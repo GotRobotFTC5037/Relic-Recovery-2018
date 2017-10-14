@@ -1,0 +1,46 @@
+[
+    {
+        "merged": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/res/merged/androidTest/debug/raw/chimedisconnect.wav",
+        "source": "/Users/Andrew/.android/build-cache/01e1a12e46f6cc78f6876232ce156484db4e10ae/output/res/raw/chimedisconnect.wav"
+    },
+    {
+        "merged": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/res/merged/androidTest/debug/raw/cube_mesh_fragment_shader.glsl",
+        "source": "/Users/Andrew/.android/build-cache/59930a12947594043871a6d9a1a5baaf02310650/output/res/raw/cube_mesh_fragment_shader.glsl"
+    },
+    {
+        "merged": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/res/merged/androidTest/debug/raw/color_fragment_shader.glsl",
+        "source": "/Users/Andrew/.android/build-cache/59930a12947594043871a6d9a1a5baaf02310650/output/res/raw/color_fragment_shader.glsl"
+    },
+    {
+        "merged": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/res/merged/androidTest/debug/raw/cube_mesh_vertex_shader.glsl",
+        "source": "/Users/Andrew/.android/build-cache/59930a12947594043871a6d9a1a5baaf02310650/output/res/raw/cube_mesh_vertex_shader.glsl"
+    },
+    {
+        "merged": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/res/merged/androidTest/debug/raw/chimeconnect.wav",
+        "source": "/Users/Andrew/.android/build-cache/01e1a12e46f6cc78f6876232ce156484db4e10ae/output/res/raw/chimeconnect.wav"
+    },
+    {
+        "merged": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/res/merged/androidTest/debug/raw/texture_fragment_shader.glsl",
+        "source": "/Users/Andrew/.android/build-cache/59930a12947594043871a6d9a1a5baaf02310650/output/res/raw/texture_fragment_shader.glsl"
+    },
+    {
+        "merged": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/res/merged/androidTest/debug/raw/warningmessage.wav",
+        "source": "/Users/Andrew/.android/build-cache/01e1a12e46f6cc78f6876232ce156484db4e10ae/output/res/raw/warningmessage.wav"
+    },
+    {
+        "merged": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/res/merged/androidTest/debug/raw/simple_vertex_shader.glsl",
+        "source": "/Users/Andrew/.android/build-cache/59930a12947594043871a6d9a1a5baaf02310650/output/res/raw/simple_vertex_shader.glsl"
+    },
+    {
+        "merged": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/res/merged/androidTest/debug/raw/errormessage.wav",
+        "source": "/Users/Andrew/.android/build-cache/01e1a12e46f6cc78f6876232ce156484db4e10ae/output/res/raw/errormessage.wav"
+    },
+    {
+        "merged": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/res/merged/androidTest/debug/raw/texture_vertex_shader.glsl",
+        "source": "/Users/Andrew/.android/build-cache/59930a12947594043871a6d9a1a5baaf02310650/output/res/raw/texture_vertex_shader.glsl"
+    },
+    {
+        "merged": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/res/merged/androidTest/debug/raw/nxtstartupsound.wav",
+        "source": "/Users/Andrew/.android/build-cache/01e1a12e46f6cc78f6876232ce156484db4e10ae/output/res/raw/nxtstartupsound.wav"
+    }
+]

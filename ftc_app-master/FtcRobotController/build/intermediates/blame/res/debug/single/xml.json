@@ -1,0 +1,42 @@
+[
+    {
+        "merged": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/res/merged/debug/xml/app_settings.xml",
+        "source": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/src/main/res/xml/app_settings.xml"
+    },
+    {
+        "merged": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/res/merged/debug/xml/device_filter.xml",
+        "source": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/src/main/res/xml/device_filter.xml"
+    },
+    {
+        "merged": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/res/merged/debug/xml/pushbotsens.xml",
+        "source": "/Users/Andrew/.android/build-cache/01e1a12e46f6cc78f6876232ce156484db4e10ae/output/res/xml/pushbotsens.xml"
+    },
+    {
+        "merged": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/res/merged/debug/xml/squarebot.xml",
+        "source": "/Users/Andrew/.android/build-cache/01e1a12e46f6cc78f6876232ce156484db4e10ae/output/res/xml/squarebot.xml"
+    },
+    {
+        "merged": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/res/merged/debug/xml/k9legacybot.xml",
+        "source": "/Users/Andrew/.android/build-cache/01e1a12e46f6cc78f6876232ce156484db4e10ae/output/res/xml/k9legacybot.xml"
+    },
+    {
+        "merged": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/res/merged/debug/xml/k9usbbot.xml",
+        "source": "/Users/Andrew/.android/build-cache/01e1a12e46f6cc78f6876232ce156484db4e10ae/output/res/xml/k9usbbot.xml"
+    },
+    {
+        "merged": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/res/merged/debug/xml/rev_scoot.xml",
+        "source": "/Users/Andrew/.android/build-cache/01e1a12e46f6cc78f6876232ce156484db4e10ae/output/res/xml/rev_scoot.xml"
+    },
+    {
+        "merged": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/res/merged/debug/xml/maxmodules.xml",
+        "source": "/Users/Andrew/.android/build-cache/01e1a12e46f6cc78f6876232ce156484db4e10ae/output/res/xml/maxmodules.xml"
+    },
+    {
+        "merged": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/res/merged/debug/xml/advanced_rc_settings.xml",
+        "source": "/Users/Andrew/.android/build-cache/01e1a12e46f6cc78f6876232ce156484db4e10ae/output/res/xml/advanced_rc_settings.xml"
+    },
+    {
+        "merged": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/res/merged/debug/xml/pushbot.xml",
+        "source": "/Users/Andrew/.android/build-cache/01e1a12e46f6cc78f6876232ce156484db4e10ae/output/res/xml/pushbot.xml"
+    }
+]
