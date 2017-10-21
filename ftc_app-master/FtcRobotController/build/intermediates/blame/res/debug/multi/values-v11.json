@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v11/values-v11.xml",
+        "outputFile": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/FtcRobotController/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v11/values-v11.xml",
         "map": [
             {
                 "to": {
@@ -12,7 +12,33 @@
                     "endOffset": 187
                 },
                 "from": {
-                    "file": "/Users/Andrew/.android/build-cache/59930a12947594043871a6d9a1a5baaf02310650/output/res/values-v11/values-v11.xml",
+                    "file": "/Users/pjtnt11/.android/build-cache/c00345be295e35f0f77a74a6ba3dc0d3863d3849/output/res/values-v11/values-v11.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endLine": 4,
+                        "endColumn": 12,
+                        "endOffset": 187
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "outputFile": "/Users/pjtnt11/Desktop/ftc_app-master/FtcRobotController/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v11/values-v11.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endLine": 4,
+                    "endColumn": 12,
+                    "endOffset": 187
+                },
+                "from": {
+                    "file": "/Users/pjtnt11/.android/build-cache/e746f5fbb5b21d3289776e1cd1c676f0d80afd6d/output/res/values-v11/values-v11.xml",
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,

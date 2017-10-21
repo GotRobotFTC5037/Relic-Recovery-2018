@@ -3,120 +3,120 @@
 
     <item
         is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/c5adf3aaa53725b464d4ff00ac8958bdca2fb967/output/jars/classes.jar"
+        jar="/Users/pjtnt11/.android/build-cache/be83747b3b475e9cd1bfe05c423ca158228c38ae/output/jars/classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
         sha1="9403be210676ed196cdcc64c7391b9ae2361c174">
-        <dex dex="/Users/Andrew/Downloads/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_797ea0e74007bdd07e0cba65d24b24acc33da557.jar" />
+        <dex dex="/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_50d1ab0f1af6c97242c5d23e6db3962894c0c3a6.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/4d9e7349b5e79fad8cff2fcfa4f3096f9ec33164/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="96cbbea552fe9bf3c56540c7e4912eb5cf72301e">
-        <dex dex="/Users/Andrew/Downloads/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_51704f54dc244d5e0a8d87ab97674b4663499566.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/59930a12947594043871a6d9a1a5baaf02310650/output/jars/libs/Vuforia.jar"
+        jar="/Users/pjtnt11/.android/build-cache/c00345be295e35f0f77a74a6ba3dc0d3863d3849/output/jars/libs/Vuforia.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
         sha1="91b46366eb9f8203073ee2935087c097c888c0ed">
-        <dex dex="/Users/Andrew/Downloads/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/Vuforia_37a33faae91d7d5ca5b9529dee1ef32098af3764.jar" />
+        <dex dex="/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/Vuforia_575c23f7ca7fd4256f92c17494bfbd05f076318a.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="/Users/Andrew/Downloads/ftc_app-master/FtcRobotController/build/intermediates/bundles/default/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="63096d280a6d0792ddbe5601216c3bc2bb685e8c">
-        <dex dex="/Users/Andrew/Downloads/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_5e60a8bb8f78f96b5aeaee3f725f056b78421820.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/59930a12947594043871a6d9a1a5baaf02310650/output/jars/libs/gson-extras-0.2.1.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="b30c2655badcc7ce97f84e49f777b7dd154bad57">
-        <dex dex="/Users/Andrew/Downloads/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/gson-extras-0.2.1_1da9558a3d5f239fc38a3381e8349c7657d41f5d.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/3d99f9dd92bb321b862a040128686a02ea655bb3/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="9da82f9829b6cafb8407989729481220ca06c905">
-        <dex dex="/Users/Andrew/Downloads/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_34acbc9ca59ad78a2418172762982b88fe16954d.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/5c57c415ec9a3662fdbeb701618aae90358029ff/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="9dafed45e330aec14abcce05bdb7bbdb2a2d7092">
-        <dex dex="/Users/Andrew/Downloads/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_77e7ed6c5ffbac555d7cdeab639f54ecc3307383.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/59930a12947594043871a6d9a1a5baaf02310650/output/jars/libs/support-annotations-23.4.0.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="5a214d3b1b12e72f4fb0d5d5d8d0ec43c96de2b5">
-        <dex dex="/Users/Andrew/Downloads/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/support-annotations-23.4.0_8508f585ebc5ee6280aa166eae597e4c5ecbbf47.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/01e1a12e46f6cc78f6876232ce156484db4e10ae/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="c2abba0621a5319232804767218216568263aa37">
-        <dex dex="/Users/Andrew/Downloads/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_c27e81a42da1dde0c288dfb301b26788601fd82c.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/59930a12947594043871a6d9a1a5baaf02310650/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="e259d01a014f392930432e85cc1ac9bf807a92df">
-        <dex dex="/Users/Andrew/Downloads/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_3f4f778d0e8eae04a0c2a1d2a301f1566a313e21.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/59930a12947594043871a6d9a1a5baaf02310650/output/jars/libs/gson-2.8.0.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="e118dd0900e4a18fb928ebb8df2d9fbda78f2b5d">
-        <dex dex="/Users/Andrew/Downloads/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/gson-2.8.0_345d90e5bd1a331d4c7b7578f1403632b124e7b5.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/f7b761ec71ed73d7a7957e1f9ae5e2c5ce423f4d/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="75bdc736b17d8f39d246beac357cb3a0e007fcfa">
-        <dex dex="/Users/Andrew/Downloads/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_dcf4c868b0fe95e9838dcf089834662230223cd6.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/59930a12947594043871a6d9a1a5baaf02310650/output/jars/libs/javac.jar"
+        jar="/Users/pjtnt11/.android/build-cache/c00345be295e35f0f77a74a6ba3dc0d3863d3849/output/jars/libs/javac.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
         sha1="c576121aac49e547b39aedfb1daa29782db4166c">
-        <dex dex="/Users/Andrew/Downloads/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/javac_2b82e1eb6e655909463e091658f46a86e6ea97ee.jar" />
+        <dex dex="/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/javac_bede036d17e49e6e92abdb84ecf0ec2000d8c340.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/pjtnt11/Documents/Robotics/ftc_app-master/FtcRobotController/build/intermediates/bundles/default/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="6da5b77184f4cd04d2914145f7f5af5a7ec64e4c">
+        <dex dex="/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_34a71b9a3645052f500345294d1dff5fa6960c26.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/pjtnt11/.android/build-cache/88f9b864b59a1a83c3dc8e98fe1c9d749b4462ec/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="96cbbea552fe9bf3c56540c7e4912eb5cf72301e">
+        <dex dex="/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_6465a6befd6c39986163506920acc556e9cfe80f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="c2abba0621a5319232804767218216568263aa37">
+        <dex dex="/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_adbea4246c32c22738c6078c2190a44b421f50f0.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/pjtnt11/.android/build-cache/c00345be295e35f0f77a74a6ba3dc0d3863d3849/output/jars/libs/support-annotations-23.4.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="5a214d3b1b12e72f4fb0d5d5d8d0ec43c96de2b5">
+        <dex dex="/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/support-annotations-23.4.0_541c797c577997b1f887387be07f3c4e763c1c30.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/pjtnt11/.android/build-cache/4a2bfe70d57d00377cf669db7e26c592c1b13587/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="9da82f9829b6cafb8407989729481220ca06c905">
+        <dex dex="/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_ee7e543f9139e2aeef852721830f600990b83ddb.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/pjtnt11/.android/build-cache/c00345be295e35f0f77a74a6ba3dc0d3863d3849/output/jars/libs/gson-2.8.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="e118dd0900e4a18fb928ebb8df2d9fbda78f2b5d">
+        <dex dex="/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/gson-2.8.0_3d09c0aba40e8eeb1e45b8947275c03b59a3f3c5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/pjtnt11/.android/build-cache/e8f633495e2201ef34ae0f9283c7a01e59800d99/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="9dafed45e330aec14abcce05bdb7bbdb2a2d7092">
+        <dex dex="/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_55f4632b2db4773412f265ae22bc7669dab4c3f6.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/pjtnt11/.android/build-cache/c00345be295e35f0f77a74a6ba3dc0d3863d3849/output/jars/libs/gson-extras-0.2.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="b30c2655badcc7ce97f84e49f777b7dd154bad57">
+        <dex dex="/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/gson-extras-0.2.1_6a93f803c19e3f793a57af4c374ef083b3de105f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/pjtnt11/.android/build-cache/c00345be295e35f0f77a74a6ba3dc0d3863d3849/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="e259d01a014f392930432e85cc1ac9bf807a92df">
+        <dex dex="/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_4cac525fa5331177e0be50a943e315a9ceb19472.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/pjtnt11/.android/build-cache/f82aa82d6ccde3dd63e5d3c7088e24f6de17061e/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="75bdc736b17d8f39d246beac357cb3a0e007fcfa">
+        <dex dex="/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_519f39cb7ff55a37e527cedfb3132fff8c9a1e37.jar" />
     </item>
 
 </items>
