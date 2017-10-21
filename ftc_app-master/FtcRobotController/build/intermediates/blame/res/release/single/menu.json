@@ -12,6 +12,14 @@
         "source": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/FtcRobotController/src/main/res/menu/ftc_robot_controller.xml"
     },
     {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/FtcRobotController/build/intermediates/res/merged/release/menu/menu_server.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/d4933137a5a1251723d8599d7afd466761f6c0c9/output/res/menu/menu_server.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/FtcRobotController/build/intermediates/res/merged/release/menu/ftc_robot_controller.xml",
+        "source": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/FtcRobotController/src/main/res/menu/ftc_robot_controller.xml"
+    },
+    {
         "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/FtcRobotController/build/intermediates/res/merged/release/menu/menu_server.xml",
         "source": "/Users/pjtnt11/.android/build-cache/f82aa82d6ccde3dd63e5d3c7088e24f6de17061e/output/res/menu/menu_server.xml"
     },
@@ -22,5 +30,9 @@
     {
         "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/FtcRobotController/build/intermediates/res/merged/release/menu/main_menu.xml",
         "source": "/Users/pjtnt11/.android/build-cache/4a2bfe70d57d00377cf669db7e26c592c1b13587/output/res/menu/main_menu.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/FtcRobotController/build/intermediates/res/merged/release/menu/main_menu.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/36427050450194c7fc91698f5f841de3f7cdd9c4/output/res/menu/main_menu.xml"
     }
 ]
