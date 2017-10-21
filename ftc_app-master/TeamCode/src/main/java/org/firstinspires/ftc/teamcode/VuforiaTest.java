@@ -34,7 +34,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 
-
 @TeleOp(name="Vuforia Test", group="Tests")
 public class VuforiaTest extends LinearOpMode {
 
