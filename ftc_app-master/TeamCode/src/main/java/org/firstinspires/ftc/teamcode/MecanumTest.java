@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp
+@TeleOp(name="Mecanum Test", group="Tests")
 public class MecanumTest extends LinearOpMode {
 
     private MecanumRobot robot = new MecanumRobot();

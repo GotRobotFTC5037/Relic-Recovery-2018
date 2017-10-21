@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/Users/pjtnt11/Documents/Robotics/ftc_app-master/FtcRobotController/src/main/shaders"/></dataSet><dataSet config="release"><source path="/Users/pjtnt11/Documents/Robotics/ftc_app-master/FtcRobotController/src/release/shaders"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/FtcRobotController/src/main/shaders"/></dataSet><dataSet config="release"><source path="/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/FtcRobotController/src/release/shaders"/></dataSet></merger>
