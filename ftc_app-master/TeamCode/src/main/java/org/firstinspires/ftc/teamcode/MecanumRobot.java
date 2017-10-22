@@ -4,8 +4,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import static java.lang.Math.abs;
-
 public class MecanumRobot extends Robot {
 
     private static Double MAX_DIRECTION_VALUE = Math.sqrt(2);
@@ -31,22 +29,28 @@ public class MecanumRobot extends Robot {
         mBackRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-    public void setDirection(double x, double y) {
-        double powerSum = abs(x) + abs(y);
-        double xPower = x / powerSum;
-        double yPower = y / powerSum;
 
-        mFrontLeftMotor.setPower(yPower - xPower);
-        mFrontRightMotor.setPower(yPower + xPower);
-        mBackLeftMotor.setPower(yPower + xPower);
-        mBackRightMotor.setPower(yPower - xPower);
+
+    @Override void setDrivePower(double power) {
+        // TODO: Add code
     }
 
-    public void setTurnPower(double power) {
-        mFrontLeftMotor.setPower(-power);
-        mFrontRightMotor.setPower(power);
-        mBackLeftMotor.setPower(-power);
-        mBackRightMotor.setPower(power);
+
+
+    @Override void setTurnPower(double power) {
+        // TODO: Add code
     }
 
+
+
+    @Override void turn(double power, double radians) {
+        // TODO: Add code
+    }
+
+
+
+    @Override double getGyroHeading() {
+        // TODO: Add code
+        return 0;
+    }
 }
