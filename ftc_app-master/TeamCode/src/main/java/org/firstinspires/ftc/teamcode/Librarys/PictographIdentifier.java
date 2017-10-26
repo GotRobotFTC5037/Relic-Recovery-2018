@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Librarys;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
@@ -6,9 +6,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-class PictographIdentifier {
+public class PictographIdentifier {
 
-    private static String VUFORIA_LICENSE_KEY =
+    private final static String VUFORIA_LICENSE_KEY =
             "ARai2kL/////AAAAGbtywJzFuEENhljmjUYXMOxYSnK" +
             "PHlrkYr0UAA2AiMQwru6hVJxv0+XBwi8d7KGOU90Gku8ubGjJNWdQwPMsvyPOivcjD" +
             "JABZuxgkVr6p8CrwnYIuFTt7v0YDG/9zFztVLkn2jaZnh8p7PkRoPeKFaixcUaDlWz" +
@@ -19,7 +19,7 @@ class PictographIdentifier {
     private VuforiaTrackables relicTrackables;
     private VuforiaTrackable relicTemplate;
 
-    PictographIdentifier() {
+    public PictographIdentifier() {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
         parameters.vuforiaLicenseKey = VUFORIA_LICENSE_KEY;
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
@@ -29,11 +29,11 @@ class PictographIdentifier {
         this.relicTemplate = relicTrackables.get(0);
     }
 
-    void activate() {
+    public void activate() {
         relicTrackables.activate();
     }
 
-    RelicRecoveryVuMark identifyPictograph() {
+    public RelicRecoveryVuMark identifyPictograph() {
         return RelicRecoveryVuMark.from(relicTemplate);
     }
 

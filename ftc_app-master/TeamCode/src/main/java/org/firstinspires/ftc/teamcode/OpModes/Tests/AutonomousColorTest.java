@@ -1,20 +1,22 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.OpModes.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
-@Autonomous(name="Color Test", group="Tests")
+import org.firstinspires.ftc.teamcode.Robots.TestRobot;
+
+@Disabled
+@Autonomous(name = "TB - Color Test", group = "Tests")
 public class AutonomousColorTest extends LinearOpMode {
 
     private TestRobot robot = new TestRobot();
-
     private final static double POWER = 0.20;
-
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot.setup(hardwareMap);
+        robot.setup(this);
         ColorSensor colorSensor = hardwareMap.get(ColorSensor.class, "color distance");
 
         waitForStart();
@@ -32,4 +34,5 @@ public class AutonomousColorTest extends LinearOpMode {
             }
         }
     }
+
 }
