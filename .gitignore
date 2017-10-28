@@ -1,8 +1,10 @@
-
-ftc_app-master/.idea/workspace.xml
-ftc_app-master/.idea/misc.xml
-ftc_app-master/.idea/misc.xml
-ftc_app-master/.idea/workspace.xml
+ftc_app-master/.idea/**
+ftc_app-master/.gradle/**
 *.xml
-*.xml
-ftc_app-master/.idea/workspace.xml
+*.bin
+*.json
+*.properties
+*.aar
+*.txt
+*.dex
+ftc_app-master/TeamCode/build/**

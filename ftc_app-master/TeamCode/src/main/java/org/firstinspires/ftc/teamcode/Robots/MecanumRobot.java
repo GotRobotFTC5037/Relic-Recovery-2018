@@ -13,6 +13,7 @@ public class MecanumRobot extends Robot {
 	private DcMotor mFrontRightMotor;
 	private DcMotor mBackLeftMotor;
 	private DcMotor mBackRightMotor;
+	public DcMotor mWinchMotor;
 
 	private GyroSensor mGyroSensor;
 	public PictographIdentifier identifier;
@@ -35,6 +36,9 @@ public class MecanumRobot extends Robot {
 
 		mBackRightMotor = linearOpMode.hardwareMap.dcMotor.get("back right motor");
 		mBackRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+		mWinchMotor = linearOpMode.hardwareMap.dcMotor.get("winch motor");
+		mWinchMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
 		mGyroSensor = linearOpMode.hardwareMap.gyroSensor.get("gyro");
 		mGyroSensor.calibrate();
@@ -95,4 +99,8 @@ public class MecanumRobot extends Robot {
 		mBackRightMotor.setPower(wheelSet2Power - z);
 	}
 
+	public void setWinchPower(double power){
+		mWinchMotor.setPower(power);
+	}
 }
+
