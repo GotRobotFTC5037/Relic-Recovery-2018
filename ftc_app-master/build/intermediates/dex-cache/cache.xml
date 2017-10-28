@@ -3,120 +3,57 @@
 
     <item
         is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/699780c3da8fec15a1a16bd811a73cf70a34f6e7/output/jars/libs/gson-2.8.0.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="e118dd0900e4a18fb928ebb8df2d9fbda78f2b5d">
-        <dex dex="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/gson-2.8.0_21d8320e53fdbb8651f5da7fb3d727f1bd9812a8.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/5291a254f1dcc673eecdcb19605a7e70c2b4d37d/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="9dafed45e330aec14abcce05bdb7bbdb2a2d7092">
-        <dex dex="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_2417e253ce025b15c678e37794a475fb1eb91824.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/214b9f2eaeeae6eab57db9b5eeaeddfe464edc70/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="75bdc736b17d8f39d246beac357cb3a0e007fcfa">
-        <dex dex="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_d69b9d55e0e70f080a83bcd059247d2ba72a6d9d.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/699780c3da8fec15a1a16bd811a73cf70a34f6e7/output/jars/libs/Vuforia.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="91b46366eb9f8203073ee2935087c097c888c0ed">
-        <dex dex="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/Vuforia_6d42e19a9ef413d713095c6f127beabe2742766a.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/699780c3da8fec15a1a16bd811a73cf70a34f6e7/output/jars/libs/support-annotations-23.4.0.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="5a214d3b1b12e72f4fb0d5d5d8d0ec43c96de2b5">
-        <dex dex="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/support-annotations-23.4.0_9bbb10fc2a75567a3fee458201fc488b9ea3b6a3.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/bf03879f14a64ec633902154f283d5eb331f5c90/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="9403be210676ed196cdcc64c7391b9ae2361c174">
-        <dex dex="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_b00742fa40d84aa55da480c15c390b0f219b87e6.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/FtcRobotController/build/intermediates/bundles/default/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="63096d280a6d0792ddbe5601216c3bc2bb685e8c">
-        <dex dex="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_de082629286e5517221c487dbe5e4b6eddac61eb.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/a9d94d2e7d1f36dbe8efee874e833b1b8a0c031f/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="96cbbea552fe9bf3c56540c7e4912eb5cf72301e">
-        <dex dex="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_a9f2b08022848b446dd20c02fd343bcb17ac4c96.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/jars/classes.jar"
+        jar="/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/jars/classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
         sha1="c2abba0621a5319232804767218216568263aa37">
-        <dex dex="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_44b15371471c897e6e049492f298e58b5e3bdcd8.jar" />
+        <dex dex="/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_a5387d115db14c79986327075e9b22e14290a092.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/699780c3da8fec15a1a16bd811a73cf70a34f6e7/output/jars/libs/gson-extras-0.2.1.jar"
+        jar="/Users/pjtnt11/.android/build-cache/d4933137a5a1251723d8599d7afd466761f6c0c9/output/jars/classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
-        sha1="b30c2655badcc7ce97f84e49f777b7dd154bad57">
-        <dex dex="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/gson-extras-0.2.1_c64894748cd2368b635fdc169e6df733ece75740.jar" />
+        sha1="75bdc736b17d8f39d246beac357cb3a0e007fcfa">
+        <dex dex="/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_b74ff505c356af11ded88ae6547db6b2b55a7e6a.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/68f12c229aa5562f69ec896252ca7ea8faa312b5/output/jars/classes.jar"
+        jar="/Users/pjtnt11/.android/build-cache/fb935ea5cde8332cae7b23f3aaecb9dfe379d8bd/output/jars/classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
-        sha1="9da82f9829b6cafb8407989729481220ca06c905">
-        <dex dex="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_87948c706d6845ab704e6e3d5aebc4c4ea30267b.jar" />
+        sha1="96cbbea552fe9bf3c56540c7e4912eb5cf72301e">
+        <dex dex="/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_05404fa615a07c61f3292c4f962a8810f7ea48ad.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/699780c3da8fec15a1a16bd811a73cf70a34f6e7/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="e259d01a014f392930432e85cc1ac9bf807a92df">
-        <dex dex="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_11aec82bf5452fa4ff294c2f99831e56b4954366.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/Andrew/.android/build-cache/699780c3da8fec15a1a16bd811a73cf70a34f6e7/output/jars/libs/javac.jar"
+        jar="/Users/pjtnt11/.android/build-cache/cb7679859eb7e78632f6d0dae81da94487dd6e43/output/jars/libs/javac.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
         sha1="c576121aac49e547b39aedfb1daa29782db4166c">
-        <dex dex="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/javac_0f73be189bdf05dd54c2b3ba87e04088ffdf280f.jar" />
+        <dex dex="/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/javac_b90bb0408a9e1d0403aa4095ac8859291b8da9d8.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/FtcRobotController/build/intermediates/bundles/default/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="6da5b77184f4cd04d2914145f7f5af5a7ec64e4c">
+        <dex dex="/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_10d531b1a0cc3ed0a2665fe85521f891f022c82b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/pjtnt11/.android/build-cache/cb7679859eb7e78632f6d0dae81da94487dd6e43/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="e259d01a014f392930432e85cc1ac9bf807a92df">
+        <dex dex="/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/pre-dexed/debug/classes_aa15f01ff6fb68746229fec528376e2a91854dba.jar" />
     </item>
 
 </items>

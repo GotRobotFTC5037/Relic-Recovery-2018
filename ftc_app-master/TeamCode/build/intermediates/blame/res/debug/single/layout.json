@@ -1,226 +1,674 @@
 [
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/pwms.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/pwms.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_load.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/activity_load.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/gray_line.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/gray_line.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_lynx_fw_update.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/activity_ftc_lynx_fw_update.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_about.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/activity_about.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/matrices.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/matrices.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/lynx_module.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/lynx_module.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/feedback.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c00345be295e35f0f77a74a6ba3dc0d3863d3849/output/res/layout/feedback.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_configuration.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/activity_ftc_configuration.xml"
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_about.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/activity_about.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/item_list_parent.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/item_list_parent.xml"
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/servo.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/servo.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/digital_device.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/digital_device.xml"
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/red_line.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/red_line.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/button_list.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/button_list.xml"
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/i2cs.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/i2cs.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_blocks.xml",
-        "source": "/Users/Andrew/.android/build-cache/214b9f2eaeeae6eab57db9b5eeaeddfe464edc70/output/res/layout/activity_blocks.xml"
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/info_button.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/info_button.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/red_line.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/red_line.xml"
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_configure_from_template.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/activity_configure_from_template.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_inspection.xml",
-        "source": "/Users/Andrew/.android/build-cache/68f12c229aa5562f69ec896252ca7ea8faa312b5/output/res/layout/activity_inspection.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_programming_mode.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/f82aa82d6ccde3dd63e5d3c7088e24f6de17061e/output/res/layout/activity_programming_mode.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/pwm_device.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/pwm_device.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/legacy.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/legacy.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/lynx_usb_device.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/lynx_usb_device.xml"
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/device_interface_module.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/device_interface_module.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/matrix_devices.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/matrix_devices.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/servo.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/servo.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/servo_controller_banner.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/servo_controller_banner.xml"
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/i2c_device.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/i2c_device.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_wifi_remembered_groups.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/activity_ftc_wifi_remembered_groups.xml"
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_configuration.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/activity_ftc_configuration.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/loading_indicator_overlay.xml",
-        "source": "/Users/Andrew/.android/build-cache/699780c3da8fec15a1a16bd811a73cf70a34f6e7/output/res/layout/loading_indicator_overlay.xml"
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/digital_devices.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/digital_devices.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_view_logs.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/activity_view_logs.xml"
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/color_list_preference_line_item.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/cb7679859eb7e78632f6d0dae81da94487dd6e43/output/res/layout/color_list_preference_line_item.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/feedback.xml",
-        "source": "/Users/Andrew/.android/build-cache/699780c3da8fec15a1a16bd811a73cf70a34f6e7/output/res/layout/feedback.xml"
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_blocks.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/f72854687de6b4bcb7d83dbf29b604e78a673f8f/output/res/layout/activity_blocks.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/lynx_module_configure_address.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/lynx_module_configure_address.xml"
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/lynx_module_configure_address_spin_item.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/lynx_module_configure_address_spin_item.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/lynx_module_configure_address_spin_item.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/lynx_module_configure_address_spin_item.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/button_list.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/button_list.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_load.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/activity_load.xml"
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/pwm_device.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/pwm_device.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/analog_outputs.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/analog_outputs.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/digital_device_lynx.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/digital_device_lynx.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_controller.xml",
-        "source": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/FtcRobotController/build/intermediates/bundles/default/res/layout/activity_ftc_controller.xml"
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_wifi_channel_selector.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/activity_ftc_wifi_channel_selector.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/simple_device.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/simple_device.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/simple_device.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/simple_device.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/template_info.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/template_info.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_swap_usb_devices.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/activity_swap_usb_devices.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/color_list_preference_line_item.xml",
-        "source": "/Users/Andrew/.android/build-cache/699780c3da8fec15a1a16bd811a73cf70a34f6e7/output/res/layout/color_list_preference_line_item.xml"
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/matrix_devices.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/matrix_devices.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/digital_device_lynx.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/digital_device_lynx.xml"
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/legacy.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/legacy.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/device_interface_module.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/device_interface_module.xml"
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/digital_device.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/digital_device.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/motor_list.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/motor_list.xml"
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/lynx_module_configure_address.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/lynx_module_configure_address.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_swap_usb_devices.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/activity_swap_usb_devices.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/pwms.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/pwms.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_generic_settings.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/activity_generic_settings.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/item_list_parent.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/item_list_parent.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/motor.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/motor.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_controller.xml",
+        "source": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/FtcRobotController/build/intermediates/bundles/default/res/layout/activity_ftc_controller.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/legacy.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/legacy.xml"
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/servo_controller_banner.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/servo_controller_banner.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/banner_parent.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/banner_parent.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/lynx_module_configure_address.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/lynx_module_configure_address.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/i2c_device.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/i2c_device.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/digital_devices.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/digital_devices.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_config_wifi_direct.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/activity_config_wifi_direct.xml"
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/lynx_module.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/lynx_module.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_lynx_fw_update.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/activity_ftc_lynx_fw_update.xml"
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/analog_outputs.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/analog_outputs.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/servo_list.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/servo_list.xml"
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/matrix_devices.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/matrix_devices.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/matrices.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/matrices.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_program_and_manage.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/activity_program_and_manage.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/header.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/header.xml"
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/pwms.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/pwms.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/motor_controller_banner.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/motor_controller_banner.xml"
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/servo_controller_banner.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/servo_controller_banner.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/analog_output_device.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/analog_output_device.xml"
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_load.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/activity_load.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_programming_mode.xml",
-        "source": "/Users/Andrew/.android/build-cache/214b9f2eaeeae6eab57db9b5eeaeddfe464edc70/output/res/layout/activity_programming_mode.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/motor_controller_banner.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/motor_controller_banner.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_lynx_address_update.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/activity_ftc_lynx_address_update.xml"
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_wifi_remembered_groups.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/activity_ftc_wifi_remembered_groups.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/i2cs.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/i2cs.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/motor_list.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/motor_list.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/servo.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/servo.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/template_info.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/template_info.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_wifi_channel_selector.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/activity_ftc_wifi_channel_selector.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/gray_line.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/gray_line.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/digital_devices.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/digital_devices.xml"
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/simple_device.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/simple_device.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/analog_inputs.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/analog_inputs.xml"
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/analog_input_device.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/analog_input_device.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_configure_from_template.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/activity_configure_from_template.xml"
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_program_and_manage.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/activity_program_and_manage.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/analog_input_device.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/analog_input_device.xml"
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/device_interface_module.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/device_interface_module.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/port_attached_row.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/port_attached_row.xml"
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/file_info.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/file_info.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/file_info.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/file_info.xml"
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/pwms.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/pwms.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_program_and_manage.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/activity_program_and_manage.xml"
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/loading_indicator_overlay.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/cb7679859eb7e78632f6d0dae81da94487dd6e43/output/res/layout/loading_indicator_overlay.xml"
     },
     {
-        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/info_button.xml",
-        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/layout/info_button.xml"
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_inspection.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/4a2bfe70d57d00377cf669db7e26c592c1b13587/output/res/layout/activity_inspection.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/color_list_preference_line_item.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c00345be295e35f0f77a74a6ba3dc0d3863d3849/output/res/layout/color_list_preference_line_item.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/loading_indicator_overlay.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/e746f5fbb5b21d3289776e1cd1c676f0d80afd6d/output/res/layout/loading_indicator_overlay.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/pwm_device.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/pwm_device.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/matrix_devices.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/matrix_devices.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_inspection.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/36427050450194c7fc91698f5f841de3f7cdd9c4/output/res/layout/activity_inspection.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/digital_device.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/digital_device.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_lynx_fw_update.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/activity_ftc_lynx_fw_update.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/analog_inputs.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/analog_inputs.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/servo_controller_banner.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/servo_controller_banner.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/motor_list.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/motor_list.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_about.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/activity_about.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/template_info.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/template_info.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_controller.xml",
+        "source": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/FtcRobotController/build/intermediates/bundles/default/res/layout/activity_ftc_controller.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/lynx_usb_device.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/lynx_usb_device.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/header.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/header.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_lynx_address_update.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/activity_ftc_lynx_address_update.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_generic_settings.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/activity_generic_settings.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_swap_usb_devices.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/activity_swap_usb_devices.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/digital_devices.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/digital_devices.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_wifi_channel_selector.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/activity_ftc_wifi_channel_selector.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_programming_mode.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/d4933137a5a1251723d8599d7afd466761f6c0c9/output/res/layout/activity_programming_mode.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/header.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/header.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_config_wifi_direct.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/activity_config_wifi_direct.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/gray_line.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/gray_line.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/lynx_module.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/lynx_module.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/matrices.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/matrices.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_wifi_remembered_groups.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/activity_ftc_wifi_remembered_groups.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/legacy.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/legacy.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/banner_parent.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/banner_parent.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/motor_list.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/motor_list.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_program_and_manage.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/activity_program_and_manage.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/info_button.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/info_button.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/i2cs.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/i2cs.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_blocks.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/f82aa82d6ccde3dd63e5d3c7088e24f6de17061e/output/res/layout/activity_blocks.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/digital_device_lynx.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/digital_device_lynx.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/lynx_module_configure_address_spin_item.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/lynx_module_configure_address_spin_item.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/servo_list.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/servo_list.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/digital_device_lynx.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/digital_device_lynx.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/i2c_device.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/i2c_device.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/item_list_parent.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/item_list_parent.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/analog_input_device.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/analog_input_device.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/motor_controller_banner.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/motor_controller_banner.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/port_attached_row.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/port_attached_row.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_lynx_address_update.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/activity_ftc_lynx_address_update.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_inspection.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/0c6df5cb6b0b55a51fe3d62e376ada560557585a/output/res/layout/activity_inspection.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/motor_controller_banner.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/motor_controller_banner.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/lynx_module.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/lynx_module.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/analog_output_device.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/analog_output_device.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_configure_from_template.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/activity_configure_from_template.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_wifi_channel_selector.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/activity_ftc_wifi_channel_selector.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/pwm_device.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/pwm_device.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_load.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/activity_load.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/simple_device.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/simple_device.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/banner_parent.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/banner_parent.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/analog_outputs.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/analog_outputs.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/item_list_parent.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/item_list_parent.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_config_wifi_direct.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/activity_config_wifi_direct.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/device_interface_module.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/device_interface_module.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/red_line.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/red_line.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/header.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/header.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_view_logs.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/activity_view_logs.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/lynx_usb_device.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/lynx_usb_device.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/analog_input_device.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/analog_input_device.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/analog_outputs.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/analog_outputs.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_controller.xml",
+        "source": "/Users/pjtnt11/Desktop/ftc_app-master/FtcRobotController/build/intermediates/bundles/default/res/layout/activity_ftc_controller.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/analog_output_device.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/analog_output_device.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/file_info.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/file_info.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/port_attached_row.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/port_attached_row.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/banner_parent.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/banner_parent.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/analog_output_device.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/analog_output_device.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/motor.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/motor.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/i2cs.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/i2cs.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/i2c_device.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/i2c_device.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_view_logs.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/activity_view_logs.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_wifi_remembered_groups.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/activity_ftc_wifi_remembered_groups.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_generic_settings.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/activity_generic_settings.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/feedback.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/cb7679859eb7e78632f6d0dae81da94487dd6e43/output/res/layout/feedback.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_lynx_fw_update.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/activity_ftc_lynx_fw_update.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/red_line.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/red_line.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/template_info.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/template_info.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/lynx_module_configure_address.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/lynx_module_configure_address.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_view_logs.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/activity_view_logs.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/gray_line.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/gray_line.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_config_wifi_direct.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/activity_config_wifi_direct.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/digital_device.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/digital_device.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/color_list_preference_line_item.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/e746f5fbb5b21d3289776e1cd1c676f0d80afd6d/output/res/layout/color_list_preference_line_item.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/servo.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/servo.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/servo_list.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/servo_list.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_swap_usb_devices.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/activity_swap_usb_devices.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/matrices.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/matrices.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/motor.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/motor.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/servo_list.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/servo_list.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/motor.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/motor.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/analog_inputs.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/analog_inputs.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/file_info.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/file_info.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/lynx_module_configure_address_spin_item.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/lynx_module_configure_address_spin_item.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/button_list.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/button_list.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/feedback.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/e746f5fbb5b21d3289776e1cd1c676f0d80afd6d/output/res/layout/feedback.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/port_attached_row.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/port_attached_row.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/info_button.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/info_button.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_blocks.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/d4933137a5a1251723d8599d7afd466761f6c0c9/output/res/layout/activity_blocks.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_programming_mode.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/f72854687de6b4bcb7d83dbf29b604e78a673f8f/output/res/layout/activity_programming_mode.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_configuration.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/activity_ftc_configuration.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_lynx_address_update.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/activity_ftc_lynx_address_update.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_about.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/activity_about.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/button_list.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/button_list.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/lynx_usb_device.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/lynx_usb_device.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_ftc_configuration.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/activity_ftc_configuration.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_generic_settings.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/layout/activity_generic_settings.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/activity_configure_from_template.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/layout/activity_configure_from_template.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/loading_indicator_overlay.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/c00345be295e35f0f77a74a6ba3dc0d3863d3849/output/res/layout/loading_indicator_overlay.xml"
+    },
+    {
+        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/res/merged/debug/layout/analog_inputs.xml",
+        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/layout/analog_inputs.xml"
     }
 ]

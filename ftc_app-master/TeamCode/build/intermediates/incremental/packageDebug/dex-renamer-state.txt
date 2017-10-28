@@ -1,4 +1,4 @@
-#Sat Oct 28 15:25:12 CDT 2017
-base.0=/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/transforms/dex/debug/folders/1000/1f/main
+#Fri Oct 27 20:31:56 CDT 2017
+base.0=/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/transforms/dex/debug/folders/1000/1f/main
 renamed.0=classes.dex
-file.0=/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/transforms/dex/debug/folders/1000/1f/main/classes.dex
+file.0=/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/transforms/dex/debug/folders/1000/1f/main/classes.dex
