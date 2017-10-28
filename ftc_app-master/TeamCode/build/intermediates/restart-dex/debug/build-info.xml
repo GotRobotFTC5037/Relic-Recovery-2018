@@ -6,99 +6,99 @@
     density="xhdpi"
     format="10"
     plugin-version="2.3.3"
-    timestamp="1506199619494"
-    token="-1166328513481256239"
+    timestamp="1509221747164"
+    token="8169003574666390180"
     verifier="FULL_BUILD_REQUESTED" >
 
     <task
         name="javac"
-        duration="0" />
+        duration="358" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="0" />
+        duration="662" />
     <task
         name="verifier"
-        duration="0" />
+        duration="218" />
 
     <artifact
-        location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_1.apk"
+        location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/dep/dependencies.apk"
         type="SPLIT" />
     <artifact
-        location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_2.apk"
+        location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_0.apk"
         type="SPLIT" />
     <artifact
-        location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_0.apk"
+        location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_1.apk"
         type="SPLIT" />
     <artifact
-        location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_4.apk"
+        location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_3.apk"
         type="SPLIT" />
     <artifact
-        location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_9.apk"
+        location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_2.apk"
         type="SPLIT" />
     <artifact
-        location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_3.apk"
+        location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_4.apk"
         type="SPLIT" />
     <artifact
-        location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/dep/dependencies.apk"
+        location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_5.apk"
         type="SPLIT" />
     <artifact
-        location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_8.apk"
+        location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_6.apk"
         type="SPLIT" />
     <artifact
-        location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_5.apk"
+        location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_7.apk"
         type="SPLIT" />
     <artifact
-        location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_6.apk"
+        location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_8.apk"
         type="SPLIT" />
     <artifact
-        location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_7.apk"
+        location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_9.apk"
         type="SPLIT" />
     <artifact
-        location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/outputs/apk/TeamCode-debug.apk"
+        location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/outputs/apk/TeamCode-debug.apk"
         type="SPLIT_MAIN" />
 
     <build
         build-mode="FULL"
-        timestamp="1506199619494"
+        timestamp="1509221747164"
         verifier="FULL_BUILD_REQUESTED" >
         <artifact
-            location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_1.apk"
+            location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/dep/dependencies.apk"
             type="SPLIT" />
         <artifact
-            location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_2.apk"
+            location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_0.apk"
             type="SPLIT" />
         <artifact
-            location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_0.apk"
+            location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_1.apk"
             type="SPLIT" />
         <artifact
-            location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_4.apk"
+            location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_3.apk"
             type="SPLIT" />
         <artifact
-            location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_9.apk"
+            location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_2.apk"
             type="SPLIT" />
         <artifact
-            location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_3.apk"
+            location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_4.apk"
             type="SPLIT" />
         <artifact
-            location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/dep/dependencies.apk"
+            location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_5.apk"
             type="SPLIT" />
         <artifact
-            location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_8.apk"
+            location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_6.apk"
             type="SPLIT" />
         <artifact
-            location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_5.apk"
+            location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_7.apk"
             type="SPLIT" />
         <artifact
-            location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_6.apk"
+            location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_8.apk"
             type="SPLIT" />
         <artifact
-            location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_7.apk"
+            location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/intermediates/split-apk/debug/slices/slice_9.apk"
             type="SPLIT" />
         <artifact
-            location="/Users/pjtnt11/Desktop/ftc_app-master/TeamCode/build/outputs/apk/TeamCode-debug.apk"
+            location="/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/TeamCode/build/outputs/apk/TeamCode-debug.apk"
             type="SPLIT_MAIN" />
     </build>
 

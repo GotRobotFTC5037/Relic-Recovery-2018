@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/FtcRobotController/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-v14/values-v14.xml",
+        "outputFile": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/FtcRobotController/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-v14/values-v14.xml",
         "map": [
             {
                 "to": {
@@ -12,59 +12,7 @@
                     "endOffset": 201
                 },
                 "from": {
-                    "file": "/Users/pjtnt11/.android/build-cache/cb7679859eb7e78632f6d0dae81da94487dd6e43/output/res/values-v14/values-v14.xml",
-                    "position": {
-                        "startLine": 2,
-                        "startColumn": 4,
-                        "startOffset": 55,
-                        "endLine": 4,
-                        "endColumn": 12,
-                        "endOffset": 201
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "outputFile": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/FtcRobotController/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-v14/values-v14.xml",
-        "map": [
-            {
-                "to": {
-                    "startLine": 2,
-                    "startColumn": 4,
-                    "startOffset": 55,
-                    "endLine": 4,
-                    "endColumn": 12,
-                    "endOffset": 201
-                },
-                "from": {
-                    "file": "/Users/pjtnt11/.android/build-cache/c00345be295e35f0f77a74a6ba3dc0d3863d3849/output/res/values-v14/values-v14.xml",
-                    "position": {
-                        "startLine": 2,
-                        "startColumn": 4,
-                        "startOffset": 55,
-                        "endLine": 4,
-                        "endColumn": 12,
-                        "endOffset": 201
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "outputFile": "/Users/pjtnt11/Desktop/ftc_app-master/FtcRobotController/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-v14/values-v14.xml",
-        "map": [
-            {
-                "to": {
-                    "startLine": 2,
-                    "startColumn": 4,
-                    "startOffset": 55,
-                    "endLine": 4,
-                    "endColumn": 12,
-                    "endOffset": 201
-                },
-                "from": {
-                    "file": "/Users/pjtnt11/.android/build-cache/e746f5fbb5b21d3289776e1cd1c676f0d80afd6d/output/res/values-v14/values-v14.xml",
+                    "file": "/Users/Andrew/.android/build-cache/699780c3da8fec15a1a16bd811a73cf70a34f6e7/output/res/values-v14/values-v14.xml",
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,

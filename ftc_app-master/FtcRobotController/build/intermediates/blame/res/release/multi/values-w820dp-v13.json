@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "/Users/pjtnt11/Desktop/ftc_app-master/FtcRobotController/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-w820dp-v13/values-w820dp-v13.xml",
+        "outputFile": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/FtcRobotController/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-w820dp-v13/values-w820dp-v13.xml",
         "map": [
             {
                 "to": {
@@ -11,55 +11,7 @@
                     "endOffset": 108
                 },
                 "from": {
-                    "file": "/Users/pjtnt11/Desktop/ftc_app-master/FtcRobotController/src/main/res/values-w820dp/dimens.xml",
-                    "position": {
-                        "startLine": 37,
-                        "startColumn": 4,
-                        "startOffset": 1940,
-                        "endColumn": 57,
-                        "endOffset": 1993
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "outputFile": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/FtcRobotController/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-w820dp-v13/values-w820dp-v13.xml",
-        "map": [
-            {
-                "to": {
-                    "startLine": 2,
-                    "startColumn": 4,
-                    "startOffset": 55,
-                    "endColumn": 57,
-                    "endOffset": 108
-                },
-                "from": {
-                    "file": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/FtcRobotController/src/main/res/values-w820dp/dimens.xml",
-                    "position": {
-                        "startLine": 37,
-                        "startColumn": 4,
-                        "startOffset": 1940,
-                        "endColumn": 57,
-                        "endOffset": 1993
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "outputFile": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/FtcRobotController/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-w820dp-v13/values-w820dp-v13.xml",
-        "map": [
-            {
-                "to": {
-                    "startLine": 2,
-                    "startColumn": 4,
-                    "startOffset": 55,
-                    "endColumn": 57,
-                    "endOffset": 108
-                },
-                "from": {
-                    "file": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/FtcRobotController/src/main/res/values-w820dp/dimens.xml",
+                    "file": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/FtcRobotController/src/main/res/values-w820dp/dimens.xml",
                     "position": {
                         "startLine": 37,
                         "startColumn": 4,

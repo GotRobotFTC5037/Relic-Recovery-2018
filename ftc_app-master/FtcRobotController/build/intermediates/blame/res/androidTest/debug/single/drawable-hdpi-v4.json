@@ -1,26 +1,10 @@
 [
     {
-        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/FtcRobotController/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/ic_launcher.png",
-        "source": "/Users/pjtnt11/Desktop/ftc_app-master/FtcRobotController/build/intermediates/bundles/debug/res/drawable-hdpi-v4/ic_launcher.png"
+        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/FtcRobotController/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/ic_launcher.png",
+        "source": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/FtcRobotController/build/intermediates/bundles/debug/res/drawable-hdpi-v4/ic_launcher.png"
     },
     {
-        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/FtcRobotController/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/ic_launcher.png",
-        "source": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/FtcRobotController/build/intermediates/bundles/debug/res/drawable-hdpi-v4/ic_launcher.png"
-    },
-    {
-        "merged": "/Users/pjtnt11/Desktop/ftc_app-master/FtcRobotController/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/button_shape.xml",
-        "source": "/Users/pjtnt11/.android/build-cache/eac09dd347a9ac13451b6735ea31828a4bb40ec2/output/res/drawable-hdpi-v4/button_shape.xml"
-    },
-    {
-        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/FtcRobotController/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/button_shape.xml",
-        "source": "/Users/pjtnt11/.android/build-cache/c3ba5cd73ea014e5bde6a858657eb0ee03ea2d59/output/res/drawable-hdpi-v4/button_shape.xml"
-    },
-    {
-        "merged": "/Users/pjtnt11/Documents/GitHub/Relic-Recovery-2018/ftc_app-master/FtcRobotController/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/button_shape.xml",
-        "source": "/Users/pjtnt11/.android/build-cache/5b9a4c1940b23a62f8219c36e8b0478e2b30b443/output/res/drawable-hdpi-v4/button_shape.xml"
-    },
-    {
-        "merged": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/FtcRobotController/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/ic_launcher.png",
-        "source": "/Users/pjtnt11/Documents/Robotics/ftc_app-master/FtcRobotController/build/intermediates/bundles/debug/res/drawable-hdpi-v4/ic_launcher.png"
+        "merged": "/Users/Andrew/Documents/Relic-Recovery-2018/ftc_app-master/FtcRobotController/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/button_shape.xml",
+        "source": "/Users/Andrew/.android/build-cache/18732ab0a5fade149618ce662b106767951e40c1/output/res/drawable-hdpi-v4/button_shape.xml"
     }
 ]
