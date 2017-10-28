@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.Robots;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.GyroSensor;
+
+import org.firstinspires.ftc.teamcode.Librarys.PictographIdentifier;
 
 public class MecanumRobot extends Robot {
 
@@ -11,7 +14,12 @@ public class MecanumRobot extends Robot {
 	private DcMotor mBackLeftMotor;
 	private DcMotor mBackRightMotor;
 
-	private LinearOpMode linearOpMode;
+	private GyroSensor mGyroSensor;
+	public PictographIdentifier identifier;
+
+	private int lastRawGyroHeading_ = 0;
+	private int gyroHeading_ = 0;
+
 
 	public void setup(LinearOpMode linearOpMode) {
 		this.linearOpMode = linearOpMode;
@@ -27,11 +35,12 @@ public class MecanumRobot extends Robot {
 
 		mBackRightMotor = linearOpMode.hardwareMap.dcMotor.get("back right motor");
 		mBackRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-	}
 
+		mGyroSensor = linearOpMode.hardwareMap.gyroSensor.get("gyro");
+		mGyroSensor.calibrate();
 
-	public void turn(double power, double radians) {
-		// TODO: Add code
+		identifier = new PictographIdentifier();
+		identifier.activate();
 	}
 
 	public void setDrivePower(double power) {
@@ -56,23 +65,34 @@ public class MecanumRobot extends Robot {
 	}
 
 	public double getGyroHeading() {
-		// TODO: Add code
-		return 0;
+		int rawGyroHeading = mGyroSensor.getHeading();
+
+		if (rawGyroHeading - 180 > lastRawGyroHeading_) {
+			gyroHeading_ = gyroHeading_ + rawGyroHeading - 360 - lastRawGyroHeading_;
+		} else if (rawGyroHeading + 180 < lastRawGyroHeading_) {
+			gyroHeading_ = gyroHeading_ + rawGyroHeading + 360 - lastRawGyroHeading_;
+		} else {
+			gyroHeading_ = gyroHeading_ + rawGyroHeading - lastRawGyroHeading_;
+		}
+
+		lastRawGyroHeading_ = rawGyroHeading;
+
+		return gyroHeading_;
 	}
 
-	public void setDirection(double x, double y) {
-		double wheelSet1ComponentPower = (y + x) / 2;
-		double wheelSet2ComponentPower = (y - x) / 2;
+	public void setDirection(double x, double y, double z) {
+		double wheelSet1ComponentPower = (y - x) / 2;
+		double wheelSet2ComponentPower = (y + x) / 2;
 
 		double wheelSet1Power = Math.sqrt(2 * Math.pow(wheelSet1ComponentPower, 2)) *
 				Math.signum(wheelSet1ComponentPower);
 		double wheelSet2Power = Math.sqrt(2 * Math.pow(wheelSet2ComponentPower, 2)) *
 				Math.signum(wheelSet2ComponentPower);
 
-		mFrontRightMotor.setPower(wheelSet1Power);
-		mBackLeftMotor.setPower(wheelSet1Power);
-		mFrontLeftMotor.setPower(wheelSet2Power);
-		mBackRightMotor.setPower(wheelSet2Power);
+		mFrontRightMotor.setPower(wheelSet1Power - z);
+		mBackLeftMotor.setPower(wheelSet1Power + z);
+		mFrontLeftMotor.setPower(wheelSet2Power + z);
+		mBackRightMotor.setPower(wheelSet2Power - z);
 	}
 
 }

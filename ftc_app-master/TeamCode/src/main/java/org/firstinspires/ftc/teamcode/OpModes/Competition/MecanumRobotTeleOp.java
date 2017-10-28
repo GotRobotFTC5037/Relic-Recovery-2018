@@ -16,7 +16,18 @@ import org.firstinspires.ftc.teamcode.Robots.MecanumRobot;
         while(opModeIsActive()) {
             double xPower = gamepad1.right_stick_x;
             double yPower = gamepad1.right_stick_y * -1;
-            robot.setDirection(xPower, yPower);
+            double zPower;
+
+            if(gamepad1.left_bumper && !gamepad1.right_bumper) {
+                zPower = -(1 - (Math.sqrt(2) / 2));
+            } else if(!gamepad1.left_bumper && gamepad1.right_bumper) {
+                zPower = (1 - (Math.sqrt(2) / 2));
+            } else {
+                zPower = 0;
+            }
+
+            robot.setDirection(xPower, yPower, zPower);
+
             idle();
         }
 

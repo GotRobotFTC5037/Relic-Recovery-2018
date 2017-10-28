@@ -12,7 +12,7 @@ public class TurnTest extends LinearOpMode {
         TestRobot robot = new TestRobot();
         robot.setup(this);
         waitForStart();
-        robot.turn(0.45, Math.PI / 2);
+        robot.turn(0.45, 90);
     }
 
 }
