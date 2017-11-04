@@ -1,19 +1,24 @@
 package org.firstinspires.ftc.teamcode.robots
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import com.qualcomm.robotcore.hardware.ColorSensor
-import com.qualcomm.robotcore.hardware.DcMotor
-import com.qualcomm.robotcore.hardware.DcMotorSimple
-import com.qualcomm.robotcore.hardware.Servo
+import com.qualcomm.robotcore.hardware.*
 
 import org.firstinspires.ftc.teamcode.libraries.PictographIdentifier
 
 class RelicRecoveryRobot : MecanumRobot() {
     private lateinit var mWinchMotor: DcMotor
+
     private lateinit var mJewelStick: Servo
     private lateinit var mLeftGlyphGrabber: Servo
     private lateinit var mRightGlyphGrabber: Servo
+
+    // TODO: Implement these sensors.
+    lateinit var liftLimitSwitch: DigitalChannel
     lateinit var colorSensor: ColorSensor
+    lateinit var leftRangeSensor: ModernRoboticsI2cRangeSensor
+    lateinit var rightRangeSensor: ModernRoboticsI2cRangeSensor
+
     private val pictographIdentifier = PictographIdentifier()
 
     override fun setup(linearOpMode: LinearOpMode) {
