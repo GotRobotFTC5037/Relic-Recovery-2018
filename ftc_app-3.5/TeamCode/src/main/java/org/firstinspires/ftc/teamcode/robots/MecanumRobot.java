@@ -37,6 +37,12 @@ public class MecanumRobot extends Robot {
 		mGyroSensor.calibrate();
 	}
 
+	public void waitForGyroCalibration() {
+		while (mGyroSensor.isCalibrating() && linearOpMode.opModeIsActive()) {
+			linearOpMode.idle();
+		}
+	}
+
 	public void setDrivePower(double power) {
 		mFrontLeftMotor.setPower(power);
 		mBackLeftMotor.setPower(power);

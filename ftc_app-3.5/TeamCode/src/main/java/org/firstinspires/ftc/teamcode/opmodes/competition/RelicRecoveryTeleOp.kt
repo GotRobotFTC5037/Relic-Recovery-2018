@@ -11,7 +11,11 @@ class RelicRecoveryTeleOp : LinearOpMode() {
     override fun runOpMode() {
         val robot = RelicRecoveryRobot()
         robot.setup(this)
+        robot.waitForGyroCalibration()
+
         waitForStart()
+
+        robot.raiseJewelStick()
 
         while (opModeIsActive()) {
             val xPower = gamepad1.right_stick_x.toDouble()
@@ -25,9 +29,9 @@ class RelicRecoveryTeleOp : LinearOpMode() {
             }
 
             if (gamepad1.a) {
-                robot.lowerJewelStick()
+                robot.closeGlyphGrabbers()
             } else if (gamepad1.b) {
-                robot.raiseJewelStick()
+                robot.openGlyphGrabbers()
             }
 
             robot.setDirection(xPower, yPower, zPower)

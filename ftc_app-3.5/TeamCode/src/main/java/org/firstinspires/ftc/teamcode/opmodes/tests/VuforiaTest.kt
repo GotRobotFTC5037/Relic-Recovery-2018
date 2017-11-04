@@ -36,6 +36,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
 import org.firstinspires.ftc.teamcode.libraries.PictographIdentifier
 
+@Disabled
 @TeleOp(name = "Vuforia Test", group = "Tests")
 class VuforiaTest : LinearOpMode() {
 

@@ -11,6 +11,7 @@ class BlueAuto : LinearOpMode() {
     override fun runOpMode() {
         val robot = RelicRecoveryRobot()
         robot.setup(this)
+        robot.waitForGyroCalibration()
 
         waitForStart()
 
