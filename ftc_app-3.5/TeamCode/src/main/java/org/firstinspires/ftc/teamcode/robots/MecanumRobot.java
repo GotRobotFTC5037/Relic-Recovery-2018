@@ -38,9 +38,12 @@ public class MecanumRobot extends Robot {
 	}
 
 	public void waitForGyroCalibration() {
+		linearOpMode.telemetry.addData("Status", "Calibrating Gyro...");
+		linearOpMode.telemetry.update();
 		while (mGyroSensor.isCalibrating() && linearOpMode.opModeIsActive()) {
 			linearOpMode.idle();
 		}
+		linearOpMode.telemetry.update();
 	}
 
 	public void setDrivePower(double power) {

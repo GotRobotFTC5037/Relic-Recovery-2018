@@ -3,7 +3,11 @@ package org.firstinspires.ftc.teamcode.robots;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 public abstract class Robot {
-	LinearOpMode linearOpMode;
+	public LinearOpMode linearOpMode;
+
+	public enum AllianceColor {
+		RED, BLUE, UNKNOWN
+	}
 
     public abstract void setup(LinearOpMode linearOpMode);
 

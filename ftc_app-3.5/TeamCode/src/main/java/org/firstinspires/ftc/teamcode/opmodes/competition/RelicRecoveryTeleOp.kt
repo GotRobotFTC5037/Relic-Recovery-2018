@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.robots.RelicRecoveryRobot
 
 @TeleOp(name = "TeleOp")
 class RelicRecoveryTeleOp : LinearOpMode() {
+
     @Throws(InterruptedException::class)
     override fun runOpMode() {
         val robot = RelicRecoveryRobot()
@@ -28,16 +29,25 @@ class RelicRecoveryTeleOp : LinearOpMode() {
                 0.0
             }
 
-            if (gamepad1.a) {
+            if (gamepad2.a) {
                 robot.closeGlyphGrabbers()
-            } else if (gamepad1.b) {
+            } else if (gamepad2.b) {
                 robot.openGlyphGrabbers()
             }
 
             robot.setDirection(xPower, yPower, zPower)
-            robot.setWinchPower((gamepad1.left_stick_y * -1).toDouble())
+
+            val winchPower = (gamepad2.left_stick_y * -1).toDouble()
+            if(true){//(winchPower < 0 && !robot.liftLimitSwitch.state) || winchPower > 0) {
+                robot.setWinchPower(winchPower)
+            } else {
+                robot.setWinchPower(0.0)
+            }
+
             idle()
         }
+
         robot.stop()
     }
+
 }
