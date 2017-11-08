@@ -8,12 +8,12 @@ import org.firstinspires.ftc.teamcode.libraries.PictographIdentifier
 
 class RelicRecoveryRobot : MecanumRobot() {
 
-    val MIN_LIFT_POSITION = 0
-    val LIFT_STEP_ONE = 25
+/*    val MIN_LIFT_POSITION = 0
+    val LIFT_STEP_1 = 25
     val LIFT_STEP_TWO = 50
     val LIFT_STEP_THREE = 75
     val LIFT_STEP_FOUR = 100
-
+*/
     private lateinit var mWinchMotor: DcMotor
 
     private lateinit var mJewelStick: Servo
@@ -35,7 +35,7 @@ class RelicRecoveryRobot : MecanumRobot() {
         val hardwareMap = linearOpMode.hardwareMap
 
         mWinchMotor = hardwareMap.dcMotor.get("winch motor")
-        mWinchMotor.direction = DcMotorSimple.Direction.FORWARD
+        mWinchMotor.direction = DcMotorSimple.Direction.REVERSE
 
         mJewelStick = hardwareMap.servo.get("jewel stick")
         mLeftGlyphGrabber = hardwareMap.servo.get("left grabber")
@@ -107,12 +107,8 @@ class RelicRecoveryRobot : MecanumRobot() {
         stop()
     }
 
-    fun getLiftPosition() {
-
-    }
-
-    fun setLiftPosition(position: Int) {
-
-    }
+/*    fun setLiftPosition(position: Int) {
+        while (mWinchMotor.currentPosition < )
+    } */
 
 }
