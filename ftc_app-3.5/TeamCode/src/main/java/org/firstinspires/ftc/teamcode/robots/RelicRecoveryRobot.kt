@@ -7,6 +7,13 @@ import com.qualcomm.robotcore.hardware.*
 import org.firstinspires.ftc.teamcode.libraries.PictographIdentifier
 
 class RelicRecoveryRobot : MecanumRobot() {
+
+    val MIN_LIFT_POSITION = 0
+    val LIFT_STEP_ONE = 25
+    val LIFT_STEP_TWO = 50
+    val LIFT_STEP_THREE = 75
+    val LIFT_STEP_FOUR = 100
+
     private lateinit var mWinchMotor: DcMotor
 
     private lateinit var mJewelStick: Servo
@@ -85,6 +92,27 @@ class RelicRecoveryRobot : MecanumRobot() {
         }
     }
 
+    fun getOpticalDistanceValue(): Int {
+        return rangeSensor.rawOptical()
+    }
+
+    fun getUltrasonicDistanceValue(): Double {
+        return rangeSensor.cmUltrasonic()
+    }
+
+    fun driveUntilThresholdReached(threshold: Double, power: Double) {
+        while (getUltrasonicDistanceValue() > threshold && linearOpMode.opModeIsActive()) {
+            setDrivePower(power)
+        }
+        stop()
+    }
+
+    fun getLiftPosition() {
+
+    }
+
+    fun setLiftPosition(position: Int) {
+
+    }
+
 }
-
-
