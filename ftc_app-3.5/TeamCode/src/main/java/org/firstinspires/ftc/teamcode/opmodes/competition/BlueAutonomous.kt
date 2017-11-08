@@ -42,12 +42,7 @@ object BlueAutonomous {
                 break
             }
         }
-
-        val power = Math.sqrt(2.0)/2
-        robot.setDirection(power, power, 0.0)
-        while(robot.rangeSensor.cmUltrasonic() >= 35) { robot.linearOpMode.idle() }
-        robot.stop()
-
+        robot.driveUntilThresholdReached(35.0, 0.5)
         robot.setDirection(1.0, 0.0, 0.0)
         robot.linearOpMode.sleep(750)
         robot.setDirection(0.0, 1.0, 0.0)
