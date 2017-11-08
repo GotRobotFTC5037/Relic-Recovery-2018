@@ -26,12 +26,18 @@ object BlueAutonomous {
                 robot.turn(0.5, -15)
                 robot.linearOpMode.sleep(1000)
                 robot.raiseJewelStick()
+
+                robot.linearOpMode.sleep(2000)
+
                 robot.turn(0.5, 15)
                 break
             } else if (red < blue) {
                 robot.turn(0.5, 15)
                 robot.linearOpMode.sleep(1000)
                 robot.raiseJewelStick()
+
+                robot.linearOpMode.sleep(2000)
+
                 robot.turn(0.5, -15)
                 break
             }
