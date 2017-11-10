@@ -11,11 +11,10 @@ class RelicRecoveryTeleOp : LinearOpMode() {
     @Throws(InterruptedException::class)
     override fun runOpMode() {
         val robot = RelicRecoveryRobot
-        robot.setup(this)
-        robot.waitForGyroCalibration()
-
+        robot.linearOpMode = this
+        robot.setup(hardwareMap)
         waitForStart()
-
+        robot.waitForGyroCalibration()
         robot.raiseJewelStick()
 
         while (opModeIsActive()) {
@@ -25,26 +24,13 @@ class RelicRecoveryTeleOp : LinearOpMode() {
                 -Math.sqrt(2.0) / 2
             } else if (!gamepad1.left_bumper && gamepad1.right_bumper) {
                 Math.sqrt(2.0) / 2
-            } else {
-                0.0
-            }
-
-            if (gamepad2.a) {
-                robot.closeGlyphGrabbers()
-            } else if (gamepad2.b) {
-                robot.openGlyphGrabbers()
-            }
-
-            robot.setDirection(xPower, yPower, zPower)
-
+            } else 0.0
             val winchPower = (gamepad2.left_stick_y * -1).toDouble()
-            if(true){//(winchPower < 0 && !robot.liftLimitSwitch.state) || winchPower > 0) {
-                robot.setWinchPower(winchPower)
-            } else {
-                robot.setWinchPower(0.0)
-            }
 
-            idle()
+            if (gamepad2.a) robot.closeGlyphGrabbers()
+            else if (gamepad2.b) robot.openGlyphGrabbers()
+            robot.setDirection(xPower, yPower, zPower)
+            robot.setWinchPower(winchPower)
         }
 
         robot.stopAllDriveMotors()

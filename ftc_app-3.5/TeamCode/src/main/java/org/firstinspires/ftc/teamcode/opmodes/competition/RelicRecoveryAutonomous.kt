@@ -6,17 +6,25 @@ import org.firstinspires.ftc.teamcode.libraries.AutoTransitioner
 import org.firstinspires.ftc.teamcode.robots.RelicRecoveryRobot
 import org.firstinspires.ftc.teamcode.robots.Robot
 
-@Autonomous(name = "Autonomous")
+@Autonomous(name = "Autonomous", group = "Automatic Autonomous")
 class RelicRecoveryAutonomous : LinearOpMode() {
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {
-        RelicRecoveryRobot.setup(this)
-        val allianceColor = RelicRecoveryRobot.getAllianceColor()
+
+        val allianceColor = RelicRecoveryRobot.getAllianceColor(hardwareMap)
+
         when (allianceColor) {
-            Robot.AllianceColor.BLUE -> AutoTransitioner.transitionOnStop(this, "Blue Autonomous")
-            Robot.AllianceColor.RED -> AutoTransitioner.transitionOnStop(this, "Red Autonomous")
-            Robot.AllianceColor.UNKNOWN -> requestOpModeStop()
+            Robot.AllianceColor.BLUE ->
+                AutoTransitioner.transitionOnStop(this, "Blue Autonomous")
+
+            Robot.AllianceColor.RED ->
+                AutoTransitioner.transitionOnStop(this, "Red Autonomous")
+
+            Robot.AllianceColor.UNKNOWN -> {
+                telemetry.addLine("Could Not Determine Alliance Color.")
+                telemetry.update()
+            }
         }
 
         requestOpModeStop()
