@@ -10,7 +10,7 @@ class RelicRecoveryTeleOp : LinearOpMode() {
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {
-        val robot = RelicRecoveryRobot()
+        val robot = RelicRecoveryRobot
         robot.setup(this)
         robot.waitForGyroCalibration()
 
@@ -47,7 +47,7 @@ class RelicRecoveryTeleOp : LinearOpMode() {
             idle()
         }
 
-        robot.stop()
+        robot.stopAllDriveMotors()
     }
 
 }

@@ -7,6 +7,9 @@ import com.qualcomm.robotcore.hardware.GyroSensor;
 
 public class MecanumRobot extends Robot {
 
+
+	public Boolean isSetup = false;
+
 	private DcMotor mFrontLeftMotor;
 	private DcMotor mFrontRightMotor;
 	private DcMotor mBackLeftMotor;
@@ -35,6 +38,8 @@ public class MecanumRobot extends Robot {
 
 		mGyroSensor = linearOpMode.hardwareMap.gyroSensor.get("gyro");
 		mGyroSensor.calibrate();
+
+		isSetup = true;
 	}
 
 	public void waitForGyroCalibration() {
@@ -53,6 +58,13 @@ public class MecanumRobot extends Robot {
 		mBackRightMotor.setPower(power);
 	}
 
+	public void setStrafePower(double power) {
+		mFrontLeftMotor.setPower(-power);
+		mFrontRightMotor.setPower(-power);
+		mBackLeftMotor.setPower(power);
+		mBackRightMotor.setPower(power);
+	}
+
 	public void setTurnPower(double power) {
 		mFrontLeftMotor.setPower(power);
 		mBackLeftMotor.setPower(power);
@@ -60,7 +72,7 @@ public class MecanumRobot extends Robot {
 		mBackRightMotor.setPower(-power);
 	}
 
-	public void stop() {
+	public void stopAllDriveMotors() {
 		mFrontLeftMotor.setPower(0);
 		mBackLeftMotor.setPower(0);
 		mFrontRightMotor.setPower(0);

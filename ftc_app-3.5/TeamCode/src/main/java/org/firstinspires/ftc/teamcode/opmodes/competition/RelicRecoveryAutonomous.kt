@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.competition
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import org.firstinspires.ftc.teamcode.libraries.AutoTransitioner
 import org.firstinspires.ftc.teamcode.robots.RelicRecoveryRobot
 import org.firstinspires.ftc.teamcode.robots.Robot
 
@@ -10,19 +11,15 @@ class RelicRecoveryAutonomous : LinearOpMode() {
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {
-        val robot = RelicRecoveryRobot()
-        robot.setup(this)
-        robot.waitForGyroCalibration()
-
-        val allianceColor = robot.getAllianceColor()
+        RelicRecoveryRobot.setup(this)
+        val allianceColor = RelicRecoveryRobot.getAllianceColor()
         when (allianceColor) {
-            Robot.AllianceColor.BLUE -> { BlueAutonomous.setup(robot); BlueAutonomous.runOpMode() }
-            Robot.AllianceColor.RED -> waitForStart()
-            Robot.AllianceColor.UNKNOWN -> waitForStart()
+            Robot.AllianceColor.BLUE -> AutoTransitioner.transitionOnStop(this, "Blue Autonomous")
+            Robot.AllianceColor.RED -> AutoTransitioner.transitionOnStop(this, "Red Autonomous")
+            Robot.AllianceColor.UNKNOWN -> requestOpModeStop()
         }
 
         requestOpModeStop()
-
     }
 
 }

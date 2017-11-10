@@ -11,7 +11,7 @@ class TurnTest : LinearOpMode() {
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {
-        val robot = RelicRecoveryRobot()
+        val robot = RelicRecoveryRobot
         robot.setup(this)
         waitForStart()
         robot.turn(0.45, 90)

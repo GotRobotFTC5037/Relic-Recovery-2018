@@ -30,11 +30,11 @@ public abstract class Robot {
 		    }
 	    }
 
-	    stop();
+	    stopAllDriveMotors();
     }
 
     public abstract void setDrivePower(double power);
     public abstract void setTurnPower(double power);
-    public abstract void stop();
+    public abstract void stopAllDriveMotors();
     public abstract double getGyroHeading();
 }
