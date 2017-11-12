@@ -4,9 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
+import org.firstinspires.ftc.robotcore.external.navigation.*
 import org.firstinspires.ftc.teamcode.libraries.RobotAccelerationIntegrator
 
 open class MecanumRobot : Robot() {
@@ -77,7 +75,26 @@ open class MecanumRobot : Robot() {
         backRightMotor.power = power
     }
 
-    fun getHeading() : Double {
+    // TODO: Make this method adjust to the robot turning, because the setDirection() method does.
+    fun driveTo(x: Double, y: Double) {
+        val max = Math.max(Math.abs(x), Math.abs(y))
+        val xPower = x / max
+        val yPower = y / max
+
+        imu.startAccelerationIntegration(Position(), Velocity(), 20)
+        setDirection(xPower, yPower, 0.0)
+
+        while(Math.abs(imu.position.toUnit(DistanceUnit.CM).x) < Math.abs(x)
+                && Math.abs(imu.position.toUnit(DistanceUnit.CM).y) < Math.abs(y)
+                && linearOpMode.opModeIsActive()) {
+            linearOpMode.sleep(100)
+        }
+
+        imu.stopAccelerationIntegration()
+        stopAllDriveMotors()
+    }
+
+    fun getHeading(): Double {
         val orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
         return orientation.firstAngle.toDouble()
     }

@@ -30,7 +30,7 @@ object RelicRecoveryRobot : MecanumRobot() {
         floorColorSensor = hardwareMap.colorSensor.get("floor color sensor")
 
         frontUltrasonicSensor = hardwareMap.analogInput.get("front ultrasonic sensor")
-        leftRangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor::class.java, "left range sensor");
+        leftRangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor::class.java, "left range sensor")
         rightRangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor::class.java, "right range sensor")
         rightRangeSensor.i2cAddress = I2cAddr.create8bit(0x46)
 
@@ -57,10 +57,25 @@ object RelicRecoveryRobot : MecanumRobot() {
     }
 
     fun driveToDistanceFromForwardObject(distance: Double, power: Double) {
-        setDrivePower(power)
-        while (getFrontObjectDistance() > distance && linearOpMode.opModeIsActive()) {
-            linearOpMode.sleep(50)
+        val currentDistance = getFrontObjectDistance()
+        when {
+            currentDistance > distance -> {
+                setDrivePower(Math.abs(power))
+                while (getFrontObjectDistance() > distance && linearOpMode.opModeIsActive()) {
+                    linearOpMode.sleep(50)
+                }
+            }
+
+            currentDistance < distance -> {
+                setDrivePower(-Math.abs(power))
+                while (getFrontObjectDistance() < distance && linearOpMode.opModeIsActive()) {
+                    linearOpMode.sleep(50)
+                }
+            }
+
+            else -> return
         }
+
         stopAllDriveMotors()
     }
 
@@ -75,7 +90,6 @@ object RelicRecoveryRobot : MecanumRobot() {
         }
 
     }
-
     fun setLiftPosition(power: Double, position: Int) {
         if(liftMotor.currentPosition < position) {
             setLiftWinchPower(Math.abs(power))
@@ -106,20 +120,4 @@ object RelicRecoveryRobot : MecanumRobot() {
     fun getRightObjectDistance() = rightRangeSensor.cmUltrasonic()
 
     private fun liftIsLowered() = liftLimitSwitch.state
-
-    // TODO: Add a method that keeps the robot locked onto the balancing stone.
-
-    // TODO: Add heading correction to drive method.
-
-    // TODO: Add vector correction to drive method.
-
-    // TODO: Add a way to lock position from a front object while strafing.
-
-    // TODO: Add an automated way to set lift positions.
-
-    // TODO: Create an integrating accelerometer algorithm to detect position.
-
-    // TODO: Add slowdown as target turn position or drive distance is reached.
-
-    // TODO: Add drive functions that use the integrating accelerometer to detect distance.
 }

@@ -34,7 +34,7 @@ class BlueAutonomous: LinearOpMode() {
         robot.colorBeacon.blue()
 
         // If we haven't identified the pictograph by now, we never will.
-        // TODO: Unless we will. We should add a feature that makes a callback to a a delegated method if the pictograph ends up being identified.
+        // TODO: Well, unless we will. We should add a feature that makes a callback to a a delegated method if the pictograph ends up being identified.
         // TODO: If the time between the pictograph identifier activation and now is very short, wait a little before getting this value.
         val pictograph = pictographIdentifier.getIdentifyedPictograph()
 
@@ -62,11 +62,10 @@ class BlueAutonomous: LinearOpMode() {
         // TODO: Move the robot to the correct crypto box.
 
         // TODO: Drive the robot forward to deliver the crypto box.
-
         robot.openGlyphGrabbers()
         sleep(500)
-        robot.setDrivePower(0.50)
-        robot.stopAllDriveMotors()
+
+        robot.driveTo(0.0, -50.0)
     }
 
 }
