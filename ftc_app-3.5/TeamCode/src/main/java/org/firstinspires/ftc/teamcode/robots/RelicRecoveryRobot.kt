@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.libraries.MRIColorBeacon
 
 object RelicRecoveryRobot : MecanumRobot() {
 
-    lateinit var liftMotor: DcMotor
+    private lateinit var liftMotor: DcMotor
     private lateinit var jewelStick: Servo
     private lateinit var leftGlyphGrabber: Servo
     private lateinit var rightGlyphGrabber: Servo
@@ -30,10 +30,8 @@ object RelicRecoveryRobot : MecanumRobot() {
         floorColorSensor = hardwareMap.colorSensor.get("floor color sensor")
 
         frontUltrasonicSensor = hardwareMap.analogInput.get("front ultrasonic sensor")
-        leftRangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor::class.java,
-                "left range sensor");
-        rightRangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor::class.java,
-                "right range sensor")
+        leftRangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor::class.java, "left range sensor");
+        rightRangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor::class.java, "right range sensor")
         rightRangeSensor.i2cAddress = I2cAddr.create8bit(0x46)
 
         liftLimitSwitch = hardwareMap.digitalChannel.get("limit switch")
@@ -122,4 +120,6 @@ object RelicRecoveryRobot : MecanumRobot() {
     // TODO: Create an integrating accelerometer algorithm to detect position.
 
     // TODO: Add slowdown as target turn position or drive distance is reached.
+
+    // TODO: Add drive functions that use the integrating accelerometer to detect distance.
 }

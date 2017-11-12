@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
+import org.firstinspires.ftc.teamcode.libraries.RobotAccelerationIntegrator
 
 open class MecanumRobot : Robot() {
 
@@ -42,6 +43,7 @@ open class MecanumRobot : Robot() {
         val imuParameters = BNO055IMU.Parameters()
         imuParameters.angleUnit = BNO055IMU.AngleUnit.DEGREES
         imuParameters.calibrationData = calibration
+        imuParameters.accelerationIntegrationAlgorithm = RobotAccelerationIntegrator()
 
         imu = hardwareMap.get(BNO055IMU::class.java, "imu")
         imu.initialize(imuParameters)
