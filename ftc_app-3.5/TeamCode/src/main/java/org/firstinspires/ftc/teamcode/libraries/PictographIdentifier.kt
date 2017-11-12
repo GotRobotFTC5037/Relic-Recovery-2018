@@ -25,7 +25,7 @@ class PictographIdentifier {
         relicTrackables.activate()
     }
 
-    fun identifyPictograph(): RelicRecoveryVuMark {
+    fun getIdentifyedPictograph(): RelicRecoveryVuMark {
         return RelicRecoveryVuMark.from(relicTemplate)
     }
 

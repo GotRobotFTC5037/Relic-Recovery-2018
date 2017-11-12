@@ -13,24 +13,24 @@ class RelicRecoveryTeleOp : LinearOpMode() {
         val robot = RelicRecoveryRobot
         robot.linearOpMode = this
         robot.setup(hardwareMap)
-        waitForStart()
+        robot.colorBeacon.yellow()
         robot.waitForGyroCalibration()
+        robot.colorBeacon.green()
+        waitForStart()
+        robot.colorBeacon.blue()
+
         robot.raiseJewelStick()
 
         while (opModeIsActive()) {
-            val xPower = gamepad1.right_stick_x.toDouble()
-            val yPower = (gamepad1.right_stick_y * -1).toDouble()
-            val zPower: Double = if (gamepad1.left_bumper && !gamepad1.right_bumper) {
-                -Math.sqrt(2.0) / 2
-            } else if (!gamepad1.left_bumper && gamepad1.right_bumper) {
-                Math.sqrt(2.0) / 2
-            } else 0.0
+            val xPower = gamepad1.left_stick_x.toDouble()
+            val yPower = (gamepad1.left_stick_y * -1).toDouble()
+            val zPower = (gamepad1.right_stick_x * -1).toDouble()
             val winchPower = (gamepad2.left_stick_y * -1).toDouble()
 
-            if (gamepad2.a) robot.closeGlyphGrabbers()
-            else if (gamepad2.b) robot.openGlyphGrabbers()
+            if (gamepad2.a) { robot.closeGlyphGrabbers() }
+            else if (gamepad2.b) { robot.openGlyphGrabbers() }
             robot.setDirection(xPower, yPower, zPower)
-            robot.setWinchPower(winchPower)
+            robot.setLiftWinchPower(winchPower)
         }
 
         robot.stopAllDriveMotors()
