@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 
 import org.firstinspires.ftc.teamcode.robots.RelicRecoveryRobot
+import kotlin.concurrent.thread
 
 @TeleOp(name = "TeleOp")
 class RelicRecoveryTeleOp : LinearOpMode() {
@@ -29,8 +30,18 @@ class RelicRecoveryTeleOp : LinearOpMode() {
             val zPower = (gamepad1.right_stick_x * -1).toDouble()
             val winchPower = (gamepad2.left_stick_y * -1).toDouble()
 
-            if (gamepad2.a) { robot.closeGlyphGrabbers() }
-            else if (gamepad2.b) { robot.openGlyphGrabbers() }
+            if (gamepad2.a) {
+                robot.closeGlyphGrabbers()
+                if(robot.liftIsLowered()) {
+                    thread(true, priority = 9) {
+                        sleep(750)
+                        robot.setLiftPosition(300, 0.15)
+                    }
+                }
+            } else if (gamepad2.b) {
+                robot.openGlyphGrabbers()
+            }
+
             robot.setDirection(xPower, yPower, zPower)
             robot.setLiftWinchPower(winchPower)
         }
