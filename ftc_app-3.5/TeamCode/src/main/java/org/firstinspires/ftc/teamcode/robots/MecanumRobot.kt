@@ -4,8 +4,12 @@ import com.qualcomm.hardware.bosch.BNO055IMU
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
-import org.firstinspires.ftc.robotcore.external.navigation.*
+import com.qualcomm.robotcore.util.Range
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
 import org.firstinspires.ftc.teamcode.libraries.RobotAccelerationIntegrator
+import kotlin.concurrent.thread
 
 open class MecanumRobot : Robot() {
 
@@ -13,7 +17,18 @@ open class MecanumRobot : Robot() {
     private lateinit var frontRightMotor: DcMotor
     private lateinit var backLeftMotor: DcMotor
     private lateinit var backRightMotor: DcMotor
-    private lateinit var imu: BNO055IMU
+    lateinit var imu: BNO055IMU
+
+    private var frontLeftMotorPower = 0.0
+    private var frontRightMotorPower = 0.0
+    private var backLeftMotorPower = 0.0
+    private var backRightMotorPower = 0.0
+
+    private var targetHeading = 0.0
+
+    var shouldCorrectHeading = false
+
+    // Preparing
 
     override fun setup(hardwareMap: HardwareMap) {
         frontLeftMotor = hardwareMap.dcMotor.get("front left motor")
@@ -33,9 +48,9 @@ open class MecanumRobot : Robot() {
         backRightMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
         val calibration = BNO055IMU.CalibrationData()
-        calibration.dxAccel = 5; calibration.dyAccel = 10; calibration.dzAccel = 39
-        calibration.dxGyro  = 0; calibration.dyGyro  =  0; calibration.dzGyro  = -1
-        calibration.dxMag   = 0; calibration.dyMag   =  0; calibration.dzMag   =  0
+        calibration.dxAccel = -19; calibration.dyAccel = -33; calibration.dzAccel = 19
+        calibration.dxGyro = -2; calibration.dyGyro = -1; calibration.dzGyro = 1
+        calibration.dxMag = 0; calibration.dyMag = 0; calibration.dzMag =  0
         calibration.radiusAccel = 1000; calibration.radiusMag = 480
 
         val imuParameters = BNO055IMU.Parameters()
@@ -45,76 +60,38 @@ open class MecanumRobot : Robot() {
 
         imu = hardwareMap.get(BNO055IMU::class.java, "imu")
         imu.initialize(imuParameters)
+
+        startUpdatingDriveMotorPowers()
     }
 
+    // Moving
+
     override fun setDrivePower(power: Double) {
-        frontLeftMotor.power = power
-        backLeftMotor.power = power
-        frontRightMotor.power = power
-        backRightMotor.power = power
+        frontLeftMotorPower = power
+        frontRightMotorPower = power
+        backLeftMotorPower = power
+        backRightMotorPower = power
     }
 
     override fun setTurnPower(power: Double) {
-        frontLeftMotor.power = -power
-        backLeftMotor.power = -power
-        frontRightMotor.power = power
-        backRightMotor.power = power
-    }
-
-    override fun stopAllDriveMotors() {
-        frontLeftMotor.power = 0.0
-        backLeftMotor.power = 0.0
-        frontRightMotor.power = 0.0
-        backRightMotor.power = 0.0
+        frontLeftMotorPower = -power
+        frontRightMotorPower = power
+        backLeftMotorPower = -power
+        backRightMotorPower = power
     }
 
     fun setStrafePower(power: Double) {
-        frontLeftMotor.power = power
-        frontRightMotor.power = -power
-        backLeftMotor.power = -power
-        backRightMotor.power = power
+        frontLeftMotorPower = power
+        frontRightMotorPower = -power
+        backLeftMotorPower = -power
+        backRightMotorPower = power
     }
 
-    // TODO: Make this method adjust to the robot turning, because the setDirection() method does.
-    fun driveTo(x: Double, y: Double) {
-        val max = Math.max(Math.abs(x), Math.abs(y))
-        val xPower = x / max
-        val yPower = y / max
-
-        imu.startAccelerationIntegration(Position(), Velocity(), 20)
-        setDirection(xPower, yPower, 0.0)
-
-        while(Math.abs(imu.position.toUnit(DistanceUnit.CM).x) < Math.abs(x)
-                && Math.abs(imu.position.toUnit(DistanceUnit.CM).y) < Math.abs(y)
-                && linearOpMode.opModeIsActive()) {
-            linearOpMode.sleep(100)
-        }
-
-        imu.stopAccelerationIntegration()
-        stopAllDriveMotors()
-    }
-
-    fun getHeading(): Double {
-        val orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
-        return orientation.firstAngle.toDouble()
-    }
-
-    override fun turn(power: Double, degrees: Int) {
-        if (degrees > 0) {
-            val targetHeading = getHeading() + degrees
-            setTurnPower(Math.abs(power))
-            while (getHeading() < targetHeading && linearOpMode.opModeIsActive()) {
-                linearOpMode.sleep(50)
-            }
-        } else if (degrees < 0) {
-            val targetHeading = getHeading() + degrees
-            setTurnPower(-Math.abs(power))
-            while (getHeading() > targetHeading && linearOpMode.opModeIsActive()) {
-               linearOpMode.sleep(50)
-            }
-        }
-
-        stopAllDriveMotors()
+    override fun stopAllDriveMotors() {
+        frontLeftMotorPower = 0.0
+        frontRightMotorPower = 0.0
+        backLeftMotorPower = 0.0
+        backRightMotorPower = 0.0
     }
 
     fun setDirection(x: Double, y: Double, z: Double) {
@@ -138,10 +115,62 @@ open class MecanumRobot : Robot() {
         backRightMotor.power = adjustedY + adjustedX + adjustedZ
     }
 
+    override fun turn(power: Double, degrees: Double) {
+        shouldCorrectHeading = false
+        targetHeading += degrees
+
+        if (degrees > 0) {
+            val targetHeading = getHeading() + degrees
+            setTurnPower(Math.abs(power))
+            while (getHeading() < targetHeading && linearOpMode.opModeIsActive()) {
+                linearOpMode.sleep(50)
+            }
+        } else if (degrees < 0) {
+            val targetHeading = getHeading() + degrees
+            setTurnPower(-Math.abs(power))
+            while (getHeading() > targetHeading && linearOpMode.opModeIsActive()) {
+               linearOpMode.sleep(50)
+            }
+        }
+
+        stopAllDriveMotors()
+        shouldCorrectHeading = true
+    }
+
+    private fun startUpdatingDriveMotorPowers() {
+        linearOpMode.waitForStart()
+        thread(start = true, priority = 7) {
+            while(linearOpMode.opModeIsActive()) {
+                val headingCorrection = if(shouldCorrectHeading) headingCorrection() else 0.0
+                frontLeftMotor.power = Range.clip(frontLeftMotorPower - headingCorrection, -1.0, 1.0)
+                frontRightMotor.power = Range.clip(frontRightMotorPower + headingCorrection, -1.0, 1.0)
+                backLeftMotor.power = Range.clip(backLeftMotorPower - headingCorrection, -1.0, 1.0)
+                backRightMotor.power = Range.clip(backRightMotorPower + headingCorrection, -1.0, 1.0)
+                Thread.yield()
+            }
+        }
+    }
+
+    // IMU
+
+    private fun getHeading(): Double {
+        val orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
+        return orientation.firstAngle.toDouble()
+    }
+
     fun waitForGyroCalibration() {
         while (!imu.isGyroCalibrated && linearOpMode.opModeIsActive()) {
             linearOpMode.sleep(100)
         }
+    }
+
+    private fun headingCorrection(): Double = (targetHeading - getHeading()) * GYRO_HEADING_COEFFICIENT
+
+    // Constants
+
+    companion object {
+        val MINIMUM_DRIVE_POWER = 0.10
+        val GYRO_HEADING_COEFFICIENT = 0.015
     }
 }
 

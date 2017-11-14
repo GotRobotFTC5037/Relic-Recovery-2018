@@ -17,6 +17,7 @@ class BlueAutonomous: LinearOpMode() {
         val robot = RelicRecoveryRobot
         robot.linearOpMode = this
         robot.setup(hardwareMap)
+        robot.shouldCorrectHeading = true
 
         // Activate the pictograph identifier.
         val pictographIdentifier = PictographIdentifier()
@@ -34,38 +35,45 @@ class BlueAutonomous: LinearOpMode() {
         robot.colorBeacon.blue()
 
         // If we haven't identified the pictograph by now, we never will.
-        // TODO: Well, unless we will. We should add a feature that makes a callback to a a delegated method if the pictograph ends up being identified.
-        // TODO: If the time between the pictograph identifier activation and now is very short, wait a little before getting this value.
-        val pictograph = pictographIdentifier.getIdentifyedPictograph()
+        val pictograph = pictographIdentifier.getIdentifiedPictograph()
+        pictographIdentifier.deactivate()
 
         // Close the Glyph Grabbers in order to grab the glyph in front of us as well as
-        // to Allow the front Ultrasonic Sensor to see in front of them.
-        robot.closeGlyphGrabbers()
-        sleep(1000)
+        // to allow the front Ultrasonic Sensor to see in front of them.
+        robot.closeGlyphGrabbers(); sleep(1000)
+
+        // Lift the lift so that the glyph doesn't drag on the floor.
+        robot.setLiftPosition(350, 0.10)
 
         // TODO: Add back the jewel knocking code.
 
-        // Drive until 45cm away from the wall.
-        robot.driveToDistanceFromForwardObject(45.0, 0.25)
-        robot.stopAllDriveMotors()
+        // Drive until close enough to the crypto boxes.
+        robot.driveToDistanceFromForwardObject(40.0, 0.15)
         sleep(1000)
 
-        // TODO: Find the real values for each crypto box
+        // Select the distance from the wall baaed on the pictograph.
         val leftWallDistance = when(pictograph) {
-            RelicRecoveryVuMark.LEFT -> 0.0
-            RelicRecoveryVuMark.CENTER -> 0.0
-            RelicRecoveryVuMark.RIGHT -> 0.0
-            RelicRecoveryVuMark.UNKNOWN -> 0.0 // TODO: Pick a random crypto box
+            RelicRecoveryVuMark.LEFT -> 50.0
+            RelicRecoveryVuMark.CENTER -> 70.0
+            RelicRecoveryVuMark.RIGHT -> 90.0
+            RelicRecoveryVuMark.UNKNOWN -> 70.0 // TODO: Pick a random crypto box here.
         }
 
         // Drive to the correct glyph position.
-        // TODO: Move the robot to the correct crypto box.
+        robot.driveToDistanceFromLeftObject(leftWallDistance, 0.75)
 
-        // TODO: Drive the robot forward to deliver the crypto box.
-        robot.openGlyphGrabbers()
-        sleep(500)
+        // Lower the lift.
+        robot.setLiftPosition(0, 0.10)
 
-        robot.driveTo(0.0, -50.0)
+        // Drop the glyph.
+        robot.openGlyphGrabbers(); sleep(500)
+
+        // Push the glyph into the crypto box.
+        robot.setDrivePower(0.25); sleep(500)
+        robot.stopAllDriveMotors()
+
+        // Back away from the crypto box.
+        robot.setDrivePower(-0.25); sleep(200)
     }
 
 }

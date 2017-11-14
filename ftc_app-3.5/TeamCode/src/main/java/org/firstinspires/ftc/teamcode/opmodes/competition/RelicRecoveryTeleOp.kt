@@ -13,9 +13,11 @@ class RelicRecoveryTeleOp : LinearOpMode() {
         val robot = RelicRecoveryRobot
         robot.linearOpMode = this
         robot.setup(hardwareMap)
+
         robot.colorBeacon.yellow()
         robot.waitForGyroCalibration()
         robot.colorBeacon.green()
+
         waitForStart()
         robot.colorBeacon.blue()
 

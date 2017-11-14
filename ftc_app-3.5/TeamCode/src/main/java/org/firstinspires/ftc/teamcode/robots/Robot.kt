@@ -15,5 +15,5 @@ abstract class Robot {
     abstract fun setDrivePower(power: Double)
     abstract fun setTurnPower(power: Double)
     abstract fun stopAllDriveMotors()
-    abstract fun turn(power: Double, degrees: Int)
+    abstract fun turn(power: Double, degrees: Double)
 }
