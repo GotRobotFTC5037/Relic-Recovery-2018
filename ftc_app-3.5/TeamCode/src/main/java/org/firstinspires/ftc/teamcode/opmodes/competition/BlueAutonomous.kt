@@ -10,6 +10,18 @@ import org.firstinspires.ftc.teamcode.robots.RelicRecoveryRobot
 @Autonomous(name = "Blue Autonomous", group = "Manual Selection Autonomous")
 class BlueAutonomous: LinearOpMode() {
 
+    companion object {
+        val OPMODE_NAME = "Blue Autonomous"
+
+        val DRIVE_POWER = 0.15
+        val STRAFE_POWER = 0.75
+
+        val FRONT_WALL_DISTANCE = 40.0
+        val LEFT_CRYPTO_BOX_DISTANCE = 50.0
+        val CENTER_CRYPTO_BOX_DISTANCE = 70.0
+        val RIGHT_CRYPTO_BOX_DISTANCE = 90.0
+    }
+
     @Throws(InterruptedException::class)
     override fun runOpMode() {
 
@@ -24,7 +36,7 @@ class BlueAutonomous: LinearOpMode() {
         pictographIdentifier.activate()
 
         // Prepare for TeleOp transition after Autonomous is run.
-        AutoTransitioner.transitionOnStop(this, "TeleOp")
+        AutoTransitioner.transitionOnStop(this, RelicRecoveryTeleOp.OPMODE_NAME)
 
         // Wait for the imu gyro to calibrate.
         robot.waitForGyroCalibration()
@@ -43,37 +55,36 @@ class BlueAutonomous: LinearOpMode() {
         robot.closeGlyphGrabbers(); sleep(1000)
 
         // Lift the lift so that the glyph doesn't drag on the floor.
-        robot.setLiftPosition(350, 0.10)
+        robot.setLiftPosition(RelicRecoveryRobot.LIFT_FIRST_LEVEL)
 
         // TODO: Add back the jewel knocking code.
 
         // Drive until close enough to the crypto boxes.
-        robot.driveToDistanceFromForwardObject(40.0, 0.15)
+        robot.driveToDistanceFromForwardObject(FRONT_WALL_DISTANCE, DRIVE_POWER)
         sleep(1000)
 
         // Select the distance from the wall baaed on the pictograph.
         val leftWallDistance = when(pictograph) {
-            RelicRecoveryVuMark.LEFT -> 50.0
-            RelicRecoveryVuMark.CENTER -> 70.0
-            RelicRecoveryVuMark.RIGHT -> 90.0
-            RelicRecoveryVuMark.UNKNOWN -> 70.0 // TODO: Pick a random crypto box here.
+            RelicRecoveryVuMark.LEFT -> LEFT_CRYPTO_BOX_DISTANCE
+            RelicRecoveryVuMark.CENTER -> CENTER_CRYPTO_BOX_DISTANCE
+            RelicRecoveryVuMark.RIGHT -> RIGHT_CRYPTO_BOX_DISTANCE
+            RelicRecoveryVuMark.UNKNOWN -> CENTER_CRYPTO_BOX_DISTANCE // TODO: Pick a random crypto box.
         }
 
         // Drive to the correct glyph position.
-        robot.driveToDistanceFromLeftObject(leftWallDistance, 0.75)
-
-        // Lower the lift.
-        robot.setLiftPosition(0, 0.10)
+        robot.driveToDistanceFromLeftObject(leftWallDistance, STRAFE_POWER)
 
         // Drop the glyph.
-        robot.openGlyphGrabbers(); sleep(500)
+        robot.setLiftPosition(0)
+        robot.openGlyphGrabbers()
+        sleep(500)
 
         // Push the glyph into the crypto box.
-        robot.setDrivePower(0.25); sleep(500)
+        robot.setDrivePower(DRIVE_POWER); sleep(750)
         robot.stopAllDriveMotors()
 
         // Back away from the crypto box.
-        robot.setDrivePower(-0.25); sleep(200)
+        robot.setDrivePower(-DRIVE_POWER); sleep(200)
     }
 
 }

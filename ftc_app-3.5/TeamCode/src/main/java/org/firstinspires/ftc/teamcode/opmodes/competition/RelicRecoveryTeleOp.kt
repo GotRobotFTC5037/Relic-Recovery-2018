@@ -9,13 +9,17 @@ import kotlin.concurrent.thread
 @TeleOp(name = "TeleOp")
 class RelicRecoveryTeleOp : LinearOpMode() {
 
+    companion object {
+        val OPMODE_NAME = "TeleOp"
+    }
+
     @Throws(InterruptedException::class)
     override fun runOpMode() {
         val robot = RelicRecoveryRobot
         robot.linearOpMode = this
         robot.setup(hardwareMap)
-
         robot.colorBeacon.yellow()
+
         robot.waitForGyroCalibration()
         robot.colorBeacon.green()
 
@@ -40,6 +44,12 @@ class RelicRecoveryTeleOp : LinearOpMode() {
                 }
             } else if (gamepad2.b) {
                 robot.openGlyphGrabbers()
+            }
+
+            if (gamepad2.x) {
+                robot.setLiftPosition(RelicRecoveryRobot.LIFT_SECOND_LEVEL)
+            } else  if (gamepad2.y) {
+                robot.setLiftPosition(RelicRecoveryRobot.LIFT_FORTH_LEVEL)
             }
 
             robot.setDirection(xPower, yPower, zPower)

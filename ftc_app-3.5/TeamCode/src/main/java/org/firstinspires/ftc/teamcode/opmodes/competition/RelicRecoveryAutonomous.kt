@@ -16,7 +16,7 @@ class RelicRecoveryAutonomous : LinearOpMode() {
 
         when (allianceColor) {
             Robot.AllianceColor.BLUE ->
-                AutoTransitioner.transitionOnStop(this, "Blue Autonomous")
+                AutoTransitioner.transitionOnStop(this, BlueAutonomous.OPMODE_NAME)
 
             Robot.AllianceColor.RED ->
                 AutoTransitioner.transitionOnStop(this, "Red Autonomous")

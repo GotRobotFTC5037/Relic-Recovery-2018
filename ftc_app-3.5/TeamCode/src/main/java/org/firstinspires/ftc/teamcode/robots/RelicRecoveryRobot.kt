@@ -10,6 +10,15 @@ object RelicRecoveryRobot : MecanumRobot() {
     private val MAXIMUM_ENCODER_LIFT_POSITION = 2700
     private val DISTANCE_SENSOR_FILTER_ALPHA = 0.15
 
+    private val LIFT_CORRECTION_COEFFICIENT = 0.002
+
+    val LIFT_FIRST_LEVEL = 350
+    val LIFT_SECOND_LEVEL = 700
+    val LIFT_THIRD_LEVEL = 1050
+    val LIFT_FORTH_LEVEL = 1400
+    val LIFT_FIFTH_LEVEL = 2700
+
+
     private lateinit var liftMotor: DcMotor
     private lateinit var jewelStick: Servo
     private lateinit var leftGlyphGrabber: Servo
@@ -21,6 +30,9 @@ object RelicRecoveryRobot : MecanumRobot() {
     private lateinit var frontUltrasonicSensor: AnalogInput
     private lateinit var liftLimitSwitch: DigitalChannel
     lateinit var colorBeacon: MRIColorBeacon
+
+    private var targetLiftPosition = 0
+    private var shouldHoldLiftPosition = true
 
     private var frontObjectDistance = 0.0
     private var leftObjectDistance = 0.0
@@ -50,6 +62,8 @@ object RelicRecoveryRobot : MecanumRobot() {
         colorBeacon = MRIColorBeacon()
         colorBeacon.init(hardwareMap, "color beacon")
         colorBeacon.yellow()
+
+        beginHoldingLiftPosition()
 
         thread(start = true, priority = 7) {
             linearOpMode.waitForStart()
@@ -133,6 +147,13 @@ object RelicRecoveryRobot : MecanumRobot() {
     // Lift
 
     fun setLiftWinchPower(power: Double) {
+        if (power == 0.0) {
+            shouldHoldLiftPosition = true;
+            targetLiftPosition = liftMotor.currentPosition
+        } else {
+            shouldHoldLiftPosition = false
+        }
+
         if ((power >= 0 && liftMotor.currentPosition <= MAXIMUM_ENCODER_LIFT_POSITION) || (!liftIsLowered() && power < 0))
             liftMotor.power = power
         else
@@ -142,10 +163,11 @@ object RelicRecoveryRobot : MecanumRobot() {
             liftMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
             liftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
         }
-
     }
 
-    fun setLiftPosition(position: Int, power: Double) {
+    fun setLiftPosition(position: Int, power: Double = 0.1) {
+        shouldHoldLiftPosition = false
+
         when {
             liftMotor.currentPosition < position -> {
                 setLiftWinchPower(Math.abs(power))
@@ -171,9 +193,24 @@ object RelicRecoveryRobot : MecanumRobot() {
         }
 
         setLiftWinchPower(0.0)
+        targetLiftPosition = position
+        shouldHoldLiftPosition = true
     }
 
     fun liftIsLowered() = liftLimitSwitch.state
+
+    private fun beginHoldingLiftPosition() {
+        thread(true) {
+            linearOpMode.waitForStart()
+            while (linearOpMode.opModeIsActive()) {
+                if(shouldHoldLiftPosition) {
+                    val liftPowerAdjustment = (targetLiftPosition - liftMotor.currentPosition) * LIFT_CORRECTION_COEFFICIENT
+                    liftMotor.power = liftPowerAdjustment
+                }
+                Thread.sleep(100)
+            }
+        }
+    }
 
     // Glyph Grabbers
 
@@ -187,7 +224,7 @@ object RelicRecoveryRobot : MecanumRobot() {
     }
 
     fun closeGlyphGrabbers() {
-        setGlyphGrabbersPosition(0.75)
+        setGlyphGrabbersPosition(0.775)
     }
 
     // Jewel Stick
@@ -206,18 +243,21 @@ object RelicRecoveryRobot : MecanumRobot() {
 
     // Range Sensors
 
-    fun updateFrontObjectDistance() {
-        if(frontObjectDistance == 0.0) { frontObjectDistance = (frontUltrasonicSensor.voltage / (5.0 / 512.0)) * 2.54; return }
-        frontObjectDistance += DISTANCE_SENSOR_FILTER_ALPHA * (((frontUltrasonicSensor.voltage / (5.0 / 512.0)) * 2.54) - frontObjectDistance)
+    private fun updateFrontObjectDistance() {
+        val rawDistance = (frontUltrasonicSensor.voltage / (5.0 / 512.0)) * 2.54
+        if(frontObjectDistance == 0.0) { frontObjectDistance = rawDistance; return }
+        frontObjectDistance += DISTANCE_SENSOR_FILTER_ALPHA * (rawDistance - frontObjectDistance)
     }
 
-    fun updateLeftObjectDistance() {
-        if(leftObjectDistance == 0.0) { leftObjectDistance = leftRangeSensor.cmUltrasonic(); return }
-        leftObjectDistance += DISTANCE_SENSOR_FILTER_ALPHA * (leftRangeSensor.cmUltrasonic() - leftObjectDistance)
+    private fun updateLeftObjectDistance() {
+        val rawDistance = leftRangeSensor.cmUltrasonic()
+        if(leftObjectDistance == 0.0) { leftObjectDistance = rawDistance; return }
+        leftObjectDistance += DISTANCE_SENSOR_FILTER_ALPHA * (rawDistance - leftObjectDistance)
     }
 
-    fun updateRightObjectDistance() {
-        if(rightObjectDistance == 0.0) { rightObjectDistance = rightRangeSensor.cmUltrasonic(); return }
-        rightObjectDistance += DISTANCE_SENSOR_FILTER_ALPHA * (rightRangeSensor.cmUltrasonic() - rightObjectDistance)
+    private fun updateRightObjectDistance() {
+        val rawDistance = rightRangeSensor.cmUltrasonic()
+        if(rightObjectDistance == 0.0) { rightObjectDistance = rawDistance; return }
+        rightObjectDistance += DISTANCE_SENSOR_FILTER_ALPHA * (rawDistance - rightObjectDistance)
     }
 }
