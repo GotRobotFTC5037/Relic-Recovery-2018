@@ -60,8 +60,6 @@ open class MecanumRobot : Robot() {
 
         imu = hardwareMap.get(BNO055IMU::class.java, "imu")
         imu.initialize(imuParameters)
-
-        startUpdatingDriveMotorPowers()
     }
 
     // Moving
@@ -137,7 +135,7 @@ open class MecanumRobot : Robot() {
         shouldCorrectHeading = true
     }
 
-    private fun startUpdatingDriveMotorPowers() {
+    fun startUpdatingDriveMotorPowers() {
         linearOpMode.waitForStart()
         thread(start = true, priority = 7) {
             while(linearOpMode.opModeIsActive()) {

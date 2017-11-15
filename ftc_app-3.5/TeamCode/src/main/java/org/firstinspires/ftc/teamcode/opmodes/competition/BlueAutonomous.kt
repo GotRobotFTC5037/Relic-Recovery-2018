@@ -17,9 +17,9 @@ class BlueAutonomous: LinearOpMode() {
         val STRAFE_POWER = 0.75
 
         val FRONT_WALL_DISTANCE = 40.0
-        val LEFT_CRYPTO_BOX_DISTANCE = 50.0
-        val CENTER_CRYPTO_BOX_DISTANCE = 70.0
-        val RIGHT_CRYPTO_BOX_DISTANCE = 90.0
+        val LEFT_CRYPTO_BOX_DISTANCE = 40.0
+        val CENTER_CRYPTO_BOX_DISTANCE = 63.0
+        val RIGHT_CRYPTO_BOX_DISTANCE = 80.0
     }
 
     @Throws(InterruptedException::class)
@@ -46,13 +46,15 @@ class BlueAutonomous: LinearOpMode() {
         waitForStart()
         robot.colorBeacon.blue()
 
+        robot.start()
+
         // If we haven't identified the pictograph by now, we never will.
         val pictograph = pictographIdentifier.getIdentifiedPictograph()
         pictographIdentifier.deactivate()
 
         // Close the Glyph Grabbers in order to grab the glyph in front of us as well as
         // to allow the front Ultrasonic Sensor to see in front of them.
-        robot.closeGlyphGrabbers(); sleep(1000)
+        robot.closeGlyphGrabbers(); sleep(2000)
 
         // Lift the lift so that the glyph doesn't drag on the floor.
         robot.setLiftPosition(RelicRecoveryRobot.LIFT_FIRST_LEVEL)

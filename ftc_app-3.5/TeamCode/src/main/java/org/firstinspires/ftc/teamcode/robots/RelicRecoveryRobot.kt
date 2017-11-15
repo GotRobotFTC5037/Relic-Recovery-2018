@@ -8,7 +8,7 @@ import kotlin.concurrent.thread
 object RelicRecoveryRobot : MecanumRobot() {
 
     private val MAXIMUM_ENCODER_LIFT_POSITION = 2700
-    private val DISTANCE_SENSOR_FILTER_ALPHA = 0.15
+    private val DISTANCE_SENSOR_FILTER_ALPHA = 0.075
 
     private val LIFT_CORRECTION_COEFFICIENT = 0.002
 
@@ -63,19 +63,13 @@ object RelicRecoveryRobot : MecanumRobot() {
         colorBeacon.init(hardwareMap, "color beacon")
         colorBeacon.yellow()
 
-        beginHoldingLiftPosition()
-
-        thread(start = true, priority = 7) {
-            linearOpMode.waitForStart()
-            while(linearOpMode.opModeIsActive()) {
-                updateFrontObjectDistance()
-                updateLeftObjectDistance()
-                updateRightObjectDistance()
-                Thread.sleep(20)
-            }
-        }
-
         super.setup(hardwareMap)
+    }
+
+    fun start() {
+        //beginHoldingLiftPosition()
+        beingUpdatingRangeSensors()
+        startUpdatingDriveMotorPowers()
     }
 
     fun getAllianceColor(hardwareMap: HardwareMap): AllianceColor {
@@ -98,7 +92,7 @@ object RelicRecoveryRobot : MecanumRobot() {
             currentDistance > distance -> {
                 setDrivePower(Math.abs(power))
                 while (frontObjectDistance > distance && linearOpMode.opModeIsActive()) {
-                    linearOpMode.telemetry.addData("Front Distance", updateFrontObjectDistance())
+                    linearOpMode.telemetry.addData("Front Distance", frontObjectDistance)
                     linearOpMode.telemetry.addData("Target", distance)
                     linearOpMode.telemetry.update()
                     linearOpMode.sleep(50)
@@ -119,6 +113,7 @@ object RelicRecoveryRobot : MecanumRobot() {
     }
 
     fun driveToDistanceFromLeftObject(distance: Double, power: Double) {
+        leftObjectDistance = 0.0
         val currentDistance = leftObjectDistance
         when {
             currentDistance > distance -> {
@@ -131,11 +126,15 @@ object RelicRecoveryRobot : MecanumRobot() {
             currentDistance < distance -> {
                 setStrafePower(Math.abs(power))
                 while (leftObjectDistance < distance && linearOpMode.opModeIsActive()) {
-                    linearOpMode.telemetry.addData("Left Distance", updateLeftObjectDistance())
+                    linearOpMode.telemetry.addData("Left Distance", leftObjectDistance)
                     linearOpMode.telemetry.addData("Target", distance)
                     linearOpMode.telemetry.update()
                     linearOpMode.sleep(50)
                 }
+
+                linearOpMode.telemetry.addData("Left Distance", leftObjectDistance)
+                linearOpMode.telemetry.addData("Target", distance)
+                linearOpMode.telemetry.update()
             }
 
             else -> return
@@ -147,12 +146,12 @@ object RelicRecoveryRobot : MecanumRobot() {
     // Lift
 
     fun setLiftWinchPower(power: Double) {
-        if (power == 0.0) {
+        /*if (power == 0.0) {
             shouldHoldLiftPosition = true;
             targetLiftPosition = liftMotor.currentPosition
         } else {
             shouldHoldLiftPosition = false
-        }
+        }*/
 
         if ((power >= 0 && liftMotor.currentPosition <= MAXIMUM_ENCODER_LIFT_POSITION) || (!liftIsLowered() && power < 0))
             liftMotor.power = power
@@ -165,17 +164,13 @@ object RelicRecoveryRobot : MecanumRobot() {
         }
     }
 
-    fun setLiftPosition(position: Int, power: Double = 0.1) {
+    fun setLiftPosition(position: Int, power: Double = 0.30) {
         shouldHoldLiftPosition = false
 
         when {
             liftMotor.currentPosition < position -> {
                 setLiftWinchPower(Math.abs(power))
                 while (liftMotor.currentPosition < position && linearOpMode.opModeIsActive()) {
-                    if (liftIsLowered()) {
-                        liftMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-                        liftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-                    }
                     linearOpMode.sleep(50)
                 }
             }
@@ -183,10 +178,6 @@ object RelicRecoveryRobot : MecanumRobot() {
             liftMotor.currentPosition > position -> {
                 setLiftWinchPower(-Math.abs(power))
                 while (liftMotor.currentPosition > position && linearOpMode.opModeIsActive()) {
-                    if (liftIsLowered()) {
-                        liftMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-                        liftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-                    }
                     linearOpMode.sleep(50)
                 }
             }
@@ -201,7 +192,6 @@ object RelicRecoveryRobot : MecanumRobot() {
 
     private fun beginHoldingLiftPosition() {
         thread(true) {
-            linearOpMode.waitForStart()
             while (linearOpMode.opModeIsActive()) {
                 if(shouldHoldLiftPosition) {
                     val liftPowerAdjustment = (targetLiftPosition - liftMotor.currentPosition) * LIFT_CORRECTION_COEFFICIENT
@@ -242,6 +232,17 @@ object RelicRecoveryRobot : MecanumRobot() {
     }
 
     // Range Sensors
+
+    private fun beingUpdatingRangeSensors() {
+        thread(start = true, priority = 7) {
+            while(linearOpMode.opModeIsActive()) {
+                updateFrontObjectDistance()
+                updateLeftObjectDistance()
+                updateRightObjectDistance()
+                Thread.sleep(20)
+            }
+        }
+    }
 
     private fun updateFrontObjectDistance() {
         val rawDistance = (frontUltrasonicSensor.voltage / (5.0 / 512.0)) * 2.54
