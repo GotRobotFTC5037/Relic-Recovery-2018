@@ -9,28 +9,38 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
 import org.firstinspires.ftc.teamcode.libraries.RobotAccelerationIntegrator
+import java.lang.Math.abs
 import kotlin.concurrent.thread
 
 open class MecanumRobot : Robot() {
+
+    companion object {
+        val MINIMUM_DRIVE_POWER = 0.10
+        val HEADING_CORRECTION_COEFFICIENT = 0.05
+    }
 
     private lateinit var frontLeftMotor: DcMotor
     private lateinit var frontRightMotor: DcMotor
     private lateinit var backLeftMotor: DcMotor
     private lateinit var backRightMotor: DcMotor
-    lateinit var imu: BNO055IMU
+    private lateinit var imu: BNO055IMU
 
     private var frontLeftMotorPower = 0.0
     private var frontRightMotorPower = 0.0
     private var backLeftMotorPower = 0.0
     private var backRightMotorPower = 0.0
 
-    private var targetHeading = 0.0
-
-    var shouldCorrectHeading = false
+    var shouldCorrectHeading = true
+    var targetHeading = 0.0
+    var perspectiveAdjustment = 0.0
 
     // Preparing
 
     override fun setup(hardwareMap: HardwareMap) {
+        shouldCorrectHeading = true
+        targetHeading = 0.0
+        perspectiveAdjustment = 0.0
+
         frontLeftMotor = hardwareMap.dcMotor.get("front left motor")
         frontLeftMotor.direction = DcMotorSimple.Direction.FORWARD
         frontLeftMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
@@ -64,6 +74,36 @@ open class MecanumRobot : Robot() {
 
     // Moving
 
+    fun startUpdatingDriveMotorPowers() {
+        thread(start = true) {
+            while(!linearOpMode.isStopRequested) {
+                val headingCorrection = if(shouldCorrectHeading) headingCorrectionPower() else 0.0
+
+                if(Math.abs(frontLeftMotorPower) < MINIMUM_DRIVE_POWER && frontLeftMotorPower != 0.0)
+                    frontLeftMotor.power = MINIMUM_DRIVE_POWER * Math.signum(frontLeftMotorPower)
+                else
+                    frontLeftMotor.power = Range.clip(frontLeftMotorPower - headingCorrection, -1.0, 1.0)
+
+                if(Math.abs(frontRightMotorPower) < MINIMUM_DRIVE_POWER && frontRightMotorPower != 0.0)
+                    frontRightMotor.power = MINIMUM_DRIVE_POWER * Math.signum(frontRightMotorPower)
+                else
+                    frontRightMotor.power = Range.clip(frontRightMotorPower + headingCorrection, -1.0, 1.0)
+
+                if(Math.abs(backLeftMotorPower) < MINIMUM_DRIVE_POWER && backLeftMotorPower != 0.0)
+                    backLeftMotor.power = MINIMUM_DRIVE_POWER * Math.signum(backLeftMotorPower)
+                else
+                    backLeftMotor.power = Range.clip(backLeftMotorPower - headingCorrection, -1.0, 1.0)
+
+                if(Math.abs(backRightMotorPower) < MINIMUM_DRIVE_POWER && backRightMotorPower != 0.0)
+                    backRightMotor.power = MINIMUM_DRIVE_POWER * Math.signum(backRightMotorPower)
+                else
+                    backRightMotor.power = Range.clip(backRightMotorPower + headingCorrection, -1.0, 1.0)
+
+                linearOpMode.sleep(10)
+            }
+        }
+    }
+
     override fun setDrivePower(power: Double) {
         frontLeftMotorPower = power
         frontRightMotorPower = power
@@ -92,8 +132,8 @@ open class MecanumRobot : Robot() {
         backRightMotorPower = 0.0
     }
 
-    fun setDirection(x: Double, y: Double, z: Double) {
-        val gyroHeading = Math.toRadians(getHeading() + 90.0)
+    fun setDirection(x: Double, y: Double, z: Double = 0.0) {
+        val gyroHeading = Math.toRadians(getHeading() + 180 - perspectiveAdjustment)
         val sin = Math.sin(gyroHeading)
         val cos = Math.cos(gyroHeading)
         var adjustedX = (sin * x) - (cos * y)
@@ -107,68 +147,65 @@ open class MecanumRobot : Robot() {
             adjustedZ /= max
         }
 
-        frontLeftMotor.power =  adjustedY + adjustedX - adjustedZ
-        backLeftMotor.power = adjustedY - adjustedX - adjustedZ
-        frontRightMotor.power = adjustedY - adjustedX + adjustedZ
-        backRightMotor.power = adjustedY + adjustedX + adjustedZ
+        frontLeftMotorPower =  adjustedY + adjustedX - adjustedZ
+        backLeftMotorPower = adjustedY - adjustedX - adjustedZ
+        frontRightMotorPower = adjustedY - adjustedX + adjustedZ
+        backRightMotorPower = adjustedY + adjustedX + adjustedZ
     }
 
     override fun turn(power: Double, degrees: Double) {
-        shouldCorrectHeading = false
-        targetHeading += degrees
+        if(!linearOpMode.isStopRequested) {
+            shouldCorrectHeading = false
+            targetHeading = degrees
+            val currentHeading = getHeading()
 
-        if (degrees > 0) {
-            val targetHeading = getHeading() + degrees
-            setTurnPower(Math.abs(power))
-            while (getHeading() < targetHeading && linearOpMode.opModeIsActive()) {
-                linearOpMode.sleep(50)
+            when {
+                targetHeading > currentHeading -> {
+                    setTurnPower(abs(power))
+                    while (targetHeading > getHeading() && linearOpMode.opModeIsActive()) {
+                        linearOpMode.sleep(10)
+                    }
+                }
+
+                targetHeading < currentHeading -> {
+                    setTurnPower(-abs(power))
+                    while (targetHeading < getHeading() && linearOpMode.opModeIsActive()) {
+                        linearOpMode.sleep(10)
+                    }
+                }
             }
-        } else if (degrees < 0) {
-            val targetHeading = getHeading() + degrees
-            setTurnPower(-Math.abs(power))
-            while (getHeading() > targetHeading && linearOpMode.opModeIsActive()) {
-               linearOpMode.sleep(50)
-            }
+
+            shouldCorrectHeading = true
         }
 
         stopAllDriveMotors()
-        shouldCorrectHeading = true
-    }
-
-    fun startUpdatingDriveMotorPowers() {
-        linearOpMode.waitForStart()
-        thread(start = true, priority = 7) {
-            while(linearOpMode.opModeIsActive()) {
-                val headingCorrection = if(shouldCorrectHeading) headingCorrection() else 0.0
-                frontLeftMotor.power = Range.clip(frontLeftMotorPower - headingCorrection, -1.0, 1.0)
-                frontRightMotor.power = Range.clip(frontRightMotorPower + headingCorrection, -1.0, 1.0)
-                backLeftMotor.power = Range.clip(backLeftMotorPower - headingCorrection, -1.0, 1.0)
-                backRightMotor.power = Range.clip(backRightMotorPower + headingCorrection, -1.0, 1.0)
-                Thread.yield()
-            }
-        }
     }
 
     // IMU
 
-    private fun getHeading(): Double {
+    fun getHeading(): Double {
         val orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
         return orientation.firstAngle.toDouble()
     }
 
-    fun waitForGyroCalibration() {
+    fun getRoll(): Double {
+        val orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
+        return orientation.secondAngle.toDouble()
+    }
+
+    fun getPitch(): Double {
+        val orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
+        return orientation.thirdAngle.toDouble()
+    }
+
+    open fun waitForGyroCalibration() {
         while (!imu.isGyroCalibrated && linearOpMode.opModeIsActive()) {
-            linearOpMode.sleep(100)
+            linearOpMode.sleep(10)
         }
     }
 
-    private fun headingCorrection(): Double = (targetHeading - getHeading()) * GYRO_HEADING_COEFFICIENT
+    private fun headingCorrectionPower(): Double = (targetHeading - (getHeading() + perspectiveAdjustment)) * HEADING_CORRECTION_COEFFICIENT
 
-    // Constants
-
-    companion object {
-        val MINIMUM_DRIVE_POWER = 0.10
-        val GYRO_HEADING_COEFFICIENT = 0.015
-    }
+    fun resetPerspective() { perspectiveAdjustment = getHeading() }
 }
 

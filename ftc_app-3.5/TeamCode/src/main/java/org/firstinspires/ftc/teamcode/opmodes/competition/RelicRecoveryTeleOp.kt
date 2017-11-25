@@ -2,9 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.competition
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-
 import org.firstinspires.ftc.teamcode.robots.RelicRecoveryRobot
-import kotlin.concurrent.thread
 
 @TeleOp(name = "TeleOp")
 class RelicRecoveryTeleOp : LinearOpMode() {
@@ -15,45 +13,69 @@ class RelicRecoveryTeleOp : LinearOpMode() {
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {
-        val robot = RelicRecoveryRobot
+        val robot = RelicRecoveryRobot()
         robot.linearOpMode = this
         robot.setup(hardwareMap)
-        robot.colorBeacon.yellow()
-
+        robot.shouldCorrectHeading = false
+        robot.printTeleOpInstructions()
         robot.waitForGyroCalibration()
-        robot.colorBeacon.green()
+        robot.waitForStart()
+        robot.start()
 
-        waitForStart()
-        robot.colorBeacon.blue()
-
+        robot.dropLift()
         robot.raiseJewelStick()
 
         while (opModeIsActive()) {
-            val xPower = gamepad1.left_stick_x.toDouble()
-            val yPower = (gamepad1.left_stick_y * -1).toDouble()
-            val zPower = (gamepad1.right_stick_x * -1).toDouble()
-            val winchPower = (gamepad2.left_stick_y * -1).toDouble()
+            // Gamepad 1: Movement
+            when {
+                gamepad1.dpad_up -> { robot.setDrivePower(0.20); robot.shouldCorrectHeading = true; robot.targetHeading = robot.getHeading() }
+                gamepad1.dpad_down -> {robot.setDrivePower(-0.20); robot.shouldCorrectHeading = true; robot.targetHeading = robot.getHeading() }
+                gamepad1.dpad_left -> { robot.setStrafePower(-0.65); robot.shouldCorrectHeading = true; robot.targetHeading = robot.getHeading() }
+                gamepad1.dpad_right -> { robot.setStrafePower(0.65); robot.shouldCorrectHeading = true; robot.targetHeading = robot.getHeading() }
 
-            if (gamepad2.a) {
-                robot.closeGlyphGrabbers()
-                if(robot.liftIsLowered()) {
-                    thread(true, priority = 9) {
-                        sleep(750)
-                        robot.setLiftPosition(300, 0.15)
-                    }
+                else -> {
+                    robot.shouldCorrectHeading = false
+                    val x = gamepad1.left_stick_x.toDouble()
+                    val y = gamepad1.left_stick_y.toDouble() * -1.0
+                    val z = gamepad1.right_stick_x.toDouble() * -1.0
+
+                    val xPower = Math.abs(Math.pow(x, 3.0)) * Math.signum(x)
+                    val yPower = Math.abs(Math.pow(y, 3.0)) * Math.signum(y)
+                    val zPower = Math.abs(Math.pow(z, 3.0)) * Math.signum(z)
+
+                    robot.setDirection(xPower, yPower, zPower)
                 }
-            } else if (gamepad2.b) {
-                robot.openGlyphGrabbers()
             }
 
-            if (gamepad2.x) {
-                robot.setLiftPosition(RelicRecoveryRobot.LIFT_SECOND_LEVEL)
-            } else  if (gamepad2.y) {
-                robot.setLiftPosition(RelicRecoveryRobot.LIFT_FORTH_LEVEL)
+            when {
+                gamepad1.y -> robot.turn(0.65, -robot.getHeading() - robot.perspectiveAdjustment)
+                gamepad1.b -> robot.turn(0.65, -robot.getHeading() - robot.perspectiveAdjustment - 90)
+                gamepad1.x -> robot.turn(0.65, -robot.getHeading() - robot.perspectiveAdjustment + 90)
             }
 
-            robot.setDirection(xPower, yPower, zPower)
+            if(gamepad1.start && gamepad1.back) robot.resetPerspective()
+
+            if(gamepad1.a) {
+                while(gamepad1.a) {}
+                robot.perspectiveAdjustment += 180
+            }
+
+
+            // Gamepad 2: Attachments
+            val winchPower = (gamepad2.left_stick_y * -1).toDouble()
             robot.setLiftWinchPower(winchPower)
+
+            when {
+                gamepad2.a -> robot.closeGlyphGrabbers()
+                gamepad2.y -> robot.releaseGlyphGrabbers()
+                gamepad2.b -> robot.openGlyphGrabbers()
+            }
+
+            // Other
+            telemetry.addData("Front Distance", robot.frontObjectDistance)
+            telemetry.addData("Left Distance", robot.leftObjectDistance)
+            telemetry.addData("Right Distance", robot.rightObjectDistance)
+            telemetry.update()
         }
 
         robot.stopAllDriveMotors()

@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap
 
 abstract class Robot {
 
-    enum class AllianceColor {
-        RED, BLUE, UNKNOWN
+    enum class SetupPosition {
+        FRONT_RED, FRONT_BLUE, BACK_BLUE, BACK_RED, UNKNOWN
     }
 
     lateinit var linearOpMode: LinearOpMode
