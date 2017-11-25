@@ -133,11 +133,11 @@ open class MecanumRobot : Robot() {
     }
 
     fun setDirection(x: Double, y: Double, z: Double = 0.0) {
-        val gyroHeading = Math.toRadians(getHeading() + 180 - perspectiveAdjustment)
-        val sin = Math.sin(gyroHeading)
-        val cos = Math.cos(gyroHeading)
-        var adjustedX = (sin * x) - (cos * y)
-        var adjustedY = (sin * y) + (cos * x)
+        //val gyroHeading = Math.toRadians(getHeading() + 180 - perspectiveAdjustment)
+        //val sin = Math.sin(gyroHeading)
+        //val cos = Math.cos(gyroHeading)
+        var adjustedX = x//(sin * x) - (cos * y)
+        var adjustedY = y//(sin * y) + (cos * x)
         var adjustedZ = z
 
         val max = Math.abs(adjustedY) + Math.abs(adjustedX) + Math.abs(adjustedZ)
