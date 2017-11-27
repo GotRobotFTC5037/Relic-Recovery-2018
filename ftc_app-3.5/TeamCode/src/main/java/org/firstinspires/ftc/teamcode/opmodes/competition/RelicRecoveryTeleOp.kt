@@ -48,16 +48,9 @@ class RelicRecoveryTeleOp : LinearOpMode() {
             }
 
             when {
-                gamepad1.y -> robot.turn(0.65, -robot.getHeading() - robot.perspectiveAdjustment)
-                gamepad1.b -> robot.turn(0.65, -robot.getHeading() - robot.perspectiveAdjustment - 90)
-                gamepad1.x -> robot.turn(0.65, -robot.getHeading() - robot.perspectiveAdjustment + 90)
-            }
-
-            if(gamepad1.start && gamepad1.back) robot.resetPerspective()
-
-            if(gamepad1.a) {
-                while(gamepad1.a) {}
-                robot.perspectiveAdjustment += 180
+                gamepad1.y -> robot.turn(0.65, -robot.getHeading())
+                gamepad1.b -> robot.turn(0.65, -robot.getHeading() - 90)
+                gamepad1.x -> robot.turn(0.65, -robot.getHeading() + 90)
             }
 
 
@@ -66,16 +59,10 @@ class RelicRecoveryTeleOp : LinearOpMode() {
             robot.setLiftWinchPower(winchPower)
 
             when {
-                gamepad2.a -> robot.closeGlyphGrabbers()
-                gamepad2.y -> robot.releaseGlyphGrabbers()
-                gamepad2.b -> robot.openGlyphGrabbers()
+                gamepad2.a -> { robot.closeGlyphGrabbers(); robot.retractGlyphDeployer() }
+                gamepad2.y -> { robot.releaseGlyphGrabbers(); robot.extendGlyphDeployer() }
+                gamepad2.b -> { robot.openGlyphGrabbers(); robot.retractGlyphDeployer() }
             }
-
-            // Other
-            telemetry.addData("Front Distance", robot.frontObjectDistance)
-            telemetry.addData("Left Distance", robot.leftObjectDistance)
-            telemetry.addData("Right Distance", robot.rightObjectDistance)
-            telemetry.update()
         }
 
         robot.stopAllDriveMotors()

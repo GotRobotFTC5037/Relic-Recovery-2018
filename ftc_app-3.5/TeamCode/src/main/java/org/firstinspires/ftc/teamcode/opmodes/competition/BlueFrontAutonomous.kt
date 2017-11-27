@@ -12,7 +12,7 @@ import java.util.*
 class BlueFrontAutonomous : LinearOpMode() {
 
     companion object {
-        val OPMODE_NAME = "Blue FrontAutonomous"
+        val OPMODE_NAME = "Blue Front Autonomous"
 
         private val FRONT_WALL_DISTANCE = 45.0
         private val LEFT_CRYPTO_BOX_DISTANCE = 46.0

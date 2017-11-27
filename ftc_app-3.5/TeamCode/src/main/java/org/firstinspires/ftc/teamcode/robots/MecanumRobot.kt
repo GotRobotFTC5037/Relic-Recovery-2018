@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
-import org.firstinspires.ftc.teamcode.libraries.RobotAccelerationIntegrator
 import java.lang.Math.abs
 import kotlin.concurrent.thread
 
@@ -32,14 +31,12 @@ open class MecanumRobot : Robot() {
 
     var shouldCorrectHeading = true
     var targetHeading = 0.0
-    var perspectiveAdjustment = 0.0
 
     // Preparing
 
     override fun setup(hardwareMap: HardwareMap) {
         shouldCorrectHeading = true
         targetHeading = 0.0
-        perspectiveAdjustment = 0.0
 
         frontLeftMotor = hardwareMap.dcMotor.get("front left motor")
         frontLeftMotor.direction = DcMotorSimple.Direction.FORWARD
@@ -66,7 +63,6 @@ open class MecanumRobot : Robot() {
         val imuParameters = BNO055IMU.Parameters()
         imuParameters.angleUnit = BNO055IMU.AngleUnit.DEGREES
         imuParameters.calibrationData = calibration
-        imuParameters.accelerationIntegrationAlgorithm = RobotAccelerationIntegrator()
 
         imu = hardwareMap.get(BNO055IMU::class.java, "imu")
         imu.initialize(imuParameters)
@@ -204,8 +200,6 @@ open class MecanumRobot : Robot() {
         }
     }
 
-    private fun headingCorrectionPower(): Double = (targetHeading - (getHeading() + perspectiveAdjustment)) * HEADING_CORRECTION_COEFFICIENT
-
-    fun resetPerspective() { perspectiveAdjustment = getHeading() }
+    private fun headingCorrectionPower(): Double = (targetHeading - (getHeading())) * HEADING_CORRECTION_COEFFICIENT
 }
 

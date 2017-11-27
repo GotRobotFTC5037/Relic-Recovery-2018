@@ -9,46 +9,52 @@ import kotlin.concurrent.thread
 class RelicRecoveryRobot : MecanumRobot() {
 
     companion object {
-        private val FRONT_DISTANCE_SENSOR_FILTER_ALPHA = 0.15
+        private val FRONT_DISTANCE_SENSOR_FILTER_ALPHA = 0.50
         private val LEFT_DISTANCE_SENSOR_FILTER_ALPHA = 0.50
         private val RIGHT_DISTANCE_SENSOR_FILTER_ALPHA = 0.50
+        private val BACK_DISTANCE_SENSOR_FILTER_ALPHA = 0.15
 
         private val OBJECT_DISTANCE_THRESHOLD = 2.0
 
         private val GLYPH_GRABBER_OPEN_POSITION = 1.0
-        private val GLYPH_GRABBER_RELEASE_POSITION = 0.75
-        private val GLYPH_GRABBER_CLOSED_POSITION = 0.30
+        private val GLYPH_GRABBER_RELEASE_POSITION = 0.60
+        private val GLYPH_GRABBER_CLOSED_POSITION = 0.40
+
+        private val GLYPH_DEPLOYER_EXTENDED_POSITION = 0.25
+        private val GLYPH_DEPLOYER_RETRACTED_POSITION = 0.90
 
         private val MAXIMUM_ENCODER_LIFT_POSITION = 3000
         val LIFT_FIRST_LEVEL = 300
 
         private val BALANCING_STONE_ANGLE_THRESHOLD = 2.0
         private val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 2.0
-
-        private val BALANCING_STONE_PITCH_COEFFICIENT = 0.15 / 3
-        private val BALANCING_STONE_ROLL_COEFFICIENT = 0.15 / 3
     }
 
     private lateinit var liftMotor: DcMotor
     private lateinit var jewelStick: Servo
     private lateinit var leftGlyphGrabber: Servo
     private lateinit var rightGlyphGrabber: Servo
+    private lateinit var glyphDeployer: Servo
     private lateinit var jewelColorSensor: ColorSensor
     private lateinit var floorColorSensor: ColorSensor
     private lateinit var leftRangeSensor: ModernRoboticsI2cRangeSensor
     private lateinit var rightRangeSensor: ModernRoboticsI2cRangeSensor
-    private lateinit var frontUltrasonicSensor: AnalogInput
+    private lateinit var frontRangeSensor: ModernRoboticsI2cRangeSensor
+    private lateinit var backRangeSensor: AnalogInput
     private lateinit var liftLimitSwitch: DigitalChannel
     private lateinit var colorBeacon: MRIColorBeacon
 
     var frontObjectDistance = 0.0
-    private set
+        private set
 
     var leftObjectDistance = 0.0
-    private set
+        private set
 
     var rightObjectDistance = 0.0
-    private set
+        private set
+
+    var backObjectDistance = 0.0
+        private set
 
     // Preparation
 
@@ -63,14 +69,21 @@ class RelicRecoveryRobot : MecanumRobot() {
         jewelStick = hardwareMap.servo.get("jewel stick")
         leftGlyphGrabber = hardwareMap.servo.get("left grabber")
         rightGlyphGrabber = hardwareMap.servo.get("right grabber")
+        glyphDeployer = hardwareMap.servo.get("glyph deployer")
 
         jewelColorSensor = hardwareMap.colorSensor.get("color sensor")
         floorColorSensor = hardwareMap.colorSensor.get("floor color sensor")
 
-        frontUltrasonicSensor = hardwareMap.analogInput.get("front ultrasonic sensor")
+        frontRangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor::class.java, "front range sensor")
+        frontRangeSensor.i2cAddress = I2cAddr.create8bit(0x32)
+
         leftRangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor::class.java, "left range sensor")
+        leftRangeSensor.i2cAddress = I2cAddr.create8bit(0x28)
+
         rightRangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor::class.java, "right range sensor")
         rightRangeSensor.i2cAddress = I2cAddr.create8bit(0x46)
+
+        backRangeSensor = hardwareMap.analogInput.get("back range sensor")
 
         liftLimitSwitch = hardwareMap.digitalChannel.get("limit switch")
         liftLimitSwitch.mode = DigitalChannel.Mode.INPUT
@@ -89,21 +102,17 @@ class RelicRecoveryRobot : MecanumRobot() {
 
     fun getRobotSetupPosition(hardwareMap: HardwareMap): SetupPosition {
         val colorSensor = hardwareMap.colorSensor.get("floor color sensor")
-        val frontDistanceSensor = hardwareMap.analogInput.get("front ultrasonic sensor")
+        val backRangeSensor = hardwareMap.analogInput.get("back range sensor")
 
         val red = colorSensor.red()
         val blue = colorSensor.blue()
-
-        var averageFrontDistance = (frontDistanceSensor.voltage / (5.0 / 512.0)) * 2.54
-        for(i in 1..100) {
-            averageFrontDistance = (((frontDistanceSensor.voltage / (5.0 / 512.0)) * 2.54) + averageFrontDistance) / (i + 1)
-        }
+        val backObjectDistance = (backRangeSensor.voltage / (5.0 / 512.0)) * 2.54
 
         return when {
-            red < blue && averageFrontDistance > 100 -> SetupPosition.FRONT_BLUE
-            red < blue && averageFrontDistance < 100 -> SetupPosition.BACK_BLUE
-            red > blue && averageFrontDistance > 100 -> SetupPosition.FRONT_RED
-            red > blue && averageFrontDistance < 100 -> SetupPosition.BACK_RED
+            red < blue && backObjectDistance > 75 -> SetupPosition.FRONT_BLUE
+            red < blue && backObjectDistance < 75 -> SetupPosition.BACK_BLUE
+            red > blue && backObjectDistance > 75 -> SetupPosition.FRONT_RED
+            red > blue && backObjectDistance < 75 -> SetupPosition.BACK_RED
             else -> SetupPosition.UNKNOWN
         }
     }
@@ -128,7 +137,6 @@ class RelicRecoveryRobot : MecanumRobot() {
 
     fun driveToDistanceFromForwardObject(distance: Double, power: Double = 0.15) {
         if(!linearOpMode.isStopRequested) {
-            resetFrontObjectDistance()
             val currentDistance = frontObjectDistance
 
             when {
@@ -138,14 +146,8 @@ class RelicRecoveryRobot : MecanumRobot() {
                         linearOpMode.sleep(10)
                     }
                 }
-                currentDistance < distance -> {
-                    /*
-                    setDrivePower(-Math.abs(power))
-                    while (frontObjectDistance < distance && linearOpMode.opModeIsActive()) {
-                        linearOpMode.sleep(10)
-                    }
-                    */
-                }
+
+                currentDistance < distance -> { }
             }
         }
 
@@ -310,6 +312,12 @@ class RelicRecoveryRobot : MecanumRobot() {
 
     fun closeGlyphGrabbers() { setGlyphGrabbersPosition(GLYPH_GRABBER_CLOSED_POSITION) }
 
+    // Glyph Deployer
+
+    fun extendGlyphDeployer() { glyphDeployer.position = GLYPH_DEPLOYER_EXTENDED_POSITION }
+
+    fun retractGlyphDeployer() { glyphDeployer.position = GLYPH_DEPLOYER_RETRACTED_POSITION }
+
     // Jewel Stick
 
     private fun setJewelStickPosition(position: Double) {
@@ -328,19 +336,15 @@ class RelicRecoveryRobot : MecanumRobot() {
                 updateFrontObjectDistance()
                 updateLeftObjectDistance()
                 updateRightObjectDistance()
+                updateBackObjectDistance()
                 Thread.sleep(10)
             }
         }
     }
 
     private fun updateFrontObjectDistance() {
-        val rawDistance = (frontUltrasonicSensor.voltage / (5.0 / 512.0)) * 2.54
+        val rawDistance = frontRangeSensor.cmUltrasonic()
         frontObjectDistance += FRONT_DISTANCE_SENSOR_FILTER_ALPHA * (rawDistance - frontObjectDistance)
-    }
-
-    private fun resetFrontObjectDistance() {
-        frontObjectDistance = (frontUltrasonicSensor.voltage / (5.0 / 512.0)) * 2.54
-        linearOpMode.sleep(1000)
     }
 
     private fun updateLeftObjectDistance() {
@@ -348,19 +352,14 @@ class RelicRecoveryRobot : MecanumRobot() {
         leftObjectDistance += LEFT_DISTANCE_SENSOR_FILTER_ALPHA * (rawDistance - leftObjectDistance)
     }
 
-    private fun resetLeftObjectDistance() {
-        leftObjectDistance = leftRangeSensor.cmUltrasonic()
-        linearOpMode.sleep(1000)
-    }
-
     private fun updateRightObjectDistance() {
         val rawDistance = rightRangeSensor.cmUltrasonic()
         rightObjectDistance += RIGHT_DISTANCE_SENSOR_FILTER_ALPHA * (rawDistance - rightObjectDistance)
     }
 
-    private fun resetRightObjectDistance() {
-        rightObjectDistance = rightRangeSensor.cmUltrasonic()
-        linearOpMode.sleep(1000)
+    private fun updateBackObjectDistance() {
+        val rawDistance = (backRangeSensor.voltage / (5.0 / 512.0)) * 2.54
+        backObjectDistance += BACK_DISTANCE_SENSOR_FILTER_ALPHA * (rawDistance - backObjectDistance)
     }
 
     // Teleop
@@ -377,5 +376,37 @@ class RelicRecoveryRobot : MecanumRobot() {
         telemetry.addLine("Grab Glyph: A")
         telemetry.addLine("Release Glyph: B")
         telemetry.update()
+    }
+
+    // Self Driving
+
+    fun deliverGlyph() {
+        val frontObjectDistance = frontObjectDistance
+        val leftObjectDistance = leftObjectDistance
+        val rightObjectDistance = rightObjectDistance
+        val heading = getHeading()
+
+        when(heading) {
+            in -45..45 -> {
+                when {
+                    leftObjectDistance < rightObjectDistance -> {}
+                    rightObjectDistance < leftObjectDistance -> {}
+                }
+            }
+
+            in -135..-45 -> {
+                when {
+                    leftObjectDistance < rightObjectDistance -> {}
+                    rightObjectDistance < leftObjectDistance -> {}
+                }
+            }
+
+            in 45..135 -> {
+                when {
+                    leftObjectDistance < rightObjectDistance -> {}
+                    rightObjectDistance < leftObjectDistance -> {}
+                }
+            }
+        }
     }
 }
