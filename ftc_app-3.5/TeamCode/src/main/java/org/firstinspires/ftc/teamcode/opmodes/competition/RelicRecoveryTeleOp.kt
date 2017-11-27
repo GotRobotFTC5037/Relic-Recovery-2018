@@ -53,7 +53,6 @@ class RelicRecoveryTeleOp : LinearOpMode() {
                 gamepad1.x -> robot.turn(0.65, -robot.getHeading() + 90)
             }
 
-
             // Gamepad 2: Attachments
             val winchPower = (gamepad2.left_stick_y * -1).toDouble()
             robot.setLiftWinchPower(winchPower)
