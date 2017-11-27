@@ -32,14 +32,14 @@ open class MecanumRobot : Robot() {
 
     var shouldCorrectHeading = true
     var targetHeading = 0.0
-    var perspectiveAdjustment = 0.0
+
 
     // Preparing
 
     override fun setup(hardwareMap: HardwareMap) {
         shouldCorrectHeading = true
         targetHeading = 0.0
-        perspectiveAdjustment = 0.0
+
 
         frontLeftMotor = hardwareMap.dcMotor.get("front left motor")
         frontLeftMotor.direction = DcMotorSimple.Direction.FORWARD
@@ -204,8 +204,8 @@ open class MecanumRobot : Robot() {
         }
     }
 
-    private fun headingCorrectionPower(): Double = (targetHeading - (getHeading() + perspectiveAdjustment)) * HEADING_CORRECTION_COEFFICIENT
+    private fun headingCorrectionPower(): Double = (targetHeading - (getHeading())) * HEADING_CORRECTION_COEFFICIENT
 
-    fun resetPerspective() { perspectiveAdjustment = getHeading() }
+
 }
 

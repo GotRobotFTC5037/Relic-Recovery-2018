@@ -48,17 +48,11 @@ class RelicRecoveryTeleOp : LinearOpMode() {
             }
 
             when {
-                gamepad1.y -> robot.turn(0.65, -robot.getHeading() - robot.perspectiveAdjustment)
-                gamepad1.b -> robot.turn(0.65, -robot.getHeading() - robot.perspectiveAdjustment - 90)
-                gamepad1.x -> robot.turn(0.65, -robot.getHeading() - robot.perspectiveAdjustment + 90)
+                gamepad1.y -> robot.turn(0.65, -robot.getHeading())
+                gamepad1.b -> robot.turn(0.65, -robot.getHeading() - 90)
+                gamepad1.x -> robot.turn(0.65, -robot.getHeading() + 90)
             }
 
-            if(gamepad1.start && gamepad1.back) robot.resetPerspective()
-
-            if(gamepad1.a) {
-                while(gamepad1.a) {}
-                robot.perspectiveAdjustment += 180
-            }
 
 
             // Gamepad 2: Attachments
