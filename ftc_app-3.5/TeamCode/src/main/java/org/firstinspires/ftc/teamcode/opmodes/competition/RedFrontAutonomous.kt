@@ -58,11 +58,14 @@ class RedFrontAutonomous : LinearOpMode() {
 
         robot.driveToDistanceFromRightObject(rightWallDistance)
 
-        robot.dropLift()
-        robot.openGlyphGrabbers(); sleep(500)
-
         robot.timeDrive(1000)
-        robot.timeDrive(350, -0.15)
+        robot.dropLift()
+        robot.extendGlyphDeployer()
+        robot.openGlyphGrabbers(); sleep(500)
+        robot.timeDrive(750, -0.15)
+
+        robot.timeDrive(500)
+        robot.timeDrive(250, -0.15)
     }
 
 }

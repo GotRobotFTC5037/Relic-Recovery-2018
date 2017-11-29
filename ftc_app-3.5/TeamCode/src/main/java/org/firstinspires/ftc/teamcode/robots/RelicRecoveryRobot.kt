@@ -252,7 +252,7 @@ class RelicRecoveryRobot : MecanumRobot() {
             liftMotor.power = 0.0
     }
 
-    fun setLiftPosition(position: Int, power: Double = 0.30) {
+    fun setLiftPosition(position: Int, power: Double = 0.5) {
         when {
             liftMotor.currentPosition < position -> {
                 setLiftWinchPower(Math.abs(power))
@@ -297,7 +297,7 @@ class RelicRecoveryRobot : MecanumRobot() {
         }
     }
 
-    private fun liftIsLowered() = liftLimitSwitch.state
+    private fun liftIsLowered() = liftLimitSwitch.state || liftMotor.currentPosition <= 0
 
     // Glyph Grabbers
 
