@@ -289,7 +289,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param position The position in encoder units that the lift should go to.
      * @param power The power that the lift motor should lift witch motor at.
      */
-    fun setLiftPosition(position: Int, power: Double = 0.30) {
+    fun setLiftPosition(position: Int, power: Double = 0.5) {
         when {
             liftMotor.currentPosition < position -> {
                 setLiftWinchPower(Math.abs(power))
@@ -342,7 +342,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * Determines if the lift is at the bottom.
      * @return True, if the lift is at the bottom.
      */
-    private fun liftIsLowered() = liftLimitSwitch.state
+    private fun liftIsLowered() = liftLimitSwitch.state || liftMotor.currentPosition <= 0
 
     // Glyph Grabbers
 
