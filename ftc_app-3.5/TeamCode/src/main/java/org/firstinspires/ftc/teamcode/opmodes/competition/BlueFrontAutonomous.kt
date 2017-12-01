@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
 import org.firstinspires.ftc.teamcode.libraries.PictographIdentifier
+import org.firstinspires.ftc.teamcode.libraries.vision.JewelPipeline
 import org.firstinspires.ftc.teamcode.robots.RelicRecoveryRobot
 import java.util.*
 
@@ -26,14 +27,21 @@ class BlueFrontAutonomous : LinearOpMode() {
         robot.linearOpMode = this
         robot.setup(hardwareMap)
 
-        val pictographIdentifier = PictographIdentifier()
+        RelicRecoveryRobotOpModeManager.queueOpMode(this, RelicRecoveryTeleOp.OPMODE_NAME)
+
+        val pictographIdentifier = PictographIdentifier(hardwareMap)
         pictographIdentifier.activate()
 
-        RelicRecoveryRobotOpModeManager.queueOpMode(this, RelicRecoveryTeleOp.OPMODE_NAME)
+        val jewelDetector = JewelPipeline()
+        // jewelDetector.init(hardwareMap.appContext, CameraViewDisplay.getInstance())
+        // jewelDetector.enable()
 
         robot.waitForGyroCalibration()
         robot.waitForStart()
         robot.start()
+
+        // val jewelPosition = jewelDetector.jewelConfiguration
+        // jewelDetector.disable()
 
         val pictograph = pictographIdentifier.getIdentifiedPictograph()
         pictographIdentifier.deactivate()
@@ -41,20 +49,60 @@ class BlueFrontAutonomous : LinearOpMode() {
         robot.closeGlyphGrabbers(); sleep(500)
         robot.setLiftPosition(RelicRecoveryRobot.LIFT_FIRST_LEVEL)
 
+        /*
+        when(jewelPosition) {
+            JewelPipeline.JewelConfiguration.BLUE_RED -> {
+                robot.lowerJewelStick()
+                sleep(1000)
+                robot.turn(0.15, 5.0)
+                sleep(1000)
+                robot.turn(0.15, 0.0)
+
+            }
+
+            JewelPipeline.JewelConfiguration.RED_BLUE -> {
+                robot.lowerJewelStick()
+                sleep(1000)
+                robot.turn(0.15, -5.0)
+                sleep(1000)
+                robot.turn(0.15, 0.0)
+            }
+
+            else -> { }
+        }
+        robot.raiseJewelStick()
+        sleep(1000)
+        */
+
         robot.driveOffBalancingStone()
         robot.driveToDistanceFromForwardObject(FRONT_WALL_DISTANCE); sleep(1000)
 
-        val leftWallDistance = when(pictograph) {
-            RelicRecoveryVuMark.LEFT -> LEFT_CRYPTO_BOX_DISTANCE
-            RelicRecoveryVuMark.CENTER -> CENTER_CRYPTO_BOX_DISTANCE
-            RelicRecoveryVuMark.RIGHT -> RIGHT_CRYPTO_BOX_DISTANCE
+        var leftWallDistance = 0.0
+        when(pictograph) {
+
+            RelicRecoveryVuMark.LEFT -> {
+                leftWallDistance = LEFT_CRYPTO_BOX_DISTANCE
+                telemetry.addLine("Left Crypto Box")
+            }
+
+            RelicRecoveryVuMark.CENTER -> {
+                leftWallDistance = CENTER_CRYPTO_BOX_DISTANCE
+                telemetry.addLine("Center Crypto Box")
+            }
+
+            RelicRecoveryVuMark.RIGHT -> { leftWallDistance = RIGHT_CRYPTO_BOX_DISTANCE
+                telemetry.addLine("Right Crypto Box")
+            }
 
             // Pick a random crypto box if the pictograph is unknown.
-            RelicRecoveryVuMark.UNKNOWN ->
-                listOf(LEFT_CRYPTO_BOX_DISTANCE,
-                        CENTER_CRYPTO_BOX_DISTANCE,
+            RelicRecoveryVuMark.UNKNOWN -> {
+                leftWallDistance = listOf(LEFT_CRYPTO_BOX_DISTANCE, CENTER_CRYPTO_BOX_DISTANCE,
                         RIGHT_CRYPTO_BOX_DISTANCE)[Random().nextInt(2)]
+                telemetry.addLine("Unknown Crypto Box")
+            }
         }
+
+        telemetry.update()
 
         robot.driveToDistanceFromLeftObject(leftWallDistance)
 

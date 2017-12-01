@@ -26,7 +26,7 @@ class RedBackAutonomous : LinearOpMode() {
         robot.linearOpMode = this
         robot.setup(hardwareMap)
 
-        val pictographIdentifier = PictographIdentifier()
+        val pictographIdentifier = PictographIdentifier(hardwareMap)
         pictographIdentifier.activate()
 
         RelicRecoveryRobotOpModeManager.queueOpMode(this, RelicRecoveryTeleOp.OPMODE_NAME)

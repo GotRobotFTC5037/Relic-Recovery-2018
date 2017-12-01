@@ -4,7 +4,6 @@ import org.corningrobotics.enderbots.endercv.OpenCVPipeline;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfKeyPoint;
-import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
@@ -14,8 +13,6 @@ import org.opencv.imgproc.Imgproc;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
 * JewelPipeline class.
@@ -24,24 +21,21 @@ import java.util.List;
 *
 * @author GRIP
 */
-public class JewelPipeline extends OpenCVPipeline{
+public class JewelPipeline extends OpenCVPipeline {
 
 	//Outputs
 	private Mat resizeImageOutput = new Mat();
+	private Mat blurOutput = new Mat();
 	private Mat hsvThreshold0Output = new Mat();
+	private Mat cvErode0Output = new Mat();
+	private Mat cvDilate0Output = new Mat();
+	private MatOfKeyPoint findBlobs0Output = new MatOfKeyPoint();
 	private Mat hsvThreshold1Output = new Mat();
 	private Mat hsvThreshold2Output = new Mat();
-	private Mat cvDilate0Output = new Mat();
-	private Mat cvErode0Output = new Mat();
+	private Mat cvAddOutput = new Mat();
 	private Mat cvErode1Output = new Mat();
 	private Mat cvDilate1Output = new Mat();
-	private Mat cvDilate2Output = new Mat();
-	private Mat cvErode2Output = new Mat();
-	private MatOfKeyPoint findBlobs0Output = new MatOfKeyPoint();
-	private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
 	private MatOfKeyPoint findBlobs1Output = new MatOfKeyPoint();
-	private Mat cvAdd0Output = new Mat();
-	private Mat cvAdd1Output = new Mat();
 
 	static {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -51,54 +45,41 @@ public class JewelPipeline extends OpenCVPipeline{
 	 * This is the primary method that runs the entire pipeline and updates the outputs.
 	 */
 	public void process(Mat source0) {
-		// Step Resize_Image0:
-		Mat resizeImageInput = source0;
-		double resizeImageWidth = 320.0;
-		double resizeImageHeight = 240.0;
-		int resizeImageInterpolation = Imgproc.INTER_NEAREST;
-		resizeImage(resizeImageInput, resizeImageWidth, resizeImageHeight, resizeImageInterpolation, resizeImageOutput);
+		Imgproc.resize(source0, resizeImageOutput, new Size(320.0, 180.0), 0.0, 0.0, Imgproc.INTER_AREA);
 
-		// Step HSV_Threshold0:
-		Mat hsvThreshold0Input = resizeImageOutput;
-		double[] hsvThreshold0Hue = {52.54237288135593, 130.531914893617};
-		double[] hsvThreshold0Saturation = {172.88135593220338, 255.0};
-		double[] hsvThreshold0Value = {0.0, 255.0};
-		hsvThreshold(hsvThreshold0Input, hsvThreshold0Hue, hsvThreshold0Saturation, hsvThreshold0Value, hsvThreshold0Output);
+		double kernelSize = 2 * 5.0 + 1;
+		Imgproc.blur(resizeImageOutput, blurOutput, new Size(kernelSize, kernelSize));
 
-		// Step HSV_Threshold1:
-		Mat hsvThreshold1Input = resizeImageOutput;
-		double[] hsvThreshold1Hue = {0.0, 180.0};
-		double[] hsvThreshold1Saturation = {0.0, 75.33106960950764};
-		double[] hsvThreshold1Value = {201.79856115107913, 255.0};
-		hsvThreshold(hsvThreshold1Input, hsvThreshold1Hue, hsvThreshold1Saturation, hsvThreshold1Value, hsvThreshold1Output);
+		Imgproc.cvtColor(blurOutput, hsvThreshold0Output, Imgproc.COLOR_BGR2HSV);
 
-		// Step HSV_Threshold2:
-		Mat hsvThreshold2Input = resizeImageOutput;
-		double[] hsvThreshold2Hue = {174.82014388489208, 180.0};
-		double[] hsvThreshold2Saturation = {169.69424460431654, 255.0};
-		double[] hsvThreshold2Value = {0.0, 255.0};
-		hsvThreshold(hsvThreshold2Input, hsvThreshold2Hue, hsvThreshold2Saturation, hsvThreshold2Value, hsvThreshold2Output);
+		double[] blueHueThreshold = {70.0, 140.0};
+		double[] blueSaturationThreshold = {115.0, 255.0};
+		double[] blueValueThreshold = {0.0, 255.0};
+		Core.inRange(blurOutput, new Scalar(blueHueThreshold[0], blueSaturationThreshold[0], blueValueThreshold[0]),
+				new Scalar(blueHueThreshold[1], blueSaturationThreshold[1], blueValueThreshold[1]), hsvThreshold0Output);
 
-		// Step CV_dilate0:
-		Mat cvDilate0Src = hsvThreshold0Output;
-		Mat cvDilate0Kernel = new Mat();
-		Point cvDilate0Anchor = new Point(-1, -1);
-		double cvDilate0Iterations = 6.0;
-		int cvDilate0Bordertype = Core.BORDER_CONSTANT;
-		Scalar cvDilate0Bordervalue = new Scalar(-1);
-		cvDilate(cvDilate0Src, cvDilate0Kernel, cvDilate0Anchor, cvDilate0Iterations, cvDilate0Bordertype, cvDilate0Bordervalue, cvDilate0Output);
+		Imgproc.erode(hsvThreshold0Output, cvErode0Output, new Mat(), new Point(-1, -1), 3,  Core.BORDER_CONSTANT, new Scalar(-1));
+		Imgproc.dilate(cvErode0Output, cvDilate0Output, new Mat(), new Point(-1, -1), 6, Core.BORDER_CONSTANT, new Scalar(-1));
 
-		// Step CV_erode0:
-		Mat cvErode0Src = cvDilate0Output;
-		Mat cvErode0Kernel = new Mat();
-		Point cvErode0Anchor = new Point(-1, -1);
-		double cvErode0Iterations = 3.0;
-		int cvErode0Bordertype = Core.BORDER_CONSTANT;
-		Scalar cvErode0Bordervalue = new Scalar(-1);
-		cvErode(cvErode0Src, cvErode0Kernel, cvErode0Anchor, cvErode0Iterations, cvErode0Bordertype, cvErode0Bordervalue, cvErode0Output);
+		double[] findBlobs0Circularity = {0.8, 1.0};
+		findBlobs(cvDilate0Output, 1000.0, findBlobs0Circularity, false, findBlobs0Output);
+
+		double[] redHueThreshold1 = {140.0, 180.0};
+		double[] redSaturationThreshold1 = {170.0, 255.0};
+		double[] redValueThreshold1 = {0.0, 255.0};
+		Core.inRange(blurOutput, new Scalar(redHueThreshold1[0], redSaturationThreshold1[0], redValueThreshold1[0]),
+				new Scalar(redHueThreshold1[1], redSaturationThreshold1[1], redValueThreshold1[1]), hsvThreshold0Output);
+
+		double[] redHueThreshold2 = {0.0, 5.0};
+		double[] redSaturationThreshold2 = {160.0, 255.0};
+		double[] redValueThreshold2 = {0.0, 255.0};
+		Core.inRange(blurOutput, new Scalar(redHueThreshold2[0], redSaturationThreshold2[0], redValueThreshold2[0]),
+				new Scalar(redHueThreshold2[1], redSaturationThreshold2[1], redValueThreshold2[1]), hsvThreshold0Output);
+
+		Core.add(hsvThreshold1Output, hsvThreshold2Output, cvAddOutput);
 
 		// Step CV_erode1:
-		Mat cvErode1Src = hsvThreshold1Output;
+		Mat cvErode1Src = cvAddOutput;
 		Mat cvErode1Kernel = new Mat();
 		Point cvErode1Anchor = new Point(-1, -1);
 		double cvErode1Iterations = 3.0;
@@ -110,57 +91,17 @@ public class JewelPipeline extends OpenCVPipeline{
 		Mat cvDilate1Src = cvErode1Output;
 		Mat cvDilate1Kernel = new Mat();
 		Point cvDilate1Anchor = new Point(-1, -1);
-		double cvDilate1Iterations = 4.0;
+		double cvDilate1Iterations = 9.0;
 		int cvDilate1Bordertype = Core.BORDER_CONSTANT;
 		Scalar cvDilate1Bordervalue = new Scalar(-1);
 		cvDilate(cvDilate1Src, cvDilate1Kernel, cvDilate1Anchor, cvDilate1Iterations, cvDilate1Bordertype, cvDilate1Bordervalue, cvDilate1Output);
 
-		// Step CV_dilate2:
-		Mat cvDilate2Src = hsvThreshold2Output;
-		Mat cvDilate2Kernel = new Mat();
-		Point cvDilate2Anchor = new Point(-1, -1);
-		double cvDilate2Iterations = 4.0;
-		int cvDilate2Bordertype = Core.BORDER_CONSTANT;
-		Scalar cvDilate2Bordervalue = new Scalar(-1);
-		cvDilate(cvDilate2Src, cvDilate2Kernel, cvDilate2Anchor, cvDilate2Iterations, cvDilate2Bordertype, cvDilate2Bordervalue, cvDilate2Output);
-
-		// Step CV_erode2:
-		Mat cvErode2Src = cvDilate2Output;
-		Mat cvErode2Kernel = new Mat();
-		Point cvErode2Anchor = new Point(-1, -1);
-		double cvErode2Iterations = 2.0;
-		int cvErode2Bordertype = Core.BORDER_CONSTANT;
-		Scalar cvErode2Bordervalue = new Scalar(-1);
-		cvErode(cvErode2Src, cvErode2Kernel, cvErode2Anchor, cvErode2Iterations, cvErode2Bordertype, cvErode2Bordervalue, cvErode2Output);
-
-		// Step Find_Blobs0:
-		Mat findBlobs0Input = cvErode0Output;
-		double findBlobs0MinArea = 1.0;
-		double[] findBlobs0Circularity = {0.0, 1.0};
-		boolean findBlobs0DarkBlobs = false;
-		findBlobs(findBlobs0Input, findBlobs0MinArea, findBlobs0Circularity, findBlobs0DarkBlobs, findBlobs0Output);
-
-		// Step Find_Contours0:
-		Mat findContoursInput = cvDilate1Output;
-		boolean findContoursExternalOnly = false;
-		findContours(findContoursInput, findContoursExternalOnly, findContoursOutput);
-
 		// Step Find_Blobs1:
-		Mat findBlobs1Input = cvErode2Output;
-		double findBlobs1MinArea = 1.0;
-		double[] findBlobs1Circularity = {0.4519774011299435, 1.0};
+		Mat findBlobs1Input = cvDilate1Output;
+		double findBlobs1MinArea = 1000.0;
+		double[] findBlobs1Circularity = {0.743879472693032, 1.0};
 		boolean findBlobs1DarkBlobs = false;
 		findBlobs(findBlobs1Input, findBlobs1MinArea, findBlobs1Circularity, findBlobs1DarkBlobs, findBlobs1Output);
-
-		// Step CV_add0:
-		Mat cvAdd0Src1 = cvErode0Output;
-		Mat cvAdd0Src2 = cvDilate1Output;
-		cvAdd(cvAdd0Src1, cvAdd0Src2, cvAdd0Output);
-
-		// Step CV_add1:
-		Mat cvAdd1Src1 = cvErode2Output;
-		Mat cvAdd1Src2 = cvAdd0Output;
-		cvAdd(cvAdd1Src1, cvAdd1Src2, cvAdd1Output);
 
 	}
 
@@ -173,11 +114,43 @@ public class JewelPipeline extends OpenCVPipeline{
 	}
 
 	/**
+	 * This method is a generated getter for the output of a Blur.
+	 * @return Mat output from Blur.
+	 */
+	public Mat blurOutput() {
+		return blurOutput;
+	}
+
+	/**
 	 * This method is a generated getter for the output of a HSV_Threshold.
 	 * @return Mat output from HSV_Threshold.
 	 */
 	public Mat hsvThreshold0Output() {
 		return hsvThreshold0Output;
+	}
+
+	/**
+	 * This method is a generated getter for the output of a CV_erode.
+	 * @return Mat output from CV_erode.
+	 */
+	public Mat cvErode0Output() {
+		return cvErode0Output;
+	}
+
+	/**
+	 * This method is a generated getter for the output of a CV_dilate.
+	 * @return Mat output from CV_dilate.
+	 */
+	public Mat cvDilate0Output() {
+		return cvDilate0Output;
+	}
+
+	/**
+	 * This method is a generated getter for the output of a Find_Blobs.
+	 * @return MatOfKeyPoint output from Find_Blobs.
+	 */
+	public MatOfKeyPoint findBlobs0Output() {
+		return findBlobs0Output;
 	}
 
 	/**
@@ -197,19 +170,11 @@ public class JewelPipeline extends OpenCVPipeline{
 	}
 
 	/**
-	 * This method is a generated getter for the output of a CV_dilate.
-	 * @return Mat output from CV_dilate.
+	 * This method is a generated getter for the output of a CV_add.
+	 * @return Mat output from CV_add.
 	 */
-	public Mat cvDilate0Output() {
-		return cvDilate0Output;
-	}
-
-	/**
-	 * This method is a generated getter for the output of a CV_erode.
-	 * @return Mat output from CV_erode.
-	 */
-	public Mat cvErode0Output() {
-		return cvErode0Output;
+	public Mat cvAddOutput() {
+		return cvAddOutput;
 	}
 
 	/**
@@ -229,38 +194,6 @@ public class JewelPipeline extends OpenCVPipeline{
 	}
 
 	/**
-	 * This method is a generated getter for the output of a CV_dilate.
-	 * @return Mat output from CV_dilate.
-	 */
-	public Mat cvDilate2Output() {
-		return cvDilate2Output;
-	}
-
-	/**
-	 * This method is a generated getter for the output of a CV_erode.
-	 * @return Mat output from CV_erode.
-	 */
-	public Mat cvErode2Output() {
-		return cvErode2Output;
-	}
-
-	/**
-	 * This method is a generated getter for the output of a Find_Blobs.
-	 * @return MatOfKeyPoint output from Find_Blobs.
-	 */
-	public MatOfKeyPoint findBlobs0Output() {
-		return findBlobs0Output;
-	}
-
-	/**
-	 * This method is a generated getter for the output of a Find_Contours.
-	 * @return ArrayList<MatOfPoint> output from Find_Contours.
-	 */
-	public ArrayList<MatOfPoint> findContoursOutput() {
-		return findContoursOutput;
-	}
-
-	/**
 	 * This method is a generated getter for the output of a Find_Blobs.
 	 * @return MatOfKeyPoint output from Find_Blobs.
 	 */
@@ -268,73 +201,9 @@ public class JewelPipeline extends OpenCVPipeline{
 		return findBlobs1Output;
 	}
 
-	/**
-	 * This method is a generated getter for the output of a CV_add.
-	 * @return Mat output from CV_add.
-	 */
-	public Mat cvAdd0Output() {
-		return cvAdd0Output;
-	}
-
-	/**
-	 * This method is a generated getter for the output of a CV_add.
-	 * @return Mat output from CV_add.
-	 */
-	public Mat cvAdd1Output() {
-		return cvAdd1Output;
-	}
-
-
-	/**
-	 * Scales and image to an exact size.
-	 * @param input The image on which to perform the Resize.
-	 * @param width The width of the output in pixels.
-	 * @param height The height of the output in pixels.
-	 * @param interpolation The type of interpolation.
-	 * @param output The image in which to store the output.
-	 */
-	private void resizeImage(Mat input, double width, double height,
-		int interpolation, Mat output) {
-		Imgproc.resize(input, output, new Size(width, height), 0.0, 0.0, interpolation);
-	}
-
-	/**
-	 * Segment an image based on hue, saturation, and value ranges.
-	 *
-	 * @param input The image on which to perform the HSL threshold.
-	 * @param hue The min and max hue
-	 * @param sat The min and max saturation
-	 * @param val The min and max value
-	 */
-	private void hsvThreshold(Mat input, double[] hue, double[] sat, double[] val,
-	    Mat out) {
-		Imgproc.cvtColor(input, out, Imgproc.COLOR_BGR2HSV);
-		Core.inRange(out, new Scalar(hue[0], sat[0], val[0]),
-			new Scalar(hue[1], sat[1], val[1]), out);
-	}
-
-	/**
-	 * Expands area of higher value in an image.
-	 * @param src the Image to dilate.
-	 * @param kernel the kernel for dilation.
-	 * @param anchor the center of the kernel.
-	 * @param iterations the number of times to perform the dilation.
-	 * @param borderType pixel extrapolation method.
-	 * @param borderValue value to be used for a constant border.
-	 * @param dst Output Image.
-	 */
-	private void cvDilate(Mat src, Mat kernel, Point anchor, double iterations,
-	int borderType, Scalar borderValue, Mat dst) {
-		if (kernel == null) {
-			kernel = new Mat();
-		}
-		if (anchor == null) {
-			anchor = new Point(-1,-1);
-		}
-		if (borderValue == null){
-			borderValue = new Scalar(-1);
-		}
-		Imgproc.dilate(src, dst, kernel, anchor, (int)iterations, borderType, borderValue);
+	@Override
+	public Mat processFrame(Mat rgba, Mat gray) {
+		return rgba;
 	}
 
 	/**
@@ -362,22 +231,27 @@ public class JewelPipeline extends OpenCVPipeline{
 	}
 
 	/**
-	 * Sets the values of pixels in a binary image to their distance to the nearest black pixel.
-	 * @param input The image on which to perform the Distance Transform.
+	 * Expands area of higher value in an image.
+	 * @param src the Image to dilate.
+	 * @param kernel the kernel for dilation.
+	 * @param anchor the center of the kernel.
+	 * @param iterations the number of times to perform the dilation.
+	 * @param borderType pixel extrapolation method.
+	 * @param borderValue value to be used for a constant border.
+	 * @param dst Output Image.
 	 */
-	private void findContours(Mat input, boolean externalOnly,
-		List<MatOfPoint> contours) {
-		Mat hierarchy = new Mat();
-		contours.clear();
-		int mode;
-		if (externalOnly) {
-			mode = Imgproc.RETR_EXTERNAL;
+	private void cvDilate(Mat src, Mat kernel, Point anchor, double iterations,
+	int borderType, Scalar borderValue, Mat dst) {
+		if (kernel == null) {
+			kernel = new Mat();
 		}
-		else {
-			mode = Imgproc.RETR_LIST;
+		if (anchor == null) {
+			anchor = new Point(-1,-1);
 		}
-		int method = Imgproc.CHAIN_APPROX_SIMPLE;
-		Imgproc.findContours(input, contours, hierarchy, mode, method);
+		if (borderValue == null){
+			borderValue = new Scalar(-1);
+		}
+		Imgproc.dilate(src, dst, kernel, anchor, (int)iterations, borderType, borderValue);
 	}
 
 	/**
@@ -438,22 +312,6 @@ public class JewelPipeline extends OpenCVPipeline{
 		}
 
 		blobDet.detect(input, blobList);
-	}
-
-	/**
-	 * Calculates the sum of two Mats.
-	 * @param src1 the first Mat
-	 * @param src2 the second Mat
-	 * @param out the Mat that is the sum of the two Mats
-	 */
-	private void cvAdd(Mat src1, Mat src2, Mat out) {
-		Core.add(src1, src2, out);
-	}
-
-
-	@Override
-	public Mat processFrame(Mat rgba, Mat gray) {
-		return cvAdd1Output;
 	}
 }
 

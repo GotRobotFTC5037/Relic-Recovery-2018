@@ -12,7 +12,7 @@ class RelicRecoveryAutonomous : LinearOpMode() {
     @Throws(InterruptedException::class)
     override fun runOpMode() {
 
-        val setupPosition = RelicRecoveryRobot().getRobotSetupPosition(hardwareMap)
+        val setupPosition = RelicRecoveryRobot.getRobotSetupPosition(hardwareMap)
 
         when(setupPosition) {
             Robot.SetupPosition.FRONT_BLUE ->
