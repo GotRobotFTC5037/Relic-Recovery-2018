@@ -63,9 +63,8 @@ class RedFrontAutonomous : LinearOpMode() {
         robot.extendGlyphDeployer()
         robot.openGlyphGrabbers(); sleep(500)
         robot.timeDrive(750, -0.15)
-
-        robot.timeDrive(500)
-        robot.timeDrive(250, -0.15)
+        sleep(1000)
+        robot.retractGlyphDeployer()
     }
 
 }
