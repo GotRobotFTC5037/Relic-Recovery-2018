@@ -16,18 +16,8 @@ class OpenCVTest : LinearOpMode() {
         jewelDetector.enable()
 
         while (opModeIsActive()) {
-            telemetry.addLine("Blue Jewel Position:")
-
-            /**
-            val jewelConfiguration = jewelDetector.jewelConfiguration
-            when (jewelConfiguration) {
-                JewelPipeline.JewelConfiguration.BLUE_RED -> telemetry.addLine("Left")
-                JewelPipeline.JewelConfiguration.RED_BLUE -> telemetry.addLine("Right")
-                JewelPipeline.JewelConfiguration.UNKNOWN -> telemetry.addLine("Unknown")
-                else -> {}
-            }
-            */
-
+            telemetry.addData("Red", jewelDetector.bluePosition)
+            telemetry.addData("Blue", jewelDetector.redPosition)
             telemetry.update()
         }
 

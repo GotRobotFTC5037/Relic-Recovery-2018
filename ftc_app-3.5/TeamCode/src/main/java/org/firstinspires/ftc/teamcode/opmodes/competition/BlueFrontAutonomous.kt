@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.competition
 import RelicRecoveryRobotOpModeManager
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import org.corningrobotics.enderbots.endercv.CameraViewDisplay
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
 import org.firstinspires.ftc.teamcode.libraries.PictographIdentifier
 import org.firstinspires.ftc.teamcode.libraries.vision.JewelPipeline
@@ -29,57 +30,57 @@ class BlueFrontAutonomous : LinearOpMode() {
 
         RelicRecoveryRobotOpModeManager.queueOpMode(this, RelicRecoveryTeleOp.OPMODE_NAME)
 
-        val pictographIdentifier = PictographIdentifier(hardwareMap)
-        pictographIdentifier.activate()
-
         val jewelDetector = JewelPipeline()
-        // jewelDetector.init(hardwareMap.appContext, CameraViewDisplay.getInstance())
-        // jewelDetector.enable()
+        jewelDetector.init(hardwareMap.appContext, CameraViewDisplay.getInstance())
+        jewelDetector.enable()
+
+        val pictographIdentifier = PictographIdentifier(hardwareMap)
 
         robot.waitForGyroCalibration()
         robot.waitForStart()
         robot.start()
 
-        // val jewelPosition = jewelDetector.jewelConfiguration
-        // jewelDetector.disable()
+        val jewelPosition = jewelDetector.jewelPositions
+        jewelDetector.disable()
 
+        pictographIdentifier.activate()
+        sleep(2000)
         val pictograph = pictographIdentifier.getIdentifiedPictograph()
         pictographIdentifier.deactivate()
 
         robot.closeGlyphGrabbers(); sleep(500)
         robot.setLiftPosition(RelicRecoveryRobot.LIFT_FIRST_LEVEL)
 
-        /*
         when(jewelPosition) {
-            JewelPipeline.JewelConfiguration.BLUE_RED -> {
+            JewelPipeline.JewelPositions.RED_BLUE -> {
                 robot.lowerJewelStick()
+                robot.timeDrive(500, -0.25)
+                robot.raiseJewelStick()
+                robot.timeDrive(500, 0.50)
                 sleep(1000)
-                robot.turn(0.15, 5.0)
-                sleep(1000)
-                robot.turn(0.15, 0.0)
-
             }
 
-            JewelPipeline.JewelConfiguration.RED_BLUE -> {
+            JewelPipeline.JewelPositions.BLUE_RED -> {
                 robot.lowerJewelStick()
+                robot.timeDrive(500, 0.25)
+                robot.raiseJewelStick()
                 sleep(1000)
-                robot.turn(0.15, -5.0)
-                sleep(1000)
-                robot.turn(0.15, 0.0)
             }
 
-            else -> { }
+            JewelPipeline.JewelPositions.UNKNOWN -> {
+                // Do nothing
+            }
+
+            else -> {
+                // Shouldn't happen
+            }
         }
-        robot.raiseJewelStick()
-        sleep(1000)
-        */
 
         robot.driveOffBalancingStone()
         robot.driveToDistanceFromForwardObject(FRONT_WALL_DISTANCE); sleep(1000)
 
         var leftWallDistance = 0.0
         when(pictograph) {
-
             RelicRecoveryVuMark.LEFT -> {
                 leftWallDistance = LEFT_CRYPTO_BOX_DISTANCE
                 telemetry.addLine("Left Crypto Box")

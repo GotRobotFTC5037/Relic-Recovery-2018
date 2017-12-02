@@ -89,6 +89,7 @@ class RelicRecoveryRobot : MecanumRobot() {
 
         liftMotor = hardwareMap.dcMotor.get("winch motor")
         liftMotor.direction = DcMotorSimple.Direction.FORWARD
+        liftMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
         jewelStick = hardwareMap.servo.get("jewel stick")
         leftGlyphGrabber = hardwareMap.servo.get("left grabber")
@@ -372,22 +373,34 @@ class RelicRecoveryRobot : MecanumRobot() {
 
     // Glyph Deployer
 
+    /**
+     * Sets the glyph deployer to the extended position.
+     */
     fun extendGlyphDeployer() { glyphDeployer.position = GLYPH_DEPLOYER_EXTENDED_POSITION }
 
+    /**
+     * Sets the glyph deployer to the retracted position.
+     */
     fun retractGlyphDeployer() { glyphDeployer.position = GLYPH_DEPLOYER_RETRACTED_POSITION }
 
     // Jewel Stick
 
+    /**
+     * Sets the jewel stick position.
+     * @param position The position to set the jewel stick in.
+     */
     private fun setJewelStickPosition(position: Double) {
         jewelStick.position = position
     }
 
     fun raiseJewelStick() {
         setJewelStickPosition(0.0)
+        linearOpMode.sleep(2000)
     }
 
     fun lowerJewelStick() {
-        setJewelStickPosition(0.80)
+        setJewelStickPosition(1.00)
+        linearOpMode.sleep(2000)
     }
 
     // Range Sensors
