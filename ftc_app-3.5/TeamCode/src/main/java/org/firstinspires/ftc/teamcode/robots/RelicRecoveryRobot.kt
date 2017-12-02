@@ -29,7 +29,7 @@ class RelicRecoveryRobot : MecanumRobot() {
 
         private val MAXIMUM_ENCODER_LIFT_POSITION = 3000
         val LIFT_FIRST_LEVEL = 300
-        val AUTO_LIFT_FIRST_LEVEL = 600
+        val AUTO_LIFT_FIRST_LEVEL = 625
 
         private val BALANCING_STONE_ANGLE_THRESHOLD = 2.0
         private val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 2.0
@@ -57,7 +57,7 @@ class RelicRecoveryRobot : MecanumRobot() {
     private lateinit var leftGlyphGrabber: Servo
     private lateinit var rightGlyphGrabber: Servo
     private lateinit var glyphDeployer: Servo
-    private lateinit var jewelColorSensor: ColorSensor
+//    private lateinit var jewelColorSensor: ColorSensor
     private lateinit var floorColorSensor: ColorSensor
     private lateinit var leftRangeSensor: ModernRoboticsI2cRangeSensor
     private lateinit var rightRangeSensor: ModernRoboticsI2cRangeSensor
@@ -97,7 +97,7 @@ class RelicRecoveryRobot : MecanumRobot() {
         rightGlyphGrabber = hardwareMap.servo.get("right grabber")
         glyphDeployer = hardwareMap.servo.get("glyph deployer")
 
-        jewelColorSensor = hardwareMap.colorSensor.get("color sensor")
+//        jewelColorSensor = hardwareMap.colorSensor.get("color sensor")
         floorColorSensor = hardwareMap.colorSensor.get("floor color sensor")
 
         frontRangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor::class.java, "front range sensor")
@@ -187,6 +187,7 @@ class RelicRecoveryRobot : MecanumRobot() {
             currentDistance > distance -> {
                 setStrafePower(-Math.abs(power))
                 while (leftObjectDistance > distance && !linearOpMode.isStopRequested) {
+                    linearOpMode.telemetry.addData("Left Object Distance: ", leftObjectDistance)
                     linearOpMode.sleep(10)
                 }
             }
@@ -194,6 +195,7 @@ class RelicRecoveryRobot : MecanumRobot() {
             currentDistance < distance -> {
                 setStrafePower(Math.abs(power))
                 while (leftObjectDistance < distance && !linearOpMode.isStopRequested) {
+                    linearOpMode.telemetry.addData("Right Object Distance: ", rightObjectDistance)
                     linearOpMode.sleep(10)
                 }
             }
@@ -268,7 +270,8 @@ class RelicRecoveryRobot : MecanumRobot() {
             linearOpMode.sleep(10)
         }
 
-        while(abs(startingPitch - getPitch()) >= BALANCING_STONE_GROUND_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
+        while(abs(startingPitch - getPitch()) >= BALANCING_STONE_GROUND_ANGLE_THRESHOLD
+                && frontRangeSensor.cmUltrasonic() > 35 && !linearOpMode.isStopRequested) {
             linearOpMode.sleep(10)
         }
 
@@ -324,8 +327,8 @@ class RelicRecoveryRobot : MecanumRobot() {
     }
 
     /**
-     * Lowers the lift until it reaches the bottom.
      * @param power The power to run the lift witch motor at.
+     * Lowers the lift until it reaches the bottom.
      */
     fun dropLift(power: Double = 0.30) {
         if(!linearOpMode.isStopRequested) {
@@ -376,7 +379,9 @@ class RelicRecoveryRobot : MecanumRobot() {
 
     fun extendGlyphDeployer() { glyphDeployer.position = GLYPH_DEPLOYER_EXTENDED_POSITION }
 
-    fun retractGlyphDeployer() { glyphDeployer.position = GLYPH_DEPLOYER_UP }
+    fun retractGlyphDeployer() { glyphDeployer.position = GLYPH_DEPLOYER_RETRACTED_POSITION }
+
+    fun liftGlyphDeployer() { glyphDeployer.position = GLYPH_DEPLOYER_UP }
 
     // Jewel Stick
 
