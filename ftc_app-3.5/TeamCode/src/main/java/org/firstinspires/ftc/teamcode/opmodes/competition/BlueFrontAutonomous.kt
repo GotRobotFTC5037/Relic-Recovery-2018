@@ -49,7 +49,7 @@ class BlueFrontAutonomous : LinearOpMode() {
         pictographIdentifier.deactivate()
 
         robot.closeGlyphGrabbers(); sleep(500)
-        robot.setLiftPosition(RelicRecoveryRobot.LIFT_FIRST_LEVEL)
+        robot.setLiftPosition(RelicRecoveryRobot.AUTO_LIFT_FIRST_LEVEL)
 
         when(jewelPosition) {
             JewelPipeline.JewelPositions.RED_BLUE -> {
@@ -111,9 +111,10 @@ class BlueFrontAutonomous : LinearOpMode() {
         robot.dropLift()
         robot.extendGlyphDeployer()
         robot.openGlyphGrabbers(); sleep(500)
-        robot.timeDrive(750, -0.15)
+        robot.timeDrive(850, -0.15)
         sleep(1000)
-        robot.retractGlyphDeployer()
+        robot.liftGlyphDeployer()
+        sleep(500)
     }
 
 }

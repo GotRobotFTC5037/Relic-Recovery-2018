@@ -39,7 +39,7 @@ class RedFrontAutonomous : LinearOpMode() {
         pictographIdentifier.deactivate()
 
         robot.closeGlyphGrabbers(); sleep(500)
-        robot.setLiftPosition(RelicRecoveryRobot.LIFT_FIRST_LEVEL)
+        robot.setLiftPosition(RelicRecoveryRobot.AUTO_LIFT_FIRST_LEVEL)
 
         robot.driveOffBalancingStone()
         robot.driveToDistanceFromForwardObject(RedFrontAutonomous.FRONT_WALL_DISTANCE); sleep(1000)
@@ -62,9 +62,10 @@ class RedFrontAutonomous : LinearOpMode() {
         robot.dropLift()
         robot.extendGlyphDeployer()
         robot.openGlyphGrabbers(); sleep(500)
-        robot.timeDrive(750, -0.15)
+        robot.timeDrive(850, -0.15)
         sleep(1000)
-        robot.retractGlyphDeployer()
+        robot.liftGlyphDeployer()
+        sleep(500)
     }
 
 }

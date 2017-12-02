@@ -17,7 +17,7 @@ class RedBackAutonomous : LinearOpMode() {
         private val FRONT_WALL_DISTANCE = 45.0
         private val RIGHT_CRYPTO_BOX_DISTANCE = 98.0
         private val CENTER_CRYPTO_BOX_DISTANCE = 116.0
-        private val LEFT_CRYPTO_BOX_DISTANCE = 134.0
+        private val LEFT_CRYPTO_BOX_DISTANCE = 137.0
     }
 
     @Throws(InterruptedException::class)
@@ -39,7 +39,7 @@ class RedBackAutonomous : LinearOpMode() {
         pictographIdentifier.deactivate()
 
         robot.closeGlyphGrabbers(); sleep(500)
-        robot.setLiftPosition(RelicRecoveryRobot.LIFT_FIRST_LEVEL)
+        robot.setLiftPosition(RelicRecoveryRobot.AUTO_LIFT_FIRST_LEVEL)
 
         robot.driveOffBalancingStone(); sleep(500)
         robot.turn(0.50, -90.0)
@@ -63,9 +63,10 @@ class RedBackAutonomous : LinearOpMode() {
         robot.dropLift()
         robot.extendGlyphDeployer()
         robot.openGlyphGrabbers(); sleep(500)
-        robot.timeDrive(750, -0.15)
+        robot.timeDrive(850, -0.15)
         sleep(1000)
-        robot.retractGlyphDeployer()
+        robot.liftGlyphDeployer()
+        sleep(500)
     }
 
 }
