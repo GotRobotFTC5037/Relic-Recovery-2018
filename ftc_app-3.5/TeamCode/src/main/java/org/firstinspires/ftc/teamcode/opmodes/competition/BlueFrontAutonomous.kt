@@ -47,7 +47,7 @@ class BlueFrontAutonomous : LinearOpMode() {
         pictographIdentifier.deactivate()
 
         robot.closeGlyphGrabbers(); sleep(500)
-        robot.setLiftPosition(RelicRecoveryRobot.LIFT_FIRST_LEVEL)
+        robot.setLiftPosition(RelicRecoveryRobot.AUTO_LIFT_FIRST_LEVEL)
 
         /*
         when(jewelPosition) {

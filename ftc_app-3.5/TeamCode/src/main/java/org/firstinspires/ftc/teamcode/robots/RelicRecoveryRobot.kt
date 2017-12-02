@@ -25,9 +25,11 @@ class RelicRecoveryRobot : MecanumRobot() {
 
         private val GLYPH_DEPLOYER_EXTENDED_POSITION = 0.25
         private val GLYPH_DEPLOYER_RETRACTED_POSITION = 0.90
+        private val GLYPH_DEPLOYER_UP = 0.01
 
         private val MAXIMUM_ENCODER_LIFT_POSITION = 3000
         val LIFT_FIRST_LEVEL = 300
+        val AUTO_LIFT_FIRST_LEVEL = 600
 
         private val BALANCING_STONE_ANGLE_THRESHOLD = 2.0
         private val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 2.0
@@ -374,7 +376,7 @@ class RelicRecoveryRobot : MecanumRobot() {
 
     fun extendGlyphDeployer() { glyphDeployer.position = GLYPH_DEPLOYER_EXTENDED_POSITION }
 
-    fun retractGlyphDeployer() { glyphDeployer.position = GLYPH_DEPLOYER_RETRACTED_POSITION }
+    fun retractGlyphDeployer() { glyphDeployer.position = GLYPH_DEPLOYER_UP }
 
     // Jewel Stick
 

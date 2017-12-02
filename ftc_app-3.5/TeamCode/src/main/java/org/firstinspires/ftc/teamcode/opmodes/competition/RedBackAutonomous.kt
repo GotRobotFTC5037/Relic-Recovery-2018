@@ -39,7 +39,7 @@ class RedBackAutonomous : LinearOpMode() {
         pictographIdentifier.deactivate()
 
         robot.closeGlyphGrabbers(); sleep(500)
-        robot.setLiftPosition(RelicRecoveryRobot.LIFT_FIRST_LEVEL)
+        robot.setLiftPosition(RelicRecoveryRobot.AUTO_LIFT_FIRST_LEVEL)
 
         robot.driveOffBalancingStone(); sleep(500)
         robot.turn(0.50, -90.0)
