@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.opmodes.competition
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.robots.RelicRecoveryRobot
+import java.lang.Math.pow
+import java.lang.Math.signum
+import kotlin.math.abs
 
 @TeleOp(name = "TeleOp")
 class RelicRecoveryTeleOp : LinearOpMode() {
@@ -19,7 +22,8 @@ class RelicRecoveryTeleOp : LinearOpMode() {
         robot.shouldCorrectHeading = false
         robot.printTeleOpInstructions()
         robot.waitForGyroCalibration()
-        robot.waitForStart()
+        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.READY)
+        waitForStart()
         robot.start()
 
         robot.dropLift()
@@ -28,10 +32,10 @@ class RelicRecoveryTeleOp : LinearOpMode() {
         while (opModeIsActive()) {
             // Gamepad 1: Movement
             when {
-                gamepad1.dpad_up -> { robot.setDrivePower(0.20); robot.shouldCorrectHeading = true; robot.targetHeading = robot.getHeading() }
-                gamepad1.dpad_down -> {robot.setDrivePower(-0.20); robot.shouldCorrectHeading = true; robot.targetHeading = robot.getHeading() }
-                gamepad1.dpad_left -> { robot.setStrafePower(-0.65); robot.shouldCorrectHeading = true; robot.targetHeading = robot.getHeading() }
-                gamepad1.dpad_right -> { robot.setStrafePower(0.65); robot.shouldCorrectHeading = true; robot.targetHeading = robot.getHeading() }
+                gamepad1.dpad_up -> { robot.setDrivePower(0.20); robot.shouldCorrectHeading = true; robot.targetHeading = robot.heading }
+                gamepad1.dpad_down -> {robot.setDrivePower(-0.20); robot.shouldCorrectHeading = true; robot.targetHeading = robot.heading }
+                gamepad1.dpad_left -> { robot.setStrafePower(-0.65); robot.shouldCorrectHeading = true; robot.targetHeading = robot.heading }
+                gamepad1.dpad_right -> { robot.setStrafePower(0.65); robot.shouldCorrectHeading = true; robot.targetHeading = robot.heading }
 
                 else -> {
                     robot.shouldCorrectHeading = false
@@ -39,9 +43,9 @@ class RelicRecoveryTeleOp : LinearOpMode() {
                     val y = gamepad1.left_stick_y.toDouble() * -1.0
                     val z = gamepad1.right_stick_x.toDouble() * -1.0
 
-                    val xPower = Math.abs(Math.pow(x, 3.0)) * Math.signum(x)
-                    val yPower = Math.abs(Math.pow(y, 3.0)) * Math.signum(y)
-                    val zPower = Math.abs(Math.pow(z, 3.0)) * Math.signum(z)
+                    val xPower = abs(pow(x, 3.0)) * signum(x)
+                    val yPower = abs(pow(y, 3.0)) * signum(y)
+                    val zPower = abs(pow(z, 3.0)) * signum(z)
 
                     robot.setDirection(xPower, yPower, zPower)
                 }
@@ -55,6 +59,7 @@ class RelicRecoveryTeleOp : LinearOpMode() {
                 gamepad2.a -> { robot.closeGlyphGrabbers(); robot.retractGlyphDeployer() }
                 gamepad2.y -> { robot.releaseGlyphGrabbers(); robot.extendGlyphDeployer() }
                 gamepad2.b -> { robot.openGlyphGrabbers(); robot.retractGlyphDeployer() }
+                gamepad2.x -> {robot.smallOpenGlyphGrabbers(); robot.retractGlyphDeployer() }
             }
         }
 

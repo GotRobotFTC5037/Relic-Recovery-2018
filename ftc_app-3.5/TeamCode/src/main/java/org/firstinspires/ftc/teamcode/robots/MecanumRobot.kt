@@ -32,7 +32,23 @@ open class MecanumRobot : Robot() {
     var shouldCorrectHeading = true
     var targetHeading = 0.0
 
-    // Preparing
+    val heading: Double
+        get() {
+            val orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
+            return orientation.firstAngle.toDouble()
+        }
+
+    val roll: Double
+        get() {
+            val orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
+            return orientation.secondAngle.toDouble()
+        }
+
+    val pitch: Double
+        get() {
+            val orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
+            return orientation.thirdAngle.toDouble()
+        }
 
     override fun setup(hardwareMap: HardwareMap) {
         shouldCorrectHeading = true
@@ -68,7 +84,16 @@ open class MecanumRobot : Robot() {
         imu.initialize(imuParameters)
     }
 
-    // Moving
+    private fun headingDifferenceFromTarget(target: Double): Double {
+        val currentHeading = heading
+        val headingDifference = target - currentHeading
+        return when {
+            abs(headingDifference) <= 180 -> headingDifference
+            target > currentHeading -> target - (currentHeading + 360)
+            target < currentHeading -> target - (currentHeading - 360)
+            else -> 0.0 // This shouldn't ever happen.
+        }
+    }
 
     fun startUpdatingDriveMotorPowers() {
         thread(start = true) {
@@ -129,11 +154,8 @@ open class MecanumRobot : Robot() {
     }
 
     fun setDirection(x: Double, y: Double, z: Double = 0.0) {
-        //val gyroHeading = Math.toRadians(getHeading() + 180 - perspectiveAdjustment)
-        //val sin = Math.sin(gyroHeading)
-        //val cos = Math.cos(gyroHeading)
-        var adjustedX = x//(sin * x) - (cos * y)
-        var adjustedY = y//(sin * y) + (cos * x)
+        var adjustedX = x
+        var adjustedY = y
         var adjustedZ = z
 
         val max = Math.abs(adjustedY) + Math.abs(adjustedX) + Math.abs(adjustedZ)
@@ -151,21 +173,23 @@ open class MecanumRobot : Robot() {
 
     override fun turn(power: Double, degrees: Double) {
         if(!linearOpMode.isStopRequested) {
+
             shouldCorrectHeading = false
             targetHeading = degrees
-            val currentHeading = getHeading()
+
+            val targetHeadingDifference = headingDifferenceFromTarget(degrees)
 
             when {
-                targetHeading > currentHeading -> {
+                targetHeadingDifference > 0.0 -> {
                     setTurnPower(abs(power))
-                    while (targetHeading > getHeading() && linearOpMode.opModeIsActive()) {
+                    while (headingDifferenceFromTarget(targetHeading) > 0.0 && !linearOpMode.isStopRequested) {
                         linearOpMode.sleep(10)
                     }
                 }
 
-                targetHeading < currentHeading -> {
+                targetHeadingDifference < 0.0 -> {
                     setTurnPower(-abs(power))
-                    while (targetHeading < getHeading() && linearOpMode.opModeIsActive()) {
+                    while (headingDifferenceFromTarget(targetHeading) < 0.0 && !linearOpMode.isStopRequested) {
                         linearOpMode.sleep(10)
                     }
                 }
@@ -177,29 +201,13 @@ open class MecanumRobot : Robot() {
         stopAllDriveMotors()
     }
 
-    // IMU
-
-    fun getHeading(): Double {
-        val orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
-        return orientation.firstAngle.toDouble()
-    }
-
-    fun getRoll(): Double {
-        val orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
-        return orientation.secondAngle.toDouble()
-    }
-
-    fun getPitch(): Double {
-        val orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
-        return orientation.thirdAngle.toDouble()
-    }
-
     open fun waitForGyroCalibration() {
         while (!imu.isGyroCalibrated && linearOpMode.opModeIsActive()) {
             linearOpMode.sleep(10)
         }
     }
 
-    private fun headingCorrectionPower(): Double = (targetHeading - (getHeading())) * HEADING_CORRECTION_COEFFICIENT
+    private fun headingCorrectionPower(): Double = headingDifferenceFromTarget(targetHeading) * HEADING_CORRECTION_COEFFICIENT
+
 }
 

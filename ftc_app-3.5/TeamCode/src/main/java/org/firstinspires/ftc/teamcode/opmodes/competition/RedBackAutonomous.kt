@@ -3,70 +3,110 @@ package org.firstinspires.ftc.teamcode.opmodes.competition
 import RelicRecoveryRobotOpModeManager
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import com.qualcomm.robotcore.util.ElapsedTime
+import org.corningrobotics.enderbots.endercv.CameraViewDisplay
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
-import org.firstinspires.ftc.teamcode.libraries.PictographIdentifier
+import org.firstinspires.ftc.teamcode.libraries.vision.JewelPipeline
+import org.firstinspires.ftc.teamcode.libraries.vision.PictographIdentifier
 import org.firstinspires.ftc.teamcode.robots.RelicRecoveryRobot
-import java.util.*
 
 @Autonomous(name = "Red Back Autonomous", group = "Manual Selection Autonomous")
 class RedBackAutonomous : LinearOpMode() {
 
     companion object {
         val OPMODE_NAME = "Red Back Autonomous"
-
-        private val FRONT_WALL_DISTANCE = 45.0
-        private val RIGHT_CRYPTO_BOX_DISTANCE = 98.0
-        private val CENTER_CRYPTO_BOX_DISTANCE = 116.0
-        private val LEFT_CRYPTO_BOX_DISTANCE = 137.0
     }
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {
+
+        // Setup the robot.
         val robot = RelicRecoveryRobot()
         robot.linearOpMode = this
         robot.setup(hardwareMap)
-
-        val pictographIdentifier = PictographIdentifier(hardwareMap)
-        pictographIdentifier.activate()
-
         RelicRecoveryRobotOpModeManager.queueOpMode(this, RelicRecoveryTeleOp.OPMODE_NAME)
 
-        robot.waitForGyroCalibration()
-        robot.waitForStart()
-        robot.start()
+        // Prepare to find the position of the jewels.
+        val jewelDetector = JewelPipeline()
+        jewelDetector.init(hardwareMap.appContext, CameraViewDisplay.getInstance())
+        jewelDetector.enable()
 
-        val pictograph = pictographIdentifier.getIdentifiedPictograph()
+        // Wait for the gyro to be calibrated.
+        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.CALIBRATING)
+        robot.waitForGyroCalibration()
+        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.READY)
+
+        // Wait for the opmode to start.
+        waitForStart()
+
+        // Start the timer.
+        val elapsedTime = ElapsedTime(ElapsedTime.Resolution.SECONDS)
+
+        // Start the robot.
+        robot.start()
+        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.DETECTING)
+
+        // Find the position of the jewels.
+        val jewelPosition = jewelDetector.waitForJewelIdentification(elapsedTime, this)
+        jewelDetector.disable()
+
+        // Read the pictograph.
+        val pictographIdentifier = PictographIdentifier(hardwareMap)
+        pictographIdentifier.activate()
+        val pictograph = pictographIdentifier.waitForPictographIdentification(elapsedTime, this)
         pictographIdentifier.deactivate()
 
-        robot.closeGlyphGrabbers(); sleep(500)
+        // Prepare to begin moving.
+        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.RUNNING)
+        robot.closeGlyphGrabbers(500)
         robot.setLiftPosition(RelicRecoveryRobot.AUTO_LIFT_FIRST_LEVEL)
 
-        robot.driveOffBalancingStone(); sleep(500)
-        robot.turn(0.50, -90.0)
-        robot.driveToDistanceFromForwardObject(RedBackAutonomous.FRONT_WALL_DISTANCE); sleep(1000)
+        // Knock off the correct jewel.
+        when(jewelPosition) {
+            JewelPipeline.JewelPositions.RED_BLUE -> {
+                robot.lowerJewelStick()
+                robot.timeDrive(500, 0.25)
+                robot.raiseJewelStick()
+                robot.driveOnBalancingStone(-0.75)
+                robot.driveOffBalancingStone(-0.15)
+            }
 
-        val rightWallDistance = when(pictograph) {
-            RelicRecoveryVuMark.LEFT -> RedBackAutonomous.LEFT_CRYPTO_BOX_DISTANCE
-            RelicRecoveryVuMark.CENTER -> RedBackAutonomous.CENTER_CRYPTO_BOX_DISTANCE
-            RelicRecoveryVuMark.RIGHT -> RedBackAutonomous.RIGHT_CRYPTO_BOX_DISTANCE
+            JewelPipeline.JewelPositions.BLUE_RED -> {
+                robot.lowerJewelStick()
+                robot.driveOffBalancingStone(-0.15)
+                robot.raiseJewelStick()
+            }
 
-        // Pick a random crypto box if the pictograph is unknown.
-            RelicRecoveryVuMark.UNKNOWN ->
-                listOf(RedBackAutonomous.LEFT_CRYPTO_BOX_DISTANCE,
-                        RedBackAutonomous.CENTER_CRYPTO_BOX_DISTANCE,
-                        RedBackAutonomous.RIGHT_CRYPTO_BOX_DISTANCE)[Random().nextInt(2)]
+            JewelPipeline.JewelPositions.UNKNOWN -> {
+                robot.driveOffBalancingStone(-0.15)
+            }
         }
 
+        // Approach the crypto box.
+        robot.timeDrive(750, -0.50)
+        robot.turn(0.50, 90.0)
+        robot.driveToDistanceFromForwardObject(RelicRecoveryRobot.CRYPTO_BOX_SPACING)
+
+        // Determine the distance from the wall to the correct crypto box.
+        val rightWallDistance = when(pictograph) {
+            RelicRecoveryVuMark.LEFT -> RelicRecoveryRobot.TRAILING_SIDE_CRYPTO_BOX_DISTANCE
+            RelicRecoveryVuMark.CENTER -> RelicRecoveryRobot.CENTER_SIDE_CRYPTO_BOX_DISTANCE
+            RelicRecoveryVuMark.RIGHT -> RelicRecoveryRobot.LEADING_SIDE_CRYPTO_BOX_DISTANCE
+            RelicRecoveryVuMark.UNKNOWN -> RelicRecoveryRobot.LEADING_SIDE_CRYPTO_BOX_DISTANCE
+        }
+
+        // Drive to the correct crypto box.
         robot.driveToDistanceFromRightObject(rightWallDistance)
 
-        robot.timeDrive(1000)
+        // Place the glyph in the correct crypto box.
         robot.dropLift()
+        robot.timeDrive(1000)
         robot.extendGlyphDeployer()
-        robot.openGlyphGrabbers(); sleep(500)
-        robot.timeDrive(850, -0.15)
-        sleep(1000)
-        robot.liftGlyphDeployer()
-        sleep(500)
+        robot.openGlyphGrabbers(250)
+
+        // Back away from the crypto box.
+        robot.timeDrive(850, -0.25)
+        robot.liftGlyphDeployer(500)
     }
 
 }

@@ -5,7 +5,7 @@ import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl
 
 object RelicRecoveryRobotOpModeManager : Thread() {
 
-    public var currentOpMode: OpMode? = null
+    var currentOpMode: OpMode? = null
     private set
 
     private var queuedOpModeName: String? = null

@@ -85,6 +85,10 @@ public class MRIColorBeacon {
         colorBreader.write8(7, blue);
     }
 
+    public void orange() {
+        rgb(255, 165, 0);
+    }
+
     public int getColorNumber(){
         colorBcache = colorBreader.read(0x04, 4);
 
