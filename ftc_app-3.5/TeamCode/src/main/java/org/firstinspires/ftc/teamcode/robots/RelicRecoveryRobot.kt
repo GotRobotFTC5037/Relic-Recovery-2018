@@ -8,7 +8,10 @@ import kotlin.math.abs
 import kotlin.math.min
 
 /**
- * Created by FTC Team 5037 gotrobot?
+ * A class the robot in the 2017-2018 FTC game, Relic Recovery.
+ *
+ * @author FTC Team 5037 gotrobot?
+ * TODO: Order the methods in this class in a logical manner.
  */
 class RelicRecoveryRobot : MecanumRobot() {
 
@@ -61,6 +64,29 @@ class RelicRecoveryRobot : MecanumRobot() {
                 else -> SetupPosition.UNKNOWN
             }
         }
+    }
+
+    /**
+     * A position that the robot can be setup on on the field.
+     */
+    enum class SetupPosition {
+        FRONT_RED,
+        FRONT_BLUE,
+        BACK_BLUE,
+        BACK_RED,
+        UNKNOWN
+    }
+
+    /**
+     * An indicated state or decision of the robot manifested by the color beacon.
+     */
+    enum class ColorBeaconState {
+        IDLE,
+        ERROR,
+        CALIBRATING,
+        DETECTING,
+        READY,
+        RUNNING
     }
 
     private lateinit var liftMotor: DcMotor
@@ -469,6 +495,7 @@ class RelicRecoveryRobot : MecanumRobot() {
     /**
      * Sets the position of the jewel stick to the raised position.
      * @param delay The milliseconds to wait after raising the jewel stick.
+     * TODO: Extract the risen position of the jewel stick into a constant.
      */
     fun raiseJewelStick(delay: Long = 0) {
         setJewelStickPosition(0.0)
@@ -478,6 +505,7 @@ class RelicRecoveryRobot : MecanumRobot() {
     /**
      * Sets the position of the jewel stick to the lowered position.
      * @param delay The milliseconds to wait after lowering the jewel stick.
+     * TODO: Extract the lowered position of the jewel stick into a constant.
      */
     fun lowerJewelStick(delay: Long = 2000) {
         setJewelStickPosition(0.9225)
@@ -547,6 +575,8 @@ class RelicRecoveryRobot : MecanumRobot() {
     /**
      * Detects a nearby crypto box and delivers a glyph into it assuming that the height of the lift
      * is the height that the glyph should be delivered at.
+     * TODO: Finish implementing this.
+     * TODO: Make this cancelable with the press of any button.
      */
     fun deliverGlyph() {
         val leftObjectDistance = leftObjectDistance
@@ -619,18 +649,6 @@ class RelicRecoveryRobot : MecanumRobot() {
     }
 
     /**
-     * An indicated state or decision of the robot manifested by the color beacon.
-     */
-    enum class ColorBeaconState {
-        IDLE,
-        ERROR,
-        CALIBRATING,
-        DETECTING,
-        READY,
-        RUNNING
-    }
-
-    /**
      * Indicates the state and decisions of the robot with the color beacon.
      */
     fun setColorBeaconState(state: ColorBeaconState) {
@@ -680,7 +698,7 @@ class RelicRecoveryRobot : MecanumRobot() {
     }
 
     /**
-     * Prints instructions for using the tele-op OpMode.
+     * Prints instructions for using the TeleOp OpMode.
      */
     fun printTeleOpInstructions() {
         val telemetry = linearOpMode.telemetry

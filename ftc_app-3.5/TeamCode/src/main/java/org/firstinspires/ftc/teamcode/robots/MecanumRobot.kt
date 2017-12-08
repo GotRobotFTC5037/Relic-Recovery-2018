@@ -11,6 +11,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
 import java.lang.Math.abs
 import kotlin.concurrent.thread
 
+/**
+ * A class for creating robots that use a mecanum drive system to move around.
+ *
+ * @author FTC Team 5037 gotrobot?
+ */
 open class MecanumRobot : Robot() {
 
     companion object {
@@ -50,6 +55,10 @@ open class MecanumRobot : Robot() {
             return orientation.thirdAngle.toDouble()
         }
 
+    /**
+     * Sets up the hardware needed in order to use the robot.
+     * @param hardwareMap A HardwareMap object. Usually provided by linearOpMode.hardwareMap.
+     */
     override fun setup(hardwareMap: HardwareMap) {
         shouldCorrectHeading = true
         targetHeading = 0.0
@@ -84,6 +93,11 @@ open class MecanumRobot : Robot() {
         imu.initialize(imuParameters)
     }
 
+    /**
+     * Calculates the shortest heading difference from a specified angle.
+     * @param target The target angle in degrees.
+     * @return The angle in degrees to turn in order to get to the specified angle.
+     */
     private fun headingDifferenceFromTarget(target: Double): Double {
         val currentHeading = heading
         val headingDifference = target - currentHeading
@@ -95,6 +109,9 @@ open class MecanumRobot : Robot() {
         }
     }
 
+    /**
+     * Begins the thread that updates the power of the motors.
+     */
     fun startUpdatingDriveMotorPowers() {
         thread(start = true) {
             while(!linearOpMode.isStopRequested) {
@@ -125,6 +142,10 @@ open class MecanumRobot : Robot() {
         }
     }
 
+    /**
+     * Sets the power that the robot should drive forward or backwards.
+     * @param power The power that the robot should drive at.
+     */
     override fun setDrivePower(power: Double) {
         frontLeftMotorPower = power
         frontRightMotorPower = power
@@ -132,6 +153,10 @@ open class MecanumRobot : Robot() {
         backRightMotorPower = power
     }
 
+    /**
+     * Sets the power that the robot should turn.
+     * @param power The power that the robot should turn at.
+     */
     override fun setTurnPower(power: Double) {
         frontLeftMotorPower = -power
         frontRightMotorPower = power
@@ -139,6 +164,10 @@ open class MecanumRobot : Robot() {
         backRightMotorPower = power
     }
 
+    /**
+     * Sets the power that the robot should drive left or right.
+     * @param power The power that the robot should strafe at.
+     */
     fun setStrafePower(power: Double) {
         frontLeftMotorPower = power
         frontRightMotorPower = -power
@@ -146,6 +175,10 @@ open class MecanumRobot : Robot() {
         backRightMotorPower = power
     }
 
+    /**
+     * Sets the power of the drive motors to 0. This does not stop the robot from correcting with
+     * gyro correction. Set shouldCorrectHeading to false to stop gyro correction.
+     */
     override fun stopAllDriveMotors() {
         frontLeftMotorPower = 0.0
         frontRightMotorPower = 0.0
@@ -153,6 +186,12 @@ open class MecanumRobot : Robot() {
         backRightMotorPower = 0.0
     }
 
+    /**
+     * Moves the robot in the direction of the specified vector.
+     * @param x The x value of the power vector.
+     * @param y The y value of the power vector.
+     * @param z The turn power of the robot.
+     */
     fun setDirection(x: Double, y: Double, z: Double = 0.0) {
         var adjustedX = x
         var adjustedY = y
@@ -171,6 +210,11 @@ open class MecanumRobot : Robot() {
         backRightMotorPower = adjustedY + adjustedX + adjustedZ
     }
 
+    /**
+     * Turns the robot to the specified angle.
+     * @param power The power that the robot should turn at.
+     * @param degrees the degrees the robot should move at.
+     */
     override fun turn(power: Double, degrees: Double) {
         if(!linearOpMode.isStopRequested) {
 
@@ -201,12 +245,19 @@ open class MecanumRobot : Robot() {
         stopAllDriveMotors()
     }
 
+    /**
+     * Waits until the gyro is calibrated.
+     */
     open fun waitForGyroCalibration() {
         while (!imu.isGyroCalibrated && linearOpMode.opModeIsActive()) {
             linearOpMode.sleep(10)
         }
     }
 
+    /**
+     * Calculates the power the robot should turn at in order to correct for the heading drift of
+     * the robot.
+     */
     private fun headingCorrectionPower(): Double = headingDifferenceFromTarget(targetHeading) * HEADING_CORRECTION_COEFFICIENT
 
 }

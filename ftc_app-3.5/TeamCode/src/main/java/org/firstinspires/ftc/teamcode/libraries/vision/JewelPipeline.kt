@@ -113,6 +113,11 @@ class JewelPipeline : OpenCVPipeline() {
         return redDilateOutput
     }
 
+    /**
+     * Waits for the jewels to be identified until 5 seconds elapse.
+     * @param elapsedTime The elapsed time instance containing the start time of the opmode.
+     * @param linearOpMode The instance of LinearOpMode that is running.
+     */
     fun waitForJewelIdentification(elapsedTime: ElapsedTime, linearOpMode: LinearOpMode): JewelPositions {
         while(jewelPositions == JewelPositions.UNKNOWN && elapsedTime.seconds() < TIME_OUT_SECONDS) {
             linearOpMode.telemetry.addData("Blue", bluePosition)

@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.robots.RelicRecoveryRobot
-import org.firstinspires.ftc.teamcode.robots.Robot
 
 @Autonomous(name = "Automatically Select", group = "Automatically Select")
 @Disabled
@@ -17,19 +16,19 @@ class RelicRecoveryAutonomous : LinearOpMode() {
         val setupPosition = RelicRecoveryRobot.getRobotSetupPosition(hardwareMap)
 
         when(setupPosition) {
-            Robot.SetupPosition.FRONT_BLUE ->
+            RelicRecoveryRobot.SetupPosition.FRONT_BLUE ->
                 RelicRecoveryRobotOpModeManager.queueOpMode(this, BlueFrontAutonomous.OPMODE_NAME)
 
-            Robot.SetupPosition.BACK_BLUE ->
+            RelicRecoveryRobot.SetupPosition.BACK_BLUE ->
                 RelicRecoveryRobotOpModeManager.queueOpMode(this, BlueBackAutonomous.OPMODE_NAME)
 
-            Robot.SetupPosition.FRONT_RED ->
+            RelicRecoveryRobot.SetupPosition.FRONT_RED ->
                 RelicRecoveryRobotOpModeManager.queueOpMode(this, RedFrontAutonomous.OPMODE_NAME)
 
-            Robot.SetupPosition.BACK_RED ->
+            RelicRecoveryRobot.SetupPosition.BACK_RED ->
                 RelicRecoveryRobotOpModeManager.queueOpMode(this, RedBackAutonomous.OPMODE_NAME)
 
-            Robot.SetupPosition.UNKNOWN -> {
+            RelicRecoveryRobot.SetupPosition.UNKNOWN -> {
                 telemetry.addLine("-!!!| Could Not Determine Alliance Color! |!!!-")
                 telemetry.update()
                 waitForStart(); while(opModeIsActive()){}

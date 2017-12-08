@@ -70,17 +70,17 @@ import java.util.Locale;
  * involves certain motions to get all 4 values at 3. The motions are as follows (though see the
  * datasheet for more information):</p>
  *
- * <li>
- *     <ol>GYR: Simply let the sensor sit flat for a few seconds.</ol>
- *     <ol>ACC: Move the sensor in various positions. Start flat, then rotate slowly by 45
+ * <ol>
+ *     <li>GYR: Simply let the sensor sit flat for a few seconds.</li>
+ *     <li>ACC: Move the sensor in various positions. Start flat, then rotate slowly by 45
  *              degrees, hold for a few seconds, then continue rotating another 45 degrees and
  *              hold, etc. 6 or more movements of this type may be required. You can move through
  *              any axis you desire, but make sure that the device is lying at least once
- *              perpendicular to the x, y, and z axis.</ol>
- *     <ol>MAG: Move slowly in a figure 8 pattern in the air, until the calibration values reaches 3.</ol>
- *     <ol>SYS: This will usually reach 3 when the other items have also reached 3. If not, continue
- *              slowly moving the device though various axes until it does."</ol>
- * </li>
+ *              perpendicular to the x, y, and z axis.</li>
+ *     <li>MAG: Move slowly in a figure 8 pattern in the air, until the calibration values reaches 3.</li>
+ *     <li>SYS: This will usually reach 3 when the other items have also reached 3. If not, continue
+ *              slowly moving the device though various axes until it does."</li>
+ * </ol>
  *
  * <p>To calibrate the IMU, run this sample opmode with a gamepad attached to the driver station.
  * Once the IMU has reached sufficient calibration as reported on telemetry, press the 'A'
