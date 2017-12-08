@@ -67,7 +67,7 @@ class BlueFrontAutonomous : LinearOpMode() {
                 robot.lowerJewelStick()
                 robot.timeDrive(500, -0.25)
                 robot.raiseJewelStick()
-                robot.driveOnBalancingStone(0.75)
+                robot.driveOnBalancingStone(0.50)
                 robot.driveOffBalancingStone(0.15)
             }
 

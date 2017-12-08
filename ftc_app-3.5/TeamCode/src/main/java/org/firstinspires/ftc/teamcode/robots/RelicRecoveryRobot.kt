@@ -13,22 +13,22 @@ import kotlin.math.min
 class RelicRecoveryRobot : MecanumRobot() {
 
     companion object {
-        val CRYPTO_BOX_SPACING = 45.0
+        val CRYPTO_BOX_SPACING = 47.0
 
         val LEADING_FRONT_CRYPTO_BOX_DISTANCE = 46.0
         val CENTER_FRONT_CRYPTO_BOX_DISTANCE = 64.0
         val TRAILING_FRONT_CRYPTO_BOX_DISTANCE = 82.0
 
-        val LEADING_SIDE_CRYPTO_BOX_DISTANCE = 98.0
+        val LEADING_SIDE_CRYPTO_BOX_DISTANCE = 102.0
         val CENTER_SIDE_CRYPTO_BOX_DISTANCE = 116.0
         val TRAILING_SIDE_CRYPTO_BOX_DISTANCE = 137.0
 
-        private val BALANCING_STONE_ANGLE_THRESHOLD = 3.5
-        private val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 1.5
+        private val BALANCING_STONE_ANGLE_THRESHOLD = 4.0
+        private val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 2.5
 
         private val FRONT_DISTANCE_SENSOR_FILTER_ALPHA = 0.50
-        private val LEFT_DISTANCE_SENSOR_FILTER_ALPHA = 0.60
-        private val RIGHT_DISTANCE_SENSOR_FILTER_ALPHA = 0.60
+        private val LEFT_DISTANCE_SENSOR_FILTER_ALPHA = 0.50
+        private val RIGHT_DISTANCE_SENSOR_FILTER_ALPHA = 0.50
         private val BACK_DISTANCE_SENSOR_FILTER_ALPHA = 0.15
 
         private val GLYPH_GRABBER_OPEN_POSITION = 1.0
@@ -186,14 +186,13 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param distance The distance the robot should be from a left object.
      * @param power The power to run the motors at when driving.
      */
-    fun driveToDistanceFromLeftObject(distance: Double, power: Double = 0.50) {
+    fun driveToDistanceFromLeftObject(distance: Double, power: Double = 0.45) {
         val currentDistance = leftObjectDistance
 
         when {
             currentDistance > distance -> {
                 setStrafePower(-Math.abs(power))
                 while (leftObjectDistance > distance && !linearOpMode.isStopRequested) {
-                    linearOpMode.telemetry.addData("Left Object Distance: ", leftObjectDistance)
                     linearOpMode.sleep(10)
                 }
             }
@@ -201,7 +200,6 @@ class RelicRecoveryRobot : MecanumRobot() {
             currentDistance < distance -> {
                 setStrafePower(Math.abs(power))
                 while (leftObjectDistance < distance && !linearOpMode.isStopRequested) {
-                    linearOpMode.telemetry.addData("Left Object Distance: ", leftObjectDistance)
                     linearOpMode.sleep(10)
                 }
             }
@@ -226,7 +224,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param distance The distance the robot should be from a right object.
      * @param power The power to run the motors at when driving.
      */
-    fun driveToDistanceFromRightObject(distance: Double, power: Double = 0.50) {
+    fun driveToDistanceFromRightObject(distance: Double, power: Double = 0.45) {
         val currentDistance = rightObjectDistance
 
         when {
@@ -240,8 +238,6 @@ class RelicRecoveryRobot : MecanumRobot() {
             currentDistance < distance -> {
                 setStrafePower(-Math.abs(power))
                 while (rightObjectDistance < distance && !linearOpMode.isStopRequested) {
-                    linearOpMode.telemetry.addData("Distance", rightObjectDistance)
-                    linearOpMode.telemetry.update()
                     linearOpMode.sleep(10)
                 }
             }
@@ -272,12 +268,28 @@ class RelicRecoveryRobot : MecanumRobot() {
         if (!linearOpMode.isStopRequested) {
             setDrivePower(power)
 
-            while (abs(startingPitch - pitch) < BALANCING_STONE_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
-                linearOpMode.sleep(10)
-            }
+            when {
+                power > 0 -> {
+                    while (startingPitch - pitch < BALANCING_STONE_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
+                        linearOpMode.sleep(10)
+                    }
 
-            while (abs(startingPitch - pitch) >= BALANCING_STONE_GROUND_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
-                linearOpMode.sleep(10)
+                    while (startingPitch - pitch >= BALANCING_STONE_GROUND_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
+                        linearOpMode.sleep(10)
+                    }
+                }
+
+                power < 0 -> {
+                    while (startingPitch - pitch > -BALANCING_STONE_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
+                        linearOpMode.sleep(10)
+                    }
+
+                    while (startingPitch - pitch <= -BALANCING_STONE_GROUND_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
+                        linearOpMode.sleep(10)
+                    }
+                }
+
+                else -> return
             }
         }
 
@@ -458,7 +470,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * Sets the position of the jewel stick to the raised position.
      * @param delay The milliseconds to wait after raising the jewel stick.
      */
-    fun raiseJewelStick(delay: Long = 2000) {
+    fun raiseJewelStick(delay: Long = 0) {
         setJewelStickPosition(0.0)
         linearOpMode.sleep(delay)
     }
@@ -468,7 +480,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param delay The milliseconds to wait after lowering the jewel stick.
      */
     fun lowerJewelStick(delay: Long = 2000) {
-        setJewelStickPosition(1.00)
+        setJewelStickPosition(0.9225)
         linearOpMode.sleep(delay)
     }
 

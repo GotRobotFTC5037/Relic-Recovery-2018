@@ -67,7 +67,7 @@ class BlueBackAutonomous : LinearOpMode() {
                 robot.lowerJewelStick()
                 robot.timeDrive(500, -0.25)
                 robot.raiseJewelStick()
-                robot.driveOnBalancingStone(0.75)
+                robot.driveOnBalancingStone(0.50)
                 robot.driveOffBalancingStone(0.15)
             }
 
@@ -83,7 +83,7 @@ class BlueBackAutonomous : LinearOpMode() {
         }
 
         // Approach the crypto box.
-        robot.timeDrive(750)
+        robot.timeDrive(250)
         robot.turn(0.50, 90.0)
         robot.driveToDistanceFromForwardObject(RelicRecoveryRobot.CRYPTO_BOX_SPACING)
 

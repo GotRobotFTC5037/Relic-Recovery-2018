@@ -67,7 +67,7 @@ class RedFrontAutonomous : LinearOpMode() {
                 robot.lowerJewelStick()
                 robot.timeDrive(500, 0.25)
                 robot.raiseJewelStick()
-                robot.driveOnBalancingStone(-0.75)
+                robot.driveOnBalancingStone(-0.25)
                 robot.driveOffBalancingStone(-0.15)
             }
 
@@ -83,15 +83,14 @@ class RedFrontAutonomous : LinearOpMode() {
         }
 
         // Approach the crypto box.
-        robot.timeDrive(750, -0.50)
         robot.turn(0.50, -180.0)
         robot.driveToDistanceFromForwardObject(RelicRecoveryRobot.CRYPTO_BOX_SPACING)
 
         // Determine the distance from the wall to the correct crypto box.
         val rightWallDistance = when(pictograph) {
-            RelicRecoveryVuMark.LEFT -> RelicRecoveryRobot.TRAILING_FRONT_CRYPTO_BOX_DISTANCE
-            RelicRecoveryVuMark.CENTER -> RelicRecoveryRobot.CENTER_FRONT_CRYPTO_BOX_DISTANCE
             RelicRecoveryVuMark.RIGHT -> RelicRecoveryRobot.LEADING_FRONT_CRYPTO_BOX_DISTANCE
+            RelicRecoveryVuMark.CENTER -> RelicRecoveryRobot.CENTER_FRONT_CRYPTO_BOX_DISTANCE
+            RelicRecoveryVuMark.LEFT -> RelicRecoveryRobot.TRAILING_FRONT_CRYPTO_BOX_DISTANCE
             RelicRecoveryVuMark.UNKNOWN -> RelicRecoveryRobot.LEADING_FRONT_CRYPTO_BOX_DISTANCE
         }
 

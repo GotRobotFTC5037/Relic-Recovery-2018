@@ -29,6 +29,8 @@ class JewelPipeline : OpenCVPipeline() {
     private val blurOutput = Mat()
     private val hsvOutput = Mat()
 
+    private val bluePositiveThresholdOutput = Mat()
+    private val blueNegativeThresholdOutput = Mat()
     private val blueThresholdOutput = Mat()
     private val blueErodeOutput = Mat()
     private val blueDilateOutput = Mat()
@@ -44,7 +46,7 @@ class JewelPipeline : OpenCVPipeline() {
 
     val redPosition: Double
         get() {
-            val circularity = doubleArrayOf(0.5, 1.0)
+            val circularity = doubleArrayOf(0.75, 1.0)
             findBlobs(redDilateOutput, 10000.0, circularity, false, findRedBlobsOutput)
 
             val redBlobs = findRedBlobsOutput.toArray()
@@ -58,7 +60,7 @@ class JewelPipeline : OpenCVPipeline() {
 
     val bluePosition: Double
         get() {
-            val circularity = doubleArrayOf(0.5, 1.0)
+            val circularity = doubleArrayOf(0.75, 1.0)
             findBlobs(blueDilateOutput, 10000.0, circularity, false, findBlueBlobsOutput)
 
             val blueBlobs = findBlueBlobsOutput.toArray()
@@ -91,21 +93,24 @@ class JewelPipeline : OpenCVPipeline() {
 
         Imgproc.cvtColor(blurOutput, hsvOutput, Imgproc.COLOR_BGR2HSV)
 
-        val blueHueThreshold = doubleArrayOf(0.0, 40.0)
+        val bluePositiveHueThreshold = doubleArrayOf(0.0, 40.0)
+        val blueNegativeHueThreshold = doubleArrayOf(150.0, 180.0)
         val blueSaturationThreshold = doubleArrayOf(150.0, 255.0)
         val blueValueThreshold = doubleArrayOf(100.0, 255.0)
-        Core.inRange(hsvOutput, Scalar(blueHueThreshold[0], blueSaturationThreshold[0], blueValueThreshold[0]), Scalar(blueHueThreshold[1], blueSaturationThreshold[1], blueValueThreshold[1]), blueThresholdOutput)
-        Imgproc.erode(blueThresholdOutput, blueErodeOutput, Mat(), Point(-1.0, -1.0), 10, Core.BORDER_CONSTANT, Scalar(-1.0))
+        Core.inRange(hsvOutput, Scalar(bluePositiveHueThreshold[0], blueSaturationThreshold[0], blueValueThreshold[0]), Scalar(bluePositiveHueThreshold[1], blueSaturationThreshold[1], blueValueThreshold[1]), bluePositiveThresholdOutput)
+        Core.inRange(hsvOutput, Scalar(blueNegativeHueThreshold[0], blueSaturationThreshold[0], blueValueThreshold[0]), Scalar(blueNegativeHueThreshold[1], blueSaturationThreshold[1], blueValueThreshold[1]), blueNegativeThresholdOutput)
+        Core.bitwise_or(bluePositiveThresholdOutput, blueNegativeThresholdOutput, blueThresholdOutput)
+        Imgproc.erode(blueThresholdOutput, blueErodeOutput, Mat(), Point(-1.0, -1.0), 3, Core.BORDER_CONSTANT, Scalar(-1.0))
         Imgproc.dilate(blueErodeOutput, blueDilateOutput, Mat(), Point(-1.0, -1.0), 15, Core.BORDER_CONSTANT, Scalar(-1.0))
 
-        val redHueThreshold = doubleArrayOf(100.0, 140.0)
-        val redSaturationThreshold = doubleArrayOf(190.0, 255.0)
+        val redHueThreshold = doubleArrayOf(110.0, 140.0)
+        val redSaturationThreshold = doubleArrayOf(230.0, 255.0)
         val redValueThreshold = doubleArrayOf(100.0, 255.0)
         Core.inRange(hsvOutput, Scalar(redHueThreshold[0], redSaturationThreshold[0], redValueThreshold[0]), Scalar(redHueThreshold[1], redSaturationThreshold[1], redValueThreshold[1]), redThresholdOutput)
-        Imgproc.erode(redThresholdOutput, redErodeOutput, Mat(), Point(-1.0, -1.0), 10, Core.BORDER_CONSTANT, Scalar(-1.0))
+        Imgproc.erode(redThresholdOutput, redErodeOutput, Mat(), Point(-1.0, -1.0), 3, Core.BORDER_CONSTANT, Scalar(-1.0))
         Imgproc.dilate(redErodeOutput, redDilateOutput, Mat(), Point(-1.0, -1.0), 15, Core.BORDER_CONSTANT, Scalar(-1.0))
 
-        return redErodeOutput
+        return redDilateOutput
     }
 
     fun waitForJewelIdentification(elapsedTime: ElapsedTime, linearOpMode: LinearOpMode): JewelPositions {
