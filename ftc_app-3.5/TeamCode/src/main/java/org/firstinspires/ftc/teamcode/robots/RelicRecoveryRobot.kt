@@ -70,6 +70,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * A position that the robot can be setup on on the field.
      */
     enum class SetupPosition {
+
         FRONT_RED,
         FRONT_BLUE,
         BACK_BLUE,
@@ -81,6 +82,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * An indicated state or decision of the robot manifested by the color beacon.
      */
     enum class ColorBeaconState {
+
         IDLE,
         ERROR,
         CALIBRATING,
@@ -597,6 +599,7 @@ class RelicRecoveryRobot : MecanumRobot() {
                             leftCryptoBoxDistance == closestCryptoBoxDistance -> LEADING_FRONT_CRYPTO_BOX_DISTANCE
                             centerCryptoBoxDistance == closestCryptoBoxDistance -> CENTER_FRONT_CRYPTO_BOX_DISTANCE
                             rightCryptoBoxDistance == closestCryptoBoxDistance -> TRAILING_FRONT_CRYPTO_BOX_DISTANCE
+
                             else -> {
                                 return
                             }
