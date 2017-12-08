@@ -39,16 +39,13 @@ class JewelPipeline : OpenCVPipeline() {
     private val redDilateOutput = Mat()
     private val findRedBlobsOutput = MatOfKeyPoint()
 
-    private val whiteThresholdOutput = Mat()
-    private val whiteErodeOutput = Mat()
-
     private var lastKnownRedPosition = -1.0
     private var lastKnownBluePosition = -1.0
 
     val redPosition: Double
         get() {
-            val circularity = doubleArrayOf(0.1, 1.0)
-            findBlobs(redDilateOutput, 1000.0, circularity, false, findRedBlobsOutput)
+            val circularity = doubleArrayOf(0.5, 1.0)
+            findBlobs(redDilateOutput, 10000.0, circularity, false, findRedBlobsOutput)
 
             val redBlobs = findRedBlobsOutput.toArray()
             if (redBlobs.isNotEmpty()) {
@@ -61,8 +58,8 @@ class JewelPipeline : OpenCVPipeline() {
 
     val bluePosition: Double
         get() {
-            val circularity = doubleArrayOf(0.1, 1.0)
-            findBlobs(blueDilateOutput, 1000.0, circularity, false, findBlueBlobsOutput)
+            val circularity = doubleArrayOf(0.5, 1.0)
+            findBlobs(blueDilateOutput, 10000.0, circularity, false, findBlueBlobsOutput)
 
             val blueBlobs = findBlueBlobsOutput.toArray()
             if (blueBlobs.isNotEmpty()) {
@@ -99,20 +96,14 @@ class JewelPipeline : OpenCVPipeline() {
         val blueValueThreshold = doubleArrayOf(100.0, 255.0)
         Core.inRange(hsvOutput, Scalar(blueHueThreshold[0], blueSaturationThreshold[0], blueValueThreshold[0]), Scalar(blueHueThreshold[1], blueSaturationThreshold[1], blueValueThreshold[1]), blueThresholdOutput)
         Imgproc.erode(blueThresholdOutput, blueErodeOutput, Mat(), Point(-1.0, -1.0), 10, Core.BORDER_CONSTANT, Scalar(-1.0))
-        Imgproc.dilate(blueErodeOutput, blueDilateOutput, Mat(), Point(-1.0, -1.0), 20, Core.BORDER_CONSTANT, Scalar(-1.0))
+        Imgproc.dilate(blueErodeOutput, blueDilateOutput, Mat(), Point(-1.0, -1.0), 15, Core.BORDER_CONSTANT, Scalar(-1.0))
 
         val redHueThreshold = doubleArrayOf(100.0, 140.0)
         val redSaturationThreshold = doubleArrayOf(190.0, 255.0)
         val redValueThreshold = doubleArrayOf(100.0, 255.0)
         Core.inRange(hsvOutput, Scalar(redHueThreshold[0], redSaturationThreshold[0], redValueThreshold[0]), Scalar(redHueThreshold[1], redSaturationThreshold[1], redValueThreshold[1]), redThresholdOutput)
         Imgproc.erode(redThresholdOutput, redErodeOutput, Mat(), Point(-1.0, -1.0), 10, Core.BORDER_CONSTANT, Scalar(-1.0))
-        Imgproc.dilate(redErodeOutput, redDilateOutput, Mat(), Point(-1.0, -1.0), 20, Core.BORDER_CONSTANT, Scalar(-1.0))
-
-        // val whiteHueThreshold = doubleArrayOf(0.0, 180.0)
-        // val whiteSaturationThreshold = doubleArrayOf(0.0, 50.0)
-        // val whiteValueThreshold = doubleArrayOf(200.0, 255.0)
-        // Core.inRange(hsvOutput, Scalar(whiteHueThreshold[0], whiteSaturationThreshold[0], whiteValueThreshold[0]), Scalar(whiteHueThreshold[1], whiteSaturationThreshold[1], whiteValueThreshold[1]), whiteThresholdOutput)
-        // Imgproc.erode(whiteThresholdOutput, whiteErodeOutput, Mat(), Point(-1.0, -1.0), 10, Core.BORDER_CONSTANT, Scalar(-1.0))
+        Imgproc.dilate(redErodeOutput, redDilateOutput, Mat(), Point(-1.0, -1.0), 15, Core.BORDER_CONSTANT, Scalar(-1.0))
 
         return redErodeOutput
     }
