@@ -20,7 +20,7 @@ class PictographIdentifier(hardwareMap: HardwareMap) {
                 "9I/7jMeKHn9lu6zhbnMlOi2D/iY14mOYUvQg1eMiHstkPzUY7IeBngPmCnEjOHWmv7" +
                 "XRboufL3JsCTrC8pnnEn5n3pZHei++FW9ovS6Aub89z//Yxq6OhPQ6+WaRNc3VSwFH/KJImw0"
 
-        val TIME_OUT_SECONDS = 10.0
+        val TIME_OUT_SECONDS = 5.0
     }
 
     private val vuforiaLocalizer: ClosableVuforiaLocalizer

@@ -45,7 +45,7 @@ class RelicRecoveryRobot : MecanumRobot() {
 
         private val OBJECT_DISTANCE_THRESHOLD = 2.0
 
-        private val MAXIMUM_ENCODER_LIFT_POSITION = 3200
+        private val MAXIMUM_ENCODER_LIFT_POSITION = 3350
         val AUTO_LIFT_FIRST_LEVEL = 1000
 
         fun getRobotSetupPosition(hardwareMap: HardwareMap): SetupPosition {
