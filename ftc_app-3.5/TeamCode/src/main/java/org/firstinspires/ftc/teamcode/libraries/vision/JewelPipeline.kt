@@ -13,7 +13,7 @@ import java.io.IOException
 class JewelPipeline : OpenCVPipeline() {
 
     companion object {
-        val TIME_OUT_SECONDS = 2.0
+        val TIME_OUT_SECONDS = 5.0
 
         init {
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
