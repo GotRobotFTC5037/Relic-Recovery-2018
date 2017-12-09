@@ -6,15 +6,15 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
-import org.firstinspires.ftc.teamcode.libraries.vision.JewelPipeline
+import org.firstinspires.ftc.teamcode.libraries.vision.JewelConfigurationDetector
 import org.firstinspires.ftc.teamcode.libraries.vision.PictographIdentifier
 import org.firstinspires.ftc.teamcode.robots.RelicRecoveryRobot
 
-@Autonomous(name = "Red Back Autonomous", group = "Manual Selection Autonomous")
+@Autonomous(name = "4: Red Back", group = "Red Manual Selection Autonomous")
 class RedBackAutonomous : LinearOpMode() {
 
     companion object {
-        val OPMODE_NAME = "Red Back Autonomous"
+        val OPMODE_NAME = "4: Red Back"
     }
 
     @Throws(InterruptedException::class)
@@ -27,7 +27,7 @@ class RedBackAutonomous : LinearOpMode() {
         RelicRecoveryRobotOpModeManager.queueOpMode(this, RelicRecoveryTeleOp.OPMODE_NAME)
 
         // Prepare to find the position of the jewels.
-        val jewelDetector = JewelPipeline()
+        val jewelDetector = JewelConfigurationDetector()
         jewelDetector.init(hardwareMap.appContext, CameraViewDisplay.getInstance())
         jewelDetector.enable()
 
@@ -63,7 +63,7 @@ class RedBackAutonomous : LinearOpMode() {
 
         // Knock off the correct jewel.
         when(jewelPosition) {
-            JewelPipeline.JewelPositions.RED_BLUE -> {
+            JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
                 robot.lowerJewelStick()
                 robot.timeDrive(500, 0.25)
                 robot.raiseJewelStick()
@@ -71,13 +71,13 @@ class RedBackAutonomous : LinearOpMode() {
                 robot.driveOffBalancingStone(-0.15)
             }
 
-            JewelPipeline.JewelPositions.BLUE_RED -> {
+            JewelConfigurationDetector.JewelConfiguration.BLUE_RED -> {
                 robot.lowerJewelStick()
                 robot.driveOffBalancingStone(-0.15)
                 robot.raiseJewelStick(500)
             }
 
-            JewelPipeline.JewelPositions.UNKNOWN -> {
+            JewelConfigurationDetector.JewelConfiguration.UNKNOWN -> {
                 robot.driveOffBalancingStone(-0.15)
             }
         }

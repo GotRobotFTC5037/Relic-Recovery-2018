@@ -8,7 +8,7 @@ import kotlin.math.abs
 import kotlin.math.min
 
 /**
- * A class the robot in the 2017-2018 FTC game, Relic Recovery.
+ * A class for our robot in the 2017-2018 FTC game, Relic Recovery.
  *
  * @author FTC Team 5037 gotrobot?
  * TODO: Order the methods in this class in a logical manner.
