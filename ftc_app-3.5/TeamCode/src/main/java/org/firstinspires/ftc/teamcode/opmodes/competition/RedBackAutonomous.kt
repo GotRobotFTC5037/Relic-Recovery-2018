@@ -74,7 +74,7 @@ class RedBackAutonomous : LinearOpMode() {
             JewelPipeline.JewelPositions.BLUE_RED -> {
                 robot.lowerJewelStick()
                 robot.driveOffBalancingStone(-0.15)
-                robot.raiseJewelStick()
+                robot.raiseJewelStick(500)
             }
 
             JewelPipeline.JewelPositions.UNKNOWN -> {
