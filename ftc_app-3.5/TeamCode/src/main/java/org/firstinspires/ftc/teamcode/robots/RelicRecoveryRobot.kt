@@ -11,7 +11,6 @@ import kotlin.math.min
  * A class for our robot in the 2017-2018 FTC game, Relic Recovery.
  *
  * @author FTC Team 5037 gotrobot?
- * TODO: Order the methods in this class in a logical manner.
  */
 class RelicRecoveryRobot : MecanumRobot() {
 
@@ -26,13 +25,13 @@ class RelicRecoveryRobot : MecanumRobot() {
         val CENTER_SIDE_CRYPTO_BOX_DISTANCE = 116.0
         val TRAILING_SIDE_CRYPTO_BOX_DISTANCE = 137.0
 
-        private val BALANCING_STONE_ANGLE_THRESHOLD = 4.0
-        private val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 2.5
-
         private val FRONT_DISTANCE_SENSOR_FILTER_ALPHA = 0.50
         private val LEFT_DISTANCE_SENSOR_FILTER_ALPHA = 0.50
         private val RIGHT_DISTANCE_SENSOR_FILTER_ALPHA = 0.50
         private val BACK_DISTANCE_SENSOR_FILTER_ALPHA = 0.15
+
+        private val BALANCING_STONE_ANGLE_THRESHOLD = 4.0
+        private val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 2.5
 
         private val GLYPH_GRABBER_OPEN_POSITION = 1.0
         private val GLYPH_GRABBER_SMALL_OPEN_POSITION = 0.70
@@ -43,11 +42,19 @@ class RelicRecoveryRobot : MecanumRobot() {
         private val GLYPH_DEPLOYER_RETRACTED_POSITION = 0.90
         private val GLYPH_DEPLOYER_UP = 0.01
 
+        private val JEWEL_STICK_UP_POSITION = 0.0
+        private val JEWEL_STICK_DOWN_POSITION = 0.9225
+
         private val OBJECT_DISTANCE_THRESHOLD = 2.0
 
         private val MAXIMUM_ENCODER_LIFT_POSITION = 3350
         val AUTO_LIFT_FIRST_LEVEL = 1000
 
+        /**
+         * Determines the current setup position of the robot.
+         * @param hardwareMap The instance of HardwareMap from the OpMode that the robot is running on.
+         * @return The setup position of the robot.
+         */
         fun getRobotSetupPosition(hardwareMap: HardwareMap): SetupPosition {
             val colorSensor = hardwareMap.colorSensor.get("floor color sensor")
             val backRangeSensor = hardwareMap.analogInput.get("back range sensor")
@@ -497,20 +504,18 @@ class RelicRecoveryRobot : MecanumRobot() {
     /**
      * Sets the position of the jewel stick to the raised position.
      * @param delay The milliseconds to wait after raising the jewel stick.
-     * TODO: Extract the risen position of the jewel stick into a constant.
      */
     fun raiseJewelStick(delay: Long = 0) {
-        setJewelStickPosition(0.0)
+        setJewelStickPosition(JEWEL_STICK_UP_POSITION)
         linearOpMode.sleep(delay)
     }
 
     /**
      * Sets the position of the jewel stick to the lowered position.
      * @param delay The milliseconds to wait after lowering the jewel stick.
-     * TODO: Extract the lowered position of the jewel stick into a constant.
      */
-    fun lowerJewelStick(delay: Long = 2000) {
-        setJewelStickPosition(0.9225)
+    fun lowerJewelStick(delay: Long = 500) {
+        setJewelStickPosition(JEWEL_STICK_DOWN_POSITION)
         linearOpMode.sleep(delay)
     }
 
@@ -581,8 +586,8 @@ class RelicRecoveryRobot : MecanumRobot() {
      * TODO: Make this cancelable with the press of any button.
      */
     fun deliverGlyph() {
-        val leftObjectDistance = leftObjectDistance
-        val rightObjectDistance = rightObjectDistance
+        val leftObjectDistance = this.leftObjectDistance
+        val rightObjectDistance = this.rightObjectDistance
         val heading = heading
 
         when (heading) {
@@ -610,8 +615,8 @@ class RelicRecoveryRobot : MecanumRobot() {
                         extendGlyphDeployer()
                         openGlyphGrabbers(250)
                         timeDrive(850, -0.15)
-                        retractGlyphDeployer()
                         openGlyphGrabbers()
+                        retractGlyphDeployer()
                         dropLift()
                     }
 

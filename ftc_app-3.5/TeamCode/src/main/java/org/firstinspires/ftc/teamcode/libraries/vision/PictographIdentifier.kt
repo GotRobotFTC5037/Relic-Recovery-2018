@@ -27,6 +27,9 @@ class PictographIdentifier(hardwareMap: HardwareMap) {
     private val relicTrackables: VuforiaTrackables
     private val relicTemplate: VuforiaTrackable
 
+    /**
+     * Sets up the vuforia localizer and the vuforia trackables for usage.
+     */
     init {
         val cameraMonitorViewId = hardwareMap.appContext.resources.getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.packageName)
         val parameters = VuforiaLocalizer.Parameters(cameraMonitorViewId)
@@ -38,11 +41,17 @@ class PictographIdentifier(hardwareMap: HardwareMap) {
         this.relicTemplate = relicTrackables[0]
     }
 
+    /**
+     * Activates vuforia vumark tracking and turns on the flash.
+     */
     fun activate() {
         CameraDevice.getInstance().setFlashTorchMode(true)
         relicTrackables.activate()
     }
 
+    /**
+     * Deactivates vuforia vumark tracking, turns off the flash and closes the vuforia localizer.
+     */
     fun deactivate() {
         relicTrackables.deactivate()
         CameraDevice.getInstance().setFlashTorchMode(false)
@@ -52,12 +61,23 @@ class PictographIdentifier(hardwareMap: HardwareMap) {
     private val identifiedPictograph: RelicRecoveryVuMark
         get() = RelicRecoveryVuMark.from(relicTemplate)
 
+    /**
+     * Waits until the pictograph is identified or it has been a specified number of seconds in an ElapsedTime.
+     * @return The identified pictograph.
+     */
     fun waitForPictographIdentification(elapsedTime: ElapsedTime, linearOpMode: LinearOpMode): RelicRecoveryVuMark {
-        while(identifiedPictograph == RelicRecoveryVuMark.UNKNOWN && elapsedTime.seconds() < TIME_OUT_SECONDS) {
+
+        while (elapsedTime.seconds() < TIME_OUT_SECONDS && !linearOpMode.isStopRequested) {
+            val pictograph = this.identifiedPictograph
+
+            if (pictograph != RelicRecoveryVuMark.UNKNOWN) {
+                return pictograph
+            }
+
             linearOpMode.sleep(100)
         }
 
-        return identifiedPictograph
+        return RelicRecoveryVuMark.UNKNOWN
     }
 
 }

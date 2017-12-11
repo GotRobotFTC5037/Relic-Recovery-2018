@@ -167,9 +167,9 @@ class JewelConfigurationDetector : OpenCVPipeline() {
 
         // Filter out anything that is not the color of the white line in between the jewels.
         val whiteHueThreshold = doubleArrayOf(0.0, 180.0)
-        val whiteSaturationThreshold = doubleArrayOf(0.0, 255.0)
         val whiteLuminanceThreshold = doubleArrayOf(25.0, 255.0)
-        Core.inRange(hsvOutput, Scalar(whiteHueThreshold[0], whiteSaturationThreshold[0], whiteLuminanceThreshold[0]), Scalar(whiteHueThreshold[1], whiteSaturationThreshold[1], whiteLuminanceThreshold[1]), whiteThresholdOutput)
+        val whiteSaturationThreshold = doubleArrayOf(0.0, 255.0)
+        Core.inRange(hsvOutput, Scalar(whiteHueThreshold[0], whiteLuminanceThreshold[0], whiteSaturationThreshold[0]), Scalar(whiteHueThreshold[1], whiteLuminanceThreshold[1], whiteSaturationThreshold[1]), whiteThresholdOutput)
 
         // Filter out anything that is not the color of the blue jewel.
         val bluePositiveHueThreshold = doubleArrayOf(0.0, 40.0)
