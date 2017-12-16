@@ -6,6 +6,9 @@ import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl
 /**
  * An object that manages the running of OpModes.
  *
+ * This class was originally created by (I forgot. I'll fill this in later.) but we have converted
+ * it into kotlin and made some changes to the way it works.
+ *
  * @author FTC Team 5037 gotrobot?
  */
 object RelicRecoveryRobotOpModeManager : Thread() {

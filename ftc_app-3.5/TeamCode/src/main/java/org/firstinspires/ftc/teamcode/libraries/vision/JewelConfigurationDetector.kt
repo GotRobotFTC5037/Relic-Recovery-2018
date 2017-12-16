@@ -26,12 +26,12 @@ class JewelConfigurationDetector : OpenCVPipeline() {
         UNKNOWN
     }
 
+    private val resizeOutput = Mat()
     private val blurOutput = Mat()
-    private val hslOutput = Mat()
     private val hsvOutput = Mat()
 
     private val whiteThresholdOutput = Mat()
-    private val whiteFindContoursOutput = mutableListOf<MatOfPoint>()
+    private val whiteFindContoursOutput = ArrayList<MatOfPoint>()
 
     private val bluePositiveThresholdOutput = Mat()
     private val blueNegativeThresholdOutput = Mat()
@@ -45,7 +45,9 @@ class JewelConfigurationDetector : OpenCVPipeline() {
     private val redDilateOutput = Mat()
     private val findRedBlobsOutput = MatOfKeyPoint()
 
-    var shouldShowDetectedJewelPositions = true
+    private val detectedObjectsOutput = Mat()
+
+    private var shouldShowDetectedJewelPositions = true
 
     /**
      * Waits for the jewels to be identified until 5 seconds elapse.
@@ -73,7 +75,7 @@ class JewelConfigurationDetector : OpenCVPipeline() {
      */
     @Synchronized
     fun getRedJewelKeyPoint(): KeyPoint? {
-        findBlobs(redDilateOutput, 10000.0, doubleArrayOf(0.75, 1.0), false, findRedBlobsOutput)
+        findBlobs(redDilateOutput, 500.0, doubleArrayOf(0.75, 1.0), false, findRedBlobsOutput)
         val redBlobs = findRedBlobsOutput.toArray()
         return if (redBlobs.isNotEmpty()) {
             redBlobs[0]
@@ -88,7 +90,7 @@ class JewelConfigurationDetector : OpenCVPipeline() {
      */
     @Synchronized
     fun getBlueJewelKeyPoint(): KeyPoint? {
-        findBlobs(blueDilateOutput, 10000.0, doubleArrayOf(0.75, 1.0), false, findBlueBlobsOutput)
+        findBlobs(blueDilateOutput, 500.0, doubleArrayOf(0.75, 1.0), false, findBlueBlobsOutput)
         val blueBlobs = findBlueBlobsOutput.toArray()
         return if (blueBlobs.isNotEmpty()) {
             blueBlobs[0]
@@ -103,17 +105,24 @@ class JewelConfigurationDetector : OpenCVPipeline() {
      */
     @Synchronized
     fun getWhiteLinePoint(): Point? {
-        Imgproc.findContours(whiteThresholdOutput, whiteFindContoursOutput, Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE)
+        val findContoursOutput = ArrayList<MatOfPoint>()
+        val filterContoursOutput = ArrayList<MatOfPoint>()
+        Imgproc.findContours(whiteThresholdOutput, findContoursOutput, Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE)
+        filterContours(findContoursOutput,
+                0.0, 0.0,
+                5.0, 40.0,
+                10.0, 90.0,
+                doubleArrayOf(60.0, 100.0),
+                30.0, 0.0,
+                0.25, 0.75,
+                filterContoursOutput)
+        convexHulls(filterContoursOutput, whiteFindContoursOutput)
+
         return if (whiteFindContoursOutput.isNotEmpty()) {
-            val whiteContours = whiteFindContoursOutput[0].toArray()
-            if (whiteContours.isNotEmpty()) {
-                val contour = whiteContours[0]
-                Point(contour.x, contour.y)
-            } else {
-                null
-            }
+            val boundingRectangle = Imgproc.boundingRect(whiteFindContoursOutput[0])
+            Point(boundingRectangle.x.toDouble() + (boundingRectangle.width / 2), boundingRectangle.y.toDouble() + (boundingRectangle.height / 2))
         } else {
-            null
+             null
         }
 
     }
@@ -122,7 +131,8 @@ class JewelConfigurationDetector : OpenCVPipeline() {
      * Determines the configuration of the jewels in the image.
      * @return The configuration of the jewels in the image.
      */
-    @Synchronized private fun getJewelConfiguration(): JewelConfiguration {
+    @Synchronized
+    private fun getJewelConfiguration(): JewelConfiguration {
         val bluePosition = getBlueJewelKeyPoint()
         val redPosition = getRedJewelKeyPoint()
         val whiteLinePosition = getWhiteLinePoint()
@@ -160,16 +170,18 @@ class JewelConfigurationDetector : OpenCVPipeline() {
      */
     override fun processFrame(rgba: Mat, gray: Mat): Mat {
 
+        val originalSize = rgba.size()
+        Imgproc.resize(rgba, resizeOutput, Size(320.0, 180.0), 0.0, 0.0, Imgproc.INTER_AREA)
+
         // Blur the image to get rid of noise.
-        Imgproc.blur(rgba, blurOutput, Size(21.0, 21.0))
+        Imgproc.blur(resizeOutput, blurOutput, Size(7.0, 7.0))
         Imgproc.cvtColor(blurOutput, hsvOutput, Imgproc.COLOR_BGR2HSV)
-        Imgproc.cvtColor(blurOutput, hslOutput, Imgproc.COLOR_BGR2HLS)
 
         // Filter out anything that is not the color of the white line in between the jewels.
         val whiteHueThreshold = doubleArrayOf(0.0, 180.0)
-        val whiteLuminanceThreshold = doubleArrayOf(25.0, 255.0)
-        val whiteSaturationThreshold = doubleArrayOf(0.0, 255.0)
-        Core.inRange(hsvOutput, Scalar(whiteHueThreshold[0], whiteLuminanceThreshold[0], whiteSaturationThreshold[0]), Scalar(whiteHueThreshold[1], whiteLuminanceThreshold[1], whiteSaturationThreshold[1]), whiteThresholdOutput)
+        val whiteSaturationThreshold = doubleArrayOf(0.0, 100.0)
+        val whiteValueThreshold = doubleArrayOf(175.0, 255.0)
+        Core.inRange(hsvOutput, Scalar(whiteHueThreshold[0], whiteSaturationThreshold[0], whiteValueThreshold[0]), Scalar(whiteHueThreshold[1], whiteSaturationThreshold[1], whiteValueThreshold[1]), whiteThresholdOutput)
 
         // Filter out anything that is not the color of the blue jewel.
         val bluePositiveHueThreshold = doubleArrayOf(0.0, 40.0)
@@ -179,16 +191,18 @@ class JewelConfigurationDetector : OpenCVPipeline() {
         Core.inRange(hsvOutput, Scalar(bluePositiveHueThreshold[0], blueSaturationThreshold[0], blueValueThreshold[0]), Scalar(bluePositiveHueThreshold[1], blueSaturationThreshold[1], blueValueThreshold[1]), bluePositiveThresholdOutput)
         Core.inRange(hsvOutput, Scalar(blueNegativeHueThreshold[0], blueSaturationThreshold[0], blueValueThreshold[0]), Scalar(blueNegativeHueThreshold[1], blueSaturationThreshold[1], blueValueThreshold[1]), blueNegativeThresholdOutput)
         Core.bitwise_or(bluePositiveThresholdOutput, blueNegativeThresholdOutput, blueThresholdOutput)
-        Imgproc.erode(blueThresholdOutput, blueErodeOutput, Mat(), Point(-1.0, -1.0), 3, Core.BORDER_CONSTANT, Scalar(-1.0))
-        Imgproc.dilate(blueErodeOutput, blueDilateOutput, Mat(), Point(-1.0, -1.0), 15, Core.BORDER_CONSTANT, Scalar(-1.0))
+        Imgproc.erode(blueThresholdOutput, blueErodeOutput, Mat(), Point(-1.0, -1.0), 1, Core.BORDER_CONSTANT, Scalar(-1.0))
+        Imgproc.dilate(blueErodeOutput, blueDilateOutput, Mat(), Point(-1.0, -1.0), 4, Core.BORDER_CONSTANT, Scalar(-1.0))
 
         // Filter out anything that is not the color of the red jewel.
         val redHueThreshold = doubleArrayOf(110.0, 140.0)
         val redSaturationThreshold = doubleArrayOf(150.0, 255.0)
         val redValueThreshold = doubleArrayOf(25.0, 255.0)
         Core.inRange(hsvOutput, Scalar(redHueThreshold[0], redSaturationThreshold[0], redValueThreshold[0]), Scalar(redHueThreshold[1], redSaturationThreshold[1], redValueThreshold[1]), redThresholdOutput)
-        Imgproc.erode(redThresholdOutput, redErodeOutput, Mat(), Point(-1.0, -1.0), 3, Core.BORDER_CONSTANT, Scalar(-1.0))
-        Imgproc.dilate(redErodeOutput, redDilateOutput, Mat(), Point(-1.0, -1.0), 15, Core.BORDER_CONSTANT, Scalar(-1.0))
+        Imgproc.erode(redThresholdOutput, redErodeOutput, Mat(), Point(-1.0, -1.0), 1, Core.BORDER_CONSTANT, Scalar(-1.0))
+        Imgproc.dilate(redErodeOutput, redDilateOutput, Mat(), Point(-1.0, -1.0), 4, Core.BORDER_CONSTANT, Scalar(-1.0))
+
+        resizeOutput.copyTo(detectedObjectsOutput)
 
         // Show the detected jewel positions on screen if requested.
         if (shouldShowDetectedJewelPositions) {
@@ -202,9 +216,8 @@ class JewelConfigurationDetector : OpenCVPipeline() {
             if (whiteLinePoint != null) {
                 val x = whiteLinePoint.x
                 val y = whiteLinePoint.y
-                val yellowScalar = Scalar(0.0, 255.0, 255.0)
-                Imgproc.circle(rgba, Point(x, y), 5, yellowScalar, 3)
-                Imgproc.putText(rgba, "Line", Point(x, y - 20), 0, 0.8, yellowScalar, 2)
+                val yellowScalar = Scalar(255.0, 255.0, 0.0)
+                Imgproc.circle(detectedObjectsOutput, Point(x, y), 5, yellowScalar, 5)
             }
 
             // Clearly identify the red jewel on the screen.
@@ -212,9 +225,10 @@ class JewelConfigurationDetector : OpenCVPipeline() {
                 val x = redKeyPoint.pt.x
                 val y = redKeyPoint.pt.y
                 val size = redKeyPoint.size
+                val radius = size / 2
                 val redScalar = Scalar(255.0, 0.0, 0.0)
-                Imgproc.rectangle(rgba, Point(x, y), Point(x + size, y + size), redScalar, 3)
-                Imgproc.putText(rgba, "Red Jewel", Point(x, y - 20), 0, 0.8, redScalar, 3)
+                Imgproc.rectangle(detectedObjectsOutput, Point(x - radius, y - radius), Point(x + radius, y + radius), redScalar, 3)
+                Imgproc.putText(detectedObjectsOutput, "Red", Point(x - radius, y - 5 - radius), 0, 0.5, redScalar, 2)
             }
 
             // Clearly identify the blue jewel on the screen.
@@ -222,14 +236,17 @@ class JewelConfigurationDetector : OpenCVPipeline() {
                 val x = blueKeyPoint.pt.x
                 val y = blueKeyPoint.pt.y
                 val size = blueKeyPoint.size
+                val radius = size / 2
                 val blueScalar = Scalar(0.0, 0.0, 255.0)
-                Imgproc.rectangle(rgba, Point(x, y), Point(x + size, y + size), blueScalar, 3)
-                Imgproc.putText(rgba, "Blue Jewel", Point(x, y - 20), 0, 0.8, blueScalar, 2)
+                Imgproc.rectangle(detectedObjectsOutput, Point(x - radius, y - radius), Point(x + radius, y + radius), blueScalar, 3)
+                Imgproc.putText(detectedObjectsOutput, "Blue", Point(x - radius, y - 5 - radius), 0, 0.5, blueScalar, 2)
             }
 
         }
 
-        return rgba
+        Imgproc.resize(detectedObjectsOutput, detectedObjectsOutput, originalSize, 0.0, 0.0, Imgproc.INTER_AREA)
+
+        return detectedObjectsOutput
     }
 
     /**
@@ -288,5 +305,85 @@ class JewelConfigurationDetector : OpenCVPipeline() {
         }
 
         blobDet.detect(input, blobList)
+    }
+
+    /**
+     * Compute the convex hulls of contours.
+     * @param inputContours The contours on which to perform the operation.
+     * @param outputContours The contours where the output will be stored.
+     */
+    private fun convexHulls(inputContours: List<MatOfPoint>, outputContours: java.util.ArrayList<MatOfPoint>) {
+        val hull = MatOfInt()
+        outputContours.clear()
+        for (i in inputContours.indices) {
+            val contour = inputContours[i]
+            val mopHull = MatOfPoint()
+            Imgproc.convexHull(contour, hull)
+            mopHull.create(hull.size().height.toInt(), 1, CvType.CV_32SC2)
+            var j = 0
+            while (j < hull.size().height) {
+                val index = hull.get(j, 0)[0].toInt()
+                val point = doubleArrayOf(contour.get(index, 0)[0], contour.get(index, 0)[1])
+                mopHull.put(j, 0, *point)
+                j++
+            }
+            outputContours.add(mopHull)
+        }
+    }
+
+
+    /**
+     * Filters out contours that do not meet certain criteria.
+     * @param inputContours is the input list of contours
+     * @param output is the the output list of contours
+     * @param minArea is the minimum area of a contour that will be kept
+     * @param minPerimeter is the minimum perimeter of a contour that will be kept
+     * @param minWidth minimum width of a contour
+     * @param maxWidth maximum width
+     * @param minHeight minimum height
+     * @param maxHeight maximum height
+     * @param solidity the minimum and maximum solidity of a contour
+     * @param minVertexCount minimum vertex Count of the contours
+     * @param maxVertexCount maximum vertex Count
+     * @param minRatio minimum ratio of width to height
+     * @param maxRatio maximum ratio of width to height
+     */
+    private fun filterContours(inputContours: List<MatOfPoint>,
+                               minArea: Double, minPerimeter: Double,
+                               minWidth: Double, maxWidth: Double,
+                               minHeight: Double, maxHeight: Double,
+                               solidity: DoubleArray,
+                               maxVertexCount: Double, minVertexCount: Double,
+                               minRatio: Double, maxRatio: Double,
+                               output: MutableList<MatOfPoint>) {
+
+        val hull = MatOfInt()
+        output.clear()
+
+        for (i in inputContours.indices) {
+            val contour = inputContours[i]
+            val bb = Imgproc.boundingRect(contour)
+            if (bb.width < minWidth || bb.width > maxWidth) continue
+            if (bb.height < minHeight || bb.height > maxHeight) continue
+            val area = Imgproc.contourArea(contour)
+            if (area < minArea) continue
+            if (Imgproc.arcLength(MatOfPoint2f(*contour.toArray()), true) < minPerimeter) continue
+            Imgproc.convexHull(contour, hull)
+            val mopHull = MatOfPoint()
+            mopHull.create(hull.size().height.toInt(), 1, CvType.CV_32SC2)
+            var j = 0
+            while (j < hull.size().height) {
+                val index = hull.get(j, 0)[0].toInt()
+                val point = doubleArrayOf(contour.get(index, 0)[0], contour.get(index, 0)[1])
+                mopHull.put(j, 0, *point)
+                j++
+            }
+            val solid = 100 * area / Imgproc.contourArea(mopHull)
+            if (solid < solidity[0] || solid > solidity[1]) continue
+            if (contour.rows() < minVertexCount || contour.rows() > maxVertexCount) continue
+            val ratio = bb.width / bb.height.toDouble()
+            if (ratio < minRatio || ratio > maxRatio) continue
+            output.add(contour)
+        }
     }
 }

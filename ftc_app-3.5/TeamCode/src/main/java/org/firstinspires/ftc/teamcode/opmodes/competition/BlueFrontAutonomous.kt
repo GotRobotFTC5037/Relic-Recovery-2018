@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
 import org.firstinspires.ftc.teamcode.libraries.vision.JewelConfigurationDetector
 import org.firstinspires.ftc.teamcode.libraries.vision.PictographIdentifier
 import org.firstinspires.ftc.teamcode.robots.RelicRecoveryRobot
+import kotlin.concurrent.thread
 
 @Autonomous(name = "1: Blue Front", group = "Blue Manual Selection Autonomous")
 class BlueFrontAutonomous : LinearOpMode() {
@@ -59,7 +60,9 @@ class BlueFrontAutonomous : LinearOpMode() {
         // Prepare to begin moving.
         robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.RUNNING)
         robot.closeGlyphGrabbers(500)
-        robot.setLiftPosition(RelicRecoveryRobot.AUTO_LIFT_FIRST_LEVEL)
+        thread(start = true) {
+            robot.setLiftPosition(RelicRecoveryRobot.AUTO_LIFT_FIRST_LEVEL)
+        }
 
         // Knock off the correct jewel.
         when (jewelPosition) {
@@ -105,6 +108,9 @@ class BlueFrontAutonomous : LinearOpMode() {
         // Back away from the crypto box.
         robot.timeDrive(850, -0.25)
         robot.liftGlyphDeployer(500)
+
+        // Turn towards the center glyphs.
+        robot.turn(0.50, -135.0)
     }
 
 }

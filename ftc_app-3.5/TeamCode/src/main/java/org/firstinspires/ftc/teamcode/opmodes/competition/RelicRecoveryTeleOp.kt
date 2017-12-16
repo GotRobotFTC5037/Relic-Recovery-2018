@@ -59,7 +59,7 @@ class RelicRecoveryTeleOp : LinearOpMode() {
                 gamepad2.a -> { robot.closeGlyphGrabbers(); robot.retractGlyphDeployer() }
                 gamepad2.y -> { robot.releaseGlyphGrabbers(); robot.extendGlyphDeployer() }
                 gamepad2.b -> { robot.openGlyphGrabbers(); robot.retractGlyphDeployer() }
-                gamepad2.x -> {robot.smallOpenGlyphGrabbers(); robot.retractGlyphDeployer() }
+                gamepad2.x -> { robot.smallOpenGlyphGrabbers(); robot.retractGlyphDeployer() }
             }
         }
 

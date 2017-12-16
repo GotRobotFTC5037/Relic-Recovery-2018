@@ -33,10 +33,10 @@ class RelicRecoveryRobot : MecanumRobot() {
         private val BALANCING_STONE_ANGLE_THRESHOLD = 4.0
         private val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 2.5
 
-        private val GLYPH_GRABBER_OPEN_POSITION = 1.0
-        private val GLYPH_GRABBER_SMALL_OPEN_POSITION = 0.70
+        private val GLYPH_GRABBER_OPEN_POSITION = 0.50
         private val GLYPH_GRABBER_RELEASE_POSITION = 0.60
-        private val GLYPH_GRABBER_CLOSED_POSITION = 0.40
+        private val GLYPH_GRABBER_SMALL_OPEN_POSITION = 0.70
+        private val GLYPH_GRABBER_CLOSED_POSITION = 1.0
 
         private val GLYPH_DEPLOYER_EXTENDED_POSITION = 0.25
         private val GLYPH_DEPLOYER_RETRACTED_POSITION = 0.90
@@ -45,7 +45,7 @@ class RelicRecoveryRobot : MecanumRobot() {
         private val JEWEL_STICK_UP_POSITION = 0.0
         private val JEWEL_STICK_DOWN_POSITION = 0.9225
 
-        private val OBJECT_DISTANCE_THRESHOLD = 2.0
+        private val DEFAULT_OBJECT_DISTANCE_TOLERANCE = 2.0
 
         private val MAXIMUM_ENCODER_LIFT_POSITION = 3350
         val AUTO_LIFT_FIRST_LEVEL = 1000
@@ -246,7 +246,7 @@ class RelicRecoveryRobot : MecanumRobot() {
         linearOpMode.sleep(1000)
 
         val leftDistance = leftObjectDistance
-        if ((distance + OBJECT_DISTANCE_THRESHOLD < leftDistance || distance - OBJECT_DISTANCE_THRESHOLD > leftDistance)
+        if ((distance + DEFAULT_OBJECT_DISTANCE_TOLERANCE < leftDistance || distance - DEFAULT_OBJECT_DISTANCE_TOLERANCE > leftDistance)
                 && linearOpMode.opModeIsActive()) {
             driveToDistanceFromLeftObject(distance, 0.45)
         }
@@ -286,7 +286,7 @@ class RelicRecoveryRobot : MecanumRobot() {
         linearOpMode.sleep(1000)
 
         val rightDistance = rightObjectDistance
-        if ((distance + OBJECT_DISTANCE_THRESHOLD < rightDistance || distance - OBJECT_DISTANCE_THRESHOLD > rightDistance)
+        if ((distance + DEFAULT_OBJECT_DISTANCE_TOLERANCE < rightDistance || distance - DEFAULT_OBJECT_DISTANCE_TOLERANCE > rightDistance)
                 && !linearOpMode.isStopRequested) {
             driveToDistanceFromRightObject(distance, 0.45)
         }

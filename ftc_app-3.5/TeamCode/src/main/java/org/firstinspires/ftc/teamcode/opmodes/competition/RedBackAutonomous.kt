@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
 import org.firstinspires.ftc.teamcode.libraries.vision.JewelConfigurationDetector
 import org.firstinspires.ftc.teamcode.libraries.vision.PictographIdentifier
 import org.firstinspires.ftc.teamcode.robots.RelicRecoveryRobot
+import kotlin.concurrent.thread
 
 @Autonomous(name = "4: Red Back", group = "Red Manual Selection Autonomous")
 class RedBackAutonomous : LinearOpMode() {
@@ -59,10 +60,12 @@ class RedBackAutonomous : LinearOpMode() {
         // Prepare to begin moving.
         robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.RUNNING)
         robot.closeGlyphGrabbers(500)
-        robot.setLiftPosition(RelicRecoveryRobot.AUTO_LIFT_FIRST_LEVEL)
+        thread(start = true) {
+            robot.setLiftPosition(RelicRecoveryRobot.AUTO_LIFT_FIRST_LEVEL)
+        }
 
         // Knock off the correct jewel.
-        when(jewelPosition) {
+        when (jewelPosition) {
             JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
                 robot.lowerJewelStick()
                 robot.timeDrive(500, 0.25)
@@ -88,7 +91,7 @@ class RedBackAutonomous : LinearOpMode() {
         robot.driveToDistanceFromForwardObject(RelicRecoveryRobot.CRYPTO_BOX_SPACING)
 
         // Determine the distance from the wall to the correct crypto box.
-        val rightWallDistance = when(pictograph) {
+        val rightWallDistance = when (pictograph) {
             RelicRecoveryVuMark.LEFT -> RelicRecoveryRobot.TRAILING_SIDE_CRYPTO_BOX_DISTANCE
             RelicRecoveryVuMark.CENTER -> RelicRecoveryRobot.CENTER_SIDE_CRYPTO_BOX_DISTANCE
             RelicRecoveryVuMark.RIGHT -> RelicRecoveryRobot.LEADING_SIDE_CRYPTO_BOX_DISTANCE
@@ -107,6 +110,8 @@ class RedBackAutonomous : LinearOpMode() {
         // Back away from the crypto box.
         robot.timeDrive(850, -0.25)
         robot.liftGlyphDeployer(500)
-    }
 
+        // Turn towards the center glyphs.
+        robot.turn(0.50, -90.0)
+    }
 }
