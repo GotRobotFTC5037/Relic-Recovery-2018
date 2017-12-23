@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmodes.competition
 
-import RelicRecoveryRobotOpModeManager
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
-import org.corningrobotics.enderbots.endercv.CameraViewDisplay
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
 import org.firstinspires.ftc.teamcode.libraries.vision.JewelConfigurationDetector
 import org.firstinspires.ftc.teamcode.libraries.vision.PictographIdentifier
@@ -23,19 +21,7 @@ class BlueFrontAutonomous : LinearOpMode() {
 
         // Setup the robot.
         val robot = RelicRecoveryRobot()
-        robot.linearOpMode = this
-        robot.setup(hardwareMap)
-        RelicRecoveryRobotOpModeManager.queueOpMode(this, RelicRecoveryTeleOp.OPMODE_NAME)
-
-        // Prepare to find the position of the jewels.
-        val jewelDetector = JewelConfigurationDetector()
-        jewelDetector.init(hardwareMap.appContext, CameraViewDisplay.getInstance())
-        jewelDetector.enable()
-
-        // Wait for the gyro to be calibrated.
-        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.CALIBRATING)
-        robot.waitForGyroCalibration()
-        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.READY)
+        robot.prepareForAutonomous(this)
 
         // Wait for the opmode to start.
         waitForStart()
@@ -48,8 +34,8 @@ class BlueFrontAutonomous : LinearOpMode() {
         robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.DETECTING)
 
         // Find the position of the jewels.
-        val jewelPosition = jewelDetector.waitForJewelIdentification(elapsedTime, this)
-        jewelDetector.disable()
+        val jewelPosition = robot.jewelConfigurationDetector.waitForJewelIdentification(elapsedTime, this)
+        robot.jewelConfigurationDetector.disable()
 
         // Read the pictograph.
         val pictographIdentifier = PictographIdentifier(hardwareMap)

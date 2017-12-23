@@ -1,13 +1,19 @@
 package org.firstinspires.ftc.teamcode.libraries.vision
 
+import com.vuforia.CameraDevice
 import org.corningrobotics.enderbots.endercv.OpenCVPipeline
 import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
 import java.util.*
+import kotlin.math.acos
+import kotlin.math.min
+import kotlin.math.roundToInt
 
 class GlyphIdentifier : OpenCVPipeline() {
 
     companion object {
+        val GLYPH_SIZE = 15.2
+
         init {
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
         }
@@ -29,6 +35,9 @@ class GlyphIdentifier : OpenCVPipeline() {
     private val filterContoursOutput = ArrayList<MatOfPoint>()
 
     private val identifiedGlyphsOutput = Mat()
+
+    private val cameraFocalLength: Double
+        get() = CameraDevice.getInstance().cameraCalibration.focalLength.data[0].toDouble() / 10
 
     override fun processFrame(rgba: Mat?, gray: Mat?): Mat {
 
@@ -85,7 +94,9 @@ class GlyphIdentifier : OpenCVPipeline() {
                 val yPosition = contourBoundingRectangle.y.toDouble()
                 val width = contourBoundingRectangle.width
                 val height = contourBoundingRectangle.height
+                val angle: Int = (acos(min((width / height).toDouble(), 1.0)) * Math.PI / 180).roundToInt()
                 Imgproc.rectangle(identifiedGlyphsOutput, Point(xPosition, yPosition), Point(xPosition + width, yPosition + height), yellowScalar, 3)
+                Imgproc.putText(identifiedGlyphsOutput, "$angle°", Point(xPosition, yPosition - 4), 0, 0.5, yellowScalar, 2)
             }
 
             Imgproc.resize(identifiedGlyphsOutput, identifiedGlyphsOutput, originalSize, 0.0, 0.0, Imgproc.INTER_AREA)
@@ -97,6 +108,7 @@ class GlyphIdentifier : OpenCVPipeline() {
         }
 
     }
+
 
     /**
      * Compute the convex hulls of contours.

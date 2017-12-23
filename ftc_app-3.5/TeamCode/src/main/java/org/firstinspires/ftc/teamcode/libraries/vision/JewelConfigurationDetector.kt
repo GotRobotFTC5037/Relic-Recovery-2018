@@ -27,27 +27,38 @@ class JewelConfigurationDetector : OpenCVPipeline() {
     }
 
     private val resizeOutput = Mat()
-    private val blurOutput = Mat()
     private val hsvOutput = Mat()
+
+    private val extractGreenChannelOutput = Mat()
+    private val greenNormalizationOutput = Mat()
+
+    private val extractRedChannelOutput = Mat()
+    private val redNormalizationOutput = Mat()
+    private val redMinusBlueOutput = Mat()
+    private val normalizedRedMinusBlueOutput = Mat()
+    private val redMinusGreenOutput = Mat()
+    private val normalizedRedMinusGreenOutput = Mat()
+    private val thresholdRedChannelOutput = Mat()
+    private val redErodeOutput = Mat()
+    private val redDilateOutput = Mat()
+    private val redFindBlobsInput = Mat()
+    private val findRedBlobsOutput = MatOfKeyPoint()
+
+    private val extractBlueChannelOutput = Mat()
+    private val blueNormalizationOutput = Mat()
+    private val blueMinusRedOutput = Mat()
+    private val normalizedBlueMinusRedOutput = Mat()
+    private val blueMinusGreenOutput = Mat()
+    private val normalizedBlueMinusGreenOutput = Mat()
+    private val thresholdBlueChannelOutput = Mat()
+    private val blueErodeOutput = Mat()
+    private val blueDilateOutput = Mat()
+    private val blueFindBlobsInput = Mat()
+    private val findBlueBlobsOutput = MatOfKeyPoint()
 
     private val whiteThresholdOutput = Mat()
     private val whiteFindContoursOutput = ArrayList<MatOfPoint>()
-
-    private val bluePositiveThresholdOutput = Mat()
-    private val blueNegativeThresholdOutput = Mat()
-    private val blueThresholdOutput = Mat()
-    private val blueErodeOutput = Mat()
-    private val blueDilateOutput = Mat()
-    private val findBlueBlobsOutput = MatOfKeyPoint()
-
-    private val redThresholdOutput = Mat()
-    private val redErodeOutput = Mat()
-    private val redDilateOutput = Mat()
-    private val findRedBlobsOutput = MatOfKeyPoint()
-
     private val detectedObjectsOutput = Mat()
-
-    private var shouldShowDetectedJewelPositions = true
 
     /**
      * Waits for the jewels to be identified until 5 seconds elapse.
@@ -75,7 +86,6 @@ class JewelConfigurationDetector : OpenCVPipeline() {
      */
     @Synchronized
     fun getRedJewelKeyPoint(): KeyPoint? {
-        findBlobs(redDilateOutput, 500.0, doubleArrayOf(0.75, 1.0), false, findRedBlobsOutput)
         val redBlobs = findRedBlobsOutput.toArray()
         return if (redBlobs.isNotEmpty()) {
             redBlobs[0]
@@ -90,7 +100,6 @@ class JewelConfigurationDetector : OpenCVPipeline() {
      */
     @Synchronized
     fun getBlueJewelKeyPoint(): KeyPoint? {
-        findBlobs(blueDilateOutput, 500.0, doubleArrayOf(0.75, 1.0), false, findBlueBlobsOutput)
         val blueBlobs = findBlueBlobsOutput.toArray()
         return if (blueBlobs.isNotEmpty()) {
             blueBlobs[0]
@@ -170,78 +179,80 @@ class JewelConfigurationDetector : OpenCVPipeline() {
      */
     override fun processFrame(rgba: Mat, gray: Mat): Mat {
 
+        // Resize the image for faster processing.
         val originalSize = rgba.size()
         Imgproc.resize(rgba, resizeOutput, Size(320.0, 180.0), 0.0, 0.0, Imgproc.INTER_AREA)
 
-        // Blur the image to get rid of noise.
-        Imgproc.blur(resizeOutput, blurOutput, Size(7.0, 7.0))
-        Imgproc.cvtColor(blurOutput, hsvOutput, Imgproc.COLOR_BGR2HSV)
+        // Extract each color channel.
+        Core.extractChannel(resizeOutput, extractRedChannelOutput, 0)
+        Core.extractChannel(resizeOutput, extractGreenChannelOutput, 1)
+        Core.extractChannel(resizeOutput, extractBlueChannelOutput, 2)
+        Core.normalize(extractRedChannelOutput, redNormalizationOutput, 0.0, 255.0, Core.NORM_MINMAX)
+        Core.normalize(extractGreenChannelOutput, greenNormalizationOutput, 0.0, 130.0, Core.NORM_MINMAX)
+        Core.normalize(extractBlueChannelOutput, blueNormalizationOutput, 0.0, 255.0, Core.NORM_MINMAX)
 
-        // Filter out anything that is not the color of the white line in between the jewels.
-        val whiteHueThreshold = doubleArrayOf(0.0, 180.0)
-        val whiteSaturationThreshold = doubleArrayOf(0.0, 100.0)
-        val whiteValueThreshold = doubleArrayOf(175.0, 255.0)
-        Core.inRange(hsvOutput, Scalar(whiteHueThreshold[0], whiteSaturationThreshold[0], whiteValueThreshold[0]), Scalar(whiteHueThreshold[1], whiteSaturationThreshold[1], whiteValueThreshold[1]), whiteThresholdOutput)
+        // Find the red jewel.
+        Core.subtract(redNormalizationOutput, blueNormalizationOutput, redMinusBlueOutput)
+        Core.normalize(redMinusBlueOutput, normalizedRedMinusBlueOutput, 0.0, 255.0, Core.NORM_MINMAX)
+        Core.subtract(normalizedRedMinusBlueOutput, greenNormalizationOutput, redMinusGreenOutput)
+        Core.normalize(redMinusGreenOutput, normalizedRedMinusGreenOutput, 0.0, 255.0, Core.NORM_MINMAX)
+        Imgproc.threshold(normalizedRedMinusGreenOutput, thresholdRedChannelOutput, 125.0, 255.0, Imgproc.THRESH_BINARY)
+        Imgproc.erode(thresholdRedChannelOutput, redErodeOutput, Mat(), Point(-1.0, -1.0), 1, Core.BORDER_CONSTANT, Scalar(-1.0))
+        Imgproc.dilate(redErodeOutput, redDilateOutput, Mat(), Point(-1.0, -1.0), 6, Core.BORDER_CONSTANT, Scalar(-1.0))
+        Imgproc.erode(redDilateOutput, redFindBlobsInput, Mat(), Point(-1.0, -1.0), 5, Core.BORDER_CONSTANT, Scalar(-1.0))
+        findBlobs(redFindBlobsInput, 400.0, doubleArrayOf(0.0, 100.0), false, findRedBlobsOutput)
 
-        // Filter out anything that is not the color of the blue jewel.
-        val bluePositiveHueThreshold = doubleArrayOf(0.0, 40.0)
-        val blueNegativeHueThreshold = doubleArrayOf(150.0, 180.0)
-        val blueSaturationThreshold = doubleArrayOf(60.0, 255.0)
-        val blueValueThreshold = doubleArrayOf(25.0, 255.0)
-        Core.inRange(hsvOutput, Scalar(bluePositiveHueThreshold[0], blueSaturationThreshold[0], blueValueThreshold[0]), Scalar(bluePositiveHueThreshold[1], blueSaturationThreshold[1], blueValueThreshold[1]), bluePositiveThresholdOutput)
-        Core.inRange(hsvOutput, Scalar(blueNegativeHueThreshold[0], blueSaturationThreshold[0], blueValueThreshold[0]), Scalar(blueNegativeHueThreshold[1], blueSaturationThreshold[1], blueValueThreshold[1]), blueNegativeThresholdOutput)
-        Core.bitwise_or(bluePositiveThresholdOutput, blueNegativeThresholdOutput, blueThresholdOutput)
-        Imgproc.erode(blueThresholdOutput, blueErodeOutput, Mat(), Point(-1.0, -1.0), 1, Core.BORDER_CONSTANT, Scalar(-1.0))
-        Imgproc.dilate(blueErodeOutput, blueDilateOutput, Mat(), Point(-1.0, -1.0), 4, Core.BORDER_CONSTANT, Scalar(-1.0))
+        // Find the blue jewel.
+        Core.subtract(blueNormalizationOutput, redNormalizationOutput, blueMinusRedOutput)
+        Core.normalize(blueMinusRedOutput, normalizedBlueMinusRedOutput, 0.0, 255.0, Core.NORM_MINMAX)
+        Core.subtract(normalizedBlueMinusRedOutput, greenNormalizationOutput, blueMinusGreenOutput)
+        Core.normalize(blueMinusGreenOutput, normalizedBlueMinusGreenOutput, 0.0, 255.0, Core.NORM_MINMAX)
+        Imgproc.threshold(normalizedBlueMinusGreenOutput, thresholdBlueChannelOutput, 10.0, 255.0, Imgproc.THRESH_BINARY)
+        Imgproc.erode(thresholdBlueChannelOutput, blueErodeOutput, Mat(), Point(-1.0, -1.0), 1, Core.BORDER_CONSTANT, Scalar(-1.0))
+        Imgproc.dilate(blueErodeOutput, blueDilateOutput, Mat(), Point(-1.0, -1.0), 6, Core.BORDER_CONSTANT, Scalar(-1.0))
+        Imgproc.erode(blueDilateOutput, blueFindBlobsInput, Mat(), Point(-1.0, -1.0), 5, Core.BORDER_CONSTANT, Scalar(-1.0))
+        findBlobs(blueFindBlobsInput, 400.0, doubleArrayOf(0.0, 100.0), false, findBlueBlobsOutput)
 
-        // Filter out anything that is not the color of the red jewel.
-        val redHueThreshold = doubleArrayOf(110.0, 140.0)
-        val redSaturationThreshold = doubleArrayOf(150.0, 255.0)
-        val redValueThreshold = doubleArrayOf(25.0, 255.0)
-        Core.inRange(hsvOutput, Scalar(redHueThreshold[0], redSaturationThreshold[0], redValueThreshold[0]), Scalar(redHueThreshold[1], redSaturationThreshold[1], redValueThreshold[1]), redThresholdOutput)
-        Imgproc.erode(redThresholdOutput, redErodeOutput, Mat(), Point(-1.0, -1.0), 1, Core.BORDER_CONSTANT, Scalar(-1.0))
-        Imgproc.dilate(redErodeOutput, redDilateOutput, Mat(), Point(-1.0, -1.0), 4, Core.BORDER_CONSTANT, Scalar(-1.0))
+        // Find the white line.
+        Imgproc.cvtColor(resizeOutput, hsvOutput, Imgproc.COLOR_BGR2HSV)
+        Core.inRange(hsvOutput, Scalar(0.0, 0.0, 175.0), Scalar(180.0, 100.0, 255.0), whiteThresholdOutput)
 
+        // Show all detected elements on the screen.
         resizeOutput.copyTo(detectedObjectsOutput)
 
-        // Show the detected jewel positions on screen if requested.
-        if (shouldShowDetectedJewelPositions) {
+        // Identify the red and blue jewels.
+        val redKeyPoint = this.getRedJewelKeyPoint()
+        val blueKeyPoint = this.getBlueJewelKeyPoint()
+        val whiteLinePoint = this.getWhiteLinePoint()
 
-            // Identify the red and blue jewels.
-            val redKeyPoint = this.getRedJewelKeyPoint()
-            val blueKeyPoint = this.getBlueJewelKeyPoint()
-            val whiteLinePoint = this.getWhiteLinePoint()
+        // Show the identified red jewel on the screen.
+        if (redKeyPoint != null) {
+            val x = redKeyPoint.pt.x
+            val y = redKeyPoint.pt.y
+            val size = redKeyPoint.size
+            val radius = size / 2
+            val redScalar = Scalar(255.0, 0.0, 0.0)
+            Imgproc.rectangle(detectedObjectsOutput, Point(x - radius, y - radius), Point(x + radius, y + radius), redScalar, 3)
+            Imgproc.putText(detectedObjectsOutput, "Red", Point(x - radius, y - 5 - radius), 0, 0.5, redScalar, 2)
+        }
 
-            // Clearly identify the white line on the screen.
-            if (whiteLinePoint != null) {
-                val x = whiteLinePoint.x
-                val y = whiteLinePoint.y
-                val yellowScalar = Scalar(255.0, 255.0, 0.0)
-                Imgproc.circle(detectedObjectsOutput, Point(x, y), 5, yellowScalar, 5)
-            }
+        // Show the identified blue jewel on the screen.
+        if (blueKeyPoint != null) {
+            val x = blueKeyPoint.pt.x
+            val y = blueKeyPoint.pt.y
+            val size = blueKeyPoint.size
+            val radius = size / 2
+            val blueScalar = Scalar(0.0, 0.0, 255.0)
+            Imgproc.rectangle(detectedObjectsOutput, Point(x - radius, y - radius), Point(x + radius, y + radius), blueScalar, 3)
+            Imgproc.putText(detectedObjectsOutput, "Blue", Point(x - radius, y - 5 - radius), 0, 0.5, blueScalar, 2)
+        }
 
-            // Clearly identify the red jewel on the screen.
-            if (redKeyPoint != null) {
-                val x = redKeyPoint.pt.x
-                val y = redKeyPoint.pt.y
-                val size = redKeyPoint.size
-                val radius = size / 2
-                val redScalar = Scalar(255.0, 0.0, 0.0)
-                Imgproc.rectangle(detectedObjectsOutput, Point(x - radius, y - radius), Point(x + radius, y + radius), redScalar, 3)
-                Imgproc.putText(detectedObjectsOutput, "Red", Point(x - radius, y - 5 - radius), 0, 0.5, redScalar, 2)
-            }
-
-            // Clearly identify the blue jewel on the screen.
-            if (blueKeyPoint != null) {
-                val x = blueKeyPoint.pt.x
-                val y = blueKeyPoint.pt.y
-                val size = blueKeyPoint.size
-                val radius = size / 2
-                val blueScalar = Scalar(0.0, 0.0, 255.0)
-                Imgproc.rectangle(detectedObjectsOutput, Point(x - radius, y - radius), Point(x + radius, y + radius), blueScalar, 3)
-                Imgproc.putText(detectedObjectsOutput, "Blue", Point(x - radius, y - 5 - radius), 0, 0.5, blueScalar, 2)
-            }
-
+        // Show the identified white line on the screen.
+        if (whiteLinePoint != null) {
+            val x = whiteLinePoint.x
+            val y = whiteLinePoint.y
+            val yellowScalar = Scalar(255.0, 255.0, 0.0)
+            Imgproc.circle(detectedObjectsOutput, Point(x, y), 5, yellowScalar, 5)
         }
 
         Imgproc.resize(detectedObjectsOutput, detectedObjectsOutput, originalSize, 0.0, 0.0, Imgproc.INTER_AREA)

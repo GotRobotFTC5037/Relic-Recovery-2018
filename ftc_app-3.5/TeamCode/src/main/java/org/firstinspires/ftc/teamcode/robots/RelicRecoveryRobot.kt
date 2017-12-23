@@ -1,8 +1,13 @@
 package org.firstinspires.ftc.teamcode.robots
 
+import RelicRecoveryRobotOpModeManager
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.*
+import org.corningrobotics.enderbots.endercv.CameraViewDisplay
 import org.firstinspires.ftc.teamcode.libraries.MRIColorBeacon
+import org.firstinspires.ftc.teamcode.libraries.vision.JewelConfigurationDetector
+import org.firstinspires.ftc.teamcode.opmodes.competition.RelicRecoveryTeleOp
 import kotlin.concurrent.thread
 import kotlin.math.abs
 import kotlin.math.min
@@ -34,8 +39,8 @@ class RelicRecoveryRobot : MecanumRobot() {
         private val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 2.5
 
         private val GLYPH_GRABBER_OPEN_POSITION = 0.50
-        private val GLYPH_GRABBER_RELEASE_POSITION = 0.60
-        private val GLYPH_GRABBER_SMALL_OPEN_POSITION = 0.70
+        private val GLYPH_GRABBER_SMALL_OPEN_POSITION = 0.66
+        private val GLYPH_GRABBER_RELEASE_POSITION = 0.75
         private val GLYPH_GRABBER_CLOSED_POSITION = 1.0
 
         private val GLYPH_DEPLOYER_EXTENDED_POSITION = 0.25
@@ -111,6 +116,7 @@ class RelicRecoveryRobot : MecanumRobot() {
     private lateinit var backRangeSensor: AnalogInput
     private lateinit var liftLimitSwitch: DigitalChannel
     private lateinit var colorBeacon: MRIColorBeacon
+    lateinit var jewelConfigurationDetector: JewelConfigurationDetector
 
     private var colorBeaconThread = thread {}
     private var startingPitch = 0.0
@@ -161,6 +167,10 @@ class RelicRecoveryRobot : MecanumRobot() {
         colorBeacon.init(hardwareMap, "color beacon")
         colorBeacon.yellow()
 
+        jewelConfigurationDetector = JewelConfigurationDetector()
+        jewelConfigurationDetector.init(hardwareMap.appContext, CameraViewDisplay.getInstance())
+        jewelConfigurationDetector.enable()
+
         super.setup(hardwareMap)
     }
 
@@ -171,6 +181,16 @@ class RelicRecoveryRobot : MecanumRobot() {
         startUpdatingRangeSensors()
         startUpdatingDriveMotorPowers()
         startingPitch = this.pitch
+    }
+
+    fun prepareForAutonomous(linearOpMode: LinearOpMode) {
+        this.linearOpMode = linearOpMode
+        setup(linearOpMode.hardwareMap)
+        RelicRecoveryRobotOpModeManager.queueOpMode(linearOpMode, RelicRecoveryTeleOp.OPMODE_NAME)
+
+        setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.CALIBRATING)
+        waitForGyroCalibration()
+        setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.READY)
     }
 
     /**
@@ -675,18 +695,22 @@ class RelicRecoveryRobot : MecanumRobot() {
 
             ColorBeaconState.CALIBRATING ->
                 colorBeaconThread = thread(true, priority = 4) {
-                    colorBeacon.yellow()
-                    linearOpMode.sleep(1000)
-                    colorBeacon.off()
-                    linearOpMode.sleep(1000)
+                    while (!Thread.interrupted()) {
+                        colorBeacon.yellow()
+                        Thread.sleep(1000)
+                        colorBeacon.off()
+                        Thread.sleep(1000)
+                    }
                 }
 
             ColorBeaconState.DETECTING ->
                 colorBeaconThread = thread(true, priority = 4) {
-                    colorBeacon.green()
-                    linearOpMode.sleep(1000)
-                    colorBeacon.off()
-                    linearOpMode.sleep(1000)
+                    while (!Thread.interrupted()) {
+                        colorBeacon.green()
+                        Thread.sleep(1000)
+                        colorBeacon.off()
+                        Thread.sleep(1000)
+                    }
                 }
 
             ColorBeaconState.READY ->
@@ -696,10 +720,12 @@ class RelicRecoveryRobot : MecanumRobot() {
 
             ColorBeaconState.RUNNING ->
                 colorBeaconThread = thread(true, priority = 4) {
-                    colorBeacon.blue()
-                    linearOpMode.sleep(1000)
-                    colorBeacon.off()
-                    linearOpMode.sleep(1000)
+                    while (!Thread.interrupted()) {
+                        colorBeacon.blue()
+                        Thread.sleep(1000)
+                        colorBeacon.off()
+                        Thread.sleep(1000)
+                    }
                 }
         }
 
