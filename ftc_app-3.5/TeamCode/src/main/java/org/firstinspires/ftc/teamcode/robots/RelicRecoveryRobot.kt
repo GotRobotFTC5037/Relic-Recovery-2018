@@ -26,9 +26,9 @@ class RelicRecoveryRobot : MecanumRobot() {
         val CENTER_FRONT_CRYPTO_BOX_DISTANCE = 64.0
         val TRAILING_FRONT_CRYPTO_BOX_DISTANCE = 82.0
 
-        val LEADING_SIDE_CRYPTO_BOX_DISTANCE = 102.0
-        val CENTER_SIDE_CRYPTO_BOX_DISTANCE = 116.0
-        val TRAILING_SIDE_CRYPTO_BOX_DISTANCE = 137.0
+        val LEADING_SIDE_CRYPTO_BOX_DISTANCE = 100.0
+        val CENTER_SIDE_CRYPTO_BOX_DISTANCE = 118.0
+        val TRAILING_SIDE_CRYPTO_BOX_DISTANCE = 136.0
 
         private val FRONT_DISTANCE_SENSOR_FILTER_ALPHA = 0.50
         private val LEFT_DISTANCE_SENSOR_FILTER_ALPHA = 0.50
@@ -48,7 +48,7 @@ class RelicRecoveryRobot : MecanumRobot() {
         private val GLYPH_DEPLOYER_UP = 0.01
 
         private val JEWEL_STICK_UP_POSITION = 0.0
-        private val JEWEL_STICK_DOWN_POSITION = 0.9225
+        private val JEWEL_STICK_DOWN_POSITION = 0.875
 
         private val DEFAULT_OBJECT_DISTANCE_TOLERANCE = 2.0
 
@@ -118,7 +118,6 @@ class RelicRecoveryRobot : MecanumRobot() {
     private lateinit var colorBeacon: MRIColorBeacon
     lateinit var jewelConfigurationDetector: JewelConfigurationDetector
 
-    private var colorBeaconThread = thread {}
     private var startingPitch = 0.0
     private var frontLeftObjectDistance = 0.0
     private var frontRightObjectDistance = 0.0
@@ -680,55 +679,14 @@ class RelicRecoveryRobot : MecanumRobot() {
      * Indicates the state and decisions of the robot with the color beacon.
      */
     fun setColorBeaconState(state: ColorBeaconState) {
-        colorBeaconThread.interrupt()
-
         when (state) {
-            ColorBeaconState.IDLE ->
-                colorBeaconThread = thread(true, priority = 4) {
-                    colorBeacon.off()
-                }
-
-            ColorBeaconState.ERROR ->
-                colorBeaconThread = thread(true, priority = 4) {
-                    colorBeacon.red()
-                }
-
-            ColorBeaconState.CALIBRATING ->
-                colorBeaconThread = thread(true, priority = 4) {
-                    while (!Thread.interrupted()) {
-                        colorBeacon.yellow()
-                        Thread.sleep(1000)
-                        colorBeacon.off()
-                        Thread.sleep(1000)
-                    }
-                }
-
-            ColorBeaconState.DETECTING ->
-                colorBeaconThread = thread(true, priority = 4) {
-                    while (!Thread.interrupted()) {
-                        colorBeacon.green()
-                        Thread.sleep(1000)
-                        colorBeacon.off()
-                        Thread.sleep(1000)
-                    }
-                }
-
-            ColorBeaconState.READY ->
-                colorBeaconThread = thread(true, priority = 4) {
-                    colorBeacon.green()
-                }
-
-            ColorBeaconState.RUNNING ->
-                colorBeaconThread = thread(true, priority = 4) {
-                    while (!Thread.interrupted()) {
-                        colorBeacon.blue()
-                        Thread.sleep(1000)
-                        colorBeacon.off()
-                        Thread.sleep(1000)
-                    }
-                }
+            ColorBeaconState.IDLE ->  colorBeacon.off()
+            ColorBeaconState.ERROR -> colorBeacon.red()
+            ColorBeaconState.CALIBRATING -> colorBeacon.yellow()
+            ColorBeaconState.DETECTING -> colorBeacon.green()
+            ColorBeaconState.READY -> colorBeacon.green()
+            ColorBeaconState.RUNNING ->  colorBeacon.blue()
         }
-
     }
 
     /**

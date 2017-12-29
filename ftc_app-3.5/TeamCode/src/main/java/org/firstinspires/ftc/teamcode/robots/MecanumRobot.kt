@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.robots
 
 import com.qualcomm.hardware.bosch.BNO055IMU
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
@@ -9,8 +8,6 @@ import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
-import org.firstinspires.ftc.teamcode.libraries.vision.JewelConfigurationDetector
-import org.firstinspires.ftc.teamcode.opmodes.competition.RelicRecoveryTeleOp
 import java.lang.Math.abs
 import kotlin.concurrent.thread
 
@@ -23,7 +20,7 @@ open class MecanumRobot : Robot() {
 
     companion object {
         val MINIMUM_DRIVE_POWER = 0.10
-        val HEADING_CORRECTION_COEFFICIENT = 0.05
+        val HEADING_CORRECTION_COEFFICIENT = 0.06
     }
 
     private lateinit var frontLeftMotor: DcMotor

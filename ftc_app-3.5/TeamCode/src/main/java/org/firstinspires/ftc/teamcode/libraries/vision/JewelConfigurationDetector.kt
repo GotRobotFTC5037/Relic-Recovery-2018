@@ -57,7 +57,8 @@ class JewelConfigurationDetector : OpenCVPipeline() {
     private val findBlueBlobsOutput = MatOfKeyPoint()
 
     private val whiteThresholdOutput = Mat()
-    private val whiteFindContoursOutput = ArrayList<MatOfPoint>()
+    private val whiteErodeOutput = Mat()
+
     private val detectedObjectsOutput = Mat()
 
     /**
@@ -116,19 +117,20 @@ class JewelConfigurationDetector : OpenCVPipeline() {
     fun getWhiteLinePoint(): Point? {
         val findContoursOutput = ArrayList<MatOfPoint>()
         val filterContoursOutput = ArrayList<MatOfPoint>()
-        Imgproc.findContours(whiteThresholdOutput, findContoursOutput, Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE)
+
+        Imgproc.findContours(whiteErodeOutput, findContoursOutput, Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE)
+
         filterContours(findContoursOutput,
                 0.0, 0.0,
-                5.0, 40.0,
-                10.0, 90.0,
-                doubleArrayOf(60.0, 100.0),
-                30.0, 0.0,
-                0.25, 0.75,
+                10.0, 40.0,
+                0.0, 1000.0,
+                doubleArrayOf(0.0, 100.0),
+                1000.0, 0.0,
+                0.0, 1000.0,
                 filterContoursOutput)
-        convexHulls(filterContoursOutput, whiteFindContoursOutput)
 
-        return if (whiteFindContoursOutput.isNotEmpty()) {
-            val boundingRectangle = Imgproc.boundingRect(whiteFindContoursOutput[0])
+        return if (filterContoursOutput.isNotEmpty()) {
+            val boundingRectangle = Imgproc.boundingRect(filterContoursOutput[0])
             Point(boundingRectangle.x.toDouble() + (boundingRectangle.width / 2), boundingRectangle.y.toDouble() + (boundingRectangle.height / 2))
         } else {
              null
@@ -200,7 +202,7 @@ class JewelConfigurationDetector : OpenCVPipeline() {
         Imgproc.erode(thresholdRedChannelOutput, redErodeOutput, Mat(), Point(-1.0, -1.0), 1, Core.BORDER_CONSTANT, Scalar(-1.0))
         Imgproc.dilate(redErodeOutput, redDilateOutput, Mat(), Point(-1.0, -1.0), 6, Core.BORDER_CONSTANT, Scalar(-1.0))
         Imgproc.erode(redDilateOutput, redFindBlobsInput, Mat(), Point(-1.0, -1.0), 5, Core.BORDER_CONSTANT, Scalar(-1.0))
-        findBlobs(redFindBlobsInput, 400.0, doubleArrayOf(0.0, 100.0), false, findRedBlobsOutput)
+        findBlobs(redFindBlobsInput, 600.0, doubleArrayOf(0.0, 100.0), false, findRedBlobsOutput)
 
         // Find the blue jewel.
         Core.subtract(blueNormalizationOutput, redNormalizationOutput, blueMinusRedOutput)
@@ -211,11 +213,12 @@ class JewelConfigurationDetector : OpenCVPipeline() {
         Imgproc.erode(thresholdBlueChannelOutput, blueErodeOutput, Mat(), Point(-1.0, -1.0), 1, Core.BORDER_CONSTANT, Scalar(-1.0))
         Imgproc.dilate(blueErodeOutput, blueDilateOutput, Mat(), Point(-1.0, -1.0), 6, Core.BORDER_CONSTANT, Scalar(-1.0))
         Imgproc.erode(blueDilateOutput, blueFindBlobsInput, Mat(), Point(-1.0, -1.0), 5, Core.BORDER_CONSTANT, Scalar(-1.0))
-        findBlobs(blueFindBlobsInput, 400.0, doubleArrayOf(0.0, 100.0), false, findBlueBlobsOutput)
+        findBlobs(blueFindBlobsInput, 600.0, doubleArrayOf(0.0, 100.0), false, findBlueBlobsOutput)
 
         // Find the white line.
         Imgproc.cvtColor(resizeOutput, hsvOutput, Imgproc.COLOR_BGR2HSV)
-        Core.inRange(hsvOutput, Scalar(0.0, 0.0, 175.0), Scalar(180.0, 100.0, 255.0), whiteThresholdOutput)
+        Core.inRange(hsvOutput, Scalar(0.0, 0.0, 205.0), Scalar(180.0, 75.0, 255.0), whiteThresholdOutput)
+        Imgproc.erode(whiteThresholdOutput, whiteErodeOutput, Mat(), Point(-1.0, -1.0), 1, Core.BORDER_CONSTANT, Scalar(-1.0))
 
         // Show all detected elements on the screen.
         resizeOutput.copyTo(detectedObjectsOutput)

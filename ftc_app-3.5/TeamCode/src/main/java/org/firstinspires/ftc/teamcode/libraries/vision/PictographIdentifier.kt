@@ -48,7 +48,6 @@ class PictographIdentifier(hardwareMap: HardwareMap) {
      * Activates vuforia vumark tracking and turns on the flash.
      */
     fun activate() {
-        CameraDevice.getInstance().setFlashTorchMode(true)
         relicTrackables.activate()
     }
 
@@ -70,8 +69,14 @@ class PictographIdentifier(hardwareMap: HardwareMap) {
      */
     fun waitForPictographIdentification(elapsedTime: ElapsedTime, linearOpMode: LinearOpMode): RelicRecoveryVuMark {
 
+        val startElapsedTime = ElapsedTime(ElapsedTime.Resolution.SECONDS)
+
         while (elapsedTime.seconds() < TIME_OUT_SECONDS && !linearOpMode.isStopRequested) {
             val pictograph = this.identifiedPictograph
+
+            if (startElapsedTime.seconds() >= 3.0) {
+                CameraDevice.getInstance().setFlashTorchMode(true)
+            }
 
             if (pictograph != RelicRecoveryVuMark.UNKNOWN) {
                 return pictograph
