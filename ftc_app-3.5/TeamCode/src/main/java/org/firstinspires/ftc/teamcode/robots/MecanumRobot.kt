@@ -217,6 +217,7 @@ open class MecanumRobot : Robot() {
      */
     override fun turn(power: Double, degrees: Double) {
         if(!linearOpMode.isStopRequested) {
+            linearOpMode.telemetry.log().add("Turning the robot to $degrees degrees")
 
             shouldCorrectHeading = false
             targetHeading = degrees

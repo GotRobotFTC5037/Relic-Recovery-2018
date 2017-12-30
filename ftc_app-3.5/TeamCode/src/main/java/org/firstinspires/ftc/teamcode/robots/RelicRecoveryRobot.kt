@@ -130,6 +130,8 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param hardwareMap A HardwareMap object. Usually provided by linearOpMode.hardwareMap.
      */
     override fun setup(hardwareMap: HardwareMap) {
+        linearOpMode.telemetry.log().add("Setting up the robot.")
+
         frontLeftObjectDistance = 0.0
         leftObjectDistance = 0.0
         rightObjectDistance = 0.0
@@ -183,6 +185,8 @@ class RelicRecoveryRobot : MecanumRobot() {
     }
 
     fun prepareForAutonomous(linearOpMode: LinearOpMode) {
+        linearOpMode.telemetry.log().add("Preparing the robot for autonomus.")
+
         this.linearOpMode = linearOpMode
         setup(linearOpMode.hardwareMap)
         RelicRecoveryRobotOpModeManager.queueOpMode(linearOpMode, RelicRecoveryTeleOp.OPMODE_NAME)
@@ -324,20 +328,24 @@ class RelicRecoveryRobot : MecanumRobot() {
 
             when {
                 power > 0 -> {
+                    linearOpMode.telemetry.log().add("Driving until offset pitch.")
                     while (startingPitch - pitch < BALANCING_STONE_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
                         linearOpMode.sleep(10)
                     }
 
+                    linearOpMode.telemetry.log().add("Driving until level pitch.")
                     while (startingPitch - pitch >= BALANCING_STONE_GROUND_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
                         linearOpMode.sleep(10)
                     }
                 }
 
                 power < 0 -> {
+                    linearOpMode.telemetry.log().add("Driving until offset pitch.")
                     while (startingPitch - pitch > -BALANCING_STONE_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
                         linearOpMode.sleep(10)
                     }
 
+                    linearOpMode.telemetry.log().add("Driving until level pitch.")
                     while (startingPitch - pitch <= -BALANCING_STONE_GROUND_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
                         linearOpMode.sleep(10)
                     }
@@ -687,23 +695,6 @@ class RelicRecoveryRobot : MecanumRobot() {
             ColorBeaconState.READY -> colorBeacon.green()
             ColorBeaconState.RUNNING ->  colorBeacon.blue()
         }
-    }
-
-    /**
-     * Prints instructions for using the TeleOp OpMode.
-     */
-    fun printTeleOpInstructions() {
-        val telemetry = linearOpMode.telemetry
-        telemetry.addLine("Gamepad 1:")
-        telemetry.addLine("Drive: Left Joystick")
-        telemetry.addLine("Turn: Right Joystick")
-        telemetry.addLine("Adjust Perspective: Start + Back")
-        telemetry.addLine()
-        telemetry.addLine("Gamepad 2:")
-        telemetry.addLine("Move Lift: Left Joystick")
-        telemetry.addLine("Grab Glyph: A")
-        telemetry.addLine("Release Glyph: B")
-        telemetry.update()
     }
 
 }

@@ -68,16 +68,23 @@ class JewelConfigurationDetector : OpenCVPipeline() {
      */
     fun waitForJewelIdentification(elapsedTime: ElapsedTime, linearOpMode: LinearOpMode): JewelConfiguration {
 
+        linearOpMode.telemetry.log().add("Waiting for jewel configuration identification.")
         while (elapsedTime.seconds() < TIME_OUT_SECONDS && !linearOpMode.isStopRequested) {
             val jewelConfiguration = getJewelConfiguration()
 
             if (jewelConfiguration != JewelConfiguration.UNKNOWN) {
+                when (jewelConfiguration) {
+                    JewelConfiguration.RED_BLUE -> linearOpMode.telemetry.log().add("Red-Blue configuration identified")
+                    JewelConfiguration.BLUE_RED -> linearOpMode.telemetry.log().add("Blue-Red configuration identified")
+                    else -> { /* This should never happen */ }
+                }
                 return jewelConfiguration
             }
 
             linearOpMode.sleep(10)
         }
 
+       linearOpMode.telemetry.log().add("Failed to identify jewel configuration.")
         return JewelConfiguration.UNKNOWN
     }
 

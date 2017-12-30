@@ -20,7 +20,6 @@ class RelicRecoveryTeleOp : LinearOpMode() {
         robot.linearOpMode = this
         robot.setup(hardwareMap)
         robot.shouldCorrectHeading = false
-        robot.printTeleOpInstructions()
         robot.waitForGyroCalibration()
         robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.READY)
         waitForStart()

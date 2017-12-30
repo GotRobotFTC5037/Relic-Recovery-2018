@@ -71,6 +71,7 @@ class PictographIdentifier(hardwareMap: HardwareMap) {
 
         val startElapsedTime = ElapsedTime(ElapsedTime.Resolution.SECONDS)
 
+        linearOpMode.telemetry.log().add("Waiting for pictograph identification.")
         while (elapsedTime.seconds() < TIME_OUT_SECONDS && !linearOpMode.isStopRequested) {
             val pictograph = this.identifiedPictograph
 
@@ -79,12 +80,19 @@ class PictographIdentifier(hardwareMap: HardwareMap) {
             }
 
             if (pictograph != RelicRecoveryVuMark.UNKNOWN) {
+                when(pictograph) {
+                    RelicRecoveryVuMark.LEFT -> linearOpMode.telemetry.log().add("Left Pictograph identified.")
+                    RelicRecoveryVuMark.CENTER -> linearOpMode.telemetry.log().add("Center Pictograph identified")
+                    RelicRecoveryVuMark.RIGHT -> linearOpMode.telemetry.log().add("Right Pictograph identified.")
+                    else -> { /* This should never happen. */ }
+                }
                 return pictograph
             }
 
             linearOpMode.sleep(100)
         }
 
+        linearOpMode.telemetry.log().add("Failed to identify the pictograph.")
         return RelicRecoveryVuMark.UNKNOWN
     }
 
