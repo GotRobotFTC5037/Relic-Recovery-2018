@@ -22,7 +22,6 @@ class BlueFrontAutonomous : LinearOpMode() {
         // Setup the robot.
         val robot = RelicRecoveryRobot()
         robot.prepareForAutonomous(this)
-
         val pictographIdentifier = PictographIdentifier(hardwareMap)
 
         // Wait for the opmode to start.
@@ -44,7 +43,9 @@ class BlueFrontAutonomous : LinearOpMode() {
         val jewelPosition = robot.jewelConfigurationDetector.waitForJewelIdentification(elapsedTime, this)
         robot.jewelConfigurationDetector.disable()
 
-        robot.lowerJewelStick(0)
+        if (jewelPosition != JewelConfigurationDetector.JewelConfiguration.UNKNOWN) {
+            robot.lowerJewelStick(0)
+        }
 
         // Read the pictograph.
         pictographIdentifier.activate()
@@ -55,7 +56,6 @@ class BlueFrontAutonomous : LinearOpMode() {
         // Knock off the correct jewel.
         when (jewelPosition) {
             JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
-                // robot.lowerJewelStick()
                 robot.timeDrive(1000, -0.25)
                 robot.raiseJewelStick()
                 robot.driveOnBalancingStone(0.50)
@@ -63,7 +63,6 @@ class BlueFrontAutonomous : LinearOpMode() {
             }
 
             JewelConfigurationDetector.JewelConfiguration.BLUE_RED -> {
-                // robot.lowerJewelStick()
                 robot.driveOffBalancingStone(0.15)
                 robot.raiseJewelStick()
             }

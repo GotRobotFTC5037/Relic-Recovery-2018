@@ -16,6 +16,7 @@ class BlueBackAutonomous : LinearOpMode() {
         val OPMODE_NAME = "2: Blue Back"
     }
 
+    @Throws(InterruptedException::class)
     override fun runOpMode() {
 
         // Setup the robot.
@@ -33,26 +34,28 @@ class BlueBackAutonomous : LinearOpMode() {
         robot.start()
         robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.DETECTING)
 
+        thread(start = true) {
+            robot.closeGlyphGrabbers(750)
+            robot.setLiftPosition(RelicRecoveryRobot.AUTO_LIFT_FIRST_LEVEL)
+        }
+
         // Find the position of the jewels.
         val jewelPosition = robot.jewelConfigurationDetector.waitForJewelIdentification(elapsedTime, this)
         robot.jewelConfigurationDetector.disable()
+
+        if (jewelPosition != JewelConfigurationDetector.JewelConfiguration.UNKNOWN) {
+            robot.lowerJewelStick(0)
+        }
 
         // Read the pictograph.
         pictographIdentifier.activate()
         val pictograph = pictographIdentifier.waitForPictographIdentification(elapsedTime, this)
         pictographIdentifier.deactivate()
-
-        // Prepare to begin moving.
         robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.RUNNING)
-        robot.closeGlyphGrabbers(1250)
-        thread(start = true) {
-            robot.setLiftPosition(RelicRecoveryRobot.AUTO_LIFT_FIRST_LEVEL)
-        }
 
         // Knock off the correct jewel.
         when (jewelPosition) {
             JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
-                robot.lowerJewelStick()
                 robot.timeDrive(1000, -0.25)
                 robot.raiseJewelStick()
                 robot.driveOnBalancingStone(0.50)
@@ -60,7 +63,6 @@ class BlueBackAutonomous : LinearOpMode() {
             }
 
             JewelConfigurationDetector.JewelConfiguration.BLUE_RED -> {
-                robot.lowerJewelStick()
                 robot.driveOffBalancingStone(0.15)
                 robot.raiseJewelStick()
             }
