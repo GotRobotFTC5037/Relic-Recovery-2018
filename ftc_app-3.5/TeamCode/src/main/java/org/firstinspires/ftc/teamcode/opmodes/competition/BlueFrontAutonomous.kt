@@ -56,6 +56,7 @@ class BlueFrontAutonomous : LinearOpMode() {
         // Knock off the correct jewel.
         when (jewelPosition) {
             JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
+                robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.READY)
                 robot.timeDrive(1000, -0.25)
                 robot.raiseJewelStick()
                 robot.driveOnBalancingStone(0.50)
@@ -63,6 +64,7 @@ class BlueFrontAutonomous : LinearOpMode() {
             }
 
             JewelConfigurationDetector.JewelConfiguration.BLUE_RED -> {
+                robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.READY)
                 robot.driveOffBalancingStone(0.15)
                 robot.raiseJewelStick()
             }
