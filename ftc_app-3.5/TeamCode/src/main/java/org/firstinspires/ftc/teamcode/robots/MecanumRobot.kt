@@ -20,7 +20,7 @@ open class MecanumRobot : Robot() {
 
     companion object {
         val MINIMUM_DRIVE_POWER = 0.10
-        val HEADING_CORRECTION_COEFFICIENT = 0.06
+        val HEADING_CORRECTION_COEFFICIENT = 0.03
     }
 
     private lateinit var frontLeftMotor: DcMotor
@@ -64,19 +64,19 @@ open class MecanumRobot : Robot() {
         targetHeading = 0.0
 
         frontLeftMotor = hardwareMap.dcMotor.get("front left motor")
-        frontLeftMotor.direction = DcMotorSimple.Direction.FORWARD
+        frontLeftMotor.direction = DcMotorSimple.Direction.REVERSE
         frontLeftMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
         frontRightMotor = hardwareMap.dcMotor.get("front right motor")
-        frontRightMotor.direction = DcMotorSimple.Direction.REVERSE
+        frontRightMotor.direction = DcMotorSimple.Direction.FORWARD
         frontRightMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
         backLeftMotor = hardwareMap.dcMotor.get("back left motor")
-        backLeftMotor.direction = DcMotorSimple.Direction.FORWARD
+        backLeftMotor.direction = DcMotorSimple.Direction.REVERSE
         backLeftMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
         backRightMotor = hardwareMap.dcMotor.get("back right motor")
-        backRightMotor.direction = DcMotorSimple.Direction.REVERSE
+        backRightMotor.direction = DcMotorSimple.Direction.FORWARD
         backRightMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
         val calibration = BNO055IMU.CalibrationData()

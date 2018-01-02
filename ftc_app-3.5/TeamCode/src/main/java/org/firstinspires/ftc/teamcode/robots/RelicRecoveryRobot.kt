@@ -5,7 +5,6 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.*
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay
-import org.firstinspires.ftc.teamcode.libraries.MRIColorBeacon
 import org.firstinspires.ftc.teamcode.libraries.vision.JewelConfigurationDetector
 import org.firstinspires.ftc.teamcode.opmodes.competition.RelicRecoveryTeleOp
 import kotlin.concurrent.thread
@@ -103,7 +102,7 @@ class RelicRecoveryRobot : MecanumRobot() {
         RUNNING
     }
 
-    private lateinit var liftMotor: DcMotor
+    lateinit var liftMotor: DcMotor
     private lateinit var jewelStick: Servo
     private lateinit var leftGlyphGrabber: Servo
     private lateinit var rightGlyphGrabber: Servo
@@ -114,8 +113,8 @@ class RelicRecoveryRobot : MecanumRobot() {
     private lateinit var frontLeftRangeSensor: ModernRoboticsI2cRangeSensor
     private lateinit var frontRightRangeSensor: ModernRoboticsI2cRangeSensor
     private lateinit var backRangeSensor: AnalogInput
-    private lateinit var liftLimitSwitch: DigitalChannel
-    private lateinit var colorBeacon: MRIColorBeacon
+    lateinit var liftLimitSwitch: DigitalChannel
+    //private lateinit var colorBeacon: MRIColorBeacon
     lateinit var jewelConfigurationDetector: JewelConfigurationDetector
 
     private var startingPitch = 0.0
@@ -137,7 +136,7 @@ class RelicRecoveryRobot : MecanumRobot() {
         rightObjectDistance = 0.0
 
         liftMotor = hardwareMap.dcMotor.get("winch motor")
-        liftMotor.direction = DcMotorSimple.Direction.FORWARD
+        liftMotor.direction = DcMotorSimple.Direction.REVERSE
         liftMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
         jewelStick = hardwareMap.servo.get("jewel stick")
@@ -146,27 +145,18 @@ class RelicRecoveryRobot : MecanumRobot() {
         glyphDeployer = hardwareMap.servo.get("glyph deployer")
 
         floorColorSensor = hardwareMap.colorSensor.get("floor color sensor")
-
         frontRightRangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor::class.java, "front right range sensor")
-        frontRightRangeSensor.i2cAddress = I2cAddr.create8bit(0x34)
-
         frontLeftRangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor::class.java, "front left range sensor")
-        frontLeftRangeSensor.i2cAddress = I2cAddr.create8bit(0x32)
-
         leftRangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor::class.java, "left range sensor")
-        leftRangeSensor.i2cAddress = I2cAddr.create8bit(0x28)
-
         rightRangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor::class.java, "right range sensor")
-        rightRangeSensor.i2cAddress = I2cAddr.create8bit(0x46)
-
         backRangeSensor = hardwareMap.analogInput.get("back range sensor")
 
         liftLimitSwitch = hardwareMap.digitalChannel.get("limit switch")
         liftLimitSwitch.mode = DigitalChannel.Mode.INPUT
 
-        colorBeacon = MRIColorBeacon()
-        colorBeacon.init(hardwareMap, "color beacon")
-        colorBeacon.yellow()
+        //colorBeacon = MRIColorBeacon()
+        //colorBeacon.init(hardwareMap, "color beacon")
+        //colorBeacon.yellow()
 
         jewelConfigurationDetector = JewelConfigurationDetector()
         jewelConfigurationDetector.init(hardwareMap.appContext, CameraViewDisplay.getInstance())
@@ -185,7 +175,7 @@ class RelicRecoveryRobot : MecanumRobot() {
     }
 
     fun prepareForAutonomous(linearOpMode: LinearOpMode) {
-        linearOpMode.telemetry.log().add("Preparing the robot for autonomus.")
+        linearOpMode.telemetry.log().add("Preparing the robot for autonomous.")
 
         this.linearOpMode = linearOpMode
         setup(linearOpMode.hardwareMap)
@@ -446,7 +436,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * Determines if the lift is at the bottom.
      * @return True, if the lift is at the bottom.
      */
-    private fun liftIsLowered() = liftLimitSwitch.state || liftMotor.currentPosition <= -5
+    fun liftIsLowered() = !liftLimitSwitch.state || liftMotor.currentPosition <= -5
 
     /**
      * Sets the position of the glyph grabbers.
@@ -688,12 +678,12 @@ class RelicRecoveryRobot : MecanumRobot() {
      */
     fun setColorBeaconState(state: ColorBeaconState) {
         when (state) {
-            ColorBeaconState.IDLE ->  colorBeacon.off()
-            ColorBeaconState.ERROR -> colorBeacon.red()
-            ColorBeaconState.CALIBRATING -> colorBeacon.yellow()
-            ColorBeaconState.DETECTING -> colorBeacon.green()
-            ColorBeaconState.READY -> colorBeacon.green()
-            ColorBeaconState.RUNNING ->  colorBeacon.blue()
+            ColorBeaconState.IDLE -> {} //colorBeacon.off()
+            ColorBeaconState.ERROR -> {} //colorBeacon.red()
+            ColorBeaconState.CALIBRATING -> {} //colorBeacon.yellow()
+            ColorBeaconState.DETECTING -> {} //colorBeacon.green()
+            ColorBeaconState.READY -> {} //colorBeacon.green()
+            ColorBeaconState.RUNNING -> {} //colorBeacon.blue()
         }
     }
 

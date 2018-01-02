@@ -60,6 +60,10 @@ class RelicRecoveryTeleOp : LinearOpMode() {
                 gamepad2.b -> { robot.openGlyphGrabbers(); robot.retractGlyphDeployer() }
                 gamepad2.x -> { robot.smallOpenGlyphGrabbers(); robot.retractGlyphDeployer() }
             }
+
+            telemetry.addData("Lift Position", robot.liftMotor.currentPosition)
+            telemetry.addData("Button", robot.liftLimitSwitch.state)
+            telemetry.update()
         }
 
         robot.stopAllDriveMotors()
