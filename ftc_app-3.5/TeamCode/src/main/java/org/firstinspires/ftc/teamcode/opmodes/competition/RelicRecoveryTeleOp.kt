@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.competition
 
+import RelicRecoveryRobotOpModeManager
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.robots.RelicRecoveryRobot
@@ -16,9 +17,16 @@ class RelicRecoveryTeleOp : LinearOpMode() {
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {
-        val robot = RelicRecoveryRobot()
+        val robotInUse = RelicRecoveryRobotOpModeManager.robotInUse as RelicRecoveryRobot?
+        val robot = if (robotInUse != null) {
+            robotInUse
+        } else {
+            val newRobot = RelicRecoveryRobot()
+            newRobot.setup(hardwareMap)
+            newRobot
+        }
+
         robot.linearOpMode = this
-        robot.setup(hardwareMap)
         robot.shouldCorrectHeading = false
         robot.waitForGyroCalibration()
         robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.READY)
@@ -42,9 +50,9 @@ class RelicRecoveryTeleOp : LinearOpMode() {
                     val y = gamepad1.left_stick_y.toDouble() * -1.0
                     val z = gamepad1.right_stick_x.toDouble() * -1.0
 
-                    val xPower = abs(pow(x, 3.0)) * signum(x)
-                    val yPower = abs(pow(y, 3.0)) * signum(y)
-                    val zPower = abs(pow(z, 3.0)) * signum(z)
+                    val xPower = abs(pow(x, 6.0)) * signum(x)
+                    val yPower = abs(pow(y, 6.0)) * signum(y)
+                    val zPower = (abs(pow(z, 6.0)) * signum(z)) / 2.0
 
                     robot.setDirection(xPower, yPower, zPower)
                 }
@@ -60,10 +68,6 @@ class RelicRecoveryTeleOp : LinearOpMode() {
                 gamepad2.b -> { robot.openGlyphGrabbers(); robot.retractGlyphDeployer() }
                 gamepad2.x -> { robot.smallOpenGlyphGrabbers(); robot.retractGlyphDeployer() }
             }
-
-            telemetry.addData("Lift Position", robot.liftMotor.currentPosition)
-            telemetry.addData("Button", robot.liftLimitSwitch.state)
-            telemetry.update()
         }
 
         robot.stopAllDriveMotors()

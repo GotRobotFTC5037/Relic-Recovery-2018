@@ -22,16 +22,16 @@ class RelicRecoveryRobot : MecanumRobot() {
         val CRYPTO_BOX_SPACING = 47.0
 
         val LEADING_FRONT_CRYPTO_BOX_DISTANCE = 46.0
-        val CENTER_FRONT_CRYPTO_BOX_DISTANCE = 64.0
-        val TRAILING_FRONT_CRYPTO_BOX_DISTANCE = 82.0
+        val CENTER_FRONT_CRYPTO_BOX_DISTANCE = LEADING_FRONT_CRYPTO_BOX_DISTANCE + 19.0
+        val TRAILING_FRONT_CRYPTO_BOX_DISTANCE = CENTER_FRONT_CRYPTO_BOX_DISTANCE + 19.0
 
         val LEADING_SIDE_CRYPTO_BOX_DISTANCE = 100.0
-        val CENTER_SIDE_CRYPTO_BOX_DISTANCE = 118.0
-        val TRAILING_SIDE_CRYPTO_BOX_DISTANCE = 136.0
+        val CENTER_SIDE_CRYPTO_BOX_DISTANCE = LEADING_SIDE_CRYPTO_BOX_DISTANCE + 19.0
+        val TRAILING_SIDE_CRYPTO_BOX_DISTANCE = CENTER_SIDE_CRYPTO_BOX_DISTANCE + 19.0
 
-        private val FRONT_DISTANCE_SENSOR_FILTER_ALPHA = 0.50
-        private val LEFT_DISTANCE_SENSOR_FILTER_ALPHA = 0.50
-        private val RIGHT_DISTANCE_SENSOR_FILTER_ALPHA = 0.50
+        private val FRONT_DISTANCE_SENSOR_FILTER_ALPHA = 0.75
+        private val LEFT_DISTANCE_SENSOR_FILTER_ALPHA = 0.75
+        private val RIGHT_DISTANCE_SENSOR_FILTER_ALPHA = 0.75
         private val BACK_DISTANCE_SENSOR_FILTER_ALPHA = 0.15
 
         private val BALANCING_STONE_ANGLE_THRESHOLD = 4.0
@@ -102,7 +102,7 @@ class RelicRecoveryRobot : MecanumRobot() {
         RUNNING
     }
 
-    lateinit var liftMotor: DcMotor
+    private lateinit var liftMotor: DcMotor
     private lateinit var jewelStick: Servo
     private lateinit var leftGlyphGrabber: Servo
     private lateinit var rightGlyphGrabber: Servo
@@ -113,7 +113,7 @@ class RelicRecoveryRobot : MecanumRobot() {
     private lateinit var frontLeftRangeSensor: ModernRoboticsI2cRangeSensor
     private lateinit var frontRightRangeSensor: ModernRoboticsI2cRangeSensor
     private lateinit var backRangeSensor: AnalogInput
-    lateinit var liftLimitSwitch: DigitalChannel
+    private lateinit var liftLimitSwitch: DigitalChannel
     //private lateinit var colorBeacon: MRIColorBeacon
     lateinit var jewelConfigurationDetector: JewelConfigurationDetector
 
@@ -180,6 +180,7 @@ class RelicRecoveryRobot : MecanumRobot() {
         this.linearOpMode = linearOpMode
         setup(linearOpMode.hardwareMap)
         RelicRecoveryRobotOpModeManager.queueOpMode(linearOpMode, RelicRecoveryTeleOp.OPMODE_NAME)
+        RelicRecoveryRobotOpModeManager.robotInUse = this
 
         setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.CALIBRATING)
         waitForGyroCalibration()
@@ -191,7 +192,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param milliseconds The length of time in seconds to drive.
      * @param power The power to run the motors at when driving.
      */
-    fun timeDrive(milliseconds: Long, power: Double = 0.50) {
+    fun timeDrive(milliseconds: Long, power: Double = 0.50 / 2) {
         if (!linearOpMode.isStopRequested) {
             setDrivePower(power)
 
@@ -206,7 +207,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param distance The distance the robot should be from a front object.
      * @param power The power to run the motors at when driving.
      */
-    fun driveToDistanceFromForwardObject(distance: Double, power: Double = 0.15) {
+    fun driveToDistanceFromForwardObject(distance: Double, power: Double = 0.15 / 2) {
 
         // Check to see if the opmode is still active.
         if (!linearOpMode.isStopRequested) {
@@ -234,7 +235,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param distance The distance the robot should be from a left object.
      * @param power The power to run the motors at when driving.
      */
-    fun driveToDistanceFromLeftObject(distance: Double, power: Double = 0.45) {
+    fun driveToDistanceFromLeftObject(distance: Double, power: Double = 0.45 / 2) {
         val currentDistance = leftObjectDistance
 
         when {
@@ -272,7 +273,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param distance The distance the robot should be from a right object.
      * @param power The power to run the motors at when driving.
      */
-    fun driveToDistanceFromRightObject(distance: Double, power: Double = 0.45) {
+    fun driveToDistanceFromRightObject(distance: Double, power: Double = 0.45 / 2) {
         val currentDistance = rightObjectDistance
 
         when {
@@ -312,7 +313,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param power The power ot run the motors at when driving.
      * TODO: Put a safety in this function that stops the robot if it goes for a certain amount of time without changes in pitch.
      */
-    fun driveOffBalancingStone(power: Double = 0.15) {
+    fun driveOffBalancingStone(power: Double = 0.15 / 2) {
         if (!linearOpMode.isStopRequested) {
             setDrivePower(power)
 
@@ -353,7 +354,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param power The power ot run the motors at when driving.
      * TODO: Put a safety in this function that stops the robot if it goes for a certain amount of time without changes in pitch.
      */
-    fun driveOnBalancingStone(power: Double = 0.50) {
+    fun driveOnBalancingStone(power: Double = 0.50 / 2) {
         if (!linearOpMode.isStopRequested) {
             setDrivePower(power)
 
@@ -381,7 +382,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param position The position in encoder units that the lift should go to.
      * @param power The power that the lift motor should lift witch motor at.
      */
-    fun setLiftPosition(position: Int, power: Double = 0.5) {
+    fun setLiftPosition(position: Int, power: Double = 0.5 / 2) {
         if (!linearOpMode.isStopRequested) {
             when {
                 liftMotor.currentPosition < position -> {
@@ -419,7 +420,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param power The power to run the lift witch motor at.
      * Lowers the lift until it reaches the bottom.
      */
-    fun dropLift(power: Double = 0.30) {
+    fun dropLift(power: Double = 0.30 / 2) {
         if (!linearOpMode.isStopRequested) {
             setLiftWinchPower(-Math.abs(power))
             while (linearOpMode.opModeIsActive() && !liftIsLowered()) {
@@ -436,7 +437,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * Determines if the lift is at the bottom.
      * @return True, if the lift is at the bottom.
      */
-    fun liftIsLowered() = !liftLimitSwitch.state || liftMotor.currentPosition <= -5
+    private fun liftIsLowered() = !liftLimitSwitch.state || liftMotor.currentPosition <= -5
 
     /**
      * Sets the position of the glyph grabbers.

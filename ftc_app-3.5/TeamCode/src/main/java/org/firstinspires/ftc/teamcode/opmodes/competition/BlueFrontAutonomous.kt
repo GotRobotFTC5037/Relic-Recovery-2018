@@ -57,7 +57,7 @@ class BlueFrontAutonomous : LinearOpMode() {
         when (jewelPosition) {
             JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
                 robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.READY)
-                robot.timeDrive(1000, -0.25)
+                robot.timeDrive(1000, -0.25 / 2)
                 robot.raiseJewelStick()
                 robot.driveOnBalancingStone(0.50)
                 robot.driveOffBalancingStone(0.15)
@@ -65,12 +65,12 @@ class BlueFrontAutonomous : LinearOpMode() {
 
             JewelConfigurationDetector.JewelConfiguration.BLUE_RED -> {
                 robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.READY)
-                robot.driveOffBalancingStone(0.15)
+                robot.driveOffBalancingStone(0.15 / 2)
                 robot.raiseJewelStick()
             }
 
             JewelConfigurationDetector.JewelConfiguration.UNKNOWN -> {
-                robot.driveOffBalancingStone(0.15)
+                robot.driveOffBalancingStone(0.15 / 2)
             }
         }
 
@@ -95,11 +95,11 @@ class BlueFrontAutonomous : LinearOpMode() {
         robot.openGlyphGrabbers(250)
 
         // Back away from the crypto box.
-        robot.timeDrive(850, -0.25)
+        robot.timeDrive(850, -0.25 / 2)
         robot.liftGlyphDeployer(500)
 
         // Turn towards the center glyphs.
-        robot.turn(0.50, -135.0)
+        robot.turn(0.50 / 2, -135.0)
 
         // Open the glyph grabbers.
         robot.releaseGlyphGrabbers()
@@ -110,14 +110,14 @@ class BlueFrontAutonomous : LinearOpMode() {
         robot.closeGlyphGrabbers(1250)
 
         // Drive back the crypto boxes.
-        robot.timeDrive(750, -0.50)
+        robot.timeDrive(750, -0.50 / 2)
         thread(true) { robot.setLiftPosition(RelicRecoveryRobot.AUTO_LIFT_FIRST_LEVEL) }
-        robot.turn(0.75, 0.0)
+        robot.turn(0.75 / 2, 0.0)
         robot.timeDrive(500)
         robot.driveToDistanceFromForwardObject(RelicRecoveryRobot.CRYPTO_BOX_SPACING + 25)
 
         // Line up with the center crypto box.
-        robot.driveToDistanceFromLeftObject(RelicRecoveryRobot.TRAILING_FRONT_CRYPTO_BOX_DISTANCE, 0.65)
+        robot.driveToDistanceFromLeftObject(RelicRecoveryRobot.TRAILING_FRONT_CRYPTO_BOX_DISTANCE, 0.65 / 2)
 
         // Place the glyph in the correct crypto box.
         robot.dropLift()
@@ -126,11 +126,11 @@ class BlueFrontAutonomous : LinearOpMode() {
         robot.openGlyphGrabbers(250)
 
         // Back away from the crypto box.
-        robot.timeDrive(850, -0.25)
+        robot.timeDrive(850, -0.25 / 2)
         robot.liftGlyphDeployer(500)
 
         // Turn towards the center glyphs.
-        robot.turn(0.50, -135.0)
+        robot.turn(0.50 / 2, -135.0)
     }
 
 }

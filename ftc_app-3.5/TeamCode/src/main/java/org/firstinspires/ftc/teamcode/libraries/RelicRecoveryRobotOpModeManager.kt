@@ -2,12 +2,13 @@ import android.util.Log
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl
+import org.firstinspires.ftc.teamcode.robots.Robot
 
 /**
  * An object that manages the running of OpModes.
  *
- * This class was originally created by (I forgot. I'll fill this in later.) but we have converted
- * it into kotlin and made some changes to the way it works.
+ * This class was originally created by team (I forgot. I'll fill this in later.) but we have converted
+ * it into kotlin, made some changes to the way it works and added some new features.
  *
  * @author FTC Team 5037 gotrobot?
  */
@@ -15,6 +16,8 @@ object RelicRecoveryRobotOpModeManager : Thread() {
 
     private var currentOpMode: OpMode? = null
     private var queuedOpModeName: String? = null
+
+    var robotInUse: Robot? = null
 
     init {
         this.start()
