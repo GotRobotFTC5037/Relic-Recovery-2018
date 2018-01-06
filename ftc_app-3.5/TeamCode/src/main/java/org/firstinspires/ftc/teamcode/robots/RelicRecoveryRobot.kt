@@ -27,13 +27,15 @@ class RelicRecoveryRobot : MecanumRobot() {
         val CENTER_SIDE_CRYPTO_BOX_DISTANCE = LEADING_SIDE_CRYPTO_BOX_DISTANCE + 19.3
         val TRAILING_SIDE_CRYPTO_BOX_DISTANCE = CENTER_SIDE_CRYPTO_BOX_DISTANCE + 19.3
 
+        private val DEFAULT_OBJECT_DISTANCE_TOLERANCE = 3.0
+
         private val BALANCING_STONE_ANGLE_THRESHOLD = 6.0
-        private val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 2.0
+        private val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 3.0
 
         private val GLYPH_GRABBER_OPEN_POSITION = 0.50
         private val GLYPH_GRABBER_SMALL_OPEN_POSITION = 0.66
         private val GLYPH_GRABBER_RELEASE_POSITION = 0.75
-        private val GLYPH_GRABBER_CLOSED_POSITION = 0.90
+        private val GLYPH_GRABBER_CLOSED_POSITION = 0.95
 
         private val GLYPH_DEPLOYER_EXTENDED_POSITION = 0.25
         private val GLYPH_DEPLOYER_RETRACTED_POSITION = 0.90
@@ -41,8 +43,6 @@ class RelicRecoveryRobot : MecanumRobot() {
 
         private val JEWEL_STICK_UP_POSITION = 0.0
         private val JEWEL_STICK_DOWN_POSITION = 0.875
-
-        private val DEFAULT_OBJECT_DISTANCE_TOLERANCE = 2.0
 
         private val MAXIMUM_ENCODER_LIFT_POSITION = 3350
         val AUTO_LIFT_FIRST_LEVEL = 1000
@@ -118,7 +118,9 @@ class RelicRecoveryRobot : MecanumRobot() {
         linearOpMode.telemetry.log().add("Setting up the robot.")
 
         liftMotor = hardwareMap.dcMotor.get("winch motor")
-        liftMotor.direction = DcMotorSimple.Direction.REVERSE
+        liftMotor.direction = DcMotorSimple.Direction.FORWARD
+        liftMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        liftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
         liftMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
         jewelStick = hardwareMap.servo.get("jewel stick")
@@ -191,7 +193,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param distance The distance the robot should be from a front object.
      * @param power The power to run the motors at when driving.
      */
-    fun driveToDistanceFromForwardObject(distance: Double, power: Double = 0.175) {
+    fun driveToDistanceFromForwardObject(distance: Double, power: Double = 0.2) {
 
         linearOpMode.telemetry.log().add("Driving to forward object.")
 
@@ -221,7 +223,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param distance The distance the robot should be from a left object.
      * @param power The power to run the motors at when driving.
      */
-    fun driveToDistanceFromLeftObject(distance: Double, power: Double = 0.30) {
+    fun driveToDistanceFromLeftObject(distance: Double, power: Double = 0.275) {
 
         linearOpMode.telemetry.log().add("Driving to distance from left object.")
 
@@ -420,7 +422,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param position The position in encoder units that the lift should go to.
      * @param power The power that the lift motor should lift witch motor at.
      */
-    fun setLiftHeight(position: LiftPosition, power: Double = 0.5) {
+    fun setLiftHeight(position: LiftPosition, power: Double = 1.0) {
         liftMotor.power = power
         liftMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
         when(position) {
@@ -437,14 +439,19 @@ class RelicRecoveryRobot : MecanumRobot() {
      * Lowers the lift until it reaches the bottom.
      */
     fun dropLift() {
-        setLiftHeight(LiftPosition.BOTTOM_LEVEL)
+        liftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+        liftMotor.power = -0.45
+        while (!liftIsLowered() && !linearOpMode.isStopRequested) {
+            linearOpMode.sleep(10)
+        }
+        liftMotor.power = 0.0
     }
 
     /**
      * Determines if the lift is at the bottom.
      * @return True, if the lift is at the bottom.
      */
-    private fun liftIsLowered() = !liftLimitSwitch.state || liftMotor.currentPosition <= -5
+    private fun liftIsLowered() = !liftLimitSwitch.state || liftMotor.currentPosition <= 0
 
     // Glyph Grabbers
 

@@ -20,7 +20,7 @@ open class MecanumRobot : Robot() {
 
     companion object {
         val MINIMUM_DRIVE_POWER = 0.10
-        val HEADING_CORRECTION_COEFFICIENT = 0.025
+        val HEADING_CORRECTION_COEFFICIENT = 0.01
     }
 
     private lateinit var frontLeftMotor: DcMotor

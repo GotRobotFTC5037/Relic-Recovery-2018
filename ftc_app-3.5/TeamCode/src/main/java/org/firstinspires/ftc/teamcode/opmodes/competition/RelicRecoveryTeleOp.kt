@@ -19,6 +19,8 @@ class RelicRecoveryTeleOp : LinearOpMode() {
     @Throws(InterruptedException::class)
     override fun runOpMode() {
         val robotInUse = RelicRecoveryRobotOpModeManager.robotInUse as RelicRecoveryRobot?
+        RelicRecoveryRobotOpModeManager.robotInUse = null
+
         val robot = if (robotInUse != null) {
             robotInUse.liftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
             robotInUse
@@ -37,7 +39,6 @@ class RelicRecoveryTeleOp : LinearOpMode() {
         robot.start()
         robot.startUpdatingRangeSensors()
 
-        robot.dropLift()
         robot.raiseJewelStick()
 
         while (opModeIsActive()) {

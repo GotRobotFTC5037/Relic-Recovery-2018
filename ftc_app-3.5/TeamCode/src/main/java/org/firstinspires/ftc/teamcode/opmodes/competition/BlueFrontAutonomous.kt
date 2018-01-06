@@ -34,8 +34,8 @@ class BlueFrontAutonomous : LinearOpMode() {
         robot.start()
 
         thread(start = true) {
-            robot.closeGlyphGrabbers(750)
-            robot.setLiftHeight(RelicRecoveryRobot.LiftPosition.SECOND_LEVEL)
+            robot.closeGlyphGrabbers(1000)
+            robot.setLiftHeight(RelicRecoveryRobot.LiftPosition.FIRST_LEVEL)
         }
 
         // Find the position of the jewels.
@@ -50,13 +50,14 @@ class BlueFrontAutonomous : LinearOpMode() {
         pictographIdentifier.activate()
         val pictograph = pictographIdentifier.waitForPictographIdentification(elapsedTime, this)
         pictographIdentifier.deactivate()
+
         // Knock off the correct jewel.
         when (jewelPosition) {
             JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
                 robot.timeDrive(1000, -0.175)
                 robot.raiseJewelStick()
-                robot.driveOnBalancingStone(0.50)
-                robot.driveOffBalancingStone(0.15)
+                robot.driveOnBalancingStone(0.35)
+                robot.driveOffBalancingStone(0.175)
             }
 
             JewelConfigurationDetector.JewelConfiguration.BLUE_RED -> {
@@ -112,7 +113,7 @@ class BlueFrontAutonomous : LinearOpMode() {
         robot.driveToDistanceFromForwardObject(RelicRecoveryRobot.CRYPTO_BOX_SPACING + 25)
 
         // Line up with the center crypto box.
-        robot.driveToDistanceFromLeftObject(RelicRecoveryRobot.TRAILING_FRONT_CRYPTO_BOX_DISTANCE, 0.20)
+        robot.driveToDistanceFromLeftObject(RelicRecoveryRobot.TRAILING_FRONT_CRYPTO_BOX_DISTANCE)
 
         // Place the glyph in the correct crypto box.
         robot.dropLift()
@@ -121,7 +122,7 @@ class BlueFrontAutonomous : LinearOpMode() {
         robot.openGlyphGrabbers(250)
 
         // Back away from the crypto box.
-        robot.timeDrive(850, -0.25)
+        robot.timeDrive(450, -0.50)
         robot.liftGlyphDeployer(500)
 
         // Turn towards the center glyphs.

@@ -41,9 +41,11 @@ class BlueBackAutonomous : LinearOpMode() {
         // Find the position of the jewels.
         val jewelPosition = robot.jewelConfigurationDetector.waitForJewelIdentification(elapsedTime, this)
         robot.jewelConfigurationDetector.disable()
+        //robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
 
         if (jewelPosition != JewelConfigurationDetector.JewelConfiguration.UNKNOWN) {
             robot.lowerJewelStick(0)
+            //robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELUNKNOWN)
         }
 
         // Read the pictograph.
@@ -54,6 +56,7 @@ class BlueBackAutonomous : LinearOpMode() {
         // Knock off the correct jewel.
         when (jewelPosition) {
             JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
+                //robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
                 robot.timeDrive(1000, -0.25 / 2)
                 robot.raiseJewelStick()
                 robot.driveOnBalancingStone(0.50 / 2)
@@ -61,12 +64,14 @@ class BlueBackAutonomous : LinearOpMode() {
             }
 
             JewelConfigurationDetector.JewelConfiguration.BLUE_RED -> {
+                //robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
                 robot.driveOffBalancingStone(0.15 / 2)
                 robot.raiseJewelStick()
             }
 
             JewelConfigurationDetector.JewelConfiguration.UNKNOWN -> {
                 robot.driveOffBalancingStone(0.15 / 2)
+                //robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELUNKNOWN)
             }
         }
 
@@ -96,7 +101,7 @@ class BlueBackAutonomous : LinearOpMode() {
         robot.liftGlyphDeployer(500)
 
         // Turn towards the center glyphs.
-        robot.turn(0.90 / 2, -90.0)
+        robot.turn(0.90, -90.0)
 
         // Open the glyph grabbers.
         robot.releaseGlyphGrabbers()
@@ -126,7 +131,7 @@ class BlueBackAutonomous : LinearOpMode() {
         robot.liftGlyphDeployer(500)
 
         // Turn towards the center glyphs.
-        robot.turn(0.50 / 2, -90.0)
+        robot.turn(0.50, -90.0)
     }
 
 }
