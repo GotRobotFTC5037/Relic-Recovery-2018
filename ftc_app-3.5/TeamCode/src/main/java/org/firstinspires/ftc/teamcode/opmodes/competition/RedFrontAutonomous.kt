@@ -57,6 +57,15 @@ class RedFrontAutonomous : LinearOpMode() {
         val pictograph = pictographIdentifier.waitForPictographIdentification(elapsedTime, this)
         pictographIdentifier.deactivate()
 
+        when (pictograph) {
+            RelicRecoveryVuMark.LEFT -> {
+            }
+            RelicRecoveryVuMark.CENTER -> {
+            }
+            RelicRecoveryVuMark.RIGHT -> {
+            }
+        }
+
         // Prepare to begin moving.
         robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.RUNNING)
         robot.closeGlyphGrabbers(500)
@@ -67,6 +76,7 @@ class RedFrontAutonomous : LinearOpMode() {
         // Knock off the correct jewel.
         when(jewelPosition) {
             JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
+                robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
                 robot.lowerJewelStick()
                 robot.timeDrive(500, 0.25)
                 robot.raiseJewelStick()
@@ -75,12 +85,14 @@ class RedFrontAutonomous : LinearOpMode() {
             }
 
             JewelConfigurationDetector.JewelConfiguration.BLUE_RED -> {
+                robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
                 robot.lowerJewelStick()
                 robot.driveOffBalancingStone(-0.15)
                 robot.raiseJewelStick()
             }
 
             JewelConfigurationDetector.JewelConfiguration.UNKNOWN -> {
+                robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELUNKNOWN)
                 robot.driveOffBalancingStone(-0.15)
             }
         }
@@ -143,6 +155,8 @@ class RedFrontAutonomous : LinearOpMode() {
 
         // Turn towards the center glyphs.
         robot.turn(0.50 / 2, 135.0)
+
+        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.DONE)
     }
 
 }

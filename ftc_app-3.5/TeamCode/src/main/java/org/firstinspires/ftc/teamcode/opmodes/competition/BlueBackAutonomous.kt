@@ -42,20 +42,28 @@ class BlueBackAutonomous : LinearOpMode() {
         // Find the position of the jewels.
         val jewelPosition = robot.jewelConfigurationDetector.waitForJewelIdentification(elapsedTime, this)
         robot.jewelConfigurationDetector.disable()
+        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
 
         if (jewelPosition != JewelConfigurationDetector.JewelConfiguration.UNKNOWN) {
             robot.lowerJewelStick(0)
+            robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELUNKNOWN)
         }
 
         // Read the pictograph.
         pictographIdentifier.activate()
         val pictograph = pictographIdentifier.waitForPictographIdentification(elapsedTime, this)
         pictographIdentifier.deactivate()
-        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.RUNNING)
+        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.DETECTING)
 
+        when (pictograph) {
+            RelicRecoveryVuMark.LEFT -> {}
+            RelicRecoveryVuMark.CENTER -> {}
+            RelicRecoveryVuMark.RIGHT -> {}
+        }
         // Knock off the correct jewel.
         when (jewelPosition) {
             JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
+                robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
                 robot.timeDrive(1000, -0.25 / 2)
                 robot.raiseJewelStick()
                 robot.driveOnBalancingStone(0.50 / 2)
@@ -63,12 +71,14 @@ class BlueBackAutonomous : LinearOpMode() {
             }
 
             JewelConfigurationDetector.JewelConfiguration.BLUE_RED -> {
+                robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
                 robot.driveOffBalancingStone(0.15 / 2)
                 robot.raiseJewelStick()
             }
 
             JewelConfigurationDetector.JewelConfiguration.UNKNOWN -> {
                 robot.driveOffBalancingStone(0.15 / 2)
+                robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELUNKNOWN)
             }
         }
 
@@ -129,6 +139,8 @@ class BlueBackAutonomous : LinearOpMode() {
 
         // Turn towards the center glyphs.
         robot.turn(0.50 / 2, -90.0)
+
+        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.DONE)
     }
 
 }
