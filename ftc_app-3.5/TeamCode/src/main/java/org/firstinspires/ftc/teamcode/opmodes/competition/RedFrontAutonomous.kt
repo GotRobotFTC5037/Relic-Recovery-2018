@@ -108,6 +108,37 @@ class RedFrontAutonomous : LinearOpMode() {
 
         // Turn towards the center glyphs.
         robot.turn(0.50, -45.0)
+
+        // Open the glyph grabbers.
+        robot.releaseGlyphGrabbers()
+        robot.retractGlyphDeployer()
+
+        // Drive to the glyphs in the center and grab one.
+        robot.timeDrive(2500)
+        robot.closeGlyphGrabbers(1250)
+
+        // Drive back to the crypto box.
+        robot.timeDrive(750, -0.50 / 2)
+        thread(true) { robot.setLiftPosition(RelicRecoveryRobot.AUTO_LIFT_FIRST_LEVEL) }
+        robot.turn(0.75 / 2, 180.0)
+        robot.timeDrive(500)
+        robot.driveToDistanceFromForwardObject(RelicRecoveryRobot.CRYPTO_BOX_SPACING + 25)
+
+        // Line up with the center crypto box.
+        robot.driveToDistanceFromLeftObject(RelicRecoveryRobot.TRAILING_FRONT_CRYPTO_BOX_DISTANCE, 0.65 / 2)
+
+        // Place the glyph in the correct crypto box.
+        robot.dropLift()
+        robot.timeDrive(1000)
+        robot.extendGlyphDeployer()
+        robot.openGlyphGrabbers(250)
+
+        // Back away from the crypto box.
+        robot.timeDrive(850, -0.25 / 2)
+        robot.liftGlyphDeployer(500)
+
+        // Turn towards the center glyphs.
+        robot.turn(0.50 / 2, 135.0)
     }
 
 }
