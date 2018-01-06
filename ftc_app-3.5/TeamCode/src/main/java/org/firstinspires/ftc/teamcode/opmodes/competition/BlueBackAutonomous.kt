@@ -32,7 +32,6 @@ class BlueBackAutonomous : LinearOpMode() {
 
         // Start the robot.
         robot.start()
-        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.DETECTING)
 
         thread(start = true) {
             robot.closeGlyphGrabbers(750)
@@ -53,7 +52,10 @@ class BlueBackAutonomous : LinearOpMode() {
         pictographIdentifier.activate()
         val pictograph = pictographIdentifier.waitForPictographIdentification(elapsedTime, this)
         pictographIdentifier.deactivate()
+<<<<<<< HEAD
         robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.DETECTING)
+=======
+>>>>>>> 9a200b1aac761a00a25e54f8b71f515ad8c750e8
 
         when (pictograph) {
             RelicRecoveryVuMark.LEFT -> {}

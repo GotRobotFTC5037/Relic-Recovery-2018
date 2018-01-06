@@ -13,7 +13,7 @@ import java.io.IOException
 class JewelConfigurationDetector : OpenCVPipeline() {
 
     companion object {
-        val TIME_OUT_SECONDS = 5.0
+        val TIME_OUT_DURATION = 0.5
 
         init {
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
@@ -69,13 +69,13 @@ class JewelConfigurationDetector : OpenCVPipeline() {
     fun waitForJewelIdentification(elapsedTime: ElapsedTime, linearOpMode: LinearOpMode): JewelConfiguration {
 
         linearOpMode.telemetry.log().add("Waiting for jewel configuration identification.")
-        while (elapsedTime.seconds() < TIME_OUT_SECONDS && !linearOpMode.isStopRequested) {
+        while (elapsedTime.milliseconds() < TIME_OUT_DURATION && !linearOpMode.isStopRequested) {
             val jewelConfiguration = getJewelConfiguration()
 
             if (jewelConfiguration != JewelConfiguration.UNKNOWN) {
                 when (jewelConfiguration) {
-                    JewelConfiguration.RED_BLUE -> linearOpMode.telemetry.log().add("Red-Blue configuration identified")
-                    JewelConfiguration.BLUE_RED -> linearOpMode.telemetry.log().add("Blue-Red configuration identified")
+                    JewelConfiguration.RED_BLUE -> linearOpMode.telemetry.log().add("Red-Blue configuration identified at ${elapsedTime.milliseconds()} milliseconds")
+                    JewelConfiguration.BLUE_RED -> linearOpMode.telemetry.log().add("Blue-Red configuration identified at ${elapsedTime.milliseconds()} milliseconds")
                     else -> { /* This should never happen */ }
                 }
                 return jewelConfiguration

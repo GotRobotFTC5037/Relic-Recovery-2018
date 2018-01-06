@@ -28,15 +28,14 @@ class BlueFrontAutonomous : LinearOpMode() {
         waitForStart()
 
         // Start the timer.
-        val elapsedTime = ElapsedTime(ElapsedTime.Resolution.SECONDS)
+        val elapsedTime = ElapsedTime(ElapsedTime.Resolution.MILLISECONDS)
 
         // Start the robot.
         robot.start()
-        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.DETECTING)
 
         thread(start = true) {
             robot.closeGlyphGrabbers(750)
-            robot.setLiftPosition(RelicRecoveryRobot.AUTO_LIFT_FIRST_LEVEL)
+            robot.setLiftHeight(RelicRecoveryRobot.LiftPosition.SECOND_LEVEL)
         }
 
         // Find the position of the jewels.
@@ -51,6 +50,7 @@ class BlueFrontAutonomous : LinearOpMode() {
         pictographIdentifier.activate()
         val pictograph = pictographIdentifier.waitForPictographIdentification(elapsedTime, this)
         pictographIdentifier.deactivate()
+<<<<<<< HEAD
         when (pictograph){
             RelicRecoveryVuMark.LEFT -> {}
             RelicRecoveryVuMark.CENTER -> {}
@@ -63,20 +63,34 @@ class BlueFrontAutonomous : LinearOpMode() {
             JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
                 robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
                 robot.timeDrive(1000, -0.25 / 2)
+=======
+        // Knock off the correct jewel.
+        when (jewelPosition) {
+            JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
+                robot.timeDrive(1000, -0.175)
+>>>>>>> 9a200b1aac761a00a25e54f8b71f515ad8c750e8
                 robot.raiseJewelStick()
                 robot.driveOnBalancingStone(0.50)
                 robot.driveOffBalancingStone(0.15)
             }
 
             JewelConfigurationDetector.JewelConfiguration.BLUE_RED -> {
+<<<<<<< HEAD
                 robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
                 robot.driveOffBalancingStone(0.15 / 2)
+=======
+                robot.driveOffBalancingStone(0.175)
+>>>>>>> 9a200b1aac761a00a25e54f8b71f515ad8c750e8
                 robot.raiseJewelStick()
             }
 
             JewelConfigurationDetector.JewelConfiguration.UNKNOWN -> {
+<<<<<<< HEAD
                 robot.driveOffBalancingStone(0.15 / 2)
                 robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELUNKNOWN)
+=======
+                robot.driveOffBalancingStone(0.175)
+>>>>>>> 9a200b1aac761a00a25e54f8b71f515ad8c750e8
             }
         }
 
@@ -101,11 +115,11 @@ class BlueFrontAutonomous : LinearOpMode() {
         robot.openGlyphGrabbers(250)
 
         // Back away from the crypto box.
-        robot.timeDrive(850, -0.25 / 2)
+        robot.timeDrive(850, -0.175)
         robot.liftGlyphDeployer(500)
 
         // Turn towards the center glyphs.
-        robot.turn(0.50 / 2, -135.0)
+        robot.turn(0.50, -135.0)
 
         // Open the glyph grabbers.
         robot.releaseGlyphGrabbers()
@@ -116,14 +130,14 @@ class BlueFrontAutonomous : LinearOpMode() {
         robot.closeGlyphGrabbers(1250)
 
         // Drive back the crypto boxes.
-        robot.timeDrive(750, -0.50 / 2)
+        robot.timeDrive(750, -0.25)
         thread(true) { robot.setLiftPosition(RelicRecoveryRobot.AUTO_LIFT_FIRST_LEVEL) }
-        robot.turn(0.75 / 2, 0.0)
+        robot.turn(0.75, 0.0)
         robot.timeDrive(500)
         robot.driveToDistanceFromForwardObject(RelicRecoveryRobot.CRYPTO_BOX_SPACING + 25)
 
         // Line up with the center crypto box.
-        robot.driveToDistanceFromLeftObject(RelicRecoveryRobot.TRAILING_FRONT_CRYPTO_BOX_DISTANCE, 0.65 / 2)
+        robot.driveToDistanceFromLeftObject(RelicRecoveryRobot.TRAILING_FRONT_CRYPTO_BOX_DISTANCE, 0.20)
 
         // Place the glyph in the correct crypto box.
         robot.dropLift()
@@ -132,13 +146,17 @@ class BlueFrontAutonomous : LinearOpMode() {
         robot.openGlyphGrabbers(250)
 
         // Back away from the crypto box.
-        robot.timeDrive(850, -0.25 / 2)
+        robot.timeDrive(850, -0.25)
         robot.liftGlyphDeployer(500)
 
         // Turn towards the center glyphs.
+<<<<<<< HEAD
         robot.turn(0.50 / 2, -135.0)
 
         robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.DONE)
+=======
+        robot.turn(0.25, -135.0)
+>>>>>>> 9a200b1aac761a00a25e54f8b71f515ad8c750e8
     }
 
 }

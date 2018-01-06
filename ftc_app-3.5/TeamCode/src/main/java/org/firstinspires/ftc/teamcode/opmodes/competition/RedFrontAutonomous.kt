@@ -33,9 +33,7 @@ class RedFrontAutonomous : LinearOpMode() {
         jewelDetector.enable()
 
         // Wait for the gyro to be calibrated.
-        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.CALIBRATING)
         robot.waitForGyroCalibration()
-        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.READY)
 
         // Wait for the opmode to start.
         waitForStart()
@@ -45,7 +43,6 @@ class RedFrontAutonomous : LinearOpMode() {
 
         // Start the robot.
         robot.start()
-        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.DETECTING)
 
         // Find the position of the jewels.
         val jewelPosition = jewelDetector.waitForJewelIdentification(elapsedTime, this)
@@ -67,7 +64,6 @@ class RedFrontAutonomous : LinearOpMode() {
         }
 
         // Prepare to begin moving.
-        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.RUNNING)
         robot.closeGlyphGrabbers(500)
         thread(start = true) {
             robot.setLiftPosition(RelicRecoveryRobot.AUTO_LIFT_FIRST_LEVEL)

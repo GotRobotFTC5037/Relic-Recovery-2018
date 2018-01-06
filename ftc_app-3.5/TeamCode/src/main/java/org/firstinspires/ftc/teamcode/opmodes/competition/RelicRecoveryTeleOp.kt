@@ -22,6 +22,7 @@ class RelicRecoveryTeleOp : LinearOpMode() {
             robotInUse
         } else {
             val newRobot = RelicRecoveryRobot()
+            newRobot.linearOpMode = this
             newRobot.setup(hardwareMap)
             newRobot
         }
@@ -29,7 +30,6 @@ class RelicRecoveryTeleOp : LinearOpMode() {
         robot.linearOpMode = this
         robot.shouldCorrectHeading = false
         robot.waitForGyroCalibration()
-        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.READY)
         waitForStart()
         robot.start()
 
@@ -40,19 +40,19 @@ class RelicRecoveryTeleOp : LinearOpMode() {
             // Gamepad 1: Movement
             when {
                 gamepad1.dpad_up -> { robot.setDrivePower(0.20); robot.shouldCorrectHeading = true; robot.targetHeading = robot.heading }
-                gamepad1.dpad_down -> {robot.setDrivePower(-0.20); robot.shouldCorrectHeading = true; robot.targetHeading = robot.heading }
+                gamepad1.dpad_down -> { robot.setDrivePower(-0.20); robot.shouldCorrectHeading = true; robot.targetHeading = robot.heading }
                 gamepad1.dpad_left -> { robot.setStrafePower(-0.65); robot.shouldCorrectHeading = true; robot.targetHeading = robot.heading }
                 gamepad1.dpad_right -> { robot.setStrafePower(0.65); robot.shouldCorrectHeading = true; robot.targetHeading = robot.heading }
 
                 else -> {
                     robot.shouldCorrectHeading = false
-                    val x = gamepad1.left_stick_x.toDouble()
-                    val y = gamepad1.left_stick_y.toDouble() * -1.0
-                    val z = gamepad1.right_stick_x.toDouble() * -1.0
+                    val x = gamepad1.left_stick_x.toDouble() * if (gamepad1.right_trigger > 0.1 || gamepad1.left_trigger > 0.1) 1.0 else 0.5
+                    val y = gamepad1.left_stick_y.toDouble() * -1.0 * if (gamepad1.right_trigger > 0.1 || gamepad1.left_trigger > 0.1) 1.0 else 0.5
+                    val z = gamepad1.right_stick_x.toDouble() * -1.0 * if (gamepad1.right_trigger > 0.1 || gamepad1.left_trigger > 0.1) 1.0 else 0.5
 
-                    val xPower = abs(pow(x, 6.0)) * signum(x)
-                    val yPower = abs(pow(y, 6.0)) * signum(y)
-                    val zPower = (abs(pow(z, 6.0)) * signum(z)) / 2.0
+                    val xPower = abs(pow(x, 2.0)) * signum(x)
+                    val yPower = abs(pow(y, 2.0)) * signum(y)
+                    val zPower = (abs(pow(z, 2.0)) * signum(z)) / 2.0
 
                     robot.setDirection(xPower, yPower, zPower)
                 }
@@ -68,6 +68,13 @@ class RelicRecoveryTeleOp : LinearOpMode() {
                 gamepad2.b -> { robot.openGlyphGrabbers(); robot.retractGlyphDeployer() }
                 gamepad2.x -> { robot.smallOpenGlyphGrabbers(); robot.retractGlyphDeployer() }
             }
+
+            // Information
+            telemetry.addLine("FL: ${robot.frontLeftRangeSensor.distanceDetected}; FR; ${robot.frontRightRangeSensor.distanceDetected}")
+            telemetry.addLine("SL: ${robot.leftRangeSensor.distanceDetected}; SR: ${robot.rightRangeSensor.distanceDetected}")
+            telemetry.addLine()
+            telemetry.addLine("Lift: ${robot.liftMotor.currentPosition}")
+            telemetry.update()
         }
 
         robot.stopAllDriveMotors()
