@@ -32,7 +32,6 @@ class BlueBackAutonomous : LinearOpMode() {
 
         // Start the robot.
         robot.start()
-        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.DETECTING)
 
         thread(start = true) {
             robot.closeGlyphGrabbers(750)
@@ -51,7 +50,6 @@ class BlueBackAutonomous : LinearOpMode() {
         pictographIdentifier.activate()
         val pictograph = pictographIdentifier.waitForPictographIdentification(elapsedTime, this)
         pictographIdentifier.deactivate()
-        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.RUNNING)
 
         // Knock off the correct jewel.
         when (jewelPosition) {

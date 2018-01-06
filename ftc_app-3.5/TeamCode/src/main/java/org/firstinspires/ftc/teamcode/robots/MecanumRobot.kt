@@ -46,13 +46,13 @@ open class MecanumRobot : Robot() {
     val roll: Double
         get() {
             val orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
-            return orientation.secondAngle.toDouble()
+            return -orientation.secondAngle.toDouble()
         }
 
     val pitch: Double
         get() {
             val orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
-            return orientation.thirdAngle.toDouble()
+            return -orientation.thirdAngle.toDouble()
         }
 
     /**

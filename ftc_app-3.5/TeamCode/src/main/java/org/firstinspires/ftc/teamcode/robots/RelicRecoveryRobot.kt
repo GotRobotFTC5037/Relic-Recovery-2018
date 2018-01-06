@@ -1,15 +1,13 @@
 package org.firstinspires.ftc.teamcode.robots
 
 import RelicRecoveryRobotOpModeManager
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.*
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay
+import org.firstinspires.ftc.teamcode.libraries.sensors.RangeSensor
 import org.firstinspires.ftc.teamcode.libraries.vision.JewelConfigurationDetector
 import org.firstinspires.ftc.teamcode.opmodes.competition.RelicRecoveryTeleOp
-import kotlin.concurrent.thread
 import kotlin.math.abs
-import kotlin.math.min
 
 /**
  * A class for our robot in the 2017-2018 FTC game, Relic Recovery.
@@ -22,20 +20,15 @@ class RelicRecoveryRobot : MecanumRobot() {
         val CRYPTO_BOX_SPACING = 47.0
 
         val LEADING_FRONT_CRYPTO_BOX_DISTANCE = 46.0
-        val CENTER_FRONT_CRYPTO_BOX_DISTANCE = LEADING_FRONT_CRYPTO_BOX_DISTANCE + 19.0
-        val TRAILING_FRONT_CRYPTO_BOX_DISTANCE = CENTER_FRONT_CRYPTO_BOX_DISTANCE + 19.0
+        val CENTER_FRONT_CRYPTO_BOX_DISTANCE = LEADING_FRONT_CRYPTO_BOX_DISTANCE + 19.3
+        val TRAILING_FRONT_CRYPTO_BOX_DISTANCE = CENTER_FRONT_CRYPTO_BOX_DISTANCE + 19.3
 
         val LEADING_SIDE_CRYPTO_BOX_DISTANCE = 100.0
-        val CENTER_SIDE_CRYPTO_BOX_DISTANCE = LEADING_SIDE_CRYPTO_BOX_DISTANCE + 19.0
-        val TRAILING_SIDE_CRYPTO_BOX_DISTANCE = CENTER_SIDE_CRYPTO_BOX_DISTANCE + 19.0
+        val CENTER_SIDE_CRYPTO_BOX_DISTANCE = LEADING_SIDE_CRYPTO_BOX_DISTANCE + 19.3
+        val TRAILING_SIDE_CRYPTO_BOX_DISTANCE = CENTER_SIDE_CRYPTO_BOX_DISTANCE + 19.3
 
-        private val FRONT_DISTANCE_SENSOR_FILTER_ALPHA = 0.75
-        private val LEFT_DISTANCE_SENSOR_FILTER_ALPHA = 0.75
-        private val RIGHT_DISTANCE_SENSOR_FILTER_ALPHA = 0.75
-        private val BACK_DISTANCE_SENSOR_FILTER_ALPHA = 0.15
-
-        private val BALANCING_STONE_ANGLE_THRESHOLD = 4.0
-        private val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 2.5
+        private val BALANCING_STONE_ANGLE_THRESHOLD = 6.0
+        private val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 1.0
 
         private val GLYPH_GRABBER_OPEN_POSITION = 0.50
         private val GLYPH_GRABBER_SMALL_OPEN_POSITION = 0.66
@@ -90,39 +83,32 @@ class RelicRecoveryRobot : MecanumRobot() {
     }
 
     /**
-     * An indicated state or decision of the robot manifested by the color beacon.
+     * A position to set the lift to.
      */
-    enum class ColorBeaconState {
+    enum class LiftPosition {
 
-        IDLE,
-        ERROR,
-        CALIBRATING,
-        DETECTING,
-        READY,
-        RUNNING
+        OVEREXTENDED,
+        FOURTH_LEVEL,
+        THIRD_LEVEL,
+        SECOND_LEVEL,
+        FIRST_LEVEL,
+        BOTTOM_LEVEL
     }
 
-    private lateinit var liftMotor: DcMotor
+    lateinit var liftMotor: DcMotor
     private lateinit var jewelStick: Servo
     private lateinit var leftGlyphGrabber: Servo
     private lateinit var rightGlyphGrabber: Servo
     private lateinit var glyphDeployer: Servo
+    lateinit var leftRangeSensor: RangeSensor
+    lateinit var rightRangeSensor: RangeSensor
+    lateinit var frontLeftRangeSensor: RangeSensor
+    lateinit var frontRightRangeSensor: RangeSensor
+    private lateinit var backRangeSensor: RangeSensor
     private lateinit var floorColorSensor: ColorSensor
-    private lateinit var leftRangeSensor: ModernRoboticsI2cRangeSensor
-    private lateinit var rightRangeSensor: ModernRoboticsI2cRangeSensor
-    private lateinit var frontLeftRangeSensor: ModernRoboticsI2cRangeSensor
-    private lateinit var frontRightRangeSensor: ModernRoboticsI2cRangeSensor
-    private lateinit var backRangeSensor: AnalogInput
     private lateinit var liftLimitSwitch: DigitalChannel
-    //private lateinit var colorBeacon: MRIColorBeacon
     lateinit var jewelConfigurationDetector: JewelConfigurationDetector
-
     private var startingPitch = 0.0
-    private var frontLeftObjectDistance = 0.0
-    private var frontRightObjectDistance = 0.0
-    private var leftObjectDistance = 0.0
-    private var rightObjectDistance = 0.0
-    private var backObjectDistance = 0.0
 
     /**
      * Sets up the hardware needed in order to use the robot.
@@ -130,10 +116,6 @@ class RelicRecoveryRobot : MecanumRobot() {
      */
     override fun setup(hardwareMap: HardwareMap) {
         linearOpMode.telemetry.log().add("Setting up the robot.")
-
-        frontLeftObjectDistance = 0.0
-        leftObjectDistance = 0.0
-        rightObjectDistance = 0.0
 
         liftMotor = hardwareMap.dcMotor.get("winch motor")
         liftMotor.direction = DcMotorSimple.Direction.REVERSE
@@ -145,22 +127,17 @@ class RelicRecoveryRobot : MecanumRobot() {
         glyphDeployer = hardwareMap.servo.get("glyph deployer")
 
         floorColorSensor = hardwareMap.colorSensor.get("floor color sensor")
-        frontRightRangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor::class.java, "front right range sensor")
-        frontLeftRangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor::class.java, "front left range sensor")
-        leftRangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor::class.java, "left range sensor")
-        rightRangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor::class.java, "right range sensor")
-        backRangeSensor = hardwareMap.analogInput.get("back range sensor")
+
+        frontRightRangeSensor = RangeSensor(linearOpMode, "front right range sensor")
+        frontLeftRangeSensor = RangeSensor(linearOpMode, "front left range sensor")
+        leftRangeSensor = RangeSensor(linearOpMode, "left range sensor")
+        rightRangeSensor = RangeSensor(linearOpMode, "right range sensor")
+        backRangeSensor = RangeSensor(linearOpMode, "back range sensor")
 
         liftLimitSwitch = hardwareMap.digitalChannel.get("limit switch")
         liftLimitSwitch.mode = DigitalChannel.Mode.INPUT
 
-        //colorBeacon = MRIColorBeacon()
-        //colorBeacon.init(hardwareMap, "color beacon")
-        //colorBeacon.yellow()
-
         jewelConfigurationDetector = JewelConfigurationDetector()
-        jewelConfigurationDetector.init(hardwareMap.appContext, CameraViewDisplay.getInstance())
-        jewelConfigurationDetector.enable()
 
         super.setup(hardwareMap)
     }
@@ -174,28 +151,35 @@ class RelicRecoveryRobot : MecanumRobot() {
         startingPitch = this.pitch
     }
 
+    /**
+     * Runs everything that is needed in order to run autonomous.
+     */
     fun prepareForAutonomous(linearOpMode: LinearOpMode) {
         linearOpMode.telemetry.log().add("Preparing the robot for autonomous.")
 
         this.linearOpMode = linearOpMode
         setup(linearOpMode.hardwareMap)
+
+        jewelConfigurationDetector.init(linearOpMode.hardwareMap.appContext, CameraViewDisplay.getInstance())
+        jewelConfigurationDetector.enable()
+
         RelicRecoveryRobotOpModeManager.queueOpMode(linearOpMode, RelicRecoveryTeleOp.OPMODE_NAME)
         RelicRecoveryRobotOpModeManager.robotInUse = this
 
-        setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.CALIBRATING)
         waitForGyroCalibration()
-        setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.READY)
     }
+
+    // Driving
 
     /**
      * Drives the robot forward or backwards for a certain amount of time.
      * @param milliseconds The length of time in seconds to drive.
      * @param power The power to run the motors at when driving.
      */
-    fun timeDrive(milliseconds: Long, power: Double = 0.50 / 2) {
+    fun timeDrive(milliseconds: Long, power: Double = 0.25) {
+
         if (!linearOpMode.isStopRequested) {
             setDrivePower(power)
-
             linearOpMode.sleep(milliseconds)
         }
 
@@ -207,17 +191,17 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param distance The distance the robot should be from a front object.
      * @param power The power to run the motors at when driving.
      */
-    fun driveToDistanceFromForwardObject(distance: Double, power: Double = 0.15 / 2) {
+    fun driveToDistanceFromForwardObject(distance: Double, power: Double = 0.175) {
 
         // Check to see if the opmode is still active.
         if (!linearOpMode.isStopRequested) {
             // Get the current distance for future reference.
-            val currentDistance = frontLeftObjectDistance
+            val currentDistance = frontLeftRangeSensor.distanceDetected
 
             when {
                 currentDistance > distance -> {
                     setDrivePower(Math.abs(power))
-                    while (frontLeftObjectDistance > distance && linearOpMode.opModeIsActive()) {
+                    while (frontLeftRangeSensor.distanceDetected > distance && linearOpMode.opModeIsActive()) {
                         linearOpMode.sleep(10)
                     }
                 }
@@ -235,20 +219,20 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param distance The distance the robot should be from a left object.
      * @param power The power to run the motors at when driving.
      */
-    fun driveToDistanceFromLeftObject(distance: Double, power: Double = 0.45 / 2) {
-        val currentDistance = leftObjectDistance
+    fun driveToDistanceFromLeftObject(distance: Double, power: Double = 0.20) {
+        val currentDistance = leftRangeSensor.distanceDetected
 
         when {
             currentDistance > distance -> {
                 setStrafePower(-Math.abs(power))
-                while (leftObjectDistance > distance && !linearOpMode.isStopRequested) {
+                while (leftRangeSensor.distanceDetected > distance && !linearOpMode.isStopRequested) {
                     linearOpMode.sleep(10)
                 }
             }
 
             currentDistance < distance -> {
                 setStrafePower(Math.abs(power))
-                while (leftObjectDistance < distance && !linearOpMode.isStopRequested) {
+                while (leftRangeSensor.distanceDetected < distance && !linearOpMode.isStopRequested) {
                     linearOpMode.sleep(10)
                 }
             }
@@ -259,7 +243,7 @@ class RelicRecoveryRobot : MecanumRobot() {
         stopAllDriveMotors()
         linearOpMode.sleep(1000)
 
-        val leftDistance = leftObjectDistance
+        val leftDistance = leftRangeSensor.distanceDetected
         if ((distance + DEFAULT_OBJECT_DISTANCE_TOLERANCE < leftDistance || distance - DEFAULT_OBJECT_DISTANCE_TOLERANCE > leftDistance)
                 && linearOpMode.opModeIsActive()) {
             driveToDistanceFromLeftObject(distance, 0.45)
@@ -273,20 +257,20 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param distance The distance the robot should be from a right object.
      * @param power The power to run the motors at when driving.
      */
-    fun driveToDistanceFromRightObject(distance: Double, power: Double = 0.45 / 2) {
-        val currentDistance = rightObjectDistance
+    fun driveToDistanceFromRightObject(distance: Double, power: Double = 0.20) {
+        val currentDistance = rightRangeSensor.distanceDetected
 
         when {
             currentDistance > distance -> {
                 setStrafePower(Math.abs(power))
-                while (rightObjectDistance > distance && !linearOpMode.isStopRequested) {
+                while (rightRangeSensor.distanceDetected > distance && !linearOpMode.isStopRequested) {
                     linearOpMode.sleep(10)
                 }
             }
 
             currentDistance < distance -> {
                 setStrafePower(-Math.abs(power))
-                while (rightObjectDistance < distance && !linearOpMode.isStopRequested) {
+                while (rightRangeSensor.distanceDetected < distance && !linearOpMode.isStopRequested) {
                     linearOpMode.sleep(10)
                 }
             }
@@ -299,7 +283,7 @@ class RelicRecoveryRobot : MecanumRobot() {
         stopAllDriveMotors()
         linearOpMode.sleep(1000)
 
-        val rightDistance = rightObjectDistance
+        val rightDistance = rightRangeSensor.distanceDetected
         if ((distance + DEFAULT_OBJECT_DISTANCE_TOLERANCE < rightDistance || distance - DEFAULT_OBJECT_DISTANCE_TOLERANCE > rightDistance)
                 && !linearOpMode.isStopRequested) {
             driveToDistanceFromRightObject(distance, 0.45)
@@ -311,9 +295,8 @@ class RelicRecoveryRobot : MecanumRobot() {
     /**
      * Drives the robot off of the balancing stone, using the angle of the robot as an indication of completion.
      * @param power The power ot run the motors at when driving.
-     * TODO: Put a safety in this function that stops the robot if it goes for a certain amount of time without changes in pitch.
      */
-    fun driveOffBalancingStone(power: Double = 0.15 / 2) {
+    fun driveOffBalancingStone(power: Double = 0.175) {
         if (!linearOpMode.isStopRequested) {
             setDrivePower(power)
 
@@ -323,11 +306,13 @@ class RelicRecoveryRobot : MecanumRobot() {
                     while (startingPitch - pitch < BALANCING_STONE_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
                         linearOpMode.sleep(10)
                     }
+                    linearOpMode.telemetry.log().add("Detected a pitch of $pitch.")
 
                     linearOpMode.telemetry.log().add("Driving until level pitch.")
                     while (startingPitch - pitch >= BALANCING_STONE_GROUND_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
                         linearOpMode.sleep(10)
                     }
+                    linearOpMode.telemetry.log().add("Detected a pitch of $pitch.")
                 }
 
                 power < 0 -> {
@@ -335,11 +320,13 @@ class RelicRecoveryRobot : MecanumRobot() {
                     while (startingPitch - pitch > -BALANCING_STONE_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
                         linearOpMode.sleep(10)
                     }
+                    linearOpMode.telemetry.log().add("Detected a pitch of $pitch.")
 
                     linearOpMode.telemetry.log().add("Driving until level pitch.")
                     while (startingPitch - pitch <= -BALANCING_STONE_GROUND_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
                         linearOpMode.sleep(10)
                     }
+                    linearOpMode.telemetry.log().add("Detected a pitch of $pitch.")
                 }
 
                 else -> return
@@ -352,9 +339,8 @@ class RelicRecoveryRobot : MecanumRobot() {
     /**
      * Drives the robot on of the balancing stone, using the angle of the robot as an indication of completion.
      * @param power The power ot run the motors at when driving.
-     * TODO: Put a safety in this function that stops the robot if it goes for a certain amount of time without changes in pitch.
      */
-    fun driveOnBalancingStone(power: Double = 0.50 / 2) {
+    fun driveOnBalancingStone(power: Double = 0.25) {
         if (!linearOpMode.isStopRequested) {
             setDrivePower(power)
 
@@ -365,6 +351,8 @@ class RelicRecoveryRobot : MecanumRobot() {
 
         stopAllDriveMotors()
     }
+
+    // Lift
 
     /**
      * Sets the power of the lift's witch motor. Ignores setting power if the robot's lift is at its limits.
@@ -382,7 +370,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param position The position in encoder units that the lift should go to.
      * @param power The power that the lift motor should lift witch motor at.
      */
-    fun setLiftPosition(position: Int, power: Double = 0.5 / 2) {
+    fun setLiftPosition(position: Int, power: Double = 0.5) {
         if (!linearOpMode.isStopRequested) {
             when {
                 liftMotor.currentPosition < position -> {
@@ -417,20 +405,28 @@ class RelicRecoveryRobot : MecanumRobot() {
     }
 
     /**
-     * @param power The power to run the lift witch motor at.
+     * Sets the lift at a specific location.
+     * @param position The position in encoder units that the lift should go to.
+     * @param power The power that the lift motor should lift witch motor at.
+     */
+    fun setLiftHeight(position: LiftPosition, power: Double = 0.5) {
+        liftMotor.power = power
+        liftMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
+        when(position) {
+            LiftPosition.OVEREXTENDED -> liftMotor.targetPosition = 2500
+            LiftPosition.FOURTH_LEVEL -> liftMotor.targetPosition = 2000
+            LiftPosition.THIRD_LEVEL -> liftMotor.targetPosition = 1500
+            LiftPosition.SECOND_LEVEL -> liftMotor.targetPosition = 1000
+            LiftPosition.FIRST_LEVEL -> liftMotor.targetPosition = 500
+            LiftPosition.BOTTOM_LEVEL -> liftMotor.targetPosition = 0
+        }
+    }
+
+    /**
      * Lowers the lift until it reaches the bottom.
      */
-    fun dropLift(power: Double = 0.30 / 2) {
-        if (!linearOpMode.isStopRequested) {
-            setLiftWinchPower(-Math.abs(power))
-            while (linearOpMode.opModeIsActive() && !liftIsLowered()) {
-                linearOpMode.sleep(10)
-            }
-
-            setLiftWinchPower(0.0)
-            liftMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-            liftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-        }
+    fun dropLift() {
+        setLiftHeight(LiftPosition.BOTTOM_LEVEL)
     }
 
     /**
@@ -438,6 +434,8 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @return True, if the lift is at the bottom.
      */
     private fun liftIsLowered() = !liftLimitSwitch.state || liftMotor.currentPosition <= -5
+
+    // Glyph Grabbers
 
     /**
      * Sets the position of the glyph grabbers.
@@ -484,6 +482,8 @@ class RelicRecoveryRobot : MecanumRobot() {
         linearOpMode.sleep(delay)
     }
 
+    // Glyph Deployer
+
     /**
      * Sets the glyph deployer to the extended position.
      * @param delay The milliseconds to wait after extending the glyph deployer.
@@ -511,6 +511,8 @@ class RelicRecoveryRobot : MecanumRobot() {
         linearOpMode.sleep(delay)
     }
 
+    // Jewel Stick
+
     /**
      * Sets the jewel stick position.
      * @param position The position to set the jewel stick in.
@@ -537,155 +539,16 @@ class RelicRecoveryRobot : MecanumRobot() {
         linearOpMode.sleep(delay)
     }
 
+    // Range Sensors
+
     /**
      * Begins updating the values of the range sensors.
      */
     private fun startUpdatingRangeSensors() {
-        thread(start = true) {
-            while (!linearOpMode.isStopRequested) {
-                updateFrontLeftObjectDistance()
-                updateFrontRightObjectDistance()
-                updateLeftObjectDistance()
-                updateRightObjectDistance()
-                updateBackObjectDistance()
-                Thread.sleep(10)
-            }
-        }
+        frontLeftRangeSensor.startUpdatingDetectedDistance()
+        frontRightRangeSensor.startUpdatingDetectedDistance()
+        leftRangeSensor.startUpdatingDetectedDistance()
+        rightRangeSensor.startUpdatingDetectedDistance()
+        backRangeSensor.startUpdatingDetectedDistance()
     }
-
-    /**
-     * Updates the distance detected by the front left range sensor.
-     */
-    private fun updateFrontLeftObjectDistance() {
-        val rawDistance = frontLeftRangeSensor.cmUltrasonic()
-        frontLeftObjectDistance += FRONT_DISTANCE_SENSOR_FILTER_ALPHA * (rawDistance - frontLeftObjectDistance)
-    }
-
-    /**
-     * Updates the distance detected by the front right range sensor.
-     */
-    private fun updateFrontRightObjectDistance() {
-        val rawDistance = frontRightRangeSensor.cmUltrasonic()
-        frontRightObjectDistance += FRONT_DISTANCE_SENSOR_FILTER_ALPHA * (rawDistance - frontRightObjectDistance)
-    }
-
-    /**
-     * Updates the distance detected by the left range sensor.
-     */
-    private fun updateLeftObjectDistance() {
-        val rawDistance = leftRangeSensor.cmUltrasonic()
-        if (abs(rawDistance - leftObjectDistance) <= 200) {
-            leftObjectDistance += LEFT_DISTANCE_SENSOR_FILTER_ALPHA * (rawDistance - leftObjectDistance)
-        }
-    }
-
-    /**
-     * Updates the distance detected by the right range sensor.
-     */
-    private fun updateRightObjectDistance() {
-        val rawDistance = rightRangeSensor.cmUltrasonic()
-        if (abs(rawDistance - rightObjectDistance) <= 200) {
-            rightObjectDistance += RIGHT_DISTANCE_SENSOR_FILTER_ALPHA * (rawDistance - rightObjectDistance)
-        }
-    }
-
-    /**
-     * Updates the distance detected by the back range sensor.
-     */
-    private fun updateBackObjectDistance() {
-        val rawDistance = (backRangeSensor.voltage / (5.0 / 512.0)) * 2.54
-        backObjectDistance += BACK_DISTANCE_SENSOR_FILTER_ALPHA * (rawDistance - backObjectDistance)
-    }
-
-    /**
-     * Detects a nearby crypto box and delivers a glyph into it assuming that the height of the lift
-     * is the height that the glyph should be delivered at.
-     * TODO: Finish implementing this.
-     * TODO: Make this cancelable with the press of any button.
-     */
-    fun deliverGlyph() {
-        val leftObjectDistance = this.leftObjectDistance
-        val rightObjectDistance = this.rightObjectDistance
-        val heading = heading
-
-        when (heading) {
-            in -45..45 -> {
-                turn(0.25, 0.0)
-                when {
-                    leftObjectDistance < rightObjectDistance -> {
-                        val leftCryptoBoxDistance = abs(leftObjectDistance - LEADING_FRONT_CRYPTO_BOX_DISTANCE)
-                        val centerCryptoBoxDistance = abs(leftObjectDistance - CENTER_FRONT_CRYPTO_BOX_DISTANCE)
-                        val rightCryptoBoxDistance = abs(leftObjectDistance - TRAILING_FRONT_CRYPTO_BOX_DISTANCE)
-                        val closestCryptoBoxDistance = min(leftCryptoBoxDistance, min(centerCryptoBoxDistance, rightCryptoBoxDistance))
-
-                        val targetLeftDistance: Double = when {
-                            leftCryptoBoxDistance == closestCryptoBoxDistance -> LEADING_FRONT_CRYPTO_BOX_DISTANCE
-                            centerCryptoBoxDistance == closestCryptoBoxDistance -> CENTER_FRONT_CRYPTO_BOX_DISTANCE
-                            rightCryptoBoxDistance == closestCryptoBoxDistance -> TRAILING_FRONT_CRYPTO_BOX_DISTANCE
-
-                            else -> {
-                                return
-                            }
-                        }
-
-                        driveToDistanceFromLeftObject(targetLeftDistance)
-                        timeDrive(1000)
-                        extendGlyphDeployer()
-                        openGlyphGrabbers(250)
-                        timeDrive(850, -0.15)
-                        openGlyphGrabbers()
-                        retractGlyphDeployer()
-                        dropLift()
-                    }
-
-                    rightObjectDistance < leftObjectDistance -> {
-
-                    }
-                }
-            }
-
-            in -135..-45 -> {
-                turn(0.25, -90.0)
-                when {
-                    leftObjectDistance < rightObjectDistance -> {
-
-                    }
-
-                    rightObjectDistance < leftObjectDistance -> {
-
-                    }
-                }
-            }
-
-            in 45..135 -> {
-                turn(0.25, 90.0)
-                when {
-                    leftObjectDistance < rightObjectDistance -> {
-
-                    }
-
-                    rightObjectDistance < leftObjectDistance -> {
-
-                    }
-                }
-            }
-
-        }
-
-    }
-
-    /**
-     * Indicates the state and decisions of the robot with the color beacon.
-     */
-    fun setColorBeaconState(state: ColorBeaconState) {
-        when (state) {
-            ColorBeaconState.IDLE -> {} //colorBeacon.off()
-            ColorBeaconState.ERROR -> {} //colorBeacon.red()
-            ColorBeaconState.CALIBRATING -> {} //colorBeacon.yellow()
-            ColorBeaconState.DETECTING -> {} //colorBeacon.green()
-            ColorBeaconState.READY -> {} //colorBeacon.green()
-            ColorBeaconState.RUNNING -> {} //colorBeacon.blue()
-        }
-    }
-
 }
