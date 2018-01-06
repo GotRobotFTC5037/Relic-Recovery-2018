@@ -56,12 +56,12 @@ class BlueFrontAutonomous : LinearOpMode() {
             RelicRecoveryVuMark.CENTER -> {}
             RelicRecoveryVuMark.RIGHT -> {}
         }
-        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.DETECTING)
+        //robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.DETECTING)
 
         // Knock off the correct jewel.
         when (jewelPosition) {
             JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
-                robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
+                //robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
                 robot.timeDrive(1000, -0.25 / 2)
 =======
         // Knock off the correct jewel.
@@ -76,7 +76,7 @@ class BlueFrontAutonomous : LinearOpMode() {
 
             JewelConfigurationDetector.JewelConfiguration.BLUE_RED -> {
 <<<<<<< HEAD
-                robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
+                //robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
                 robot.driveOffBalancingStone(0.15 / 2)
 =======
                 robot.driveOffBalancingStone(0.175)
@@ -87,7 +87,7 @@ class BlueFrontAutonomous : LinearOpMode() {
             JewelConfigurationDetector.JewelConfiguration.UNKNOWN -> {
 <<<<<<< HEAD
                 robot.driveOffBalancingStone(0.15 / 2)
-                robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELUNKNOWN)
+                //robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELUNKNOWN)
 =======
                 robot.driveOffBalancingStone(0.175)
 >>>>>>> 9a200b1aac761a00a25e54f8b71f515ad8c750e8
@@ -153,7 +153,7 @@ class BlueFrontAutonomous : LinearOpMode() {
 <<<<<<< HEAD
         robot.turn(0.50 / 2, -135.0)
 
-        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.DONE)
+        //robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.DONE)
 =======
         robot.turn(0.25, -135.0)
 >>>>>>> 9a200b1aac761a00a25e54f8b71f515ad8c750e8

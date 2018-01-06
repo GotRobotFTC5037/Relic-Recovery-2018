@@ -41,11 +41,11 @@ class BlueBackAutonomous : LinearOpMode() {
         // Find the position of the jewels.
         val jewelPosition = robot.jewelConfigurationDetector.waitForJewelIdentification(elapsedTime, this)
         robot.jewelConfigurationDetector.disable()
-        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
+        //robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
 
         if (jewelPosition != JewelConfigurationDetector.JewelConfiguration.UNKNOWN) {
             robot.lowerJewelStick(0)
-            robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELUNKNOWN)
+            //robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELUNKNOWN)
         }
 
         // Read the pictograph.
@@ -53,19 +53,19 @@ class BlueBackAutonomous : LinearOpMode() {
         val pictograph = pictographIdentifier.waitForPictographIdentification(elapsedTime, this)
         pictographIdentifier.deactivate()
 <<<<<<< HEAD
-        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.DETECTING)
+        //robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.DETECTING)
 =======
 >>>>>>> 9a200b1aac761a00a25e54f8b71f515ad8c750e8
 
         when (pictograph) {
-            RelicRecoveryVuMark.LEFT -> {}
-            RelicRecoveryVuMark.CENTER -> {}
-            RelicRecoveryVuMark.RIGHT -> {}
+            //RelicRecoveryVuMark.LEFT -> {}
+            //RelicRecoveryVuMark.CENTER -> {}
+            //RelicRecoveryVuMark.RIGHT -> {}
         }
         // Knock off the correct jewel.
         when (jewelPosition) {
             JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
-                robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
+                //robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
                 robot.timeDrive(1000, -0.25 / 2)
                 robot.raiseJewelStick()
                 robot.driveOnBalancingStone(0.50 / 2)
@@ -73,14 +73,14 @@ class BlueBackAutonomous : LinearOpMode() {
             }
 
             JewelConfigurationDetector.JewelConfiguration.BLUE_RED -> {
-                robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
+                //robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
                 robot.driveOffBalancingStone(0.15 / 2)
                 robot.raiseJewelStick()
             }
 
             JewelConfigurationDetector.JewelConfiguration.UNKNOWN -> {
                 robot.driveOffBalancingStone(0.15 / 2)
-                robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELUNKNOWN)
+                //robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELUNKNOWN)
             }
         }
 
@@ -142,7 +142,7 @@ class BlueBackAutonomous : LinearOpMode() {
         // Turn towards the center glyphs.
         robot.turn(0.50 / 2, -90.0)
 
-        robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.DONE)
+        //robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.DONE)
     }
 
 }
