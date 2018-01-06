@@ -699,7 +699,7 @@ class RelicRecoveryRobot : MecanumRobot() {
             ColorBeaconState.PICTLEFT -> {colorBeacon.teal()}
             ColorBeaconState.PICTMID -> {colorBeacon.white()}
             ColorBeaconState.PICTRIGHT -> {colorBeacon.pink()}
-            ColorBeaconState.DONE -> {colorBeacon.blue()}
+            ColorBeaconState.DONE -> {colorBeacon.red()}
         }
     }
 
