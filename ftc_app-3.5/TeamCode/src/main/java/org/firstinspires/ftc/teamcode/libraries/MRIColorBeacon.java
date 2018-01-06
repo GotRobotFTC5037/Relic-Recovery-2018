@@ -89,6 +89,10 @@ public class MRIColorBeacon {
         rgb(255, 165, 0);
     }
 
+    public void pink() { rgb(255, 105, 180); }
+
+    }
+
     public int getColorNumber(){
         colorBcache = colorBreader.read(0x04, 4);
 

@@ -5,6 +5,7 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.*
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay
+import org.firstinspires.ftc.teamcode.libraries.MRIColorBeacon
 import org.firstinspires.ftc.teamcode.libraries.vision.JewelConfigurationDetector
 import org.firstinspires.ftc.teamcode.opmodes.competition.RelicRecoveryTeleOp
 import kotlin.concurrent.thread
@@ -99,7 +100,14 @@ class RelicRecoveryRobot : MecanumRobot() {
         CALIBRATING,
         DETECTING,
         READY,
-        RUNNING
+        RUNNING,
+        INIT,
+        JEWELDETECTED,
+        JEWELUNKNOWN,
+        PICTLEFT,
+        PICTMID,
+        PICTRIGHT,
+        DONE,
     }
 
     private lateinit var liftMotor: DcMotor
@@ -114,7 +122,7 @@ class RelicRecoveryRobot : MecanumRobot() {
     private lateinit var frontRightRangeSensor: ModernRoboticsI2cRangeSensor
     private lateinit var backRangeSensor: AnalogInput
     private lateinit var liftLimitSwitch: DigitalChannel
-    //private lateinit var colorBeacon: MRIColorBeacon
+    private lateinit var colorBeacon: MRIColorBeacon
     lateinit var jewelConfigurationDetector: JewelConfigurationDetector
 
     private var startingPitch = 0.0
@@ -679,12 +687,19 @@ class RelicRecoveryRobot : MecanumRobot() {
      */
     fun setColorBeaconState(state: ColorBeaconState) {
         when (state) {
-            ColorBeaconState.IDLE -> {} //colorBeacon.off()
-            ColorBeaconState.ERROR -> {} //colorBeacon.red()
-            ColorBeaconState.CALIBRATING -> {} //colorBeacon.yellow()
-            ColorBeaconState.DETECTING -> {} //colorBeacon.green()
-            ColorBeaconState.READY -> {} //colorBeacon.green()
-            ColorBeaconState.RUNNING -> {} //colorBeacon.blue()
+            ColorBeaconState.IDLE -> {colorBeacon.off()}
+            ColorBeaconState.ERROR -> {colorBeacon.red()} 
+            ColorBeaconState.CALIBRATING -> {colorBeacon.yellow()}
+            ColorBeaconState.DETECTING -> {colorBeacon.green()}
+            ColorBeaconState.READY -> {colorBeacon.green()}
+            ColorBeaconState.RUNNING -> {colorBeacon.blue()}
+            ColorBeaconState.INIT -> {colorBeacon.green()}
+            ColorBeaconState.JEWELDETECTED -> {colorBeacon.yellow()}
+            ColorBeaconState.JEWELUNKNOWN -> {colorBeacon.purple()}
+            ColorBeaconState.PICTLEFT -> {colorBeacon.teal()}
+            ColorBeaconState.PICTMID -> {colorBeacon.white()}
+            ColorBeaconState.PICTRIGHT -> {colorBeacon.pink()}
+            ColorBeaconState.DONE -> {colorBeacon.blue()}
         }
     }
 
