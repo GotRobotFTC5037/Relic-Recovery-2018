@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.competition
 import RelicRecoveryRobotOpModeManager
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import com.qualcomm.robotcore.hardware.DcMotor
 import org.firstinspires.ftc.teamcode.robots.RelicRecoveryRobot
 import java.lang.Math.pow
 import java.lang.Math.signum
@@ -19,11 +20,13 @@ class RelicRecoveryTeleOp : LinearOpMode() {
     override fun runOpMode() {
         val robotInUse = RelicRecoveryRobotOpModeManager.robotInUse as RelicRecoveryRobot?
         val robot = if (robotInUse != null) {
+            robotInUse.liftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
             robotInUse
         } else {
             val newRobot = RelicRecoveryRobot()
             newRobot.linearOpMode = this
             newRobot.setup(hardwareMap)
+            newRobot.liftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
             newRobot
         }
 
@@ -32,11 +35,14 @@ class RelicRecoveryTeleOp : LinearOpMode() {
         robot.waitForGyroCalibration()
         waitForStart()
         robot.start()
+        robot.startUpdatingRangeSensors()
 
         robot.dropLift()
         robot.raiseJewelStick()
 
         while (opModeIsActive()) {
+            robot.liftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+
             // Gamepad 1: Movement
             when {
                 gamepad1.dpad_up -> { robot.setDrivePower(0.20); robot.shouldCorrectHeading = true; robot.targetHeading = robot.heading }
@@ -50,9 +56,9 @@ class RelicRecoveryTeleOp : LinearOpMode() {
                     val y = gamepad1.left_stick_y.toDouble() * -1.0 * if (gamepad1.right_trigger > 0.1 || gamepad1.left_trigger > 0.1) 1.0 else 0.5
                     val z = gamepad1.right_stick_x.toDouble() * -1.0 * if (gamepad1.right_trigger > 0.1 || gamepad1.left_trigger > 0.1) 1.0 else 0.5
 
-                    val xPower = abs(pow(x, 2.0)) * signum(x)
-                    val yPower = abs(pow(y, 2.0)) * signum(y)
-                    val zPower = (abs(pow(z, 2.0)) * signum(z)) / 2.0
+                    val xPower = abs(pow(x, 3.0)) * signum(x)
+                    val yPower = abs(pow(y, 3.0)) * signum(y)
+                    val zPower = (abs(pow(z, 3.0)) * signum(z))
 
                     robot.setDirection(xPower, yPower, zPower)
                 }

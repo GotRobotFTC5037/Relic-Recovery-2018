@@ -28,12 +28,12 @@ class RelicRecoveryRobot : MecanumRobot() {
         val TRAILING_SIDE_CRYPTO_BOX_DISTANCE = CENTER_SIDE_CRYPTO_BOX_DISTANCE + 19.3
 
         private val BALANCING_STONE_ANGLE_THRESHOLD = 6.0
-        private val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 1.0
+        private val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 2.0
 
         private val GLYPH_GRABBER_OPEN_POSITION = 0.50
         private val GLYPH_GRABBER_SMALL_OPEN_POSITION = 0.66
         private val GLYPH_GRABBER_RELEASE_POSITION = 0.75
-        private val GLYPH_GRABBER_CLOSED_POSITION = 1.0
+        private val GLYPH_GRABBER_CLOSED_POSITION = 0.90
 
         private val GLYPH_DEPLOYER_EXTENDED_POSITION = 0.25
         private val GLYPH_DEPLOYER_RETRACTED_POSITION = 0.90
@@ -193,6 +193,8 @@ class RelicRecoveryRobot : MecanumRobot() {
      */
     fun driveToDistanceFromForwardObject(distance: Double, power: Double = 0.175) {
 
+        linearOpMode.telemetry.log().add("Driving to forward object.")
+
         // Check to see if the opmode is still active.
         if (!linearOpMode.isStopRequested) {
             // Get the current distance for future reference.
@@ -219,20 +221,29 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param distance The distance the robot should be from a left object.
      * @param power The power to run the motors at when driving.
      */
-    fun driveToDistanceFromLeftObject(distance: Double, power: Double = 0.20) {
+    fun driveToDistanceFromLeftObject(distance: Double, power: Double = 0.30) {
+
+        linearOpMode.telemetry.log().add("Driving to distance from left object.")
+
         val currentDistance = leftRangeSensor.distanceDetected
 
         when {
             currentDistance > distance -> {
+                linearOpMode.telemetry.log().add("Current distance is greater than the target distance.")
                 setStrafePower(-Math.abs(power))
                 while (leftRangeSensor.distanceDetected > distance && !linearOpMode.isStopRequested) {
+                    linearOpMode.telemetry.addLine("LRS: ${leftRangeSensor.distanceDetected}")
+                    linearOpMode.telemetry.update()
                     linearOpMode.sleep(10)
                 }
             }
 
             currentDistance < distance -> {
+                linearOpMode.telemetry.log().add("Current distance is greater than the target distance.")
                 setStrafePower(Math.abs(power))
                 while (leftRangeSensor.distanceDetected < distance && !linearOpMode.isStopRequested) {
+                    linearOpMode.telemetry.addLine("LRS: ${leftRangeSensor.distanceDetected}")
+                    linearOpMode.telemetry.update()
                     linearOpMode.sleep(10)
                 }
             }
@@ -246,7 +257,7 @@ class RelicRecoveryRobot : MecanumRobot() {
         val leftDistance = leftRangeSensor.distanceDetected
         if ((distance + DEFAULT_OBJECT_DISTANCE_TOLERANCE < leftDistance || distance - DEFAULT_OBJECT_DISTANCE_TOLERANCE > leftDistance)
                 && linearOpMode.opModeIsActive()) {
-            driveToDistanceFromLeftObject(distance, 0.45)
+            driveToDistanceFromLeftObject(distance, power)
         }
 
         stopAllDriveMotors()
@@ -544,7 +555,7 @@ class RelicRecoveryRobot : MecanumRobot() {
     /**
      * Begins updating the values of the range sensors.
      */
-    private fun startUpdatingRangeSensors() {
+    fun startUpdatingRangeSensors() {
         frontLeftRangeSensor.startUpdatingDetectedDistance()
         frontRightRangeSensor.startUpdatingDetectedDistance()
         leftRangeSensor.startUpdatingDetectedDistance()

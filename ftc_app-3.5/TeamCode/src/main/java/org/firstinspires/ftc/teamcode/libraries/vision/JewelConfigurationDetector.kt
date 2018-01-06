@@ -13,7 +13,7 @@ import java.io.IOException
 class JewelConfigurationDetector : OpenCVPipeline() {
 
     companion object {
-        val TIME_OUT_DURATION = 0.5
+        val TIME_OUT_DURATION = 500
 
         init {
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
