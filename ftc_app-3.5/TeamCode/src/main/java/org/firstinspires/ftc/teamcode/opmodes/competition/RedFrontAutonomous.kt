@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmodes.competition
 
-import RelicRecoveryRobotOpModeManager
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
-import org.corningrobotics.enderbots.endercv.CameraViewDisplay
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
 import org.firstinspires.ftc.teamcode.libraries.vision.JewelConfigurationDetector
 import org.firstinspires.ftc.teamcode.libraries.vision.PictographIdentifier
@@ -23,85 +21,61 @@ class RedFrontAutonomous : LinearOpMode() {
 
         // Setup the robot.
         val robot = RelicRecoveryRobot()
-        robot.linearOpMode = this
-        robot.setup(hardwareMap)
-        RelicRecoveryRobotOpModeManager.queueOpMode(this, RelicRecoveryTeleOp.OPMODE_NAME)
-
-        // Prepare to find the position of the jewels.
-        val jewelDetector = JewelConfigurationDetector()
-        jewelDetector.init(hardwareMap.appContext, CameraViewDisplay.getInstance())
-        jewelDetector.enable()
-
-        // Wait for the gyro to be calibrated.
-        robot.waitForGyroCalibration()
+        robot.prepareForAutonomous(this)
+        val pictographIdentifier = PictographIdentifier(hardwareMap)
 
         // Wait for the opmode to start.
         waitForStart()
 
         // Start the timer.
-        val elapsedTime = ElapsedTime(ElapsedTime.Resolution.SECONDS)
+        val elapsedTime = ElapsedTime(ElapsedTime.Resolution.MILLISECONDS)
 
         // Start the robot.
         robot.start()
 
+        robot.closeGlyphGrabbers(1200)
+        robot.setLiftHeight(RelicRecoveryRobot.LiftPosition.SECOND_LEVEL)
+
         // Find the position of the jewels.
-        val jewelPosition = jewelDetector.waitForJewelIdentification(elapsedTime, this)
-        jewelDetector.disable()
+        val jewelPosition = robot.jewelConfigurationDetector.waitForJewelIdentification(elapsedTime, this)
+        robot.jewelConfigurationDetector.disable()
+
+        if (jewelPosition != JewelConfigurationDetector.JewelConfiguration.UNKNOWN) {
+            robot.lowerJewelStick(0)
+        }
 
         // Read the pictograph.
-        val pictographIdentifier = PictographIdentifier(hardwareMap)
         pictographIdentifier.activate()
         val pictograph = pictographIdentifier.waitForPictographIdentification(elapsedTime, this)
         pictographIdentifier.deactivate()
 
-        when (pictograph) {
-            RelicRecoveryVuMark.LEFT -> {
-            }
-            RelicRecoveryVuMark.CENTER -> {
-            }
-            RelicRecoveryVuMark.RIGHT -> {
-            }
-        }
-
-        // Prepare to begin moving.
-        robot.closeGlyphGrabbers(500)
-        thread(start = true) {
-            robot.setLiftPosition(RelicRecoveryRobot.AUTO_LIFT_FIRST_LEVEL)
-        }
-
         // Knock off the correct jewel.
-        when(jewelPosition) {
+        when (jewelPosition) {
             JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
-                //robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
-                robot.lowerJewelStick()
-                robot.timeDrive(500, 0.25)
+                robot.timeDrive(1000, 0.175)
                 robot.raiseJewelStick()
-                robot.driveOnBalancingStone(-0.25)
-                robot.driveOffBalancingStone(-0.15)
+                robot.driveOnBalancingStone(-0.45)
+                robot.driveOffBalancingStone(-0.175)
             }
 
             JewelConfigurationDetector.JewelConfiguration.BLUE_RED -> {
-                //robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELDETECTED)
-                robot.lowerJewelStick()
-                robot.driveOffBalancingStone(-0.15)
+                robot.driveOffBalancingStone(-0.175)
                 robot.raiseJewelStick()
             }
 
             JewelConfigurationDetector.JewelConfiguration.UNKNOWN -> {
-                //robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.JEWELUNKNOWN)
-                robot.driveOffBalancingStone(-0.15)
+                robot.driveOffBalancingStone(-0.175)
             }
         }
 
         // Approach the crypto box.
-        robot.turn(0.50, -180.0)
-        robot.driveToDistanceFromForwardObject(RelicRecoveryRobot.CRYPTO_BOX_SPACING)
+        robot.turn(0.45, -180.0)
 
         // Determine the distance from the wall to the correct crypto box.
-        val rightWallDistance = when(pictograph) {
-            RelicRecoveryVuMark.RIGHT -> RelicRecoveryRobot.LEADING_FRONT_CRYPTO_BOX_DISTANCE
-            RelicRecoveryVuMark.CENTER -> RelicRecoveryRobot.CENTER_FRONT_CRYPTO_BOX_DISTANCE
+        val rightWallDistance = when (pictograph) {
             RelicRecoveryVuMark.LEFT -> RelicRecoveryRobot.TRAILING_FRONT_CRYPTO_BOX_DISTANCE
+            RelicRecoveryVuMark.CENTER -> RelicRecoveryRobot.CENTER_FRONT_CRYPTO_BOX_DISTANCE
+            RelicRecoveryVuMark.RIGHT -> RelicRecoveryRobot.LEADING_FRONT_CRYPTO_BOX_DISTANCE
             RelicRecoveryVuMark.UNKNOWN -> RelicRecoveryRobot.LEADING_FRONT_CRYPTO_BOX_DISTANCE
         }
 
@@ -109,13 +83,13 @@ class RedFrontAutonomous : LinearOpMode() {
         robot.driveToDistanceFromRightObject(rightWallDistance)
 
         // Place the glyph in the correct crypto box.
-        robot.dropLift()
+        robot.setLiftHeight(RelicRecoveryRobot.LiftPosition.BOTTOM_LEVEL)
         robot.timeDrive(1000)
         robot.extendGlyphDeployer()
         robot.openGlyphGrabbers(250)
 
         // Back away from the crypto box.
-        robot.timeDrive(850, -0.25)
+        robot.timeDrive(850, -0.175)
         robot.liftGlyphDeployer(500)
 
         // Turn towards the center glyphs.
@@ -129,15 +103,16 @@ class RedFrontAutonomous : LinearOpMode() {
         robot.timeDrive(2500)
         robot.closeGlyphGrabbers(1250)
 
-        // Drive back to the crypto box.
-        robot.timeDrive(750, -0.50 / 2)
-        thread(true) { robot.setLiftPosition(RelicRecoveryRobot.AUTO_LIFT_FIRST_LEVEL) }
-        robot.turn(0.75 / 2, 180.0)
+        // Drive back the crypto boxes.
+        robot.timeDrive(750, -0.25)
+        thread(true) {  robot.setLiftHeight(RelicRecoveryRobot.LiftPosition.SECOND_LEVEL) }
+        robot.turn(0.75, 135.0)
         robot.timeDrive(500)
-        robot.driveToDistanceFromForwardObject(RelicRecoveryRobot.CRYPTO_BOX_SPACING + 25)
+        robot.turn(0.50, -180.0)
+        robot.driveToDistanceFromForwardObject(RelicRecoveryRobot.CRYPTO_BOX_SPACING)
 
         // Line up with the center crypto box.
-        robot.driveToDistanceFromLeftObject(RelicRecoveryRobot.TRAILING_FRONT_CRYPTO_BOX_DISTANCE, 0.65 / 2)
+        robot.driveToDistanceFromRightObject(RelicRecoveryRobot.CENTER_FRONT_CRYPTO_BOX_DISTANCE)
 
         // Place the glyph in the correct crypto box.
         robot.dropLift()
@@ -146,13 +121,11 @@ class RedFrontAutonomous : LinearOpMode() {
         robot.openGlyphGrabbers(250)
 
         // Back away from the crypto box.
-        robot.timeDrive(850, -0.25 / 2)
+        robot.timeDrive(450, -0.50)
         robot.liftGlyphDeployer(500)
 
         // Turn towards the center glyphs.
-        robot.turn(0.50 / 2, 135.0)
-
-        //robot.setColorBeaconState(RelicRecoveryRobot.ColorBeaconState.DONE)
+        robot.turn(0.25, -45.0)
     }
 
 }

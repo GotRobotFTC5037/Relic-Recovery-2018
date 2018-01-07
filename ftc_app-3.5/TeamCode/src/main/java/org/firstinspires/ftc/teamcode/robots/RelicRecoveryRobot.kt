@@ -17,15 +17,15 @@ import kotlin.math.abs
 class RelicRecoveryRobot : MecanumRobot() {
 
     companion object {
-        val CRYPTO_BOX_SPACING = 47.0
+        val CRYPTO_BOX_SPACING = 50.0
 
         val LEADING_FRONT_CRYPTO_BOX_DISTANCE = 46.0
-        val CENTER_FRONT_CRYPTO_BOX_DISTANCE = LEADING_FRONT_CRYPTO_BOX_DISTANCE + 19.3
-        val TRAILING_FRONT_CRYPTO_BOX_DISTANCE = CENTER_FRONT_CRYPTO_BOX_DISTANCE + 19.3
+        val CENTER_FRONT_CRYPTO_BOX_DISTANCE = LEADING_FRONT_CRYPTO_BOX_DISTANCE + 17.0
+        val TRAILING_FRONT_CRYPTO_BOX_DISTANCE = CENTER_FRONT_CRYPTO_BOX_DISTANCE + 17.0
 
         val LEADING_SIDE_CRYPTO_BOX_DISTANCE = 100.0
-        val CENTER_SIDE_CRYPTO_BOX_DISTANCE = LEADING_SIDE_CRYPTO_BOX_DISTANCE + 19.3
-        val TRAILING_SIDE_CRYPTO_BOX_DISTANCE = CENTER_SIDE_CRYPTO_BOX_DISTANCE + 19.3
+        val CENTER_SIDE_CRYPTO_BOX_DISTANCE = LEADING_SIDE_CRYPTO_BOX_DISTANCE + 16.0
+        val TRAILING_SIDE_CRYPTO_BOX_DISTANCE = CENTER_SIDE_CRYPTO_BOX_DISTANCE + 16.0
 
         private val DEFAULT_OBJECT_DISTANCE_TOLERANCE = 3.0
 
@@ -118,7 +118,7 @@ class RelicRecoveryRobot : MecanumRobot() {
         linearOpMode.telemetry.log().add("Setting up the robot.")
 
         liftMotor = hardwareMap.dcMotor.get("winch motor")
-        liftMotor.direction = DcMotorSimple.Direction.FORWARD
+        liftMotor.direction = DcMotorSimple.Direction.REVERSE
         liftMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         liftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
         liftMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
@@ -200,17 +200,21 @@ class RelicRecoveryRobot : MecanumRobot() {
         // Check to see if the opmode is still active.
         if (!linearOpMode.isStopRequested) {
             // Get the current distance for future reference.
-            val currentDistance = frontLeftRangeSensor.distanceDetected
+            val currentDistance = frontRightRangeSensor.distanceDetected
 
             when {
                 currentDistance > distance -> {
                     setDrivePower(Math.abs(power))
-                    while (frontLeftRangeSensor.distanceDetected > distance && linearOpMode.opModeIsActive()) {
+                    while (frontRightRangeSensor.distanceDetected > distance && linearOpMode.opModeIsActive()) {
                         linearOpMode.sleep(10)
                     }
                 }
 
                 currentDistance < distance -> {
+                    setDrivePower(-Math.abs(power))
+                    while (frontRightRangeSensor.distanceDetected < distance && linearOpMode.opModeIsActive()) {
+                        linearOpMode.sleep(10)
+                    }
                 }
             }
         }
@@ -223,7 +227,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param distance The distance the robot should be from a left object.
      * @param power The power to run the motors at when driving.
      */
-    fun driveToDistanceFromLeftObject(distance: Double, power: Double = 0.275) {
+    fun driveToDistanceFromLeftObject(distance: Double, power: Double = 0.325) {
 
         linearOpMode.telemetry.log().add("Driving to distance from left object.")
 
@@ -270,7 +274,10 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param distance The distance the robot should be from a right object.
      * @param power The power to run the motors at when driving.
      */
-    fun driveToDistanceFromRightObject(distance: Double, power: Double = 0.20) {
+    fun driveToDistanceFromRightObject(distance: Double, power: Double = 0.275) {
+
+        linearOpMode.telemetry.log().add("Driving to distance from right object.")
+
         val currentDistance = rightRangeSensor.distanceDetected
 
         when {
@@ -321,6 +328,8 @@ class RelicRecoveryRobot : MecanumRobot() {
                     }
                     linearOpMode.telemetry.log().add("Detected a pitch of $pitch.")
 
+                    this.raiseJewelStick(0)
+
                     linearOpMode.telemetry.log().add("Driving until level pitch.")
                     while (startingPitch - pitch >= BALANCING_STONE_GROUND_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
                         linearOpMode.sleep(10)
@@ -334,6 +343,8 @@ class RelicRecoveryRobot : MecanumRobot() {
                         linearOpMode.sleep(10)
                     }
                     linearOpMode.telemetry.log().add("Detected a pitch of $pitch.")
+
+                    this.raiseJewelStick(0)
 
                     linearOpMode.telemetry.log().add("Driving until level pitch.")
                     while (startingPitch - pitch <= -BALANCING_STONE_GROUND_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
@@ -353,7 +364,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * Drives the robot on of the balancing stone, using the angle of the robot as an indication of completion.
      * @param power The power ot run the motors at when driving.
      */
-    fun driveOnBalancingStone(power: Double = 0.25) {
+    fun driveOnBalancingStone(power: Double = 0.45) {
         if (!linearOpMode.isStopRequested) {
             setDrivePower(power)
 
@@ -422,16 +433,20 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param position The position in encoder units that the lift should go to.
      * @param power The power that the lift motor should lift witch motor at.
      */
-    fun setLiftHeight(position: LiftPosition, power: Double = 1.0) {
+    fun setLiftHeight(position: LiftPosition, power: Double = 0.5) {
         liftMotor.power = power
         liftMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
+
         when(position) {
-            LiftPosition.OVEREXTENDED -> liftMotor.targetPosition = 2500
-            LiftPosition.FOURTH_LEVEL -> liftMotor.targetPosition = 2000
-            LiftPosition.THIRD_LEVEL -> liftMotor.targetPosition = 1500
-            LiftPosition.SECOND_LEVEL -> liftMotor.targetPosition = 1000
-            LiftPosition.FIRST_LEVEL -> liftMotor.targetPosition = 500
+            LiftPosition.FOURTH_LEVEL -> liftMotor.targetPosition = 2950
+            LiftPosition.THIRD_LEVEL -> liftMotor.targetPosition = 2000
+            LiftPosition.SECOND_LEVEL -> liftMotor.targetPosition = 1150
+            LiftPosition.FIRST_LEVEL -> liftMotor.targetPosition = 100
             LiftPosition.BOTTOM_LEVEL -> liftMotor.targetPosition = 0
+        }
+
+        while (liftMotor.isBusy) {
+            linearOpMode.sleep(10)
         }
     }
 
@@ -440,7 +455,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      */
     fun dropLift() {
         liftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-        liftMotor.power = -0.45
+        liftMotor.power = 0.45
         while (!liftIsLowered() && !linearOpMode.isStopRequested) {
             linearOpMode.sleep(10)
         }
@@ -568,5 +583,9 @@ class RelicRecoveryRobot : MecanumRobot() {
         leftRangeSensor.startUpdatingDetectedDistance()
         rightRangeSensor.startUpdatingDetectedDistance()
         backRangeSensor.startUpdatingDetectedDistance()
+    }
+
+    fun powerBreak() {
+        timeDrive(100, -1.0)
     }
 }

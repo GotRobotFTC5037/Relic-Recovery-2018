@@ -4,7 +4,7 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import kotlin.concurrent.thread
 
-class RangeSensor(private val linearOpMode: LinearOpMode, name: String, private val alpha: Double = 0.50) {
+class RangeSensor(private val linearOpMode: LinearOpMode, name: String, private val alpha: Double = 0.75) {
 
     companion object {
         val RAW_RANGE_VALUE_CUTOFF  = 200
