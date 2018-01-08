@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.hardware.Servo
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay
-import org.firstinspires.ftc.teamcode.libraries.components.Lift.RelicRecoveryLift
+import org.firstinspires.ftc.teamcode.libraries.components.lift.RelicRecoveryLift
 import org.firstinspires.ftc.teamcode.libraries.sensors.RangeSensor
 import org.firstinspires.ftc.teamcode.libraries.vision.JewelConfigurationDetector
 import org.firstinspires.ftc.teamcode.opmodes.competition.RelicRecoveryTeleOp
