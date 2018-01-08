@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
+import org.firstinspires.ftc.teamcode.libraries.components.Lift.RelicRecoveryLift
 import org.firstinspires.ftc.teamcode.libraries.vision.JewelConfigurationDetector
 import org.firstinspires.ftc.teamcode.libraries.vision.PictographIdentifier
 import org.firstinspires.ftc.teamcode.robots.RelicRecoveryRobot
@@ -35,7 +36,7 @@ class RedBackAutonomous : LinearOpMode() {
 
         thread(start = true) {
             robot.closeGlyphGrabbers(1200)
-            robot.setLiftHeight(RelicRecoveryRobot.LiftPosition.SECOND_LEVEL)
+            robot.lift.setPosition(RelicRecoveryLift.LiftPosition.SECOND_LEVEL)
         }
 
         // Find the position of the jewels.
@@ -85,7 +86,7 @@ class RedBackAutonomous : LinearOpMode() {
         robot.driveToDistanceFromRightObject(rightWallDistance)
 
         // Place the glyph in the correct crypto box.
-        robot.setLiftHeight(RelicRecoveryRobot.LiftPosition.BOTTOM_LEVEL)
+        robot.lift.drop()
         robot.timeDrive(1000)
         robot.extendGlyphDeployer()
         robot.openGlyphGrabbers(250)
@@ -107,7 +108,7 @@ class RedBackAutonomous : LinearOpMode() {
 
         // Drive back the crypto boxes.
         robot.timeDrive(750, -0.25)
-        thread(true) {  robot.setLiftHeight(RelicRecoveryRobot.LiftPosition.SECOND_LEVEL) }
+        thread(true) { robot.lift.setPosition(RelicRecoveryLift.LiftPosition.FIRST_LEVEL) }
         robot.turn(0.75, 90.0)
         robot.timeDrive(500)
         robot.driveToDistanceFromForwardObject(RelicRecoveryRobot.CRYPTO_BOX_SPACING)
@@ -116,7 +117,7 @@ class RedBackAutonomous : LinearOpMode() {
         robot.driveToDistanceFromRightObject(RelicRecoveryRobot.CENTER_SIDE_CRYPTO_BOX_DISTANCE)
 
         // Place the glyph in the correct crypto box.
-        robot.dropLift()
+        robot.lift.drop()
         robot.timeDrive(1000)
         robot.extendGlyphDeployer()
         robot.openGlyphGrabbers(250)

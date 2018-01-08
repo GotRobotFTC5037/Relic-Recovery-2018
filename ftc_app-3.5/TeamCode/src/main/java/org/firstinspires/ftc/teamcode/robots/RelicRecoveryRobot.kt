@@ -2,8 +2,12 @@ package org.firstinspires.ftc.teamcode.robots
 
 import RelicRecoveryRobotOpModeManager
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import com.qualcomm.robotcore.hardware.*
+import com.qualcomm.robotcore.hardware.ColorSensor
+import com.qualcomm.robotcore.hardware.DcMotorSimple
+import com.qualcomm.robotcore.hardware.HardwareMap
+import com.qualcomm.robotcore.hardware.Servo
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay
+import org.firstinspires.ftc.teamcode.libraries.components.Lift.RelicRecoveryLift
 import org.firstinspires.ftc.teamcode.libraries.sensors.RangeSensor
 import org.firstinspires.ftc.teamcode.libraries.vision.JewelConfigurationDetector
 import org.firstinspires.ftc.teamcode.opmodes.competition.RelicRecoveryTeleOp
@@ -24,12 +28,12 @@ class RelicRecoveryRobot : MecanumRobot() {
         val TRAILING_FRONT_CRYPTO_BOX_DISTANCE = CENTER_FRONT_CRYPTO_BOX_DISTANCE + 17.0
 
         val LEADING_SIDE_CRYPTO_BOX_DISTANCE = 100.0
-        val CENTER_SIDE_CRYPTO_BOX_DISTANCE = LEADING_SIDE_CRYPTO_BOX_DISTANCE + 16.0
-        val TRAILING_SIDE_CRYPTO_BOX_DISTANCE = CENTER_SIDE_CRYPTO_BOX_DISTANCE + 16.0
+        val CENTER_SIDE_CRYPTO_BOX_DISTANCE = LEADING_SIDE_CRYPTO_BOX_DISTANCE + 17.0
+        val TRAILING_SIDE_CRYPTO_BOX_DISTANCE = CENTER_SIDE_CRYPTO_BOX_DISTANCE + 17.0
 
         private val DEFAULT_OBJECT_DISTANCE_TOLERANCE = 3.0
 
-        private val BALANCING_STONE_ANGLE_THRESHOLD = 6.0
+        private val BALANCING_STONE_ANGLE_THRESHOLD = 7.5
         private val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 3.0
 
         private val GLYPH_GRABBER_OPEN_POSITION = 0.50
@@ -43,9 +47,6 @@ class RelicRecoveryRobot : MecanumRobot() {
 
         private val JEWEL_STICK_UP_POSITION = 0.0
         private val JEWEL_STICK_DOWN_POSITION = 0.875
-
-        private val MAXIMUM_ENCODER_LIFT_POSITION = 3350
-        val AUTO_LIFT_FIRST_LEVEL = 1000
 
         /**
          * Determines the current setup position of the robot.
@@ -74,7 +75,6 @@ class RelicRecoveryRobot : MecanumRobot() {
      * A position that the robot can be setup on on the field.
      */
     enum class SetupPosition {
-
         FRONT_RED,
         FRONT_BLUE,
         BACK_BLUE,
@@ -82,20 +82,7 @@ class RelicRecoveryRobot : MecanumRobot() {
         UNKNOWN
     }
 
-    /**
-     * A position to set the lift to.
-     */
-    enum class LiftPosition {
-
-        OVEREXTENDED,
-        FOURTH_LEVEL,
-        THIRD_LEVEL,
-        SECOND_LEVEL,
-        FIRST_LEVEL,
-        BOTTOM_LEVEL
-    }
-
-    lateinit var liftMotor: DcMotor
+    lateinit var lift: RelicRecoveryLift
     private lateinit var jewelStick: Servo
     private lateinit var leftGlyphGrabber: Servo
     private lateinit var rightGlyphGrabber: Servo
@@ -106,7 +93,6 @@ class RelicRecoveryRobot : MecanumRobot() {
     lateinit var frontRightRangeSensor: RangeSensor
     private lateinit var backRangeSensor: RangeSensor
     private lateinit var floorColorSensor: ColorSensor
-    private lateinit var liftLimitSwitch: DigitalChannel
     lateinit var jewelConfigurationDetector: JewelConfigurationDetector
     private var startingPitch = 0.0
 
@@ -117,18 +103,12 @@ class RelicRecoveryRobot : MecanumRobot() {
     override fun setup(hardwareMap: HardwareMap) {
         linearOpMode.telemetry.log().add("Setting up the robot.")
 
-        liftMotor = hardwareMap.dcMotor.get("winch motor")
-        liftMotor.direction = DcMotorSimple.Direction.REVERSE
-        liftMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-        liftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-        liftMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        lift = RelicRecoveryLift(linearOpMode, "winch motor", DcMotorSimple.Direction.REVERSE, "limit switch")
 
         jewelStick = hardwareMap.servo.get("jewel stick")
         leftGlyphGrabber = hardwareMap.servo.get("left grabber")
         rightGlyphGrabber = hardwareMap.servo.get("right grabber")
         glyphDeployer = hardwareMap.servo.get("glyph deployer")
-
-        floorColorSensor = hardwareMap.colorSensor.get("floor color sensor")
 
         frontRightRangeSensor = RangeSensor(linearOpMode, "front right range sensor")
         frontLeftRangeSensor = RangeSensor(linearOpMode, "front left range sensor")
@@ -136,8 +116,7 @@ class RelicRecoveryRobot : MecanumRobot() {
         rightRangeSensor = RangeSensor(linearOpMode, "right range sensor")
         backRangeSensor = RangeSensor(linearOpMode, "back range sensor")
 
-        liftLimitSwitch = hardwareMap.digitalChannel.get("limit switch")
-        liftLimitSwitch.mode = DigitalChannel.Mode.INPUT
+        floorColorSensor = hardwareMap.colorSensor.get("floor color sensor")
 
         jewelConfigurationDetector = JewelConfigurationDetector()
 
@@ -186,6 +165,14 @@ class RelicRecoveryRobot : MecanumRobot() {
         }
 
         stopAllDriveMotors()
+    }
+
+    /**
+     * Drives backward at max speed for a very short period of time to slow down. Only use in cases
+     * where the robot is moving very fast forward.
+     */
+    fun powerBreak() {
+        timeDrive(100, -1.0)
     }
 
     /**
@@ -274,7 +261,7 @@ class RelicRecoveryRobot : MecanumRobot() {
      * @param distance The distance the robot should be from a right object.
      * @param power The power to run the motors at when driving.
      */
-    fun driveToDistanceFromRightObject(distance: Double, power: Double = 0.275) {
+    fun driveToDistanceFromRightObject(distance: Double, power: Double = 0.325) {
 
         linearOpMode.telemetry.log().add("Driving to distance from right object.")
 
@@ -375,98 +362,6 @@ class RelicRecoveryRobot : MecanumRobot() {
 
         stopAllDriveMotors()
     }
-
-    // Lift
-
-    /**
-     * Sets the power of the lift's witch motor. Ignores setting power if the robot's lift is at its limits.
-     * @param power The power to run the lift at.
-     */
-    fun setLiftWinchPower(power: Double) {
-        if ((power >= 0 && liftMotor.currentPosition <= MAXIMUM_ENCODER_LIFT_POSITION) || (!liftIsLowered() && power < 0))
-            liftMotor.power = power
-        else
-            liftMotor.power = 0.0
-    }
-
-    /**
-     * Sets the lift at a specific location.
-     * @param position The position in encoder units that the lift should go to.
-     * @param power The power that the lift motor should lift witch motor at.
-     */
-    fun setLiftPosition(position: Int, power: Double = 0.5) {
-        if (!linearOpMode.isStopRequested) {
-            when {
-                liftMotor.currentPosition < position -> {
-                    setLiftWinchPower(Math.abs(power))
-
-                    while (liftIsLowered() && linearOpMode.opModeIsActive()) {
-                        linearOpMode.sleep(20)
-                    }
-
-                    val targetPosition = liftMotor.currentPosition + position
-                    while (liftMotor.currentPosition < targetPosition && linearOpMode.opModeIsActive()) {
-                        linearOpMode.sleep(50)
-                    }
-                }
-
-                liftMotor.currentPosition > position -> {
-                    setLiftWinchPower(-Math.abs(power))
-
-                    while (liftIsLowered() && linearOpMode.opModeIsActive()) {
-                        linearOpMode.sleep(20)
-                    }
-
-                    val targetPosition = liftMotor.currentPosition + position
-                    while (liftMotor.currentPosition > targetPosition && linearOpMode.opModeIsActive()) {
-                        linearOpMode.sleep(50)
-                    }
-                }
-            }
-        }
-
-        setLiftWinchPower(0.0)
-    }
-
-    /**
-     * Sets the lift at a specific location.
-     * @param position The position in encoder units that the lift should go to.
-     * @param power The power that the lift motor should lift witch motor at.
-     */
-    fun setLiftHeight(position: LiftPosition, power: Double = 0.5) {
-        liftMotor.power = power
-        liftMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
-
-        when(position) {
-            LiftPosition.FOURTH_LEVEL -> liftMotor.targetPosition = 2950
-            LiftPosition.THIRD_LEVEL -> liftMotor.targetPosition = 2000
-            LiftPosition.SECOND_LEVEL -> liftMotor.targetPosition = 1150
-            LiftPosition.FIRST_LEVEL -> liftMotor.targetPosition = 100
-            LiftPosition.BOTTOM_LEVEL -> liftMotor.targetPosition = 0
-        }
-
-        while (liftMotor.isBusy) {
-            linearOpMode.sleep(10)
-        }
-    }
-
-    /**
-     * Lowers the lift until it reaches the bottom.
-     */
-    fun dropLift() {
-        liftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-        liftMotor.power = 0.45
-        while (!liftIsLowered() && !linearOpMode.isStopRequested) {
-            linearOpMode.sleep(10)
-        }
-        liftMotor.power = 0.0
-    }
-
-    /**
-     * Determines if the lift is at the bottom.
-     * @return True, if the lift is at the bottom.
-     */
-    private fun liftIsLowered() = !liftLimitSwitch.state || liftMotor.currentPosition <= 0
 
     // Glyph Grabbers
 
@@ -583,9 +478,5 @@ class RelicRecoveryRobot : MecanumRobot() {
         leftRangeSensor.startUpdatingDetectedDistance()
         rightRangeSensor.startUpdatingDetectedDistance()
         backRangeSensor.startUpdatingDetectedDistance()
-    }
-
-    fun powerBreak() {
-        timeDrive(100, -1.0)
     }
 }

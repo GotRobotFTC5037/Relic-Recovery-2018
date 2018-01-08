@@ -60,8 +60,7 @@ class PictographIdentifier(hardwareMap: HardwareMap) {
         vuforiaLocalizer.close()
     }
 
-    private val identifiedPictograph: RelicRecoveryVuMark
-        get() = RelicRecoveryVuMark.from(relicTemplate)
+    private val identifiedPictograph: RelicRecoveryVuMark = RelicRecoveryVuMark.from(relicTemplate)
 
     /**
      * Waits until the pictograph is identified or it has been a specified number of seconds in an ElapsedTime.

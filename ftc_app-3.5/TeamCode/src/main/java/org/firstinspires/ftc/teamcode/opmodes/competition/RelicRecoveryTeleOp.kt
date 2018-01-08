@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.opmodes.competition
 import RelicRecoveryRobotOpModeManager
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import com.qualcomm.robotcore.hardware.DcMotor
 import org.firstinspires.ftc.teamcode.robots.RelicRecoveryRobot
 import java.lang.Math.pow
 import java.lang.Math.signum
+import kotlin.concurrent.thread
 import kotlin.math.abs
 
 @TeleOp(name = "TeleOp")
@@ -16,25 +16,21 @@ class RelicRecoveryTeleOp : LinearOpMode() {
         val OPMODE_NAME = "TeleOp"
     }
 
-    private var liftPosition = 0
-
     @Throws(InterruptedException::class)
     override fun runOpMode() {
         val robotInUse = RelicRecoveryRobotOpModeManager.robotInUse as RelicRecoveryRobot?
         RelicRecoveryRobotOpModeManager.robotInUse = null
 
         val robot = if (robotInUse != null) {
-            robotInUse.liftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+            robotInUse.linearOpMode = this
             robotInUse
         } else {
             val newRobot = RelicRecoveryRobot()
             newRobot.linearOpMode = this
             newRobot.setup(hardwareMap)
-            newRobot.liftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
             newRobot
         }
 
-        robot.linearOpMode = this
         robot.shouldCorrectHeading = false
         robot.waitForGyroCalibration()
         waitForStart()
@@ -44,7 +40,6 @@ class RelicRecoveryTeleOp : LinearOpMode() {
         robot.raiseJewelStick()
 
         while (opModeIsActive()) {
-            robot.liftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
 
             // Gamepad 1: Movement
             when {
@@ -68,36 +63,12 @@ class RelicRecoveryTeleOp : LinearOpMode() {
             }
 
             // Gamepad 2: Attachments
-            val winchPower = (gamepad2.left_stick_y * -1).toDouble()
-            robot.setLiftWinchPower(winchPower)
+            robot.lift.manuallyMove((gamepad2.left_stick_y * -1).toDouble())
 
-            /*when {
-                gamepad2.dpad_up -> {
-                    if (liftPosition != 4) {
-                        liftPosition += 1
-                    }
-                    while (gamepad2.dpad_up) {
-                        sleep(10)
-                    }
-                }
-
-                gamepad2.dpad_down -> {
-                    if (liftPosition != 0) {
-                        liftPosition -= 1
-                    }
-                    while (gamepad2.dpad_down) {
-                        sleep(10)
-                    }
-                }
+            when {
+                gamepad2.dpad_up -> thread(start = true) { robot.lift.moveUpLevel() }
+                gamepad2.dpad_down -> thread(start = true) { robot.lift.moveDownLevel() }
             }
-
-            when (liftPosition) {
-                0 -> robot.setLiftHeight(RelicRecoveryRobot.LiftPosition.BOTTOM_LEVEL)
-                1 -> robot.setLiftHeight(RelicRecoveryRobot.LiftPosition.FIRST_LEVEL)
-                2 -> robot.setLiftHeight(RelicRecoveryRobot.LiftPosition.SECOND_LEVEL)
-                3 -> robot.setLiftHeight(RelicRecoveryRobot.LiftPosition.THIRD_LEVEL)
-                4 -> robot.setLiftHeight(RelicRecoveryRobot.LiftPosition.FOURTH_LEVEL)
-            }*/
 
             when {
                 gamepad2.a -> { robot.closeGlyphGrabbers(); robot.retractGlyphDeployer() }
@@ -106,11 +77,11 @@ class RelicRecoveryTeleOp : LinearOpMode() {
                 gamepad2.x -> { robot.smallOpenGlyphGrabbers(); robot.retractGlyphDeployer() }
             }
 
-            // Information
+            // Telemetry
             telemetry.addLine("FL: ${robot.frontLeftRangeSensor.distanceDetected}; FR; ${robot.frontRightRangeSensor.distanceDetected}")
             telemetry.addLine("SL: ${robot.leftRangeSensor.distanceDetected}; SR: ${robot.rightRangeSensor.distanceDetected}")
             telemetry.addLine()
-            telemetry.addLine("Lift: ${robot.liftMotor.currentPosition}")
+            telemetry.addLine("Lift: ${robot.lift.motor.currentPosition}")
             telemetry.update()
         }
 
