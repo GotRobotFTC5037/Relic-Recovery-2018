@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.opmodes.tests
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay
 import org.firstinspires.ftc.teamcode.libraries.vision.JewelConfigurationDetector
 
 @TeleOp(name = "Jewel Detector Test")
+@Disabled
 class JewelDetectorTest : LinearOpMode() {
 
     private val jewelDetector = JewelConfigurationDetector()

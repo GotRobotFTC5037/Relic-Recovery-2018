@@ -479,4 +479,18 @@ class RelicRecoveryRobot : MecanumRobot() {
         rightRangeSensor.startUpdatingDetectedDistance()
         backRangeSensor.startUpdatingDetectedDistance()
     }
+
+    // Gamepads
+
+    fun firstGamepadIsIdle(): Boolean {
+        val gp = linearOpMode.gamepad1
+        return !(gp.atRest() || gp.a || gp.b || gp.x || gp.y || gp.left_bumper || gp.right_bumper
+                || gp.dpad_up || gp.dpad_down || gp.dpad_right || gp.dpad_left || gp.back || gp.start)
+    }
+
+    fun secondGamepadIsIdle(): Boolean {
+        val gp = linearOpMode.gamepad2
+        return !(gp.atRest() || gp.a || gp.b || gp.x || gp.y || gp.left_bumper || gp.right_bumper
+                || gp.dpad_up || gp.dpad_down || gp.dpad_right || gp.dpad_left || gp.back || gp.start)
+    }
 }

@@ -215,6 +215,7 @@ open class MecanumRobot : Robot() {
      * @param power The power that the robot should turn at.
      * @param degrees the degrees the robot should move at.
      */
+    @Synchronized
     override fun turn(power: Double, degrees: Double) {
         if(!linearOpMode.isStopRequested) {
             linearOpMode.telemetry.log().add("Turning the robot to $degrees degrees")
