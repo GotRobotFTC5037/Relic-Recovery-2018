@@ -12,7 +12,7 @@ import kotlin.math.abs
  *
  * @author FTC Team 5037 gotrobot?
  */
-open class Lift(private val linearOpMode: LinearOpMode, motorName: String, direction: DcMotorSimple.Direction) {
+open class RobotLift(private val linearOpMode: LinearOpMode, motorName: String, direction: DcMotorSimple.Direction) {
 
     val motor: DcMotor = linearOpMode.hardwareMap.dcMotor.get(motorName)
     private var shouldHoldPosition = true
@@ -25,7 +25,7 @@ open class Lift(private val linearOpMode: LinearOpMode, motorName: String, direc
         motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
         motor.direction = direction
-        beginHoldingPosition()
+        //beginHoldingPosition()
     }
 
     open fun liftIsLowered() = motor.currentPosition <= 0

@@ -2,12 +2,9 @@ package org.firstinspires.ftc.teamcode.robots
 
 import RelicRecoveryRobotOpModeManager
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import com.qualcomm.robotcore.hardware.ColorSensor
-import com.qualcomm.robotcore.hardware.DcMotorSimple
-import com.qualcomm.robotcore.hardware.HardwareMap
-import com.qualcomm.robotcore.hardware.Servo
+import com.qualcomm.robotcore.hardware.*
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay
-import org.firstinspires.ftc.teamcode.libraries.components.lift.RelicRecoveryLift
+import org.firstinspires.ftc.teamcode.libraries.components.lift.RelicRecoveryRobotLift
 import org.firstinspires.ftc.teamcode.libraries.sensors.RangeSensor
 import org.firstinspires.ftc.teamcode.libraries.vision.JewelConfigurationDetector
 import org.firstinspires.ftc.teamcode.opmodes.competition.RelicRecoveryTeleOp
@@ -82,7 +79,7 @@ class RelicRecoveryRobot : MecanumRobot() {
         UNKNOWN
     }
 
-    lateinit var lift: RelicRecoveryLift
+    lateinit var lift: RelicRecoveryRobotLift
     private lateinit var jewelStick: Servo
     private lateinit var leftGlyphGrabber: Servo
     private lateinit var rightGlyphGrabber: Servo
@@ -91,7 +88,7 @@ class RelicRecoveryRobot : MecanumRobot() {
     lateinit var rightRangeSensor: RangeSensor
     lateinit var frontLeftRangeSensor: RangeSensor
     lateinit var frontRightRangeSensor: RangeSensor
-    private lateinit var backRangeSensor: RangeSensor
+    lateinit var backRangeSensor: RangeSensor
     private lateinit var floorColorSensor: ColorSensor
     lateinit var jewelConfigurationDetector: JewelConfigurationDetector
     private var startingPitch = 0.0
@@ -103,21 +100,24 @@ class RelicRecoveryRobot : MecanumRobot() {
     override fun setup(hardwareMap: HardwareMap) {
         linearOpMode.telemetry.log().add("Setting up the robot.")
 
-        lift = RelicRecoveryLift(linearOpMode, "winch motor", DcMotorSimple.Direction.REVERSE, "limit switch")
+        // Lift
+        lift = RelicRecoveryRobotLift(linearOpMode, "winch motor", DcMotorSimple.Direction.REVERSE, "limit switch")
 
+        // Attachments
         jewelStick = hardwareMap.servo.get("jewel stick")
         leftGlyphGrabber = hardwareMap.servo.get("left grabber")
         rightGlyphGrabber = hardwareMap.servo.get("right grabber")
         glyphDeployer = hardwareMap.servo.get("glyph deployer")
 
-        frontRightRangeSensor = RangeSensor(linearOpMode, "front right range sensor")
+        // Sensors
+        leftRangeSensor = RangeSensor(linearOpMode, "left range sensor", I2cAddr.create8bit(0x32))
         frontLeftRangeSensor = RangeSensor(linearOpMode, "front left range sensor")
-        leftRangeSensor = RangeSensor(linearOpMode, "left range sensor")
+        frontRightRangeSensor = RangeSensor(linearOpMode, "front right range sensor")
         rightRangeSensor = RangeSensor(linearOpMode, "right range sensor")
         backRangeSensor = RangeSensor(linearOpMode, "back range sensor")
-
         floorColorSensor = hardwareMap.colorSensor.get("floor color sensor")
 
+        // Computer Vision
         jewelConfigurationDetector = JewelConfigurationDetector()
 
         super.setup(hardwareMap)

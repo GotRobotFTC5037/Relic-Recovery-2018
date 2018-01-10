@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
-import org.firstinspires.ftc.teamcode.libraries.components.lift.RelicRecoveryLift
+import org.firstinspires.ftc.teamcode.libraries.components.lift.RelicRecoveryRobotLift
 import org.firstinspires.ftc.teamcode.libraries.vision.JewelConfigurationDetector
 import org.firstinspires.ftc.teamcode.libraries.vision.PictographIdentifier
 import org.firstinspires.ftc.teamcode.robots.RelicRecoveryRobot
@@ -35,7 +35,7 @@ class RedFrontAutonomous : LinearOpMode() {
         robot.start()
 
         robot.closeGlyphGrabbers(1200)
-        robot.lift.setPosition(RelicRecoveryLift.LiftPosition.SECOND_LEVEL)
+        robot.lift.setPosition(RelicRecoveryRobotLift.LiftPosition.SECOND_LEVEL)
 
         // Find the position of the jewels.
         val jewelPosition = robot.jewelConfigurationDetector.waitForJewelIdentification(elapsedTime, this)
@@ -106,7 +106,7 @@ class RedFrontAutonomous : LinearOpMode() {
 
         // Drive back the crypto boxes.
         robot.timeDrive(750, -0.25)
-        thread(true) { robot.lift.setPosition(RelicRecoveryLift.LiftPosition.SECOND_LEVEL) }
+        thread(true) { robot.lift.setPosition(RelicRecoveryRobotLift.LiftPosition.SECOND_LEVEL) }
         robot.turn(0.75, 135.0)
         robot.timeDrive(500)
         robot.turn(0.50, -180.0)

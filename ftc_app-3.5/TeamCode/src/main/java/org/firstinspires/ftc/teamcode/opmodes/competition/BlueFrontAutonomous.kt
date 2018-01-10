@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
-import org.firstinspires.ftc.teamcode.libraries.components.lift.RelicRecoveryLift
+import org.firstinspires.ftc.teamcode.libraries.components.lift.RelicRecoveryRobotLift
 import org.firstinspires.ftc.teamcode.libraries.vision.JewelConfigurationDetector
 import org.firstinspires.ftc.teamcode.libraries.vision.PictographIdentifier
 import org.firstinspires.ftc.teamcode.robots.RelicRecoveryRobot
@@ -32,8 +32,10 @@ class BlueFrontAutonomous : LinearOpMode() {
         robot.start()
 
         // Grab the glyph.
-        robot.closeGlyphGrabbers(1200)
-        robot.lift.setPosition(RelicRecoveryLift.LiftPosition.SECOND_LEVEL)
+        val glyphGrabbingThread = thread(true) {
+            robot.closeGlyphGrabbers(1100)
+            robot.lift.setPosition(RelicRecoveryRobotLift.LiftPosition.SECOND_LEVEL)
+        }
 
         // Start the timer.
         val elapsedTime = ElapsedTime(ElapsedTime.Resolution.MILLISECONDS)
@@ -42,6 +44,7 @@ class BlueFrontAutonomous : LinearOpMode() {
         val jewelPosition = robot.jewelConfigurationDetector.waitForJewelIdentification(elapsedTime, this)
         robot.jewelConfigurationDetector.disable()
 
+        // Lower the jewel stick as soon as we determine the jewel configuration.
         if (jewelPosition != JewelConfigurationDetector.JewelConfiguration.UNKNOWN) {
             robot.lowerJewelStick(0)
         }
@@ -50,6 +53,13 @@ class BlueFrontAutonomous : LinearOpMode() {
         pictographIdentifier.activate()
         val pictograph = pictographIdentifier.waitForPictographIdentification(elapsedTime, this)
         pictographIdentifier.deactivate()
+
+        // Wait for the glyph to be grabbed.
+        // (I find it funny that the robot identifies the jewels *and* pictograph
+        // before it even has time to grab the glyph that is right in front of it)
+        while (glyphGrabbingThread.isAlive) {
+            sleep(10)
+        }
 
         // Knock off the correct jewel.
         when (jewelPosition) {
@@ -110,7 +120,7 @@ class BlueFrontAutonomous : LinearOpMode() {
 
         // Drive back the crypto boxes.
         robot.timeDrive(750, -0.25)
-        thread(true) { robot.lift.setPosition(RelicRecoveryLift.LiftPosition.FIRST_LEVEL) }
+        thread(true) { robot.lift.setPosition(RelicRecoveryRobotLift.LiftPosition.FIRST_LEVEL) }
         robot.turn(0.75, 0.0)
         robot.timeDrive(500)
         robot.driveToDistanceFromForwardObject(RelicRecoveryRobot.CRYPTO_BOX_SPACING)

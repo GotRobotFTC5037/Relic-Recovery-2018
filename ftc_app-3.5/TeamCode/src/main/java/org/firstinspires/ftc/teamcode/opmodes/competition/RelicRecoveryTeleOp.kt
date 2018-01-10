@@ -8,6 +8,7 @@ import java.lang.Math.pow
 import java.lang.Math.signum
 import kotlin.concurrent.thread
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 @TeleOp(name = "TeleOp")
 class RelicRecoveryTeleOp : LinearOpMode() {
@@ -93,10 +94,12 @@ class RelicRecoveryTeleOp : LinearOpMode() {
             }
 
             // Telemetry
-            telemetry.addLine("FL: ${robot.frontLeftRangeSensor.distanceDetected}; FR; ${robot.frontRightRangeSensor.distanceDetected}")
-            telemetry.addLine("SL: ${robot.leftRangeSensor.distanceDetected}; SR: ${robot.rightRangeSensor.distanceDetected}")
+            telemetry.addLine("FL: ${robot.frontLeftRangeSensor.distanceDetected.roundToInt()}; FR; ${robot.frontRightRangeSensor.distanceDetected.roundToInt()}")
+            telemetry.addLine("SL: ${robot.leftRangeSensor.distanceDetected.roundToInt()}; SR: ${robot.rightRangeSensor.distanceDetected.roundToInt()}")
+            telemetry.addLine("B: ${robot.backRangeSensor.distanceDetected.roundToInt()}")
             telemetry.addLine()
             telemetry.addLine("Lift: ${robot.lift.motor.currentPosition}")
+            telemetry.addLine("Limit Switch: ${robot.lift.limitDevice.state}")
             telemetry.update()
         }
 

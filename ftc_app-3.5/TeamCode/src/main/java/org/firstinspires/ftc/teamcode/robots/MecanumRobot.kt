@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
+import com.qualcomm.robotcore.util.ElapsedTime
 import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
@@ -20,7 +21,8 @@ open class MecanumRobot : Robot() {
 
     companion object {
         val MINIMUM_DRIVE_POWER = 0.10
-        val HEADING_CORRECTION_COEFFICIENT = 0.01
+        val HEADING_PROPORTIONAL_GAIN = 0.01
+        val HEADING_DERIVATIVE_GAIN = 0.01
     }
 
     private lateinit var frontLeftMotor: DcMotor
@@ -36,6 +38,8 @@ open class MecanumRobot : Robot() {
 
     var shouldCorrectHeading = true
     var targetHeading = 0.0
+    private var previousTargetHeadingError = 0.0
+    private var timeSinceLastHeadingCorrection = ElapsedTime(ElapsedTime.Resolution.MILLISECONDS)
 
     val heading: Double
         get() {
@@ -114,6 +118,9 @@ open class MecanumRobot : Robot() {
      */
     fun startUpdatingDriveMotorPowers() {
         thread(start = true) {
+
+            timeSinceLastHeadingCorrection = ElapsedTime(ElapsedTime.Resolution.MILLISECONDS)
+
             while(!linearOpMode.isStopRequested) {
                 val headingCorrection = if(shouldCorrectHeading) headingCorrectionPower() else 0.0
 
@@ -260,7 +267,11 @@ open class MecanumRobot : Robot() {
      * Calculates the power the robot should turn at in order to correct for the heading drift of
      * the robot.
      */
-    private fun headingCorrectionPower(): Double = headingDifferenceFromTarget(targetHeading) * HEADING_CORRECTION_COEFFICIENT
+    private fun headingCorrectionPower(): Double {
+        val error = headingDifferenceFromTarget(targetHeading)
+        val derivative = (error - previousTargetHeadingError) / (timeSinceLastHeadingCorrection.milliseconds() / 1000)
+        return (error * HEADING_PROPORTIONAL_GAIN) + (derivative * HEADING_DERIVATIVE_GAIN)
+    }
 
 }
 

@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import kotlin.math.abs
 
-class RelicRecoveryLift(linearOpMode: LinearOpMode, motorName: String, direction: DcMotorSimple.Direction, binaryLimitDeviceName: String) : LimitedLift(linearOpMode, motorName, direction, binaryLimitDeviceName) {
+class RelicRecoveryRobotLift(linearOpMode: LinearOpMode, motorName: String, direction: DcMotorSimple.Direction, binaryLimitDeviceName: String) : LimitedRobotLift(linearOpMode, motorName, direction, binaryLimitDeviceName) {
 
     /**
      * A position to set the lift to.
