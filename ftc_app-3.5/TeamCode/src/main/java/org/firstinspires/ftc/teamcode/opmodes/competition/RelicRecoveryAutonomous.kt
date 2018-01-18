@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmodes.competition
 
-import RelicRecoveryRobotOpModeManager
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import org.firstinspires.ftc.teamcode.robots.RelicRecoveryRobot
 
 @Autonomous(name = "Automatically Select", group = "Automatically Select")
 @Disabled
@@ -13,7 +11,9 @@ class RelicRecoveryAutonomous : LinearOpMode() {
     @Throws(InterruptedException::class)
     override fun runOpMode() {
 
-        val setupPosition = RelicRecoveryRobot.getRobotSetupPosition(hardwareMap)
+        /*
+
+        val setupPosition = RelicRecoveryRobot.getRobotSetupPosition(this)
 
         when(setupPosition) {
             RelicRecoveryRobot.SetupPosition.FRONT_BLUE ->
@@ -35,7 +35,8 @@ class RelicRecoveryAutonomous : LinearOpMode() {
             }
         }
 
+        */
+
         requestOpModeStop()
     }
-
 }

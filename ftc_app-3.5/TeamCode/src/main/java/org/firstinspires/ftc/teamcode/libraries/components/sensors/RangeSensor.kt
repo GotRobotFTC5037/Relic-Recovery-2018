@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.libraries.sensors
+package org.firstinspires.ftc.teamcode.libraries.components.sensors
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.I2cAddr
 import kotlin.concurrent.thread
 
-class RangeSensor(private val linearOpMode: LinearOpMode, name: String, address: I2cAddr = I2cAddr.create8bit(0x28), private val alpha: Double = 0.75) {
+class RangeSensor(linearOpMode: LinearOpMode, name: String, address: I2cAddr = I2cAddr.create8bit(0x28), private val alpha: Double = 0.50): RobotSensor(linearOpMode) {
 
     companion object {
         val RAW_RANGE_VALUE_CUTOFF  = 200

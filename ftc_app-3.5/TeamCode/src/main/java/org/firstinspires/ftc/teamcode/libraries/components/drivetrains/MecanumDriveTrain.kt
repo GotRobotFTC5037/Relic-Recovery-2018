@@ -1,38 +1,43 @@
-package org.firstinspires.ftc.teamcode.robots
+package org.firstinspires.ftc.teamcode.libraries.components.drivetrains
 
-/*
+import com.qualcomm.hardware.bosch.BNO055IMU
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import com.qualcomm.robotcore.hardware.DcMotor
+import com.qualcomm.robotcore.hardware.DcMotorSimple
+import com.qualcomm.robotcore.util.ElapsedTime
+import com.qualcomm.robotcore.util.Range
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
+import kotlin.concurrent.thread
 
-/**
- * A class for creating robots that use a mecanum drive system to move around.
- *
- * @author FTC Team 5037 gotrobot?
- */
-open class MecanumRobot : Robot() {
-
-
+class MecanumDriveTrain(linearOpMode: LinearOpMode) : RobotDriveTrain(linearOpMode) {
 
     companion object {
         val MINIMUM_DRIVE_POWER = 0.15
 
         val HEADING_PROPORTIONAL_GAIN = 0.01000
+        val HEADING_INTEGRAL_GAIN     = 0.00006
         val HEADING_DERIVATIVE_GAIN   = 0.00006
     }
 
-    private lateinit var frontLeftMotor: DcMotor
-    private lateinit var frontRightMotor: DcMotor
-    private lateinit var backLeftMotor: DcMotor
-    private lateinit var backRightMotor: DcMotor
-    private lateinit var imu: BNO055IMU
+    private var frontLeftMotor: DcMotor
+    private var frontRightMotor: DcMotor
+    private var backLeftMotor: DcMotor
+    private var backRightMotor: DcMotor
+    private var imu: BNO055IMU
 
     private var frontLeftMotorPower = 0.0
     private var frontRightMotorPower = 0.0
     private var backLeftMotorPower = 0.0
     private var backRightMotorPower = 0.0
 
+    private var headingIntergral = 0.0
+
     var shouldCorrectHeading = true
-    set(value) {
-        timeSinceLastHeadingCorrection.reset()
-    }
+        set(value) {
+            timeSinceLastHeadingCorrection.reset()
+        }
 
     var targetHeading = 0.0
     private var previousTargetHeadingError = 0.0
@@ -58,9 +63,10 @@ open class MecanumRobot : Robot() {
 
     /**
      * Sets up the hardware needed in order to use the robot.
-     * @param hardwareMap A HardwareMap object. Usually provided by opMode.hardwareMap.
      */
-    override fun setup(hardwareMap: HardwareMap) {
+    init {
+        val hardwareMap = linearOpMode.hardwareMap
+
         shouldCorrectHeading = true
         targetHeading = 0.0
 
@@ -95,18 +101,11 @@ open class MecanumRobot : Robot() {
     }
 
     /**
-     * Calculates the shortest heading difference from a specified angle.
-     * @param target The target angle in degrees.
-     * @return The angle in degrees to turn in order to get to the specified angle.
+     * Waits until the gyro is calibrated.
      */
-    private fun headingDifferenceFromTarget(target: Double): Double {
-        val currentHeading = heading
-        val headingDifference = target - currentHeading
-        return when {
-            abs(headingDifference) <= 180 -> headingDifference
-            target > currentHeading -> target - (currentHeading + 360)
-            target < currentHeading -> target - (currentHeading - 360)
-            else -> 0.0 // This shouldn't ever happen.
+    fun waitForGyroCalibration() {
+        while (!imu.isGyroCalibrated && linearOpMode.opModeIsActive()) {
+            linearOpMode.sleep(10)
         }
     }
 
@@ -116,47 +115,7 @@ open class MecanumRobot : Robot() {
     fun startUpdatingDriveMotorPowers() {
         thread(start = true) {
 
-            while(!opMode.isStopRequested) {
-                val headingCorrection = 0.0
-                        /*if(shouldCorrectHeading) {
-                    0.0//headingCorrectionPower()
-                } else {
-                    0.0
-                }*/
-
-                if(Math.abs(frontLeftMotorPower) < MINIMUM_DRIVE_POWER && frontLeftMotorPower != 0.0)
-                    frontLeftMotor.power = MINIMUM_DRIVE_POWER * Math.signum(frontLeftMotorPower)
-                else
-                    frontLeftMotor.power = Range.clip(frontLeftMotorPower - headingCorrection, -1.0, 1.0)
-
-                if(Math.abs(frontRightMotorPower) < MINIMUM_DRIVE_POWER && frontRightMotorPower != 0.0)
-                    frontRightMotor.power = MINIMUM_DRIVE_POWER * Math.signum(frontRightMotorPower)
-                else
-                    frontRightMotor.power = Range.clip(frontRightMotorPower + headingCorrection, -1.0, 1.0)
-
-                if(Math.abs(backLeftMotorPower) < MINIMUM_DRIVE_POWER && backLeftMotorPower != 0.0)
-                    backLeftMotor.power = MINIMUM_DRIVE_POWER * Math.signum(backLeftMotorPower)
-                else
-                    backLeftMotor.power = Range.clip(backLeftMotorPower - headingCorrection, -1.0, 1.0)
-
-                if(Math.abs(backRightMotorPower) < MINIMUM_DRIVE_POWER && backRightMotorPower != 0.0)
-                    backRightMotor.power = MINIMUM_DRIVE_POWER * Math.signum(backRightMotorPower)
-                else
-                    backRightMotor.power = Range.clip(backRightMotorPower + headingCorrection, -1.0, 1.0)
-
-                opMode.sleep(10)
-            }
-        }
-    }
-
-
-    /**
-     * Begins the thread that updates the power of the motors.
-     */
-    fun startUpdatingDriveMotorPowersAuto() {
-        thread(start = true) {
-
-            while(!opMode.isStopRequested) {
+            while(!linearOpMode.isStopRequested) {
                 val headingCorrection = if(shouldCorrectHeading) {
                     headingCorrectionPower()
                 } else {
@@ -183,7 +142,7 @@ open class MecanumRobot : Robot() {
                 else
                     backRightMotor.power = Range.clip(backRightMotorPower + headingCorrection, -1.0, 1.0)
 
-                opMode.sleep(10)
+                linearOpMode.sleep(10)
             }
         }
     }
@@ -193,7 +152,7 @@ open class MecanumRobot : Robot() {
      * Sets the power that the robot should drive forward or backwards.
      * @param power The power that the robot should drive at.
      */
-    override fun setDrivePower(power: Double) {
+    fun setDrivePower(power: Double) {
         frontLeftMotorPower = power
         frontRightMotorPower = power
         backLeftMotorPower = power
@@ -204,7 +163,7 @@ open class MecanumRobot : Robot() {
      * Sets the power that the robot should turn.
      * @param power The power that the robot should turn at.
      */
-    override fun setTurnPower(power: Double) {
+    fun setTurnPower(power: Double) {
         frontLeftMotorPower = -power
         frontRightMotorPower = power
         backLeftMotorPower = -power
@@ -226,7 +185,7 @@ open class MecanumRobot : Robot() {
      * Sets the power of the drive motors to 0. This does not stop the robot from correcting with
      * gyro correction. Set shouldCorrectHeading to false to stop gyro correction.
      */
-    override fun stopAllDriveMotors() {
+    fun stopAllDriveMotors() {
         frontLeftMotorPower = 0.0
         frontRightMotorPower = 0.0
         backLeftMotorPower = 0.0
@@ -263,9 +222,9 @@ open class MecanumRobot : Robot() {
      * @param degrees the degrees the robot should move at.
      */
     @Synchronized
-    override fun turn(power: Double, degrees: Double) {
-        if(!opMode.isStopRequested) {
-            opMode.telemetry.log().add("Turning the robot to $degrees degrees")
+    fun turn(power: Double, degrees: Double) {
+        if(!linearOpMode.isStopRequested) {
+            linearOpMode.telemetry.log().add("Turning the robot to $degrees degrees")
 
             shouldCorrectHeading = false
             targetHeading = degrees
@@ -274,16 +233,16 @@ open class MecanumRobot : Robot() {
 
             when {
                 targetHeadingDifference > 0.0 -> {
-                    setTurnPower(abs(power))
-                    while (headingDifferenceFromTarget(targetHeading) > 0.0 && !opMode.isStopRequested) {
-                        opMode.sleep(10)
+                    setTurnPower(Math.abs(power))
+                    while (headingDifferenceFromTarget(targetHeading) > 0.0 && !linearOpMode.isStopRequested) {
+                        linearOpMode.sleep(10)
                     }
                 }
 
                 targetHeadingDifference < 0.0 -> {
-                    setTurnPower(-abs(power))
-                    while (headingDifferenceFromTarget(targetHeading) < 0.0 && !opMode.isStopRequested) {
-                        opMode.sleep(10)
+                    setTurnPower(-Math.abs(power))
+                    while (headingDifferenceFromTarget(targetHeading) < 0.0 && !linearOpMode.isStopRequested) {
+                        linearOpMode.sleep(10)
                     }
                 }
             }
@@ -295,11 +254,18 @@ open class MecanumRobot : Robot() {
     }
 
     /**
-     * Waits until the gyro is calibrated.
+     * Calculates the shortest heading difference from a specified angle.
+     * @param target The target angle in degrees.
+     * @return The angle in degrees to turn in order to get to the specified angle.
      */
-    open fun waitForGyroCalibration() {
-        while (!imu.isGyroCalibrated && opMode.opModeIsActive()) {
-            opMode.sleep(10)
+    private fun headingDifferenceFromTarget(target: Double): Double {
+        val currentHeading = heading
+        val headingDifference = target - currentHeading
+        return when {
+            Math.abs(headingDifference) <= 180 -> headingDifference
+            target > currentHeading -> target - (currentHeading + 360)
+            target < currentHeading -> target - (currentHeading - 360)
+            else -> 0.0 // This shouldn't ever happen.
         }
     }
 
@@ -311,6 +277,7 @@ open class MecanumRobot : Robot() {
         val dt = timeSinceLastHeadingCorrection.milliseconds() / 1000
 
         val error = headingDifferenceFromTarget(targetHeading)
+        headingIntergral = error * dt
         val derivative = (previousTargetHeadingError - error) / dt
 
         val proportionalOutput = error * HEADING_PROPORTIONAL_GAIN
@@ -320,8 +287,4 @@ open class MecanumRobot : Robot() {
 
         return proportionalOutput + derivativeOutput
     }
-
-
 }
-
-*/

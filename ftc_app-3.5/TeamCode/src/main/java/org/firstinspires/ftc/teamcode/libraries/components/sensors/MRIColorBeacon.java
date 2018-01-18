@@ -9,7 +9,7 @@ This class provides functions to use the Color Beacon http://modernroboticsinc.c
 Support is available by emailing support@modernroboticsinc.com
 */
 
-package org.firstinspires.ftc.teamcode.libraries.sensors;
+package org.firstinspires.ftc.teamcode.libraries.components.sensors;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cAddr;

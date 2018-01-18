@@ -2,13 +2,6 @@ package org.firstinspires.ftc.teamcode.opmodes.competition
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import com.qualcomm.robotcore.util.ElapsedTime
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
-import org.firstinspires.ftc.teamcode.libraries.components.lift.RelicRecoveryRobotLift
-import org.firstinspires.ftc.teamcode.libraries.vision.JewelConfigurationDetector
-import org.firstinspires.ftc.teamcode.libraries.vision.PictographIdentifier
-import org.firstinspires.ftc.teamcode.robots.RelicRecoveryRobot
-import kotlin.concurrent.thread
 
 @Autonomous(name = "1: Blue Front", group = "Blue Manual Selection Autonomous")
 class BlueFrontAutonomous : LinearOpMode() {
@@ -19,7 +12,7 @@ class BlueFrontAutonomous : LinearOpMode() {
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {
-
+        /*
         // Setup the robot.
         val robot = RelicRecoveryRobot()
         robot.prepareForAutonomous(this)
@@ -29,12 +22,14 @@ class BlueFrontAutonomous : LinearOpMode() {
         waitForStart()
 
         // Start the robot.
-        robot.start()
+        robot.startAuto()
 
         // Grab the glyph.
         val glyphGrabbingThread = thread(true) {
             robot.closeGlyphGrabbers(1100)
-            robot.lift.setPosition(RelicRecoveryRobotLift.LiftPosition.SECOND_LEVEL)
+            thread(true) {
+                robot.lift.setPosition(RelicRecoveryRobotLift.LiftPosition.SECOND_LEVEL)
+            }
         }
 
         // Start the timer.
@@ -83,11 +78,12 @@ class BlueFrontAutonomous : LinearOpMode() {
             }
         }
 
-        // Approach the crypto box.
-        // robot.driveToDistanceFromForwardObject(RelicRecoveryRobot.CRYPTO_BOX_SPACING)
+        thread(true) {
+            robot.lift.setPosition(RelicRecoveryRobotLift.LiftPosition.FIRST_LEVEL, 0.3)
+        }
 
         // Determine the distance from the wall to the correct crypto box.
-        val rightWallDistance = when (pictograph) {
+        val leftWallDistance = when (pictograph) {
             RelicRecoveryVuMark.LEFT -> RelicRecoveryRobot.LEADING_FRONT_CRYPTO_BOX_DISTANCE
             RelicRecoveryVuMark.CENTER -> RelicRecoveryRobot.CENTER_FRONT_CRYPTO_BOX_DISTANCE
             RelicRecoveryVuMark.RIGHT -> RelicRecoveryRobot.TRAILING_FRONT_CRYPTO_BOX_DISTANCE
@@ -95,7 +91,8 @@ class BlueFrontAutonomous : LinearOpMode() {
         }
 
         // Drive to the correct crypto box.
-        robot.driveToDistanceFromLeftObject(rightWallDistance)
+        robot.timeDrive(750, -0.225)
+        robot.driveToDistanceFromLeftObject(leftWallDistance)
 
         // Place the glyph in the correct crypto box.
         robot.lift.drop()
@@ -104,24 +101,29 @@ class BlueFrontAutonomous : LinearOpMode() {
         robot.openGlyphGrabbers(250)
 
         // Back away from the crypto box.
-        robot.timeDrive(1250, -0.175)
+        robot.timeDrive(1250, -0.225)
         robot.liftGlyphDeployer(500)
-
-        // Turn towards the center glyphs.
-        robot.turn(0.50, -135.0)
 
         // Open the glyph grabbers.
         robot.releaseGlyphGrabbers()
         robot.retractGlyphDeployer()
 
+        // Turn towards the center glyphs.
+        if (pictograph != RelicRecoveryVuMark.RIGHT) {
+            robot.driveToDistanceFromLeftObject(RelicRecoveryRobot.TRAILING_FRONT_CRYPTO_BOX_DISTANCE, 1.00, false)
+        }
+
+        robot.turn(0.20, -135.0)
+
         // Drive to the glyphs in the center and grab one.
-        robot.timeDrive(2500)
+        sleep(1000)
+        robot.timeDrive(700, 1.0)
         robot.closeGlyphGrabbers(1250)
 
         // Drive back the crypto boxes.
-        robot.timeDrive(750, -0.25)
+        robot.timeDrive(650, -0.25)
         thread(true) { robot.lift.setPosition(RelicRecoveryRobotLift.LiftPosition.FIRST_LEVEL) }
-        robot.turn(0.75, 0.0)
+        robot.turn(0.35, 0.0)
         robot.timeDrive(500)
         robot.driveToDistanceFromForwardObject(RelicRecoveryRobot.CRYPTO_BOX_SPACING)
 
@@ -129,7 +131,12 @@ class BlueFrontAutonomous : LinearOpMode() {
         robot.driveToDistanceFromLeftObject(RelicRecoveryRobot.TRAILING_FRONT_CRYPTO_BOX_DISTANCE)
 
         // Place the glyph in the correct crypto box.
-        robot.lift.drop()
+        if (pictograph == RelicRecoveryVuMark.RIGHT) {
+            robot.lift.setPosition(RelicRecoveryRobotLift.LiftPosition.SECOND_LEVEL)
+        } else {
+            robot.lift.drop()
+        }
+
         robot.timeDrive(1000)
         robot.extendGlyphDeployer()
         robot.openGlyphGrabbers(250)
@@ -139,7 +146,8 @@ class BlueFrontAutonomous : LinearOpMode() {
         robot.liftGlyphDeployer(500)
 
         // Turn towards the center glyphs.
-        robot.turn(0.25, -135.0)
+        robot.turn(0.35, -135.0)
+        */
     }
 
 }

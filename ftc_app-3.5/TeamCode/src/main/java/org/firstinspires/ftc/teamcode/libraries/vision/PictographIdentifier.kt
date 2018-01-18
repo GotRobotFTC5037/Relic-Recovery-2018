@@ -23,7 +23,7 @@ class PictographIdentifier(hardwareMap: HardwareMap) {
                 "9I/7jMeKHn9lu6zhbnMlOi2D/iY14mOYUvQg1eMiHstkPzUY7IeBngPmCnEjOHWmv7" +
                 "XRboufL3JsCTrC8pnnEn5n3pZHei++FW9ovS6Aub89z//Yxq6OhPQ6+WaRNc3VSwFH/KJImw0"
 
-        val TIME_OUT_SECONDS = 3
+        val TIME_OUT_DURATION = 3000
     }
 
     private val vuforiaLocalizer: ClosableVuforiaLocalizer
@@ -60,7 +60,8 @@ class PictographIdentifier(hardwareMap: HardwareMap) {
         vuforiaLocalizer.close()
     }
 
-    private val identifiedPictograph: RelicRecoveryVuMark = RelicRecoveryVuMark.from(relicTemplate)
+    private val identifiedPictograph: RelicRecoveryVuMark
+        get() = RelicRecoveryVuMark.from(relicTemplate)
 
     /**
      * Waits until the pictograph is identified or it has been a specified number of seconds in an ElapsedTime.
@@ -68,13 +69,12 @@ class PictographIdentifier(hardwareMap: HardwareMap) {
      */
     fun waitForPictographIdentification(elapsedTime: ElapsedTime, linearOpMode: LinearOpMode): RelicRecoveryVuMark {
 
-        val startElapsedTime = ElapsedTime(ElapsedTime.Resolution.SECONDS)
-
         linearOpMode.telemetry.log().add("Waiting for pictograph identification.")
-        while (elapsedTime.seconds() < TIME_OUT_SECONDS && !linearOpMode.isStopRequested) {
+
+        while (elapsedTime.milliseconds() < TIME_OUT_DURATION && !linearOpMode.isStopRequested) {
             val pictograph = this.identifiedPictograph
 
-            if (startElapsedTime.milliseconds() >= 1500) {
+            if (elapsedTime.milliseconds() >= 1500) {
                 CameraDevice.getInstance().setFlashTorchMode(true)
             }
 
@@ -88,7 +88,7 @@ class PictographIdentifier(hardwareMap: HardwareMap) {
                 return pictograph
             }
 
-            linearOpMode.sleep(100)
+            linearOpMode.sleep(10)
         }
 
         linearOpMode.telemetry.log().add("Failed to identify the pictograph.")

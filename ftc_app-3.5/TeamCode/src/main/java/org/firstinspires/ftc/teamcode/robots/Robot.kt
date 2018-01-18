@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.robots
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.hardware.HardwareMap
 
 /**
@@ -10,11 +10,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap
  */
 abstract class Robot {
 
-    lateinit var linearOpMode: LinearOpMode
+    lateinit var opMode: OpMode
 
     /**
      * Sets up the hardware needed in order to use the robot.
-     * @param hardwareMap A HardwareMap object. Usually provided by linearOpMode.hardwareMap.
+     * @param hardwareMap A HardwareMap object. Usually provided by opMode.hardwareMap.
      */
     abstract fun setup(hardwareMap: HardwareMap)
 
