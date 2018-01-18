@@ -15,7 +15,7 @@ class RedFrontAutonomous : LinearOpMode() {
 
         /*
         // Setup the robot.
-        val robot = RelicRecoveryRobot()
+        val robot = Coda()
         robot.prepareForAutonomous(this)
         val pictographIdentifier = PictographIdentifier(hardwareMap)
 
@@ -85,10 +85,10 @@ class RedFrontAutonomous : LinearOpMode() {
 
         // Determine the distance from the wall to the correct crypto box.
         val rightWallDistance = when (pictograph) {
-            RelicRecoveryVuMark.LEFT -> RelicRecoveryRobot.TRAILING_FRONT_CRYPTO_BOX_DISTANCE
-            RelicRecoveryVuMark.CENTER -> RelicRecoveryRobot.CENTER_FRONT_CRYPTO_BOX_DISTANCE
-            RelicRecoveryVuMark.RIGHT -> RelicRecoveryRobot.LEADING_FRONT_CRYPTO_BOX_DISTANCE
-            RelicRecoveryVuMark.UNKNOWN -> RelicRecoveryRobot.LEADING_FRONT_CRYPTO_BOX_DISTANCE
+            RelicRecoveryVuMark.LEFT -> Coda.TRAILING_FRONT_CRYPTO_BOX_DISTANCE
+            RelicRecoveryVuMark.CENTER -> Coda.CENTER_FRONT_CRYPTO_BOX_DISTANCE
+            RelicRecoveryVuMark.RIGHT -> Coda.LEADING_FRONT_CRYPTO_BOX_DISTANCE
+            RelicRecoveryVuMark.UNKNOWN -> Coda.LEADING_FRONT_CRYPTO_BOX_DISTANCE
         }
 
         // Drive to the correct crypto box.
@@ -113,7 +113,7 @@ class RedFrontAutonomous : LinearOpMode() {
 
         // Turn towards the center glyphs.
         if (pictograph != RelicRecoveryVuMark.RIGHT) {
-            robot.driveToDistanceFromRightObject(RelicRecoveryRobot.TRAILING_FRONT_CRYPTO_BOX_DISTANCE, 1.00, false)
+            robot.driveToDistanceFromRightObject(Coda.TRAILING_FRONT_CRYPTO_BOX_DISTANCE, 1.00, false)
         }
 
         robot.turn(0.20, -45.0)
@@ -128,10 +128,10 @@ class RedFrontAutonomous : LinearOpMode() {
         thread(true) { robot.lift.setPosition(Lift.LiftPosition.FIRST_LEVEL) }
         robot.turn(0.35, 180.0)
         robot.timeDrive(500)
-        robot.driveToDistanceFromForwardObject(RelicRecoveryRobot.CRYPTO_BOX_SPACING)
+        robot.driveToDistanceFromForwardObject(Coda.CRYPTO_BOX_SPACING)
 
         // Line up with the center crypto box.
-        robot.driveToDistanceFromRightObject(RelicRecoveryRobot.TRAILING_FRONT_CRYPTO_BOX_DISTANCE)
+        robot.driveToDistanceFromRightObject(Coda.TRAILING_FRONT_CRYPTO_BOX_DISTANCE)
 
         // Place the glyph in the correct crypto box.
         if (pictograph == RelicRecoveryVuMark.LEFT) {

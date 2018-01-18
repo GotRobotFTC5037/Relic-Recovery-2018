@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.libraries.robot.drivetrains.MecanumDriveTr
 import org.firstinspires.ftc.teamcode.libraries.robot.sensors.RangeSensor
 import kotlin.math.abs
 
-class RelicRecoveryRobot(linearOpMode: LinearOpMode): Robot(linearOpMode) {
+class Coda(linearOpMode: LinearOpMode): Robot(linearOpMode) {
 
     companion object {
         private val LIFT = "lift"

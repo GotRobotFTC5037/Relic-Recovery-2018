@@ -3,13 +3,13 @@ package org.firstinspires.ftc.teamcode.game.opmodes
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.game.components.GlyphGrabber
-import org.firstinspires.ftc.teamcode.game.robots.RelicRecoveryRobot
+import org.firstinspires.ftc.teamcode.game.robots.Coda
 import java.lang.Math.pow
 import java.lang.Math.signum
 import kotlin.math.abs
 
 @TeleOp(name = "TeleOp")
-class RelicRecoveryTeleOp : LinearOpMode() {
+class CodaTeleOp : LinearOpMode() {
 
     companion object {
         val OPMODE_NAME = "TeleOp"
@@ -18,7 +18,7 @@ class RelicRecoveryTeleOp : LinearOpMode() {
     @Throws(InterruptedException::class)
     override fun runOpMode() {
 
-        val robot = RelicRecoveryRobot(this)
+        val robot = Coda(this)
         robot.setup()
         waitForStart()
 
