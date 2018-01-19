@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.game.opmodes
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
+import org.corningrobotics.enderbots.endercv.CameraViewDisplay
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
 import org.firstinspires.ftc.teamcode.game.components.GlyphGrabbers
 import org.firstinspires.ftc.teamcode.game.components.JewelStick
@@ -13,13 +15,11 @@ import org.firstinspires.ftc.teamcode.libraries.vision.PictographIdentifier
 import kotlin.concurrent.thread
 
 @Autonomous(name = "1: Blue Front", group = "Blue Manual Selection Autonomous")
-class BlueFrontAutonomous : RobotOpMode() {
+class BlueFrontAutonomous : LinearOpMode() {
 
     companion object {
         val OPMODE_NAME = "1: Blue Front"
     }
-
-    override val type = OpModeType.AUTONOMOUS
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {
@@ -30,6 +30,8 @@ class BlueFrontAutonomous : RobotOpMode() {
 
         // Wait for the opmode to start.
         waitForStart()
+
+        jewelConfigurationDetector.init(hardwareMap.appContext, CameraViewDisplay.getInstance())
 
         // Grab the glyph.
         val glyphGrabbingThread = thread(true) {
