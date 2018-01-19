@@ -148,7 +148,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorController.html#getMotorCurrentPosition-int-">getMotorCurrentPosition</a></span>(int&nbsp;motor)</code>
-<div class="block">Get the current motor position</div>
+<div class="block">Get the current motor state</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -172,7 +172,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorController.html#getMotorTargetPosition-int-">getMotorTargetPosition</a></span>(int&nbsp;motor)</code>
-<div class="block">Get the current motor target position</div>
+<div class="block">Get the current motor target state</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -210,8 +210,8 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorController.html#setMotorTargetPosition-int-int-">setMotorTargetPosition</a></span>(int&nbsp;motor,
-                      int&nbsp;position)</code>
-<div class="block">Set the motor target position.</div>
+                      int&nbsp;state)</code>
+<div class="block">Set the motor target state.</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
@@ -416,14 +416,14 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <li class="blockList">
 <h4>setMotorTargetPosition</h4>
 <pre>void&nbsp;setMotorTargetPosition(int&nbsp;motor,
-                            int&nbsp;position)</pre>
-<div class="block">Set the motor target position. This takes in an integer, which is not scaled.
+                            int&nbsp;state)</pre>
+<div class="block">Set the motor target state. This takes in an integer, which is not scaled.
 
- Motor power should be positive if using run to position</div>
+ Motor power should be positive if using run to state</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>motor</code> - port of motor</dd>
-<dd><code>position</code> - range from Integer.MIN_VALUE to Integer.MAX_VALUE</dd>
+<dd><code>state</code> - range from Integer.MIN_VALUE to Integer.MAX_VALUE</dd>
 </dl>
 </li>
 </ul>
@@ -434,7 +434,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <li class="blockList">
 <h4>getMotorTargetPosition</h4>
 <pre>int&nbsp;getMotorTargetPosition(int&nbsp;motor)</pre>
-<div class="block">Get the current motor target position</div>
+<div class="block">Get the current motor target state</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>motor</code> - port of motor</dd>
@@ -450,7 +450,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <li class="blockList">
 <h4>getMotorCurrentPosition</h4>
 <pre>int&nbsp;getMotorCurrentPosition(int&nbsp;motor)</pre>
-<div class="block">Get the current motor position</div>
+<div class="block">Get the current motor state</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>motor</code> - port of motor</dd>

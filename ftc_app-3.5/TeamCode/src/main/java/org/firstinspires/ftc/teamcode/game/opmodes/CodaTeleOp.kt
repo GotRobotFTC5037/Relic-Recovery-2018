@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.game.opmodes
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import org.firstinspires.ftc.teamcode.game.components.GlyphGrabber
+import org.firstinspires.ftc.teamcode.game.components.GlyphGrabbers
 import org.firstinspires.ftc.teamcode.game.robots.Coda
 import java.lang.Math.pow
 import java.lang.Math.signum
@@ -22,6 +22,8 @@ class CodaTeleOp : LinearOpMode() {
         robot.setup()
         waitForStart()
 
+        robot.driveTrain.startUpdatingDriveMotorPowers()
+
         while (opModeIsActive()) {
 
             // Gamepad 1: Movement
@@ -33,12 +35,12 @@ class CodaTeleOp : LinearOpMode() {
             val yPower = abs(pow(y, 3.0)) * signum(y)
             val zPower = abs(pow(z, 3.0)) * signum(z)
 
-            robot.mecanumDriveTrain.setDirection(xPower, yPower, zPower)
+            robot.driveTrain.setDirection(xPower, yPower, zPower)
 
             when {
-                gamepad1.x -> robot.mecanumDriveTrain.targetHeading = 90.0
-                gamepad1.a -> robot.mecanumDriveTrain.targetHeading = 0.0
-                gamepad1.b -> robot.mecanumDriveTrain.targetHeading = -90.0
+                gamepad1.x -> robot.driveTrain.targetHeading = 90.0
+                gamepad1.a -> robot.driveTrain.targetHeading = 0.0
+                gamepad1.b -> robot.driveTrain.targetHeading = -90.0
             }
 
             // Gamepad 2: Attachments
@@ -46,14 +48,14 @@ class CodaTeleOp : LinearOpMode() {
             robot.lift.manuallyMove(liftPower)
 
             when {
-                gamepad2.a -> robot.glyphGrabber.setGlyphGrabberPosition(GlyphGrabber.GlyphGrabberPosition.CLOSED)
-                gamepad2.y -> robot.glyphGrabber.setGlyphGrabberPosition(GlyphGrabber.GlyphGrabberPosition.RELEASE)
-                gamepad2.b -> robot.glyphGrabber.setGlyphGrabberPosition(GlyphGrabber.GlyphGrabberPosition.OPEN)
-                gamepad2.x -> robot.glyphGrabber.setGlyphGrabberPosition(GlyphGrabber.GlyphGrabberPosition.SMALL_OPEN)
+                gamepad2.a -> robot.glyphGrabbers.setGlyphGrabberState(GlyphGrabbers.GlyphGrabberState.CLOSED)
+                gamepad2.y -> robot.glyphGrabbers.setGlyphGrabberState(GlyphGrabbers.GlyphGrabberState.RELEASE)
+                gamepad2.b -> robot.glyphGrabbers.setGlyphGrabberState(GlyphGrabbers.GlyphGrabberState.OPEN)
+                gamepad2.x -> robot.glyphGrabbers.setGlyphGrabberState(GlyphGrabbers.GlyphGrabberState.SMALL_OPEN)
             }
         }
 
-        robot.mecanumDriveTrain.stopAllDriveMotors()
+        robot.driveTrain.stop()
     }
 
 }

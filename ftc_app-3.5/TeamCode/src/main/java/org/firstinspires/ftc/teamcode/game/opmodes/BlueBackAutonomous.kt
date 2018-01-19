@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.game.opmodes
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 
 @Autonomous(name = "2: Blue Back", group = "Blue Manual Selection Autonomous")
+@Disabled
 class BlueBackAutonomous : LinearOpMode() {
 
     companion object {

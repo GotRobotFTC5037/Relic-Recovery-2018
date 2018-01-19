@@ -368,7 +368,7 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/Gamepad.html#atRest--">atRest()</a></span> - Method in class com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/Gamepad.html" title="class in com.qualcomm.robotcore.hardware">Gamepad</a></dt>
 <dd>
-<div class="block">Are all analog sticks and triggers in their rest position?</div>
+<div class="block">Are all analog sticks and triggers in their rest state?</div>
 </dd>
 <dt><a href="com/qualcomm/robotcore/eventloop/opmode/Autonomous.html" title="annotation in com.qualcomm.robotcore.eventloop.opmode"><span class="typeNameLink">Autonomous</span></a> - Annotation Type in <a href="com/qualcomm/robotcore/eventloop/opmode/package-summary.html">com.qualcomm.robotcore.eventloop.opmode</a></dt>
 <dd>
@@ -2532,7 +2532,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotorController.html#getMotorCurrentPosition-int-">getMotorCurrentPosition(int)</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotorController.html" title="interface in com.qualcomm.robotcore.hardware">DcMotorController</a></dt>
 <dd>
-<div class="block">Get the current motor position</div>
+<div class="block">Get the current motor state</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotorController.html#getMotorMode-int-">getMotorMode(int)</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotorController.html" title="interface in com.qualcomm.robotcore.hardware">DcMotorController</a></dt>
 <dd>
@@ -2548,7 +2548,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotorController.html#getMotorTargetPosition-int-">getMotorTargetPosition(int)</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotorController.html" title="interface in com.qualcomm.robotcore.hardware">DcMotorController</a></dt>
 <dd>
-<div class="block">Get the current motor target position</div>
+<div class="block">Get the current motor target state</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotor.html#getMotorType--">getMotorType()</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotor.html" title="interface in com.qualcomm.robotcore.hardware">DcMotor</a></dt>
 <dd>
@@ -2714,11 +2714,11 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/Servo.html#getPosition--">getPosition()</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/Servo.html" title="interface in com.qualcomm.robotcore.hardware">Servo</a></dt>
 <dd>
-<div class="block">Returns the position to which the servo was last commanded to move.</div>
+<div class="block">Returns the state to which the servo was last commanded to move.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/ServoImpl.html#getPosition--">getPosition()</a></span> - Method in class com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/ServoImpl.html" title="class in com.qualcomm.robotcore.hardware">ServoImpl</a></dt>
 <dd>
-<div class="block">Returns the position to which the servo was last commanded, or Double.NaN if that is
+<div class="block">Returns the state to which the servo was last commanded, or Double.NaN if that is
  unavailable.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/CRServoImpl.html#getPower--">getPower()</a></span> - Method in class com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/CRServoImpl.html" title="class in com.qualcomm.robotcore.hardware">CRServoImpl</a></dt>
@@ -2901,7 +2901,7 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/ServoController.html#getServoPosition-int-">getServoPosition(int)</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/ServoController.html" title="interface in com.qualcomm.robotcore.hardware">ServoController</a></dt>
 <dd>
-<div class="block">Get the position of a servo at a given channel</div>
+<div class="block">Get the state of a servo at a given channel</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/ServoControllerEx.html#getServoPwmRange-int-">getServoPwmRange(int)</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/ServoControllerEx.html" title="interface in com.qualcomm.robotcore.hardware">ServoControllerEx</a></dt>
 <dd>
@@ -2958,11 +2958,11 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotor.html#getTargetPosition--">getTargetPosition()</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotor.html" title="interface in com.qualcomm.robotcore.hardware">DcMotor</a></dt>
 <dd>
-<div class="block">Returns the current target encoder position for this motor.</div>
+<div class="block">Returns the current target encoder state for this motor.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotorImpl.html#getTargetPosition--">getTargetPosition()</a></span> - Method in class com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotorImpl.html" title="class in com.qualcomm.robotcore.hardware">DcMotorImpl</a></dt>
 <dd>
-<div class="block">Get the current motor target position.</div>
+<div class="block">Get the current motor target state.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotorEx.html#getTargetPositionTolerance--">getTargetPositionTolerance()</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotorEx.html" title="interface in com.qualcomm.robotcore.hardware">DcMotorEx</a></dt>
 <dd>
@@ -3709,7 +3709,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotor.html#isBusy--">isBusy()</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotor.html" title="interface in com.qualcomm.robotcore.hardware">DcMotor</a></dt>
 <dd>
-<div class="block">Returns true if the motor is currently advancing or retreating to a target position.</div>
+<div class="block">Returns true if the motor is currently advancing or retreating to a target state.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotorController.html#isBusy-int-">isBusy(int)</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotorController.html" title="interface in com.qualcomm.robotcore.hardware">DcMotorController</a></dt>
 <dd>
@@ -4199,7 +4199,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/Servo.html#MAX_POSITION">MAX_POSITION</a></span> - Static variable in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/Servo.html" title="interface in com.qualcomm.robotcore.hardware">Servo</a></dt>
 <dd>
-<div class="block">The maximum allowable position to which a servo can be moved</div>
+<div class="block">The maximum allowable state to which a servo can be moved</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/I2cDeviceSynch.ReadWindow.html#mayInitiateSwitchToReadMode--">mayInitiateSwitchToReadMode()</a></span> - Method in class com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/I2cDeviceSynch.ReadWindow.html" title="class in com.qualcomm.robotcore.hardware">I2cDeviceSynch.ReadWindow</a></dt>
 <dd>
@@ -4208,7 +4208,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="org/firstinspires/ftc/robotcore/external/navigation/NavUtil.html#meanIntegrate-org.firstinspires.ftc.robotcore.external.navigation.Velocity-org.firstinspires.ftc.robotcore.external.navigation.Velocity-">meanIntegrate(Velocity, Velocity)</a></span> - Static method in class org.firstinspires.ftc.robotcore.external.navigation.<a href="org/firstinspires/ftc/robotcore/external/navigation/NavUtil.html" title="class in org.firstinspires.ftc.robotcore.external.navigation">NavUtil</a></dt>
 <dd>
-<div class="block">Integrate between two velocities to determine a change in position using an assumption
+<div class="block">Integrate between two velocities to determine a change in state using an assumption
  that the mean of the velocities has been acting the entire interval.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/firstinspires/ftc/robotcore/external/navigation/NavUtil.html#meanIntegrate-org.firstinspires.ftc.robotcore.external.navigation.Acceleration-org.firstinspires.ftc.robotcore.external.navigation.Acceleration-">meanIntegrate(Acceleration, Acceleration)</a></span> - Static method in class org.firstinspires.ftc.robotcore.external.navigation.<a href="org/firstinspires/ftc/robotcore/external/navigation/NavUtil.html" title="class in org.firstinspires.ftc.robotcore.external.navigation">NavUtil</a></dt>
@@ -4236,7 +4236,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/Servo.html#MIN_POSITION">MIN_POSITION</a></span> - Static variable in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/Servo.html" title="interface in com.qualcomm.robotcore.hardware">Servo</a></dt>
 <dd>
-<div class="block">The minimum allowable position to which a servo can be moved</div>
+<div class="block">The minimum allowable state to which a servo can be moved</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/firstinspires/ftc/robotcore/external/navigation/NavUtil.html#minus-org.firstinspires.ftc.robotcore.external.navigation.Position-org.firstinspires.ftc.robotcore.external.navigation.Position-">minus(Position, Position)</a></span> - Static method in class org.firstinspires.ftc.robotcore.external.navigation.<a href="org/firstinspires/ftc/robotcore/external/navigation/NavUtil.html" title="class in org.firstinspires.ftc.robotcore.external.navigation">NavUtil</a></dt>
 <dd>&nbsp;</dd>
@@ -5533,7 +5533,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/ServoImpl.html#scaleRange-double-double-">scaleRange(double, double)</a></span> - Method in class com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/ServoImpl.html" title="class in com.qualcomm.robotcore.hardware">ServoImpl</a></dt>
 <dd>
-<div class="block">Automatically scales the position of the servo.</div>
+<div class="block">Automatically scales the state of the servo.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DeviceManager.html#scanForUsbDevices--">scanForUsbDevices()</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DeviceManager.html" title="interface in com.qualcomm.robotcore.hardware">DeviceManager</a></dt>
 <dd>
@@ -5946,11 +5946,11 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotorController.html#setMotorTargetPosition-int-int-">setMotorTargetPosition(int, int)</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotorController.html" title="interface in com.qualcomm.robotcore.hardware">DcMotorController</a></dt>
 <dd>
-<div class="block">Set the motor target position.</div>
+<div class="block">Set the motor target state.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotorControllerEx.html#setMotorTargetPosition-int-int-int-">setMotorTargetPosition(int, int, int)</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotorControllerEx.html" title="interface in com.qualcomm.robotcore.hardware">DcMotorControllerEx</a></dt>
 <dd>
-<div class="block">Sets the target position and tolerance for a 'run to position' operation.</div>
+<div class="block">Sets the target state and tolerance for a 'run to state' operation.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotor.html#setMotorType-MotorConfigurationType-">setMotorType(MotorConfigurationType)</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotor.html" title="interface in com.qualcomm.robotcore.hardware">DcMotor</a></dt>
 <dd>
@@ -6015,12 +6015,12 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/Servo.html#setPosition-double-">setPosition(double)</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/Servo.html" title="interface in com.qualcomm.robotcore.hardware">Servo</a></dt>
 <dd>
-<div class="block">Sets the current position of the servo, expressed as a fraction of its available
+<div class="block">Sets the current state of the servo, expressed as a fraction of its available
  range.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/ServoImpl.html#setPosition-double-">setPosition(double)</a></span> - Method in class com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/ServoImpl.html" title="class in com.qualcomm.robotcore.hardware">ServoImpl</a></dt>
 <dd>
-<div class="block">Commands the servo to move to a designated position.</div>
+<div class="block">Commands the servo to move to a designated state.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/CRServoImpl.html#setPower-double-">setPower(double)</a></span> - Method in class com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/CRServoImpl.html" title="class in com.qualcomm.robotcore.hardware">CRServoImpl</a></dt>
 <dd>&nbsp;</dd>
@@ -6122,7 +6122,7 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/ServoController.html#setServoPosition-int-double-">setServoPosition(int, double)</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/ServoController.html" title="interface in com.qualcomm.robotcore.hardware">ServoController</a></dt>
 <dd>
-<div class="block">Set the position of a servo at the given channel</div>
+<div class="block">Set the state of a servo at the given channel</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/ServoControllerEx.html#setServoPwmDisable-int-">setServoPwmDisable(int)</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/ServoControllerEx.html" title="interface in com.qualcomm.robotcore.hardware">ServoControllerEx</a></dt>
 <dd>
@@ -6154,12 +6154,12 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotor.html#setTargetPosition-int-">setTargetPosition(int)</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotor.html" title="interface in com.qualcomm.robotcore.hardware">DcMotor</a></dt>
 <dd>
-<div class="block">Sets the desired encoder target position to which the motor should advance or retreat
+<div class="block">Sets the desired encoder target state to which the motor should advance or retreat
  and then actively hold thereat.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotorImpl.html#setTargetPosition-int-">setTargetPosition(int)</a></span> - Method in class com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotorImpl.html" title="class in com.qualcomm.robotcore.hardware">DcMotorImpl</a></dt>
 <dd>
-<div class="block">Set the motor target position, using an integer.</div>
+<div class="block">Set the motor target state, using an integer.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/qualcomm/robotcore/hardware/DcMotorEx.html#setTargetPositionTolerance-int-">setTargetPositionTolerance(int)</a></span> - Method in interface com.qualcomm.robotcore.hardware.<a href="com/qualcomm/robotcore/hardware/DcMotorEx.html" title="interface in com.qualcomm.robotcore.hardware">DcMotorEx</a></dt>
 <dd>
@@ -7302,7 +7302,7 @@ the order they are declared.</div>
 </dd>
 <dt><a href="org/firstinspires/ftc/robotcore/external/navigation/VuforiaLocalizer.html" title="interface in org.firstinspires.ftc.robotcore.external.navigation"><span class="typeNameLink">VuforiaLocalizer</span></a> - Interface in <a href="org/firstinspires/ftc/robotcore/external/navigation/package-summary.html">org.firstinspires.ftc.robotcore.external.navigation</a></dt>
 <dd>
-<div class="block">Robot "localization" denotes a robot's ability to establish its own position and
+<div class="block">Robot "localization" denotes a robot's ability to establish its own state and
  orientation within its frame of reference.</div>
 </dd>
 <dt><a href="org/firstinspires/ftc/robotcore/external/navigation/VuforiaLocalizer.CameraDirection.html" title="enum in org.firstinspires.ftc.robotcore.external.navigation"><span class="typeNameLink">VuforiaLocalizer.CameraDirection</span></a> - Enum in <a href="org/firstinspires/ftc/robotcore/external/navigation/package-summary.html">org.firstinspires.ftc.robotcore.external.navigation</a></dt>

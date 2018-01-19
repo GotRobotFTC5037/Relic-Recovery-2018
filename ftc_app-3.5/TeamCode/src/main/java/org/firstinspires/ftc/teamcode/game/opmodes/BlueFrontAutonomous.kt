@@ -1,32 +1,39 @@
 package org.firstinspires.ftc.teamcode.game.opmodes
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import com.qualcomm.robotcore.util.ElapsedTime
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
+import org.firstinspires.ftc.teamcode.game.components.GlyphGrabbers
+import org.firstinspires.ftc.teamcode.game.components.JewelStick
+import org.firstinspires.ftc.teamcode.game.components.Lift
+import org.firstinspires.ftc.teamcode.game.robots.Coda
+import org.firstinspires.ftc.teamcode.libraries.RobotOpMode
+import org.firstinspires.ftc.teamcode.libraries.vision.JewelConfigurationDetector
+import org.firstinspires.ftc.teamcode.libraries.vision.PictographIdentifier
+import kotlin.concurrent.thread
 
 @Autonomous(name = "1: Blue Front", group = "Blue Manual Selection Autonomous")
-class BlueFrontAutonomous : LinearOpMode() {
+class BlueFrontAutonomous : RobotOpMode() {
 
     companion object {
         val OPMODE_NAME = "1: Blue Front"
     }
 
+    override val type = OpModeType.AUTONOMOUS
+
     @Throws(InterruptedException::class)
     override fun runOpMode() {
-        /*
         // Setup the robot.
-        val robot = Coda()
-        robot.prepareForAutonomous(this)
+        val robot = Coda(this)
+        val jewelConfigurationDetector = JewelConfigurationDetector()
         val pictographIdentifier = PictographIdentifier(hardwareMap)
 
         // Wait for the opmode to start.
         waitForStart()
 
-        // Start the robot.
-        robot.startAuto()
-
         // Grab the glyph.
         val glyphGrabbingThread = thread(true) {
-            robot.closeGlyphGrabbers(1100)
+            robot.glyphGrabbers.setGlyphGrabberState(GlyphGrabbers.GlyphGrabberState.CLOSED, 1100)
             thread(true) {
                 robot.lift.setPosition(Lift.LiftPosition.SECOND_LEVEL)
             }
@@ -36,12 +43,12 @@ class BlueFrontAutonomous : LinearOpMode() {
         val elapsedTime = ElapsedTime(ElapsedTime.Resolution.MILLISECONDS)
 
         // Find the position of the jewels.
-        val jewelPosition = robot.jewelConfigurationDetector.waitForJewelIdentification(elapsedTime, this)
-        robot.jewelConfigurationDetector.disable()
+        val jewelPosition = jewelConfigurationDetector.waitForJewelIdentification(elapsedTime, this)
+        jewelConfigurationDetector.disable()
 
         // Lower the jewel stick as soon as we determine the jewel configuration.
         if (jewelPosition != JewelConfigurationDetector.JewelConfiguration.UNKNOWN) {
-            robot.lowerJewelStick(0)
+            robot.jewelStick.setPosition(JewelStick.Position.DOWN)
         }
 
         // Read the pictograph.
@@ -59,22 +66,22 @@ class BlueFrontAutonomous : LinearOpMode() {
         // Knock off the correct jewel.
         when (jewelPosition) {
             JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
-                robot.timeDrive(1000, -0.175)
-                robot.raiseJewelStick()
+                robot.driveTrain.timeDrive(1000, -0.175)
+                robot.jewelStick.setPosition(JewelStick.Position.UP)
                 robot.driveOnBalancingStone()
                 robot.driveOffBalancingStone(0.175)
-                robot.powerBreak()
+                //robot.driveTrain.powerBreak()
             }
 
             JewelConfigurationDetector.JewelConfiguration.BLUE_RED -> {
                 robot.driveOffBalancingStone(0.175)
-                robot.powerBreak()
-                robot.raiseJewelStick()
+                //robot.driveTrain.powerBreak()
+                robot.jewelStick.setPosition(JewelStick.Position.UP)
             }
 
             JewelConfigurationDetector.JewelConfiguration.UNKNOWN -> {
                 robot.driveOffBalancingStone(0.175)
-                robot.powerBreak()
+                //robot.driveTrain.powerBreak()
             }
         }
 
@@ -91,44 +98,39 @@ class BlueFrontAutonomous : LinearOpMode() {
         }
 
         // Drive to the correct crypto box.
-        robot.timeDrive(750, -0.225)
-        robot.driveToDistanceFromLeftObject(leftWallDistance)
+        robot.driveTrain.timeDrive(750, -0.225)
+        robot.driveToDistanceFromObject(Coda.ObjectDirection.LEFT, leftWallDistance)
 
         // Place the glyph in the correct crypto box.
         robot.lift.drop()
-        robot.timeDrive(1000)
-        robot.extendGlyphDeployer()
-        robot.openGlyphGrabbers(250)
+        robot.driveTrain.timeDrive(1000)
+        robot.glyphGrabbers.setGlyphGrabberState(GlyphGrabbers.GlyphGrabberState.RELEASE, 250)
 
         // Back away from the crypto box.
-        robot.timeDrive(1250, -0.225)
-        robot.liftGlyphDeployer(500)
-
-        // Open the glyph grabbers.
-        robot.releaseGlyphGrabbers()
-        robot.retractGlyphDeployer()
+        robot.driveTrain.timeDrive(1250, -0.225)
+        robot.glyphGrabbers.setGlyphGrabberState(GlyphGrabbers.GlyphGrabberState.OPEN)
 
         // Turn towards the center glyphs.
         if (pictograph != RelicRecoveryVuMark.RIGHT) {
-            robot.driveToDistanceFromLeftObject(Coda.TRAILING_FRONT_CRYPTO_BOX_DISTANCE, 1.00, false)
+            robot.driveToDistanceFromObject(Coda.ObjectDirection.LEFT, Coda.TRAILING_FRONT_CRYPTO_BOX_DISTANCE, 1.0, false)
         }
 
-        robot.turn(0.20, -135.0)
+        robot.driveTrain.turnTo(0.20, -135.0)
 
         // Drive to the glyphs in the center and grab one.
         sleep(1000)
-        robot.timeDrive(700, 1.0)
-        robot.closeGlyphGrabbers(1250)
+        robot.driveTrain.timeDrive(700, 1.0)
+        robot.glyphGrabbers.setGlyphGrabberState(GlyphGrabbers.GlyphGrabberState.CLOSED)
 
         // Drive back the crypto boxes.
-        robot.timeDrive(650, -0.25)
+        robot.driveTrain.timeDrive(650, -0.25)
         thread(true) { robot.lift.setPosition(Lift.LiftPosition.FIRST_LEVEL) }
-        robot.turn(0.35, 0.0)
-        robot.timeDrive(500)
-        robot.driveToDistanceFromForwardObject(Coda.CRYPTO_BOX_SPACING)
+        robot.driveTrain.turnTo(0.35, 0.0)
+        robot.driveTrain.timeDrive(500)
+        //robot.driveToDistanceFromForwardObject(Coda.CRYPTO_BOX_SPACING)
 
         // Line up with the center crypto box.
-        robot.driveToDistanceFromLeftObject(Coda.TRAILING_FRONT_CRYPTO_BOX_DISTANCE)
+        //robot.driveToDistanceFromLeftObject(Coda.TRAILING_FRONT_CRYPTO_BOX_DISTANCE)
 
         // Place the glyph in the correct crypto box.
         if (pictograph == RelicRecoveryVuMark.RIGHT) {
@@ -137,17 +139,15 @@ class BlueFrontAutonomous : LinearOpMode() {
             robot.lift.drop()
         }
 
-        robot.timeDrive(1000)
-        robot.extendGlyphDeployer()
-        robot.openGlyphGrabbers(250)
+        robot.driveTrain.timeDrive(1000)
+        robot.glyphGrabbers.setGlyphGrabberState(GlyphGrabbers.GlyphGrabberState.OPEN, 200)
 
         // Back away from the crypto box.
-        robot.timeDrive(450, -0.50)
-        robot.liftGlyphDeployer(500)
+        robot.driveTrain.timeDrive(450, -0.50)
+        //robot.liftGlyphDeployer(500)
 
         // Turn towards the center glyphs.
-        robot.turn(0.35, -135.0)
-        */
+        robot.driveTrain.turnTo(0.35, -135.0)
     }
 
 }

@@ -15,39 +15,41 @@ import kotlin.properties.Delegates
 class MecanumDriveTrain(linearOpMode: LinearOpMode) : RobotDriveTrain(linearOpMode) {
 
     companion object {
-        val MINIMUM_DRIVE_POWER = 0.15
-        val HEADING_PROPORTIONAL_GAIN = 0.04000
-        val HEADING_INTEGRAL_GAIN     = 0.04000
-        val HEADING_DERIVATIVE_GAIN   = 0.00075
+        const val MINIMUM_DRIVE_POWER = 0.15
+        const val HEADING_PROPORTIONAL_GAIN = 0.025
+        const val HEADING_INTEGRAL_GAIN     = 0.12
+        const val HEADING_DERIVATIVE_GAIN   = 0.0
     }
 
+    // Motors & Gyro
     private var frontLeftMotor: DcMotor
     private var frontRightMotor: DcMotor
     private var backLeftMotor: DcMotor
     private var backRightMotor: DcMotor
     private var imu: BNO055IMU
 
+    // Motor Powers
     private var frontLeftMotorPower = 0.0
     private var frontRightMotorPower = 0.0
     private var backLeftMotorPower = 0.0
     private var backRightMotorPower = 0.0
 
+    // Heading Correction, Turning & PID
     var targetHeading = 0.0
     private var previousTargetHeadingError = 0.0
+    private var headingIntegral = 0.0
     private var timeSinceLastHeadingCorrection = ElapsedTime(ElapsedTime.Resolution.MILLISECONDS)
-    private var headingIntergral = 0.0
-
     var shouldCorrectHeading: Boolean by Delegates.observable(true) { _, _, _ ->
         timeSinceLastHeadingCorrection.reset()
     }
 
-    val heading: Double
+    private val heading: Double
         get() {
             val orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
             return orientation.firstAngle.toDouble()
         }
 
-    val roll: Double
+    private val roll: Double
         get() {
             val orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
             return -orientation.secondAngle.toDouble()
@@ -111,14 +113,10 @@ class MecanumDriveTrain(linearOpMode: LinearOpMode) : RobotDriveTrain(linearOpMo
      * Begins the thread that updates the power of the motors.
      */
     fun startUpdatingDriveMotorPowers() {
-        thread(start = true) {
 
+        thread(start = true) {
             while(!linearOpMode.isStopRequested) {
-                val headingCorrection = if(shouldCorrectHeading) {
-                    headingCorrectionPower()
-                } else {
-                    0.0
-                }
+                val headingCorrection = if(shouldCorrectHeading) headingCorrectionPower() else 0.0
 
                 if(Math.abs(frontLeftMotorPower) < MINIMUM_DRIVE_POWER && frontLeftMotorPower != 0.0)
                     frontLeftMotor.power = MINIMUM_DRIVE_POWER * Math.signum(frontLeftMotorPower)
@@ -143,6 +141,7 @@ class MecanumDriveTrain(linearOpMode: LinearOpMode) : RobotDriveTrain(linearOpMo
                 linearOpMode.sleep(10)
             }
         }
+
     }
 
 
@@ -150,7 +149,7 @@ class MecanumDriveTrain(linearOpMode: LinearOpMode) : RobotDriveTrain(linearOpMo
      * Sets the power that the robot should drive forward or backwards.
      * @param power The power that the robot should drive at.
      */
-    fun setDrivePower(power: Double) {
+    override fun setDrivePower(power: Double) {
         frontLeftMotorPower = power
         frontRightMotorPower = power
         backLeftMotorPower = power
@@ -161,7 +160,7 @@ class MecanumDriveTrain(linearOpMode: LinearOpMode) : RobotDriveTrain(linearOpMo
      * Sets the power that the robot should turn.
      * @param power The power that the robot should turn at.
      */
-    fun setTurnPower(power: Double) {
+    override fun setTurnPower(power: Double) {
         frontLeftMotorPower = -power
         frontRightMotorPower = power
         backLeftMotorPower = -power
@@ -183,7 +182,7 @@ class MecanumDriveTrain(linearOpMode: LinearOpMode) : RobotDriveTrain(linearOpMo
      * Sets the power of the drive motors to 0. This does not stop the robot from correcting with
      * gyro correction. Set shouldCorrectHeading to false to stop gyro correction.
      */
-    fun stopAllDriveMotors() {
+    override fun stop() {
         frontLeftMotorPower = 0.0
         frontRightMotorPower = 0.0
         backLeftMotorPower = 0.0
@@ -219,8 +218,8 @@ class MecanumDriveTrain(linearOpMode: LinearOpMode) : RobotDriveTrain(linearOpMo
      * @param power The power that the robot should turn at.
      * @param degrees the degrees the robot should move at.
      */
-    @Synchronized
-    fun turn(power: Double, degrees: Double) {
+    fun turnTo(power: Double, degrees: Double) {
+
         if(!linearOpMode.isStopRequested) {
             linearOpMode.telemetry.log().add("Turning the robot to $degrees degrees")
 
@@ -248,7 +247,7 @@ class MecanumDriveTrain(linearOpMode: LinearOpMode) : RobotDriveTrain(linearOpMo
             shouldCorrectHeading = true
         }
 
-        stopAllDriveMotors()
+        stop()
     }
 
     /**
@@ -275,11 +274,11 @@ class MecanumDriveTrain(linearOpMode: LinearOpMode) : RobotDriveTrain(linearOpMo
         val dt = timeSinceLastHeadingCorrection.milliseconds() / 1000
 
         val error = headingDifferenceFromTarget(targetHeading)
-        headingIntergral += error * dt
+        headingIntegral += error * dt
         val derivative = (error - previousTargetHeadingError) / dt
 
         val proportionalOutput = error * HEADING_PROPORTIONAL_GAIN
-        val integralOutput = headingIntergral * HEADING_INTEGRAL_GAIN
+        val integralOutput = headingIntegral * HEADING_INTEGRAL_GAIN
         val derivativeOutput = derivative * HEADING_DERIVATIVE_GAIN
         val output = proportionalOutput + integralOutput + derivativeOutput
 

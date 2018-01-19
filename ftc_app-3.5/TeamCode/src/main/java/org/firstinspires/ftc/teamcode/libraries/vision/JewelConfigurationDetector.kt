@@ -64,7 +64,7 @@ class JewelConfigurationDetector : OpenCVPipeline() {
     /**
      * Waits for the jewels to be identified until 5 seconds elapse.
      * @param elapsedTime The elapsed time instance containing the start time of the opmode.
-     * @param linearOpMode The instance of LinearOpMode that is running.
+     * @param linearOpMode The instance of RobotOpMode that is running.
      */
     fun waitForJewelIdentification(elapsedTime: ElapsedTime, linearOpMode: LinearOpMode): JewelConfiguration {
 
