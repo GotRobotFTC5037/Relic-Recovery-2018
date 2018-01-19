@@ -17,8 +17,8 @@ class MecanumDriveTrain(linearOpMode: LinearOpMode) : RobotDriveTrain(linearOpMo
     companion object {
         const val MINIMUM_DRIVE_POWER = 0.15
         const val HEADING_PROPORTIONAL_GAIN = 0.025
-        const val HEADING_INTEGRAL_GAIN     = 0.12
-        const val HEADING_DERIVATIVE_GAIN   = 0.0
+        const val HEADING_INTEGRAL_GAIN     = 0.04
+        const val HEADING_DERIVATIVE_GAIN   = 0.00015
     }
 
     // Motors & Gyro
@@ -275,7 +275,7 @@ class MecanumDriveTrain(linearOpMode: LinearOpMode) : RobotDriveTrain(linearOpMo
 
         val error = headingDifferenceFromTarget(targetHeading)
         headingIntegral += error * dt
-        val derivative = (error - previousTargetHeadingError) / dt
+        val derivative = (previousTargetHeadingError - error) / dt
 
         val proportionalOutput = error * HEADING_PROPORTIONAL_GAIN
         val integralOutput = headingIntegral * HEADING_INTEGRAL_GAIN
@@ -285,6 +285,7 @@ class MecanumDriveTrain(linearOpMode: LinearOpMode) : RobotDriveTrain(linearOpMo
         linearOpMode.telemetry.addLine("Proportional: $proportionalOutput")
         linearOpMode.telemetry.addLine("Integral: $integralOutput")
         linearOpMode.telemetry.addLine("Derivative: $derivativeOutput")
+        linearOpMode.telemetry.addLine()
         linearOpMode.telemetry.addLine("Output: $output")
         linearOpMode.telemetry.update()
 
