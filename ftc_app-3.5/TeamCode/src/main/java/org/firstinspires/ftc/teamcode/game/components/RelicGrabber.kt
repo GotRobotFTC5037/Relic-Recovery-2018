@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.libraries.robot.attachments.RobotAttachment
-import java.text.FieldPosition
 
 class RelicGrabber(linearOpMode: LinearOpMode) : RobotAttachment(linearOpMode) {
 
@@ -33,5 +32,5 @@ class RelicGrabber(linearOpMode: LinearOpMode) : RobotAttachment(linearOpMode) {
     fun setCamPower(power: Double) {
         cam.power = power
     }
-    
+
 }
