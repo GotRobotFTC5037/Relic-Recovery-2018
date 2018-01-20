@@ -8,9 +8,15 @@ import org.firstinspires.ftc.teamcode.libraries.robot.Robot
  * Created by Andrew on 1/19/18.
  */
 class TestBedBot(linearOpMode: LinearOpMode): Robot(linearOpMode) {
-    fun setup() {
-        this.addComponent(RelicGrabber(linearOpMode), "QuarterNote")
+
+    companion object {
+        private const val RELIC_GRABBER = "relic_grabber"
     }
+
+    fun setup() {
+        this.addComponent(RelicGrabber(linearOpMode), RELIC_GRABBER)
+    }
+
     val relicGrabber: RelicGrabber
-    get() = attachments["QuarterNote"] as RelicGrabber
+        get() = attachments[RELIC_GRABBER] as RelicGrabber
 }

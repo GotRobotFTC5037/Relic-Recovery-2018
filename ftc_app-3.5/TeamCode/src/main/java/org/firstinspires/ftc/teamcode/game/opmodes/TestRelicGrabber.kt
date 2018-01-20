@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.game.robots.TestBedBot
 class TestRelicGrabber: LinearOpMode() {
     override fun runOpMode() {
         val robot = TestBedBot(this)
+        robot.setup()
         waitForStart()
         while (opModeIsActive()) {
             robot.relicGrabber.setWinchPower(gamepad1.left_stick_y.toDouble())
