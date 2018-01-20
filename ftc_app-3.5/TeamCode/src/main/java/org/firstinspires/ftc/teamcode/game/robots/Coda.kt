@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.I2cAddr
 import org.firstinspires.ftc.teamcode.game.components.GlyphGrabber
 import org.firstinspires.ftc.teamcode.game.components.JewelStick
 import org.firstinspires.ftc.teamcode.game.components.Lift
+import org.firstinspires.ftc.teamcode.game.components.RelicGrabber
 import org.firstinspires.ftc.teamcode.libraries.robot.Robot
 import org.firstinspires.ftc.teamcode.libraries.robot.drivetrains.MecanumDriveTrain
 import org.firstinspires.ftc.teamcode.libraries.robot.sensors.RangeSensor
@@ -16,6 +17,7 @@ class Coda(linearOpMode: LinearOpMode): Robot(linearOpMode) {
         private val LIFT = "lift"
         private val GLYPH_GRABBER = "glyph_grabber"
         private val JEWEL_STICK = "jewel_stick"
+        private val RELIC_GRABBER = "relic_grabber"
         private val FRONT_LEFT_RANGE_SENSOR = "front_left_range_sensor"
         private val FRONT_RIGHT_RANGE_SENSOR = "front_right_range_sensor"
         private val LEFT_RANGE_SENSOR = "left range sensor"
@@ -48,6 +50,7 @@ class Coda(linearOpMode: LinearOpMode): Robot(linearOpMode) {
         this.addComponent(Lift(linearOpMode), LIFT)
         this.addComponent(GlyphGrabber(linearOpMode), GLYPH_GRABBER)
         this.addComponent(JewelStick(linearOpMode), JEWEL_STICK)
+        this.addComponent(RelicGrabber(linearOpMode), RELIC_GRABBER)
 
         this.addComponent(RangeSensor(linearOpMode, "front left range sensor"), FRONT_LEFT_RANGE_SENSOR)
         this.addComponent(RangeSensor(linearOpMode, "front right range sensor"), FRONT_RIGHT_RANGE_SENSOR)
