@@ -19,6 +19,13 @@ class EncoderMecanumDriveTrain(linearOpMode: LinearOpMode): MecanumDriveTrain(li
     }
 
     fun getPosition(): RobotPosition {
+        val frontLeftEncoderValue = frontLeftMotor.currentPosition
+        val frontRightEncoderValue = frontRightMotor.currentPosition
+        val backLeftEncoderValue = backLeftMotor.currentPosition
+        val backRightEncoderValue = backRightMotor.currentPosition
+
+        //val encoderPositionSet1 = frontLeftEncoderValue, backRightEncoderValue
+
         return RobotPosition(0.0, 0.0)
     }
 

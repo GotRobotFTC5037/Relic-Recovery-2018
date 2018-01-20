@@ -154,5 +154,4 @@ class CodaActions(private val linearOpMode: LinearOpMode, private val robot: Cod
         robot.driveToDistanceFromObject(Coda.ObjectDirection.LEFT, Coda.TRAILING_FRONT_CRYPTO_BOX_DISTANCE)
     }
 
-
 }
