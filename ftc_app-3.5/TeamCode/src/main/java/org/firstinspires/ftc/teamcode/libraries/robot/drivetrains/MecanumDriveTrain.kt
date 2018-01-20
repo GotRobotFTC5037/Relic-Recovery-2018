@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
 import kotlin.concurrent.thread
 import kotlin.properties.Delegates
 
-class MecanumDriveTrain(linearOpMode: LinearOpMode) : RobotDriveTrain(linearOpMode) {
+open class MecanumDriveTrain(linearOpMode: LinearOpMode) : RobotDriveTrain(linearOpMode) {
 
     companion object {
         const val MINIMUM_DRIVE_POWER = 0.15
@@ -22,10 +22,10 @@ class MecanumDriveTrain(linearOpMode: LinearOpMode) : RobotDriveTrain(linearOpMo
     }
 
     // Motors & Gyro
-    private var frontLeftMotor: DcMotor
-    private var frontRightMotor: DcMotor
-    private var backLeftMotor: DcMotor
-    private var backRightMotor: DcMotor
+    protected var frontLeftMotor: DcMotor
+    protected var frontRightMotor: DcMotor
+    protected var backLeftMotor: DcMotor
+    protected var backRightMotor: DcMotor
     private var imu: BNO055IMU
 
     // Motor Powers
@@ -43,7 +43,7 @@ class MecanumDriveTrain(linearOpMode: LinearOpMode) : RobotDriveTrain(linearOpMo
         timeSinceLastHeadingCorrection.reset()
     }
 
-    private val heading: Double
+    internal val heading: Double
         get() {
             val orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
             return orientation.firstAngle.toDouble()
@@ -66,9 +66,6 @@ class MecanumDriveTrain(linearOpMode: LinearOpMode) : RobotDriveTrain(linearOpMo
      */
     init {
         val hardwareMap = linearOpMode.hardwareMap
-
-        shouldCorrectHeading = true
-        targetHeading = 0.0
 
         frontLeftMotor = hardwareMap.dcMotor.get("front left motor")
         frontLeftMotor.direction = DcMotorSimple.Direction.REVERSE
@@ -112,7 +109,7 @@ class MecanumDriveTrain(linearOpMode: LinearOpMode) : RobotDriveTrain(linearOpMo
     /**
      * Begins the thread that updates the power of the motors.
      */
-    fun startUpdatingDriveMotorPowers() {
+    internal fun startUpdatingDriveMotorPowers() {
 
         thread(start = true) {
             while(!linearOpMode.isStopRequested) {
@@ -218,7 +215,7 @@ class MecanumDriveTrain(linearOpMode: LinearOpMode) : RobotDriveTrain(linearOpMo
      * @param power The power that the robot should turn at.
      * @param degrees the degrees the robot should move at.
      */
-    fun turnTo(power: Double, degrees: Double) {
+    fun turnTo(degrees: Double, power: Double) {
 
         if(!linearOpMode.isStopRequested) {
             linearOpMode.telemetry.log().add("Turning the robot to $degrees degrees")

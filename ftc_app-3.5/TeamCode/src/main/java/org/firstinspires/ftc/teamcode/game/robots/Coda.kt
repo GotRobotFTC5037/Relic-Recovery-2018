@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode.game.robots
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.I2cAddr
+import org.firstinspires.ftc.teamcode.game.components.EncoderMecanumDriveTrain
 import org.firstinspires.ftc.teamcode.game.components.GlyphGrabbers
 import org.firstinspires.ftc.teamcode.game.components.JewelStick
 import org.firstinspires.ftc.teamcode.game.components.Lift
 import org.firstinspires.ftc.teamcode.libraries.robot.Robot
 import org.firstinspires.ftc.teamcode.libraries.robot.drivetrains.MecanumDriveTrain
 import org.firstinspires.ftc.teamcode.libraries.robot.sensors.RangeSensor
+import kotlin.concurrent.thread
 import kotlin.math.abs
 
 class Coda(linearOpMode: LinearOpMode): Robot(linearOpMode) {
@@ -43,7 +45,7 @@ class Coda(linearOpMode: LinearOpMode): Robot(linearOpMode) {
      * Adds the necessary components to the robot.
      */
     fun setup() {
-        this.addComponent(MecanumDriveTrain(linearOpMode), DRIVE_TRAIN)
+        this.addComponent(EncoderMecanumDriveTrain(linearOpMode), DRIVE_TRAIN)
         this.addComponent(Lift(linearOpMode), LIFT)
         this.addComponent(GlyphGrabbers(linearOpMode), GLYPH_GRABBER)
         this.addComponent(JewelStick(linearOpMode), JEWEL_STICK)
@@ -56,6 +58,11 @@ class Coda(linearOpMode: LinearOpMode): Robot(linearOpMode) {
 
         driveTrain.waitForGyroCalibration()
         startingPitch = driveTrain.pitch
+
+        thread(start = true) {
+            linearOpMode.waitForStart()
+            driveTrain.startUpdatingDriveMotorPowers()
+        }
     }
 
     val driveTrain: MecanumDriveTrain
@@ -130,7 +137,7 @@ class Coda(linearOpMode: LinearOpMode): Robot(linearOpMode) {
      * Drives the robot off of the balancing stone, using the angle of the robot as an indication of completion.
      * @param power The power ot run the motors at when driving.
      */
-    fun driveOffBalancingStone(power: Double = 0.175) {
+    fun driveOffBalancingStone(power: Double) {
         if (!linearOpMode.isStopRequested) {
 
             driveTrain.setDrivePower(power)
@@ -171,7 +178,7 @@ class Coda(linearOpMode: LinearOpMode): Robot(linearOpMode) {
      * Drives the robot on of the balancing stone, using the angle of the robot as an indication of completion.
      * @param power The power ot run the motors at when driving.
      */
-    fun driveOnBalancingStone(power: Double = 0.40) {
+    fun driveOnBalancingStone(power: Double) {
 
         if (!linearOpMode.isStopRequested) {
 
