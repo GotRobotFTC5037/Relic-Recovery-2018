@@ -8,10 +8,10 @@ import org.firstinspires.ftc.teamcode.libraries.robot.attachments.RobotAttachmen
 
 class RelicGrabber(linearOpMode: LinearOpMode) : RobotAttachment(linearOpMode) {
 
-    val winch: DcMotor = linearOpMode.hardwareMap.dcMotor.get("X Motor")
-    val cam: DcMotor = linearOpMode.hardwareMap.dcMotor.get("Y Motor")
-    val leftGrabber: Servo = linearOpMode.hardwareMap.servo.get("X Servo")
-    val rightGrabber: Servo = linearOpMode.hardwareMap.servo.get("Y Servo")
+    val winch: DcMotor = linearOpMode.hardwareMap.dcMotor.get("left_motor")
+    val cam: DcMotor = linearOpMode.hardwareMap.dcMotor.get("right_motor")
+    val leftGrabber: Servo = linearOpMode.hardwareMap.servo.get("left_servo")
+    val rightGrabber: Servo = linearOpMode.hardwareMap.servo.get("right_servo")
 
     init {
         winch.direction = DcMotorSimple.Direction.FORWARD
