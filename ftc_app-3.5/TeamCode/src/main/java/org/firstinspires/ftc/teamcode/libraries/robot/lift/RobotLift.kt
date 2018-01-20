@@ -14,9 +14,9 @@ import kotlin.math.abs
  *
  * @author FTC Team 5037 gotrobot?
  */
-open class RobotLift(linearOpMode: LinearOpMode, motorName: String, direction: DcMotorSimple.Direction): RobotComponent(linearOpMode) {
+open class RobotLift(override val linearOpMode: LinearOpMode, motorName: String, direction: DcMotorSimple.Direction): RobotComponent {
 
-    val motor: DcMotor = linearOpMode.hardwareMap.dcMotor.get(motorName)
+    private val motor: DcMotor = linearOpMode.hardwareMap.dcMotor.get(motorName)
 
     private var previousError = 0
     private var integral = 0.0
@@ -26,7 +26,7 @@ open class RobotLift(linearOpMode: LinearOpMode, motorName: String, direction: D
     private var targetPosition = 0
     private var isManuallyMovingLift = false
 
-    var isBusy = false
+    private var isBusy = false
     var positionCorrectionProportionalCoefficient = 0.0
     var positionCorrectionIntegralCoefficient = 0.0
     var positionCorrectionDerivativeCoefficient = 0.0
@@ -52,12 +52,6 @@ open class RobotLift(linearOpMode: LinearOpMode, motorName: String, direction: D
         val derivativeOutput = derivative * positionCorrectionDerivativeCoefficient
         val output = proportionalOutput + integralOutput + derivativeOutput
 
-        //linearOpMode.telemetry.addLine("Proportional: $proportionalOutput")
-        //linearOpMode.telemetry.addLine("Integral: $integralOutput")
-        //linearOpMode.telemetry.addLine("Derivative: $derivativeOutput")
-        //linearOpMode.telemetry.addLine("Output: $output")
-        //linearOpMode.telemetry.update()
-
         previousError = error
         deltaTime.reset()
 
@@ -80,7 +74,6 @@ open class RobotLift(linearOpMode: LinearOpMode, motorName: String, direction: D
         }
     }
 
-    @Synchronized
     open fun setPosition(targetPosition: Int, power: Double = 0.5) {
         if (!linearOpMode.isStopRequested) {
             isBusy = true

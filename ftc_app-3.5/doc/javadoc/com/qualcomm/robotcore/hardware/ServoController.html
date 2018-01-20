@@ -167,7 +167,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/ServoController.html#getServoPosition-int-">getServoPosition</a></span>(int&nbsp;servo)</code>
-<div class="block">Get the position of a servo at a given channel</div>
+<div class="block">Get the state of a servo at a given channel</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -185,8 +185,8 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/ServoController.html#setServoPosition-int-double-">setServoPosition</a></span>(int&nbsp;servo,
-                double&nbsp;position)</code>
-<div class="block">Set the position of a servo at the given channel</div>
+                double&nbsp;state)</code>
+<div class="block">Set the state of a servo at the given channel</div>
 </td>
 </tr>
 </table>
@@ -252,12 +252,12 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <li class="blockList">
 <h4>setServoPosition</h4>
 <pre>void&nbsp;setServoPosition(int&nbsp;servo,
-                      double&nbsp;position)</pre>
-<div class="block">Set the position of a servo at the given channel</div>
+                      double&nbsp;state)</pre>
+<div class="block">Set the state of a servo at the given channel</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>servo</code> - channel of servo</dd>
-<dd><code>position</code> - from 0.0 to 1.0</dd>
+<dd><code>state</code> - from 0.0 to 1.0</dd>
 </dl>
 </li>
 </ul>
@@ -268,12 +268,12 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <li class="blockList">
 <h4>getServoPosition</h4>
 <pre>double&nbsp;getServoPosition(int&nbsp;servo)</pre>
-<div class="block">Get the position of a servo at a given channel</div>
+<div class="block">Get the state of a servo at a given channel</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>servo</code> - channel of servo</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>position, scaled from 0.0 to 1.0</dd>
+<dd>state, scaled from 0.0 to 1.0</dd>
 </dl>
 </li>
 </ul>

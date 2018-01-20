@@ -160,13 +160,13 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <tr class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#MAX_POSITION">MAX_POSITION</a></span></code>
-<div class="block">The maximum allowable position to which a servo can be moved</div>
+<div class="block">The maximum allowable state to which a servo can be moved</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#MIN_POSITION">MIN_POSITION</a></span></code>
-<div class="block">The minimum allowable position to which a servo can be moved</div>
+<div class="block">The minimum allowable state to which a servo can be moved</div>
 </td>
 </tr>
 </table>
@@ -205,7 +205,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#getPosition--">getPosition</a></span>()</code>
-<div class="block">Returns the position to which the servo was last commanded to move.</div>
+<div class="block">Returns the state to which the servo was last commanded to move.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -223,8 +223,8 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#setPosition-double-">setPosition</a></span>(double&nbsp;position)</code>
-<div class="block">Sets the current position of the servo, expressed as a fraction of its available
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#setPosition-double-">setPosition</a></span>(double&nbsp;state)</code>
+<div class="block">Sets the current state of the servo, expressed as a fraction of its available
  range.</div>
 </td>
 </tr>
@@ -257,10 +257,10 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <li class="blockList">
 <h4>MIN_POSITION</h4>
 <pre>static final&nbsp;double MIN_POSITION</pre>
-<div class="block">The minimum allowable position to which a servo can be moved</div>
+<div class="block">The minimum allowable state to which a servo can be moved</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#setPosition-double-"><code>setPosition(double)</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#setPosition-double-"><code>setPosition(double)</code></a>,
 <a href="../../../../constant-values.html#com.qualcomm.robotcore.hardware.Servo.MIN_POSITION">Constant Field Values</a></dd>
 </dl>
 </li>
@@ -272,10 +272,10 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <li class="blockList">
 <h4>MAX_POSITION</h4>
 <pre>static final&nbsp;double MAX_POSITION</pre>
-<div class="block">The maximum allowable position to which a servo can be moved</div>
+<div class="block">The maximum allowable state to which a servo can be moved</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#setPosition-double-"><code>setPosition(double)</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#setPosition-double-"><code>setPosition(double)</code></a>,
 <a href="../../../../constant-values.html#com.qualcomm.robotcore.hardware.Servo.MAX_POSITION">Constant Field Values</a></dd>
 </dl>
 </li>
@@ -332,7 +332,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>direction</code> - the direction to set for this servo</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#getDirection--"><code>getDirection()</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#getDirection--"><code>getDirection()</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/Servo.Direction.html" title="enum in com.qualcomm.robotcore.hardware"><code>Servo.Direction</code></a></dd>
 </dl>
 </li>
@@ -359,15 +359,15 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <ul class="blockList">
 <li class="blockList">
 <h4>setPosition</h4>
-<pre>void&nbsp;setPosition(double&nbsp;position)</pre>
-<div class="block">Sets the current position of the servo, expressed as a fraction of its available
+<pre>void&nbsp;setPosition(double&nbsp;state)</pre>
+<div class="block">Sets the current state of the servo, expressed as a fraction of its available
  range. If PWM power is enabled for the servo, the servo will attempt to move to
- the indicated position.</div>
+ the indicated state.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>position</code> - the position to which the servo should move, a value in the range [0.0, 1.0]</dd>
+<dd><code>state</code> - the state to which the servo should move, a value in the range [0.0, 1.0]</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/ServoController.html#pwmEnable--"><code>ServoController.pwmEnable()</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/ServoController.html#pwmEnable--"><code>ServoController.pwmEnable()</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#getPosition--"><code>getPosition()</code></a></dd>
 </dl>
 </li>
@@ -379,16 +379,16 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/HardwareDevice.html
 <li class="blockList">
 <h4>getPosition</h4>
 <pre>double&nbsp;getPosition()</pre>
-<div class="block">Returns the position to which the servo was last commanded to move. Note that this method
- does NOT read a position from the servo through any electrical means, as no such electrical
+<div class="block">Returns the state to which the servo was last commanded to move. Note that this method
+ does NOT read a state from the servo through any electrical means, as no such electrical
  mechanism is, generally, available.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the position to which the servo was last commanded to move, or Double.NaN
-         if no such position is known</dd>
+<dd>the state to which the servo was last commanded to move, or Double.NaN
+         if no such state is known</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#setPosition-double-"><code>setPosition(double)</code></a>, 
-<code>Double.NaN</code>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/Servo.html#setPosition-double-"><code>setPosition(double)</code></a>,
+<code>Double.NaN</code>,
 <code>Double.isNaN()</code></dd>
 </dl>
 </li>

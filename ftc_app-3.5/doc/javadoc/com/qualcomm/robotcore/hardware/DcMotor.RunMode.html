@@ -185,7 +185,7 @@ extends java.lang.Enum&lt;<a href="../../../../com/qualcomm/robotcore/hardware/D
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html#STOP_AND_RESET_ENCODER">STOP_AND_RESET_ENCODER</a></span></code>
-<div class="block">The motor is to set the current encoder position to zero.</div>
+<div class="block">The motor is to set the current encoder state to zero.</div>
 </td>
 </tr>
 </table>
@@ -301,10 +301,10 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>STOP_AND_RESET_ENCODER</h4>
 <pre>public static final&nbsp;<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html" title="enum in com.qualcomm.robotcore.hardware">DcMotor.RunMode</a> STOP_AND_RESET_ENCODER</pre>
-<div class="block">The motor is to set the current encoder position to zero. In contrast to
+<div class="block">The motor is to set the current encoder state to zero. In contrast to
  <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html#RUN_TO_POSITION"><code>RUN_TO_POSITION</code></a>,
  the motor is not rotated in order to achieve this; rather, the current rotational
- position of the motor is simply reinterpreted as the new zero value. However, as
+ state of the motor is simply reinterpreted as the new zero value. However, as
  a side effect of placing a motor in this mode, power is removed from the motor, causing
  it to stop, though it is unspecified whether the motor enters brake or float mode.
 
@@ -384,7 +384,7 @@ for (DcMotor.RunMode c : DcMotor.RunMode.values())
 <pre>public static&nbsp;<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html" title="enum in com.qualcomm.robotcore.hardware">DcMotor.RunMode</a>&nbsp;valueOf(java.lang.String&nbsp;name)</pre>
 <div class="block">Returns the enum constant of this type with the specified name.
 The string must match <i>exactly</i> an identifier used to declare an
-enum constant in this type.  (Extraneous whitespace characters are 
+enum constant in this type.  (Extraneous whitespace characters are
 not permitted.)</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

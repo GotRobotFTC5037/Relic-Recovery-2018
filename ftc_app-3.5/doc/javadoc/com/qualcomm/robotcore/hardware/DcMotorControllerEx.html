@@ -179,9 +179,9 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorController.h
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorControllerEx.html#setMotorTargetPosition-int-int-int-">setMotorTargetPosition</a></span>(int&nbsp;motor,
-                      int&nbsp;position,
+                      int&nbsp;state,
                       int&nbsp;tolerance)</code>
-<div class="block">Sets the target position and tolerance for a 'run to position' operation.</div>
+<div class="block">Sets the target state and tolerance for a 'run to state' operation.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -241,7 +241,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorController.h
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>motor</code> - the port number of the motor on this controller</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorControllerEx.html#setMotorDisable-int-"><code>setMotorDisable(int)</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorControllerEx.html#setMotorDisable-int-"><code>setMotorDisable(int)</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorControllerEx.html#isMotorEnabled-int-"><code>isMotorEnabled(int)</code></a></dd>
 </dl>
 </li>
@@ -258,7 +258,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorController.h
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>motor</code> - the port number of the motor on this controller</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorControllerEx.html#setMotorEnable-int-"><code>setMotorEnable(int)</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorControllerEx.html#setMotorEnable-int-"><code>setMotorEnable(int)</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorControllerEx.html#isMotorEnabled-int-"><code>isMotorEnabled(int)</code></a></dd>
 </dl>
 </li>
@@ -275,7 +275,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorController.h
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>motor</code> - the port number of the motor on this controller</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorControllerEx.html#setMotorEnable-int-"><code>setMotorEnable(int)</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorControllerEx.html#setMotorEnable-int-"><code>setMotorEnable(int)</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorControllerEx.html#setMotorDisable-int-"><code>setMotorDisable(int)</code></a></dd>
 </dl>
 </li>
@@ -336,7 +336,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorController.h
 <dd><code>mode</code> - the mode on that motor whose coefficients are to be set</dd>
 <dd><code>pidCoefficients</code> - the new coefficients to set</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorEx.html#setPIDCoefficients-com.qualcomm.robotcore.hardware.DcMotor.RunMode-com.qualcomm.robotcore.hardware.PIDCoefficients-"><code>DcMotorEx.setPIDCoefficients(DcMotor.RunMode, PIDCoefficients)</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorEx.html#setPIDCoefficients-com.qualcomm.robotcore.hardware.DcMotor.RunMode-com.qualcomm.robotcore.hardware.PIDCoefficients-"><code>DcMotorEx.setPIDCoefficients(DcMotor.RunMode, PIDCoefficients)</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorControllerEx.html#getPIDCoefficients-int-com.qualcomm.robotcore.hardware.DcMotor.RunMode-"><code>getPIDCoefficients(int, DcMotor.RunMode)</code></a></dd>
 </dl>
 </li>
@@ -357,7 +357,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorController.h
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the coefficients used for PID control on the indicated motor when in the indicated mode</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorEx.html#getPIDCoefficients-com.qualcomm.robotcore.hardware.DcMotor.RunMode-"><code>DcMotorEx.getPIDCoefficients(DcMotor.RunMode)</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorEx.html#getPIDCoefficients-com.qualcomm.robotcore.hardware.DcMotor.RunMode-"><code>DcMotorEx.getPIDCoefficients(DcMotor.RunMode)</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorControllerEx.html#setPIDCoefficients-int-com.qualcomm.robotcore.hardware.DcMotor.RunMode-com.qualcomm.robotcore.hardware.PIDCoefficients-"><code>setPIDCoefficients(int, DcMotor.RunMode, PIDCoefficients)</code></a></dd>
 </dl>
 </li>
@@ -369,14 +369,14 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorController.h
 <li class="blockList">
 <h4>setMotorTargetPosition</h4>
 <pre>void&nbsp;setMotorTargetPosition(int&nbsp;motor,
-                            int&nbsp;position,
+                            int&nbsp;state,
                             int&nbsp;tolerance)</pre>
-<div class="block">Sets the target position and tolerance for a 'run to position' operation.</div>
+<div class="block">Sets the target state and tolerance for a 'run to state' operation.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>motor</code> - the motor number to be affected</dd>
-<dd><code>position</code> - the desired target position, in encoder ticks</dd>
-<dd><code>tolerance</code> - the tolerance of the desired target position, in encoder ticks</dd>
+<dd><code>state</code> - the desired target state, in encoder ticks</dd>
+<dd><code>tolerance</code> - the tolerance of the desired target state, in encoder ticks</dd>
 </dl>
 </li>
 </ul>

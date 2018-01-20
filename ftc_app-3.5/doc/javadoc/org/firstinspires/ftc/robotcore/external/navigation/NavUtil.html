@@ -151,7 +151,7 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>static <a href="../../../../../../org/firstinspires/ftc/robotcore/external/navigation/Position.html" title="class in org.firstinspires.ftc.robotcore.external.navigation">Position</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/firstinspires/ftc/robotcore/external/navigation/NavUtil.html#meanIntegrate-org.firstinspires.ftc.robotcore.external.navigation.Velocity-org.firstinspires.ftc.robotcore.external.navigation.Velocity-">meanIntegrate</a></span>(<a href="../../../../../../org/firstinspires/ftc/robotcore/external/navigation/Velocity.html" title="class in org.firstinspires.ftc.robotcore.external.navigation">Velocity</a>&nbsp;cur,
              <a href="../../../../../../org/firstinspires/ftc/robotcore/external/navigation/Velocity.html" title="class in org.firstinspires.ftc.robotcore.external.navigation">Velocity</a>&nbsp;prev)</code>
-<div class="block">Integrate between two velocities to determine a change in position using an assumption
+<div class="block">Integrate between two velocities to determine a change in state using an assumption
  that the mean of the velocities has been acting the entire interval.</div>
 </td>
 </tr>
@@ -340,14 +340,14 @@ extends java.lang.Object</pre>
 <h4>meanIntegrate</h4>
 <pre>public static&nbsp;<a href="../../../../../../org/firstinspires/ftc/robotcore/external/navigation/Position.html" title="class in org.firstinspires.ftc.robotcore.external.navigation">Position</a>&nbsp;meanIntegrate(<a href="../../../../../../org/firstinspires/ftc/robotcore/external/navigation/Velocity.html" title="class in org.firstinspires.ftc.robotcore.external.navigation">Velocity</a>&nbsp;cur,
                                      <a href="../../../../../../org/firstinspires/ftc/robotcore/external/navigation/Velocity.html" title="class in org.firstinspires.ftc.robotcore.external.navigation">Velocity</a>&nbsp;prev)</pre>
-<div class="block">Integrate between two velocities to determine a change in position using an assumption
+<div class="block">Integrate between two velocities to determine a change in state using an assumption
  that the mean of the velocities has been acting the entire interval.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>cur</code> - the current velocity</dd>
 <dd><code>prev</code> - the previous velocity</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an approximation to the change in position over the interval</dd>
+<dd>an approximation to the change in state over the interval</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="https://en.wikipedia.org/wiki/Simpson%27s_rule">Simpson's Rule</a></dd>
 </dl>

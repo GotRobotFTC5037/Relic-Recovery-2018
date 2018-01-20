@@ -238,7 +238,7 @@ implements <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html" ti
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorImpl.html#adjustPosition-int-">adjustPosition</a></span>(int&nbsp;position)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorImpl.html#adjustPosition-int-">adjustPosition</a></span>(int&nbsp;state)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected double</code></td>
@@ -323,7 +323,7 @@ implements <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html" ti
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorImpl.html#getTargetPosition--">getTargetPosition</a></span>()</code>
-<div class="block">Get the current motor target position.</div>
+<div class="block">Get the current motor target state.</div>
 </td>
 </tr>
 <tr id="i16" class="altColor">
@@ -348,7 +348,7 @@ implements <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html" ti
 </tr>
 <tr id="i20" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorImpl.html#internalSetTargetPosition-int-">internalSetTargetPosition</a></span>(int&nbsp;position)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorImpl.html#internalSetTargetPosition-int-">internalSetTargetPosition</a></span>(int&nbsp;state)</code>&nbsp;</td>
 </tr>
 <tr id="i21" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -394,8 +394,8 @@ implements <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html" ti
 </tr>
 <tr id="i28" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorImpl.html#setTargetPosition-int-">setTargetPosition</a></span>(int&nbsp;position)</code>
-<div class="block">Set the motor target position, using an integer.</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorImpl.html#setTargetPosition-int-">setTargetPosition</a></span>(int&nbsp;state)</code>
+<div class="block">Set the motor target state, using an integer.</div>
 </td>
 </tr>
 <tr id="i29" class="rowColor">
@@ -482,7 +482,7 @@ implements <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html" ti
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>controller</code> - DC motor controller this motor is attached to</dd>
-<dd><code>portNumber</code> - portNumber position on the controller</dd>
+<dd><code>portNumber</code> - portNumber state on the controller</dd>
 </dl>
 </li>
 </ul>
@@ -758,8 +758,8 @@ implements <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html" ti
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>power</code> - from -1.0 to 1.0</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorSimple.html#getPower--"><code>DcMotorSimple.getPower()</code></a>, 
-<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setMode-com.qualcomm.robotcore.hardware.DcMotor.RunMode-"><code>DcMotor.setMode(DcMotor.RunMode)</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorSimple.html#getPower--"><code>DcMotorSimple.getPower()</code></a>,
+<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setMode-com.qualcomm.robotcore.hardware.DcMotor.RunMode-"><code>DcMotor.setMode(DcMotor.RunMode)</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setPowerFloat--"><code>DcMotor.setPowerFloat()</code></a></dd>
 </dl>
 </li>
@@ -824,7 +824,7 @@ implements <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html" ti
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>zeroPowerBehavior</code> - the new behavior of the motor when a power level of zero is applied.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.ZeroPowerBehavior.html" title="enum in com.qualcomm.robotcore.hardware"><code>DcMotor.ZeroPowerBehavior</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.ZeroPowerBehavior.html" title="enum in com.qualcomm.robotcore.hardware"><code>DcMotor.ZeroPowerBehavior</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorSimple.html#setPower-double-"><code>DcMotorSimple.setPower(double)</code></a></dd>
 </dl>
 </li>
@@ -860,8 +860,8 @@ public&nbsp;void&nbsp;setPowerFloat()</pre>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setPowerFloat--">setPowerFloat</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html" title="interface in com.qualcomm.robotcore.hardware">DcMotor</a></code></dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorSimple.html#setPower-double-"><code>DcMotorSimple.setPower(double)</code></a>, 
-<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getPowerFloat--"><code>DcMotor.getPowerFloat()</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorSimple.html#setPower-double-"><code>DcMotorSimple.setPower(double)</code></a>,
+<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getPowerFloat--"><code>DcMotor.getPowerFloat()</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setZeroPowerBehavior-com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior-"><code>DcMotor.setZeroPowerBehavior(ZeroPowerBehavior)</code></a></dd>
 </dl>
 </li>
@@ -890,19 +890,19 @@ public&nbsp;void&nbsp;setPowerFloat()</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setTargetPosition</h4>
-<pre>public&nbsp;void&nbsp;setTargetPosition(int&nbsp;position)</pre>
-<div class="block">Set the motor target position, using an integer. If this motor has been set to REVERSE,
- the passed-in "position" value will be multiplied by -1.</div>
+<pre>public&nbsp;void&nbsp;setTargetPosition(int&nbsp;state)</pre>
+<div class="block">Set the motor target state, using an integer. If this motor has been set to REVERSE,
+ the passed-in "state" value will be multiplied by -1.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setTargetPosition-int-">setTargetPosition</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html" title="interface in com.qualcomm.robotcore.hardware">DcMotor</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>position</code> - range from Integer.MIN_VALUE to Integer.MAX_VALUE</dd>
+<dd><code>state</code> - range from Integer.MIN_VALUE to Integer.MAX_VALUE</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getCurrentPosition--"><code>DcMotor.getCurrentPosition()</code></a>, 
-<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setMode-com.qualcomm.robotcore.hardware.DcMotor.RunMode-"><code>DcMotor.setMode(RunMode)</code></a>, 
-<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html#RUN_TO_POSITION"><code>DcMotor.RunMode.RUN_TO_POSITION</code></a>, 
-<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getTargetPosition--"><code>DcMotor.getTargetPosition()</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getCurrentPosition--"><code>DcMotor.getCurrentPosition()</code></a>,
+<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setMode-com.qualcomm.robotcore.hardware.DcMotor.RunMode-"><code>DcMotor.setMode(RunMode)</code></a>,
+<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html#RUN_TO_POSITION"><code>DcMotor.RunMode.RUN_TO_POSITION</code></a>,
+<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getTargetPosition--"><code>DcMotor.getTargetPosition()</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#isBusy--"><code>DcMotor.isBusy()</code></a></dd>
 </dl>
 </li>
@@ -913,7 +913,7 @@ public&nbsp;void&nbsp;setPowerFloat()</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>internalSetTargetPosition</h4>
-<pre>protected&nbsp;void&nbsp;internalSetTargetPosition(int&nbsp;position)</pre>
+<pre>protected&nbsp;void&nbsp;internalSetTargetPosition(int&nbsp;state)</pre>
 </li>
 </ul>
 <a name="getTargetPosition--">
@@ -923,8 +923,8 @@ public&nbsp;void&nbsp;setPowerFloat()</pre>
 <li class="blockList">
 <h4>getTargetPosition</h4>
 <pre>public&nbsp;int&nbsp;getTargetPosition()</pre>
-<div class="block">Get the current motor target position. If this motor has been set to REVERSE, the returned
- "position" will be multiplied by -1.</div>
+<div class="block">Get the current motor target state. If this motor has been set to REVERSE, the returned
+ "state" will be multiplied by -1.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getTargetPosition--">getTargetPosition</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html" title="interface in com.qualcomm.robotcore.hardware">DcMotor</a></code></dd>
@@ -947,9 +947,9 @@ public&nbsp;void&nbsp;setPowerFloat()</pre>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getCurrentPosition--">getCurrentPosition</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html" title="interface in com.qualcomm.robotcore.hardware">DcMotor</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>double indicating current position</dd>
+<dd>double indicating current state</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getTargetPosition--"><code>DcMotor.getTargetPosition()</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getTargetPosition--"><code>DcMotor.getTargetPosition()</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html#STOP_AND_RESET_ENCODER"><code>DcMotor.RunMode.STOP_AND_RESET_ENCODER</code></a></dd>
 </dl>
 </li>
@@ -960,7 +960,7 @@ public&nbsp;void&nbsp;setPowerFloat()</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>adjustPosition</h4>
-<pre>protected&nbsp;int&nbsp;adjustPosition(int&nbsp;position)</pre>
+<pre>protected&nbsp;int&nbsp;adjustPosition(int&nbsp;state)</pre>
 </li>
 </ul>
 <a name="adjustPower-double-">
@@ -995,7 +995,7 @@ public&nbsp;void&nbsp;setPowerFloat()</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>mode</code> - run mode</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html" title="enum in com.qualcomm.robotcore.hardware"><code>DcMotor.RunMode</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html" title="enum in com.qualcomm.robotcore.hardware"><code>DcMotor.RunMode</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getMode--"><code>DcMotor.getMode()</code></a></dd>
 </dl>
 </li>
@@ -1023,7 +1023,7 @@ public&nbsp;void&nbsp;setPowerFloat()</pre>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>run mode</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html" title="enum in com.qualcomm.robotcore.hardware"><code>DcMotor.RunMode</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html" title="enum in com.qualcomm.robotcore.hardware"><code>DcMotor.RunMode</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setMode-com.qualcomm.robotcore.hardware.DcMotor.RunMode-"><code>DcMotor.setMode(RunMode)</code></a></dd>
 </dl>
 </li>

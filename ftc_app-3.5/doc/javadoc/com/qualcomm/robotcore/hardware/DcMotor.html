@@ -214,7 +214,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorSimple.html"
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getTargetPosition--">getTargetPosition</a></span>()</code>
-<div class="block">Returns the current target encoder position for this motor.</div>
+<div class="block">Returns the current target encoder state for this motor.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -226,7 +226,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorSimple.html"
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#isBusy--">isBusy</a></span>()</code>
-<div class="block">Returns true if the motor is currently advancing or retreating to a target position.</div>
+<div class="block">Returns true if the motor is currently advancing or retreating to a target state.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
@@ -253,8 +253,8 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorSimple.html"
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setTargetPosition-int-">setTargetPosition</a></span>(int&nbsp;position)</code>
-<div class="block">Sets the desired encoder target position to which the motor should advance or retreat
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setTargetPosition-int-">setTargetPosition</a></span>(int&nbsp;state)</code>
+<div class="block">Sets the desired encoder target state to which the motor should advance or retreat
  and then actively hold thereat.</div>
 </td>
 </tr>
@@ -370,7 +370,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorSimple.html"
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>zeroPowerBehavior</code> - the new behavior of the motor when a power level of zero is applied.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.ZeroPowerBehavior.html" title="enum in com.qualcomm.robotcore.hardware"><code>DcMotor.ZeroPowerBehavior</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.ZeroPowerBehavior.html" title="enum in com.qualcomm.robotcore.hardware"><code>DcMotor.ZeroPowerBehavior</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorSimple.html#setPower-double-"><code>DcMotorSimple.setPower(double)</code></a></dd>
 </dl>
 </li>
@@ -418,8 +418,8 @@ void&nbsp;setPowerFloat()</pre>
  the motor would have been left braked.</p></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorSimple.html#setPower-double-"><code>DcMotorSimple.setPower(double)</code></a>, 
-<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getPowerFloat--"><code>getPowerFloat()</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorSimple.html#setPower-double-"><code>DcMotorSimple.setPower(double)</code></a>,
+<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getPowerFloat--"><code>getPowerFloat()</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setZeroPowerBehavior-com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior-"><code>setZeroPowerBehavior(ZeroPowerBehavior)</code></a></dd>
 </dl>
 </li>
@@ -446,25 +446,25 @@ void&nbsp;setPowerFloat()</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setTargetPosition</h4>
-<pre>void&nbsp;setTargetPosition(int&nbsp;position)</pre>
-<div class="block">Sets the desired encoder target position to which the motor should advance or retreat
+<pre>void&nbsp;setTargetPosition(int&nbsp;state)</pre>
+<div class="block">Sets the desired encoder target state to which the motor should advance or retreat
  and then actively hold thereat. This behavior is similar to the operation of a servo.
  The maximum speed at which this advance or retreat occurs is governed by the power level
  currently set on the motor. While the motor is advancing or retreating to the desired
- taget position, <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#isBusy--"><code>isBusy()</code></a> will return true.
+ taget state, <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#isBusy--"><code>isBusy()</code></a> will return true.
 
- <p>Note that adjustment to a target position is only effective when the motor is in
+ <p>Note that adjustment to a target state is only effective when the motor is in
  <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html#RUN_TO_POSITION"><code>RUN_TO_POSITION</code></a>
  RunMode. Note further that, clearly, the motor must be equipped with an encoder in order
  for this mode to function properly.</p></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>position</code> - the desired encoder target position</dd>
+<dd><code>state</code> - the desired encoder target state</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getCurrentPosition--"><code>getCurrentPosition()</code></a>, 
-<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setMode-com.qualcomm.robotcore.hardware.DcMotor.RunMode-"><code>setMode(RunMode)</code></a>, 
-<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html#RUN_TO_POSITION"><code>DcMotor.RunMode.RUN_TO_POSITION</code></a>, 
-<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getTargetPosition--"><code>getTargetPosition()</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getCurrentPosition--"><code>getCurrentPosition()</code></a>,
+<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setMode-com.qualcomm.robotcore.hardware.DcMotor.RunMode-"><code>setMode(RunMode)</code></a>,
+<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html#RUN_TO_POSITION"><code>DcMotor.RunMode.RUN_TO_POSITION</code></a>,
+<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getTargetPosition--"><code>getTargetPosition()</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#isBusy--"><code>isBusy()</code></a></dd>
 </dl>
 </li>
@@ -476,10 +476,10 @@ void&nbsp;setPowerFloat()</pre>
 <li class="blockList">
 <h4>getTargetPosition</h4>
 <pre>int&nbsp;getTargetPosition()</pre>
-<div class="block">Returns the current target encoder position for this motor.</div>
+<div class="block">Returns the current target encoder state for this motor.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the current target encoder position for this motor.</dd>
+<dd>the current target encoder state for this motor.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setTargetPosition-int-"><code>setTargetPosition(int)</code></a></dd>
 </dl>
@@ -492,10 +492,10 @@ void&nbsp;setPowerFloat()</pre>
 <li class="blockList">
 <h4>isBusy</h4>
 <pre>boolean&nbsp;isBusy()</pre>
-<div class="block">Returns true if the motor is currently advancing or retreating to a target position.</div>
+<div class="block">Returns true if the motor is currently advancing or retreating to a target state.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the motor is currently advancing or retreating to a target position.</dd>
+<dd>true if the motor is currently advancing or retreating to a target state.</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setTargetPosition-int-"><code>setTargetPosition(int)</code></a></dd>
 </dl>
@@ -515,7 +515,7 @@ void&nbsp;setPowerFloat()</pre>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the current reading of the encoder for this motor</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getTargetPosition--"><code>getTargetPosition()</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getTargetPosition--"><code>getTargetPosition()</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html#STOP_AND_RESET_ENCODER"><code>DcMotor.RunMode.STOP_AND_RESET_ENCODER</code></a></dd>
 </dl>
 </li>
@@ -532,7 +532,7 @@ void&nbsp;setPowerFloat()</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>mode</code> - the new current run mode for this motor</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html" title="enum in com.qualcomm.robotcore.hardware"><code>DcMotor.RunMode</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html" title="enum in com.qualcomm.robotcore.hardware"><code>DcMotor.RunMode</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getMode--"><code>getMode()</code></a></dd>
 </dl>
 </li>
@@ -549,7 +549,7 @@ void&nbsp;setPowerFloat()</pre>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the current run mode for this motor</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html" title="enum in com.qualcomm.robotcore.hardware"><code>DcMotor.RunMode</code></a>, 
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html" title="enum in com.qualcomm.robotcore.hardware"><code>DcMotor.RunMode</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setMode-com.qualcomm.robotcore.hardware.DcMotor.RunMode-"><code>setMode(RunMode)</code></a></dd>
 </dl>
 </li>
