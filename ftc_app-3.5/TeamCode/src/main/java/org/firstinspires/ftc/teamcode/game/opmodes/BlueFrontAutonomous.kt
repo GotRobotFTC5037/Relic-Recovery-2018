@@ -20,6 +20,7 @@ class BlueFrontAutonomous : LinearOpMode() {
         val robot = Coda(this)
         val actions = CodaActions(this, robot)
 
+        robot.setup()
         actions.setupCameras()
         actions.waitForStart()
         actions.elevateGlyph()

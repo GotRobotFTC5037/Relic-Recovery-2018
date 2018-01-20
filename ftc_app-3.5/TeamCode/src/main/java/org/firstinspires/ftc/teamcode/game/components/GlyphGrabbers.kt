@@ -19,11 +19,13 @@ class GlyphGrabbers(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode) {
         OPEN(0.50, GlyphDeployerPosition.RETRACTED),
         SMALL_OPEN(0.66, GlyphDeployerPosition.RETRACTED),
         RELEASE(0.75, GlyphDeployerPosition.EXTENDED),
+        ATTACHED(0.90, GlyphDeployerPosition.ATTACHED),
         CLOSED(0.90, GlyphDeployerPosition.EXTENDED)
     }
 
     enum class GlyphDeployerPosition(val value: Double) {
         EXTENDED(0.90),
+        ATTACHED(0.85),
         RETRACTED(0.25)
     }
 
@@ -37,8 +39,8 @@ class GlyphGrabbers(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode) {
     }
 
     fun setState(state: GlyphGrabberState, delay: Long = 0) {
-        setArmsPosition(state.armPosition)
         setDeployerPosition(state.deployerPosition)
+        setArmsPosition(state.armPosition)
         linearOpMode.sleep(delay)
     }
 

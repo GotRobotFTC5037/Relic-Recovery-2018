@@ -46,7 +46,7 @@ class CodaActions(private val linearOpMode: LinearOpMode, private val robot: Cod
 
     fun elevateGlyph() {
         elevateGlyphThread = thread(true) {
-            robot.glyphGrabbers.setState(GlyphGrabbers.GlyphGrabberState.CLOSED, 1100)
+            robot.glyphGrabbers.setState(GlyphGrabbers.GlyphGrabberState.ATTACHED, 1100)
             thread(true) {
                 robot.lift.setPosition(Lift.LiftPosition.SECOND_LEVEL)
             }

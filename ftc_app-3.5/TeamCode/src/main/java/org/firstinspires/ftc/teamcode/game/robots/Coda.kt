@@ -2,11 +2,7 @@ package org.firstinspires.ftc.teamcode.game.robots
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.I2cAddr
-import org.firstinspires.ftc.teamcode.game.components.EncoderMecanumDriveTrain
-import org.firstinspires.ftc.teamcode.game.components.GlyphGrabbers
-import org.firstinspires.ftc.teamcode.game.components.JewelStick
-import org.firstinspires.ftc.teamcode.game.components.Lift
-import org.firstinspires.ftc.teamcode.game.components.RelicGrabber
+import org.firstinspires.ftc.teamcode.game.components.*
 import org.firstinspires.ftc.teamcode.libraries.robot.Robot
 import org.firstinspires.ftc.teamcode.libraries.robot.drivetrains.MecanumDriveTrain
 import org.firstinspires.ftc.teamcode.libraries.robot.sensors.RangeSensor
@@ -44,6 +40,9 @@ class Coda(linearOpMode: LinearOpMode): Robot(linearOpMode) {
         private const val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 4.5
     }
 
+    var isSetup = false
+    private set
+
     /*
      * Adds the necessary components to the robot.
      */
@@ -67,6 +66,8 @@ class Coda(linearOpMode: LinearOpMode): Robot(linearOpMode) {
             linearOpMode.waitForStart()
             driveTrain.startUpdatingDriveMotorPowers()
         }
+
+        isSetup = true
     }
 
     val driveTrain: MecanumDriveTrain
