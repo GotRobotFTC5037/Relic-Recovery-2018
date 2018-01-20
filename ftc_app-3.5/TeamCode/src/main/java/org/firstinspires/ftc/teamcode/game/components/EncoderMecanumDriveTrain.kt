@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.game.components
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import org.firstinspires.ftc.teamcode.libraries.robot.drivetrains.MecanumDriveTrain
+import kotlin.math.abs
 
 class EncoderMecanumDriveTrain(linearOpMode: LinearOpMode): MecanumDriveTrain(linearOpMode) {
 
@@ -29,8 +30,18 @@ class EncoderMecanumDriveTrain(linearOpMode: LinearOpMode): MecanumDriveTrain(li
         return RobotPosition(0.0, 0.0)
     }
 
-    fun driveTo(position: RobotPosition, power: Double) {
+    fun driveTo(targetPosition: RobotPosition, power: Double) {
+        resetEncoders()
+        if (targetPosition.y > 0)
+            setDrivePower(power)
+        else
+            setDrivePower(-power)
 
+        while (abs(getPosition().y) < abs(targetPosition.y)) {
+            linearOpMode.sleep(10)
+        }
+
+        stop()
     }
 
 }
