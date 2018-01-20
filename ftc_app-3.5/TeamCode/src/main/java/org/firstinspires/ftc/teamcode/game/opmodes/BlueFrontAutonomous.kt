@@ -1,20 +1,18 @@
 package org.firstinspires.ftc.teamcode.game.opmodes
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
 import org.firstinspires.ftc.teamcode.game.CodaActions
 import org.firstinspires.ftc.teamcode.game.components.Lift
 import org.firstinspires.ftc.teamcode.game.robots.Coda
-import org.firstinspires.ftc.teamcode.libraries.RobotOpMode
 
 @Autonomous(name = "1: Blue Front", group = "Blue Manual Selection Autonomous")
-class BlueFrontAutonomous : RobotOpMode() {
+class BlueFrontAutonomous : LinearOpMode() {
 
     companion object {
         val OPMODE_NAME = "1: Blue Front"
     }
-
-    override val type = OpModeType.AUTONOMOUS
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {
