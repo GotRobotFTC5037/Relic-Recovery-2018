@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.libraries.vision
+package org.firstinspires.ftc.teamcode.game.vision
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime

@@ -18,5 +18,5 @@ class TestBedBot(linearOpMode: LinearOpMode): Robot(linearOpMode) {
     }
 
     val relicGrabber: RelicGrabber
-        get() = attachments[RELIC_GRABBER] as RelicGrabber
+        get() = components[RELIC_GRABBER] as RelicGrabber
 }

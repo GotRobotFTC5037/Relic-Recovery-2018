@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Servo
-import org.firstinspires.ftc.teamcode.libraries.robot.attachments.RobotAttachment
+import org.firstinspires.ftc.teamcode.libraries.robot.attachment.RobotAttachment
 
 class RelicGrabber(linearOpMode: LinearOpMode) : RobotAttachment(linearOpMode) {
 
@@ -20,7 +20,7 @@ class RelicGrabber(linearOpMode: LinearOpMode) : RobotAttachment(linearOpMode) {
         rightGrabber.direction = Servo.Direction.FORWARD
     }
 
-    fun setGrabberPosistion(position: Double) {
+    fun setGrabberPosition(position: Double) {
         leftGrabber.position = position
         rightGrabber.position = position
     }

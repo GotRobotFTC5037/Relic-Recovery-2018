@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.libraries.vision
+package org.firstinspires.ftc.teamcode.game.vision
 
 import com.vuforia.CameraDevice
 import org.corningrobotics.enderbots.endercv.OpenCVPipeline

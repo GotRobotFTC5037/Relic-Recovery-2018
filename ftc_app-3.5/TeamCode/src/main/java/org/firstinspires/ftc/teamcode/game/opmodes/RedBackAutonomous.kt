@@ -62,7 +62,7 @@ class RedBackAutonomous : LinearOpMode() {
         // Knock off the correct jewel.
         when (jewelPosition) {
             JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
-                robot.timeDrive(1000, 0.175)
+                robot.linearTimeDrive(1000, 0.175)
                 robot.raiseJewelStick()
                 robot.driveOnBalancingStone(-0.40)
                 robot.driveOffBalancingStone(-0.175)
@@ -99,12 +99,12 @@ class RedBackAutonomous : LinearOpMode() {
 
         // Place the glyph in the correct crypto box.
         robot.lift.drop()
-        robot.timeDrive(1000)
+        robot.linearTimeDrive(1000)
         robot.extendGlyphDeployer()
         robot.openGlyphGrabbers(250)
 
         // Back away from the crypto box.
-        robot.timeDrive(1250, -0.225)
+        robot.linearTimeDrive(1250, -0.225)
         robot.liftGlyphDeployer(500)
 
         // Open the glyph grabbers.
@@ -115,14 +115,14 @@ class RedBackAutonomous : LinearOpMode() {
 
         // Drive to the glyphs in the center and grab one.
         sleep(1000)
-        robot.timeDrive(475, 1.0)
+        robot.linearTimeDrive(475, 1.0)
         robot.closeGlyphGrabbers(1250)
 
         // Drive back the crypto boxes.
-        robot.timeDrive(650, -0.25)
+        robot.linearTimeDrive(650, -0.25)
         thread(true) { robot.lift.setPosition(Lift.LiftPosition.FIRST_LEVEL) }
         robot.turn(0.35, 90.0)
-        robot.timeDrive(500)
+        robot.linearTimeDrive(500)
         robot.driveToDistanceFromForwardObject(Coda.CRYPTO_BOX_SPACING)
 
         // Line up with the center crypto box.
@@ -135,12 +135,12 @@ class RedBackAutonomous : LinearOpMode() {
             robot.lift.drop()
         }
 
-        robot.timeDrive(1000)
+        robot.linearTimeDrive(1000)
         robot.extendGlyphDeployer()
         robot.openGlyphGrabbers(250)
 
         // Back away from the crypto box.
-        robot.timeDrive(450, -0.50)
+        robot.linearTimeDrive(450, -0.50)
         robot.liftGlyphDeployer(500)
 
         // Turn towards the center glyphs.

@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
 import org.firstinspires.ftc.teamcode.game.CodaActions
+import org.firstinspires.ftc.teamcode.game.RelicRecoveryConstants
 import org.firstinspires.ftc.teamcode.game.components.Lift
 import org.firstinspires.ftc.teamcode.game.robots.Coda
 
@@ -30,10 +31,10 @@ class BlueFrontAutonomous : LinearOpMode() {
         actions.setLiftPositionToFirstLevel()
 
         val wallDistance = when (actions.detectedPictograph) {
-            RelicRecoveryVuMark.LEFT -> Coda.LEADING_FRONT_CRYPTO_BOX_DISTANCE
-            RelicRecoveryVuMark.CENTER -> Coda.CENTER_FRONT_CRYPTO_BOX_DISTANCE
-            RelicRecoveryVuMark.RIGHT -> Coda.TRAILING_FRONT_CRYPTO_BOX_DISTANCE
-            RelicRecoveryVuMark.UNKNOWN -> Coda.LEADING_FRONT_CRYPTO_BOX_DISTANCE
+            RelicRecoveryVuMark.LEFT -> RelicRecoveryConstants.LEADING_FRONT_CRYPTO_BOX_DISTANCE
+            RelicRecoveryVuMark.CENTER -> RelicRecoveryConstants.CENTER_FRONT_CRYPTO_BOX_DISTANCE
+            RelicRecoveryVuMark.RIGHT -> RelicRecoveryConstants.TRAILING_FRONT_CRYPTO_BOX_DISTANCE
+            RelicRecoveryVuMark.UNKNOWN -> RelicRecoveryConstants.LEADING_FRONT_CRYPTO_BOX_DISTANCE
         }
 
         actions.placeGlyph(Coda.ObjectDirection.LEFT, wallDistance)
@@ -42,9 +43,9 @@ class BlueFrontAutonomous : LinearOpMode() {
             actions.driveToTrailingCryptoBox()
         }
 
-        robot.driveTrain.turnTo(-135.0, 0.20)
+        robot.driveTrain.turnToHeading(-135.0, 0.20)
         actions.grabSecondGlyph(CodaActions.DistanceFromCenter.LONG)
-        robot.driveTrain.turnTo(0.0, 0.35)
+        robot.driveTrain.turnToHeading(0.0, 0.35)
         actions.driveBackToCryptoBoxFromCenter()
 
         if (actions.detectedPictograph == RelicRecoveryVuMark.RIGHT) {
@@ -55,7 +56,7 @@ class BlueFrontAutonomous : LinearOpMode() {
 
         actions.placeGlyph()
 
-        robot.driveTrain.turnTo(-135.0, 0.35)
+        robot.driveTrain.turnToHeading(-135.0, 0.35)
     }
 
 }

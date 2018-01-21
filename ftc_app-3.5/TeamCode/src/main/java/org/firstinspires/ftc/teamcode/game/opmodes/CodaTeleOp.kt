@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.game.opmodes
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import org.firstinspires.ftc.teamcode.game.components.GlyphGrabbers
+import org.firstinspires.ftc.teamcode.game.components.GlyphGrabber
 import org.firstinspires.ftc.teamcode.game.robots.Coda
 import kotlin.math.abs
 
@@ -20,12 +20,13 @@ class CodaTeleOp : LinearOpMode() {
         robot = Coda(this)
         robot.setup()
         waitForStart()
+        robot.driveTrain.shouldCorrectHeading = false
 
         while (opModeIsActive()) {
 
             // Gamepad 1: Movement
             updateDriveDirection()
-            updateTurningState()
+            //updateTurningState()
 
 
             // Gamepad 2: Attachments
@@ -55,16 +56,17 @@ class CodaTeleOp : LinearOpMode() {
         yPower = abs(Math.pow(yPower, 3.0)) * Math.signum(yPower)
         zPower = abs(Math.pow(zPower, 3.0)) * Math.signum(zPower)
 
-        if (zPower == 0.0) {
+        if (xPower == 0.0 && yPower == 0.0 && zPower == 0.0) {
             if (!robot.driveTrain.shouldCorrectHeading) {
-                robot.driveTrain.shouldCorrectHeading = true
-                robot.driveTrain.targetHeading = robot.driveTrain.heading
+                //robot.driveTrain.shouldCorrectHeading = true
             }
         } else {
-            robot.driveTrain.shouldCorrectHeading = false
+            if (robot.driveTrain.shouldCorrectHeading) {
+                //robot.driveTrain.shouldCorrectHeading = false
+            }
         }
 
-        robot.driveTrain.setDirection(xPower, yPower, zPower)
+        robot.driveTrain.setMovementPowers(yPower, xPower, zPower)
     }
 
     private fun updateLiftPower() {
@@ -74,19 +76,19 @@ class CodaTeleOp : LinearOpMode() {
 
     private fun updateGlyphGrabberState() {
         when {
-            gamepad2.a -> robot.glyphGrabbers.setState(GlyphGrabbers.GlyphGrabberState.CLOSED)
-            gamepad2.y -> robot.glyphGrabbers.setState(GlyphGrabbers.GlyphGrabberState.RELEASE)
-            gamepad2.b -> robot.glyphGrabbers.setState(GlyphGrabbers.GlyphGrabberState.OPEN)
-            gamepad2.x -> robot.glyphGrabbers.setState(GlyphGrabbers.GlyphGrabberState.SMALL_OPEN)
+            gamepad2.a -> robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.CLOSED)
+            gamepad2.y -> robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.RELEASE)
+            gamepad2.b -> robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.OPEN)
+            gamepad2.x -> robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.SMALL_OPEN)
         }
     }
 
     private fun updateTurningState() {
         when {
-            gamepad1.x -> robot.driveTrain.turnTo(0.0, 1.00)
-            gamepad1.a -> robot.driveTrain.turnTo(90.0, 1.00)
-            gamepad1.b -> robot.driveTrain.turnTo(180.0, 1.00)
-            gamepad1.y -> robot.driveTrain.turnTo(-90.0, 1.00)
+            gamepad1.x -> robot.driveTrain.turnToHeading(0.0, 1.00)
+            gamepad1.a -> robot.driveTrain.turnToHeading(90.0, 1.00)
+            gamepad1.b -> robot.driveTrain.turnToHeading(180.0, 1.00)
+            gamepad1.y -> robot.driveTrain.turnToHeading(-90.0, 1.00)
         }
     }
 

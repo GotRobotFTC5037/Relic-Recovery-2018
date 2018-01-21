@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode.game.components
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.Servo
-import org.firstinspires.ftc.teamcode.libraries.robot.attachments.RobotAttachment
+import org.firstinspires.ftc.teamcode.libraries.robot.attachment.RobotAttachment
 
-class GlyphGrabbers(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode) {
+class GlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode) {
 
     private val leftGlyphGrabber: Servo = linearOpMode.hardwareMap.servo.get("left grabber")
     private val rightGlyphGrabber: Servo = linearOpMode.hardwareMap.servo.get("right grabber")
@@ -20,7 +20,7 @@ class GlyphGrabbers(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode) {
         SMALL_OPEN(0.66, GlyphDeployerPosition.RETRACTED),
         RELEASE(0.75, GlyphDeployerPosition.EXTENDED),
         ATTACHED(0.90, GlyphDeployerPosition.ATTACHED),
-        CLOSED(0.90, GlyphDeployerPosition.EXTENDED)
+        CLOSED(0.90, GlyphDeployerPosition.RETRACTED)
     }
 
     enum class GlyphDeployerPosition(val value: Double) {

@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.libraries.robot.lift.LimitedRobotLift
 
 class Lift(linearOpMode: LinearOpMode,
            motorName: String = "winch motor",
-           direction: DcMotorSimple.Direction = DcMotorSimple.Direction.REVERSE,
+           direction: DcMotorSimple.Direction = DcMotorSimple.Direction.FORWARD,
            limitDeviceName: String = "limit switch") :
         LimitedRobotLift(linearOpMode, motorName, direction, limitDeviceName) {
 

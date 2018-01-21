@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.libraries.vision;
+package org.firstinspires.ftc.teamcode.libraries;
 
 import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
 

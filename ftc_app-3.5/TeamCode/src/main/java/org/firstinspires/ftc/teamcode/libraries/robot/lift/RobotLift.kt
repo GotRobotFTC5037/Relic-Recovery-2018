@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.util.ElapsedTime
-import org.firstinspires.ftc.teamcode.libraries.robot.RobotComponent
+import org.firstinspires.ftc.teamcode.libraries.robot.Component
 import kotlin.concurrent.thread
 import kotlin.math.abs
 
@@ -14,7 +14,7 @@ import kotlin.math.abs
  *
  * @author FTC Team 5037 gotrobot?
  */
-open class RobotLift(override val linearOpMode: LinearOpMode, motorName: String, direction: DcMotorSimple.Direction): RobotComponent {
+open class RobotLift(override val linearOpMode: LinearOpMode, motorName: String, direction: DcMotorSimple.Direction): Component {
 
     private val motor: DcMotor = linearOpMode.hardwareMap.dcMotor.get(motorName)
 

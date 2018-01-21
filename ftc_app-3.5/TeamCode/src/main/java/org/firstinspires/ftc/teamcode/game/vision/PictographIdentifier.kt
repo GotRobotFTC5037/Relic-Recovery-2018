@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.libraries.vision
+package org.firstinspires.ftc.teamcode.game.vision
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.HardwareMap
@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables
+import org.firstinspires.ftc.teamcode.libraries.ClosableVuforiaLocalizer
 
 /**
  * A class that is used to identify the pictograph images on the side wall in
@@ -39,7 +40,8 @@ class PictographIdentifier(hardwareMap: HardwareMap) {
         parameters.vuforiaLicenseKey = VUFORIA_LICENSE_KEY
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK
 
-        vuforiaLocalizer = ClosableVuforiaLocalizer(parameters)
+        vuforiaLocalizer =
+                ClosableVuforiaLocalizer(parameters)
         this.relicTrackables = vuforiaLocalizer.loadTrackablesFromAsset("RelicVuMark")
         this.relicTemplate = relicTrackables[0]
     }
