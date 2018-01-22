@@ -113,7 +113,7 @@ class GlyphIdentifier : OpenCVPipeline() {
     /**
      * Compute the convex hulls of contours.
      * @param inputContours The contours on which to perform the operation.
-     * @param outputContours The contours where the output will be stored.
+     * @param outputContours The contours where the sumOutput will be stored.
      */
     private fun convexHulls(inputContours: List<MatOfPoint>, outputContours: ArrayList<MatOfPoint>) {
         val hull = MatOfInt()
@@ -138,7 +138,7 @@ class GlyphIdentifier : OpenCVPipeline() {
     /**
      * Filters out contours that do not meet certain criteria.
      * @param inputContours is the input list of contours
-     * @param output is the the output list of contours
+     * @param output is the the sumOutput list of contours
      * @param minArea is the minimum area of a contour that will be kept
      * @param minPerimeter is the minimum perimeter of a contour that will be kept
      * @param minWidth minimum width of a contour

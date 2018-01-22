@@ -276,7 +276,7 @@ class JewelConfigurationDetector : OpenCVPipeline() {
      * @param minArea The minimum area required to recognize as a blob.
      * @param circularity The circularity required to recognize as a blob.
      * @param darkBlobs Informs the blob detector if the recognition should be based on light blobs or dark blobs.
-     * @param blobList The MatOfKeyPoints to use as the output for recognition.
+     * @param blobList The MatOfKeyPoints to use as the sumOutput for recognition.
      */
     private fun findBlobs(input: Mat, minArea: Double, circularity: DoubleArray, darkBlobs: Boolean, blobList: MatOfKeyPoint) {
         val blobDet = FeatureDetector.create(FeatureDetector.SIMPLEBLOB)
@@ -331,7 +331,7 @@ class JewelConfigurationDetector : OpenCVPipeline() {
     /**
      * Compute the convex hulls of contours.
      * @param inputContours The contours on which to perform the operation.
-     * @param outputContours The contours where the output will be stored.
+     * @param outputContours The contours where the sumOutput will be stored.
      */
     private fun convexHulls(inputContours: List<MatOfPoint>, outputContours: java.util.ArrayList<MatOfPoint>) {
         val hull = MatOfInt()
@@ -356,7 +356,7 @@ class JewelConfigurationDetector : OpenCVPipeline() {
     /**
      * Filters out contours that do not meet certain criteria.
      * @param inputContours is the input list of contours
-     * @param output is the the output list of contours
+     * @param output is the the sumOutput list of contours
      * @param minArea is the minimum area of a contour that will be kept
      * @param minPerimeter is the minimum perimeter of a contour that will be kept
      * @param minWidth minimum width of a contour

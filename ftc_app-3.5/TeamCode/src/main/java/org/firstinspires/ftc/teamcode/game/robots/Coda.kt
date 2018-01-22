@@ -6,8 +6,8 @@ import org.firstinspires.ftc.teamcode.game.components.DriveTrain
 import org.firstinspires.ftc.teamcode.game.components.GlyphGrabber
 import org.firstinspires.ftc.teamcode.game.components.JewelDisplacmentBar
 import org.firstinspires.ftc.teamcode.game.components.Lift
-import org.firstinspires.ftc.teamcode.libraries.robot.Robot
-import org.firstinspires.ftc.teamcode.libraries.robot.sensor.RangeSensor
+import org.firstinspires.ftc.teamcode.lib.robot.Robot
+import org.firstinspires.ftc.teamcode.lib.robot.sensor.RangeSensor
 import kotlin.concurrent.thread
 import kotlin.math.abs
 
@@ -84,14 +84,14 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
             val currentDistance = rangeSensor.distanceDetected
             when {
                 targetDistance > currentDistance -> {
-                    driveTrain.strafeDrive(abs(drivePower))
+                    driveTrain.strafeDriveAtPower(abs(drivePower))
                     while (targetDistance > rangeSensor.distanceDetected) {
                         linearOpMode.sleep(10)
                     }
                 }
 
                 currentDistance > targetDistance -> {
-                    driveTrain.linearDrive(-abs(drivePower))
+                    driveTrain.linearDriveAtPower(-abs(drivePower))
                     while (rangeSensor.distanceDetected > targetDistance) {
                         linearOpMode.sleep(10)
                     }
@@ -124,7 +124,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
     fun driveOffBalancingStone(power: Double) {
         if (!linearOpMode.isStopRequested) {
 
-            driveTrain.linearDrive(power)
+            driveTrain.linearDriveAtPower(power)
 
             when {
                 power > 0 -> {
@@ -166,7 +166,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
 
         if (!linearOpMode.isStopRequested) {
 
-            driveTrain.linearDrive(power)
+            driveTrain.linearDriveAtPower(power)
 
             while (abs(startingPitch - driveTrain.currentPitch) >= BALANCING_STONE_GROUND_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
                 linearOpMode.sleep(10)

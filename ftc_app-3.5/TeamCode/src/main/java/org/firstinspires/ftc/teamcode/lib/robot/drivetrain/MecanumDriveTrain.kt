@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode.libraries.robot.drivetrain
+package org.firstinspires.ftc.teamcode.lib.robot.drivetrain
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import org.firstinspires.ftc.robotcore.external.navigation.Position
+import org.firstinspires.ftc.teamcode.lib.powercontroller.PowerController
+import org.firstinspires.ftc.teamcode.lib.powercontroller.StaticPowerController
 import kotlin.concurrent.thread
-import kotlin.math.abs
 
 typealias Heading = Double
 typealias MotorPower = Double
@@ -21,7 +22,7 @@ abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : Driv
     private var isActivelyTurning = false
     abstract val currentHeading: Heading
 
-    protected val drivePowers: DrivePowers = DrivePowers()
+    private val drivePowers: DrivePowers = DrivePowers()
 
     /**
      * Used to contain powers for the drive train's motors.
@@ -36,7 +37,7 @@ abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : Driv
     /**
      * Linearly drives the drive train by using the provided power.
      */
-    fun linearDrive(power: MotorPower) {
+    fun linearDriveAtPower(power: MotorPower) {
         drivePowers.frontLeft = power
         drivePowers.frontRight = power
         drivePowers.rearLeft = power
@@ -46,7 +47,7 @@ abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : Driv
     /**
      * Strafes the drive train by using the provided power.
      */
-    fun strafeDrive(power: MotorPower) {
+    fun strafeDriveAtPower(power: MotorPower) {
         drivePowers.frontLeft = -power
         drivePowers.frontRight = power
         drivePowers.rearLeft = power
@@ -56,7 +57,7 @@ abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : Driv
     /**
      * Turns the drive train by using the provided power.
      */
-    fun turn(power: MotorPower) {
+    fun turnAtPower(power: MotorPower) {
         drivePowers.frontLeft = -power
         drivePowers.frontRight = power
         drivePowers.rearLeft = -power
@@ -67,7 +68,7 @@ abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : Driv
      * Linearly drives for the provided duration.
      */
     fun linearTimeDrive(duration: Long, power: MotorPower) {
-        linearDrive(power)
+        linearDriveAtPower(power)
         linearOpMode.sleep(duration)
     }
 
@@ -119,30 +120,40 @@ abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : Driv
     /**
      * Turns the drive train to the specified heading.
      */
-    fun turnToHeading(targetHeading: Heading, power: MotorPower) {
-        isActivelyTurning = true
+    fun turnToHeading(targetHeading: Heading, controller: PowerController) {
 
+        // Prepare to turn
+        isActivelyTurning = true
+        controller.target = targetHeading
+        controller.inputValueHandler = { currentHeading }
+
+        // Determine which direction the robot will be turning in.
         val targetHeadingDifference = headingDifferenceFromTarget(targetHeading)
         if (targetHeadingDifference > 0) {
-            turn(abs(power))
             while (
                 headingDifferenceFromTarget(targetHeading) > 0.0 &&
                 !linearOpMode.isStopRequested
             ) {
+                turnAtPower(controller.output)
                 linearOpMode.idle()
             }
         } else if (targetHeadingDifference < 0) {
-            turn(-abs(power))
+            turnAtPower(controller.output)
             while (
                 headingDifferenceFromTarget(targetHeading) < 0.0 &&
                 !linearOpMode.isStopRequested
             ) {
+                turnAtPower(controller.output)
                 linearOpMode.idle()
             }
         }
 
         this.targetHeading = targetHeading
         isActivelyTurning = false
+    }
+
+    fun turnToHeading(targetHeading: Heading, power: MotorPower) {
+        turnToHeading(targetHeading, StaticPowerController(power))
     }
 
     /**

@@ -94,7 +94,7 @@ class BlueBackAutonomous : LinearOpMode() {
         }
 
         // Drive to the correct crypto box.
-        robot.turn(0.3, 90.0)
+        robot.turnAtPower(0.3, 90.0)
         robot.driveToDistanceFromLeftObject(rightWallDistance)
 
         // Place the glyph in the correct crypto box.
@@ -111,7 +111,7 @@ class BlueBackAutonomous : LinearOpMode() {
         robot.releaseGlyphGrabbers()
         robot.retractGlyphDeployer()
 
-        robot.turn(0.20, -90.0)
+        robot.turnAtPower(0.20, -90.0)
 
         // Drive to the glyphs in the center and grab one.
         sleep(1000)
@@ -121,7 +121,7 @@ class BlueBackAutonomous : LinearOpMode() {
         // Drive back the crypto boxes.
         robot.linearTimeDrive(650, -0.25)
         thread(true) { robot.lift.setPosition(Lift.LiftPosition.FIRST_LEVEL) }
-        robot.turn(0.35, 90.0)
+        robot.turnAtPower(0.35, 90.0)
         robot.linearTimeDrive(500)
         robot.driveToDistanceFromForwardObject(Coda.CRYPTO_BOX_SPACING)
 
@@ -144,7 +144,7 @@ class BlueBackAutonomous : LinearOpMode() {
         robot.liftGlyphDeployer(500)
 
         // Turn towards the center glyphs.
-        robot.turn(0.35, -90.0)
+        robot.turnAtPower(0.35, -90.0)
         */
     }
 

@@ -95,7 +95,7 @@ class RedFrontAutonomous : LinearOpMode() {
 
         // Drive to the correct crypto box.
         robot.linearTimeDrive(750, 0.225)
-        robot.turn(0.3, 180.0)
+        robot.turnAtPower(0.3, 180.0)
         //robot.linearTimeDrive(750, -0.225)
         robot.driveToDistanceFromRightObject(rightWallDistance)
 
@@ -118,7 +118,7 @@ class RedFrontAutonomous : LinearOpMode() {
             robot.driveToDistanceFromRightObject(Coda.TRAILING_FRONT_CRYPTO_BOX_DISTANCE, 1.00, false)
         }
 
-        robot.turn(0.20, -45.0)
+        robot.turnAtPower(0.20, -45.0)
 
         // Drive to the glyphs in the center and grab one.
         sleep(1000)
@@ -128,7 +128,7 @@ class RedFrontAutonomous : LinearOpMode() {
         // Drive back the crypto boxes.
         robot.linearTimeDrive(650, -0.25)
         thread(true) { robot.lift.setPosition(Lift.LiftPosition.FIRST_LEVEL) }
-        robot.turn(0.35, 180.0)
+        robot.turnAtPower(0.35, 180.0)
         robot.linearTimeDrive(500)
         robot.driveToDistanceFromForwardObject(Coda.CRYPTO_BOX_SPACING)
 
@@ -151,7 +151,7 @@ class RedFrontAutonomous : LinearOpMode() {
         robot.liftGlyphDeployer(500)
 
         // Turn towards the center glyphs.
-        robot.turn(0.35, -45.0)
+        robot.turnAtPower(0.35, -45.0)
 
         */
     }

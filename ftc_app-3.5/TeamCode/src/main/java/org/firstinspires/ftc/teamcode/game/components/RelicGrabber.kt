@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Servo
-import org.firstinspires.ftc.teamcode.libraries.robot.attachment.RobotAttachment
+import org.firstinspires.ftc.teamcode.lib.robot.attachment.RobotAttachment
 
 class RelicGrabber(linearOpMode: LinearOpMode) : RobotAttachment(linearOpMode) {
 

@@ -8,43 +8,39 @@ import com.qualcomm.robotcore.hardware.PIDCoefficients
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
-import org.firstinspires.ftc.teamcode.libraries.PIDController
-import org.firstinspires.ftc.teamcode.libraries.robot.drivetrain.Heading
-import org.firstinspires.ftc.teamcode.libraries.robot.drivetrain.MecanumDriveTrain
+import org.firstinspires.ftc.teamcode.lib.powercontroller.PIDPowerController
+import org.firstinspires.ftc.teamcode.lib.robot.drivetrain.Heading
+import org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain
 
 class DriveTrain(linearOpMode: LinearOpMode) : MecanumDriveTrain(linearOpMode) {
 
-    override val frontLeftMotor: DcMotor
-        get() {
-            val motor = hardwareMap.dcMotor.get("front left motor")
-            motor.direction = DcMotorSimple.Direction.FORWARD
-            motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-            return motor
-        }
+    override val frontLeftMotor: DcMotor by lazy {
+        val motor = hardwareMap.dcMotor.get("front left motor")
+        motor.direction = DcMotorSimple.Direction.FORWARD
+        motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        motor
+    }
 
-    override val frontRightMotor: DcMotor
-        get() {
-            val motor = hardwareMap.dcMotor.get("right left motor")
-            motor.direction = DcMotorSimple.Direction.FORWARD
-            motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-            return motor
-        }
+    override val frontRightMotor: DcMotor by lazy {
+        val motor = hardwareMap.dcMotor.get("right left motor")
+        motor.direction = DcMotorSimple.Direction.FORWARD
+        motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+         motor
+    }
 
-    override val rearLeftMotor: DcMotor
-        get() {
-            val motor = hardwareMap.dcMotor.get("back left motor")
-            motor.direction = DcMotorSimple.Direction.FORWARD
-            motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-            return motor
-        }
+    override val rearLeftMotor: DcMotor by lazy {
+        val motor = hardwareMap.dcMotor.get("back left motor")
+        motor.direction = DcMotorSimple.Direction.FORWARD
+        motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        motor
+    }
 
-    override val rearRightMotor: DcMotor
-        get() {
-            val motor = hardwareMap.dcMotor.get("back left motor")
-            motor.direction = DcMotorSimple.Direction.FORWARD
-            motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-            return motor
-        }
+    override val rearRightMotor: DcMotor by lazy {
+        val motor = hardwareMap.dcMotor.get("back right motor")
+        motor.direction = DcMotorSimple.Direction.FORWARD
+        motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        motor
+    }
 
     private val imu: BNO055IMU by lazy {
         val calibration = BNO055IMU.CalibrationData()
@@ -81,10 +77,10 @@ class DriveTrain(linearOpMode: LinearOpMode) : MecanumDriveTrain(linearOpMode) {
             return orientation.thirdAngle.toDouble()
         }
 
-    private val headingPIDController: PIDController by lazy {
-        val controller = PIDController(linearOpMode, HEADING_PID_COEFFICIENTS)
-        controller.setUpdateHandler { headingDifferenceFromTarget(targetHeading) }
-        controller.start()
+    private val headingPIDController: PIDPowerController by lazy {
+        val controller = PIDPowerController(linearOpMode, HEADING_PID_COEFFICIENTS)
+        controller.inputValueHandler = { headingDifferenceFromTarget(targetHeading) }
+        controller.target = 0.0
         controller
     }
 

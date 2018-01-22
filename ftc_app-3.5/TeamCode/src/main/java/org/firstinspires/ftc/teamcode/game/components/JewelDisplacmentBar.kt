@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.game.components
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import org.firstinspires.ftc.teamcode.libraries.robot.attachment.RobotAttachment
+import org.firstinspires.ftc.teamcode.lib.robot.attachment.RobotAttachment
 
 class JewelDisplacmentBar(linearOpMode: LinearOpMode, name: String = "jewel stick"): RobotAttachment(linearOpMode) {
 

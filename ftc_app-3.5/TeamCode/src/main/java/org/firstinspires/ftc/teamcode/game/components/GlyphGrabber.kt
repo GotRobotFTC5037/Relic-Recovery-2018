@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.game.components
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.Servo
-import org.firstinspires.ftc.teamcode.libraries.robot.attachment.RobotAttachment
+import org.firstinspires.ftc.teamcode.lib.robot.attachment.RobotAttachment
 
 class GlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode) {
 

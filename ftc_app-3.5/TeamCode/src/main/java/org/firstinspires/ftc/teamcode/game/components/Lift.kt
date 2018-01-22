@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.game.components
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotorSimple
-import org.firstinspires.ftc.teamcode.libraries.robot.lift.LimitedRobotLift
+import org.firstinspires.ftc.teamcode.lib.robot.lift.LimitedRobotLift
 
 class Lift(linearOpMode: LinearOpMode,
            motorName: String = "winch motor",

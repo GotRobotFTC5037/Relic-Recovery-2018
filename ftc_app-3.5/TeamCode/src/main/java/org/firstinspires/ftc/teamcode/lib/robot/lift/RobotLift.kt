@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.libraries.robot.lift
+package org.firstinspires.ftc.teamcode.lib.robot.lift
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.util.ElapsedTime
-import org.firstinspires.ftc.teamcode.libraries.robot.Component
+import org.firstinspires.ftc.teamcode.lib.robot.Component
 import kotlin.concurrent.thread
 import kotlin.math.abs
 

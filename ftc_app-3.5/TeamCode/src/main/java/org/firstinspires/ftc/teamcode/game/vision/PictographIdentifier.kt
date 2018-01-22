@@ -8,7 +8,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables
-import org.firstinspires.ftc.teamcode.libraries.ClosableVuforiaLocalizer
+import org.firstinspires.ftc.teamcode.lib.vision.ClosableVuforiaLocalizer
 
 /**
  * A class that is used to identify the pictograph images on the side wall in
