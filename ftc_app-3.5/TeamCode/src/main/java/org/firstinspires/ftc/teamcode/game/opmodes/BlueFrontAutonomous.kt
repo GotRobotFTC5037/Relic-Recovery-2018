@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
 import org.firstinspires.ftc.teamcode.game.CodaActions
 import org.firstinspires.ftc.teamcode.game.RelicRecoveryConstants
-import org.firstinspires.ftc.teamcode.game.components.Lift
 import org.firstinspires.ftc.teamcode.game.robots.Coda
 
 @Autonomous(name = "1: Blue Front", group = "Blue Manual Selection Autonomous")
@@ -49,9 +48,9 @@ class BlueFrontAutonomous : LinearOpMode() {
         actions.driveBackToCryptoBoxFromCenter()
 
         if (actions.detectedPictograph == RelicRecoveryVuMark.RIGHT) {
-            robot.lift.setPosition(Lift.LiftPosition.SECOND_LEVEL)
+            //robot.lift.setPosition(Lift.LiftPosition.SECOND_LEVEL)
         } else {
-            robot.lift.drop()
+            //robot.lift.drop()
         }
 
         actions.placeGlyph()

@@ -16,27 +16,27 @@ class DriveTrain(linearOpMode: LinearOpMode) : MecanumDriveTrain(linearOpMode) {
 
     override val frontLeftMotor: DcMotor by lazy {
         val motor = hardwareMap.dcMotor.get("front left motor")
-        motor.direction = DcMotorSimple.Direction.FORWARD
+        motor.direction = DcMotorSimple.Direction.REVERSE
         motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
         motor
     }
 
     override val frontRightMotor: DcMotor by lazy {
-        val motor = hardwareMap.dcMotor.get("right left motor")
+        val motor = hardwareMap.dcMotor.get("front right motor")
         motor.direction = DcMotorSimple.Direction.FORWARD
         motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
          motor
     }
 
     override val rearLeftMotor: DcMotor by lazy {
-        val motor = hardwareMap.dcMotor.get("back left motor")
-        motor.direction = DcMotorSimple.Direction.FORWARD
+        val motor = hardwareMap.dcMotor.get("rear left motor")
+        motor.direction = DcMotorSimple.Direction.REVERSE
         motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
         motor
     }
 
     override val rearRightMotor: DcMotor by lazy {
-        val motor = hardwareMap.dcMotor.get("back right motor")
+        val motor = hardwareMap.dcMotor.get("rear right motor")
         motor.direction = DcMotorSimple.Direction.FORWARD
         motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
         motor

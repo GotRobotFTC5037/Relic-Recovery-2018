@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
 import org.firstinspires.ftc.teamcode.game.components.GlyphGrabber
 import org.firstinspires.ftc.teamcode.game.components.JewelDisplacmentBar
-import org.firstinspires.ftc.teamcode.game.components.Lift
 import org.firstinspires.ftc.teamcode.game.robots.Coda
 import org.firstinspires.ftc.teamcode.game.vision.JewelConfigurationDetector
 import org.firstinspires.ftc.teamcode.game.vision.PictographIdentifier
@@ -41,9 +40,9 @@ class CodaActions(private val linearOpMode: LinearOpMode, private val robot: Cod
 
     fun elevateGlyph() {
         elevateGlyphThread = thread(true) {
-            robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.ATTACHED, 1100)
+            robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.CLOSED, 1100)
             thread(true) {
-                robot.lift.setPosition(Lift.LiftPosition.SECOND_LEVEL)
+                //robot.lift.setPosition(Lift.LiftPosition.SECOND_LEVEL)
             }
         }
     }
@@ -79,7 +78,7 @@ class CodaActions(private val linearOpMode: LinearOpMode, private val robot: Cod
 
     fun setLiftPositionToFirstLevel() {
         thread(true) {
-            robot.lift.setPosition(Lift.LiftPosition.FIRST_LEVEL, 0.3)
+            //robot.lift.setPosition(Lift.LiftPosition.FIRST_LEVEL, 0.3)
         }
     }
 
@@ -122,7 +121,7 @@ class CodaActions(private val linearOpMode: LinearOpMode, private val robot: Cod
         }
 
         robot.driveToDistanceFromObject(wallDirection, wallDistance)
-        robot.lift.drop()
+        //robot.lift.drop()
         placeGlyph()
         robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.OPEN)
     }
@@ -146,7 +145,7 @@ class CodaActions(private val linearOpMode: LinearOpMode, private val robot: Cod
         robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.CLOSED)
         robot.driveTrain.linearTimeDrive(distanceFromCenter.duration, -0.25)
         thread(true) {
-            robot.lift.setPosition(Lift.LiftPosition.FIRST_LEVEL)
+            //robot.lift.setPosition(Lift.LiftPosition.FIRST_LEVEL)
         }
     }
 

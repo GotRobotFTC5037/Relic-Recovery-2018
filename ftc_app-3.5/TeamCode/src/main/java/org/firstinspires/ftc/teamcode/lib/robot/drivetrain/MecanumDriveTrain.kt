@@ -93,8 +93,8 @@ abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : Driv
         }
 
         drivePowers.frontLeft = adjustedLinearPower + adjustedStrafePower - adjustedTurnPower
-        drivePowers.frontRight = adjustedLinearPower - adjustedStrafePower - adjustedTurnPower
-        drivePowers.rearLeft = adjustedLinearPower - adjustedStrafePower + adjustedTurnPower
+        drivePowers.frontRight = adjustedLinearPower - adjustedStrafePower + adjustedTurnPower
+        drivePowers.rearLeft = adjustedLinearPower - adjustedStrafePower - adjustedTurnPower
         drivePowers.rearRight = adjustedLinearPower + adjustedStrafePower + adjustedTurnPower
 
         if (turnPower == 0.0) isActivelyTurning = false

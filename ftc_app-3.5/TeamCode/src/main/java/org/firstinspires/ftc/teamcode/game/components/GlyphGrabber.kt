@@ -6,32 +6,52 @@ import org.firstinspires.ftc.teamcode.lib.robot.attachment.RobotAttachment
 
 class GlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode) {
 
-    private val leftGlyphGrabber: Servo = linearOpMode.hardwareMap.servo.get("left grabber")
-    private val rightGlyphGrabber: Servo = linearOpMode.hardwareMap.servo.get("right grabber")
-    private val glyphDeployer: Servo = linearOpMode.hardwareMap.servo.get("glyph deployer")
+    var currentState: GlyphGrabberState = GlyphGrabberState.OPEN
+        private set
 
-    init {
-        leftGlyphGrabber.direction = Servo.Direction.FORWARD
-        rightGlyphGrabber.direction = Servo.Direction.REVERSE
+    private val leftGlyphGrabber: Servo by lazy {
+        val servo = hardwareMap.servo.get("left grabber")
+        servo.direction = Servo.Direction.FORWARD
+        servo
     }
 
-    enum class GlyphGrabberState(val armPosition: Double, val deployerPosition: GlyphDeployerPosition) {
-        OPEN(0.50, GlyphDeployerPosition.RETRACTED),
-        SMALL_OPEN(0.66, GlyphDeployerPosition.RETRACTED),
-        RELEASE(0.75, GlyphDeployerPosition.EXTENDED),
-        ATTACHED(0.90, GlyphDeployerPosition.ATTACHED),
-        CLOSED(0.90, GlyphDeployerPosition.RETRACTED)
+    private val rightGlyphGrabber: Servo by lazy {
+        val servo = hardwareMap.servo.get("right grabber")
+        servo.direction = Servo.Direction.REVERSE
+        servo
+    }
+
+    private val glyphDeployer: Servo by lazy {
+        val servo = hardwareMap.servo.get("glyph deployer")
+        servo.direction = Servo.Direction.FORWARD
+        servo
+    }
+
+    enum class GlyphArmPosition(val value: Double) {
+        OPEN(1.0),
+        SMALL_OPEN(0.85),
+        RELEASE(0.80),
+        CLOSED(0.65)
     }
 
     enum class GlyphDeployerPosition(val value: Double) {
-        EXTENDED(0.90),
-        ATTACHED(0.85),
-        RETRACTED(0.25)
+        RETRACTED(0.80),
+        EXTENDED(0.35)
     }
 
-    private fun setArmsPosition(position: Double) {
-        leftGlyphGrabber.position = position
-        rightGlyphGrabber.position = position
+    enum class GlyphGrabberState(
+        val armPosition: GlyphArmPosition,
+        val deployerPosition: GlyphDeployerPosition
+    ) {
+        OPEN(GlyphArmPosition.OPEN, GlyphDeployerPosition.RETRACTED),
+        CLOSED(GlyphArmPosition.CLOSED, GlyphDeployerPosition.RETRACTED),
+        SMALL_OPEN(GlyphArmPosition.SMALL_OPEN, GlyphDeployerPosition.RETRACTED),
+        RELEASE(GlyphArmPosition.RELEASE, GlyphDeployerPosition.EXTENDED),
+    }
+
+    private fun setArmsPosition(position: GlyphArmPosition) {
+        leftGlyphGrabber.position = position.value
+        rightGlyphGrabber.position = position.value
     }
 
     private fun setDeployerPosition(position: GlyphDeployerPosition) {
@@ -39,6 +59,7 @@ class GlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode) {
     }
 
     fun setState(state: GlyphGrabberState, delay: Long = 0) {
+        currentState = state
         setDeployerPosition(state.deployerPosition)
         setArmsPosition(state.armPosition)
         linearOpMode.sleep(delay)

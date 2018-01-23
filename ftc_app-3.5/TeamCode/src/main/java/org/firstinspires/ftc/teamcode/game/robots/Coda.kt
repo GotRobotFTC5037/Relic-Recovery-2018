@@ -2,10 +2,10 @@ package org.firstinspires.ftc.teamcode.game.robots
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.I2cAddr
+import org.firstinspires.ftc.teamcode.game.components.CodaLift
 import org.firstinspires.ftc.teamcode.game.components.DriveTrain
 import org.firstinspires.ftc.teamcode.game.components.GlyphGrabber
 import org.firstinspires.ftc.teamcode.game.components.JewelDisplacmentBar
-import org.firstinspires.ftc.teamcode.game.components.Lift
 import org.firstinspires.ftc.teamcode.lib.robot.Robot
 import org.firstinspires.ftc.teamcode.lib.robot.sensor.RangeSensor
 import kotlin.concurrent.thread
@@ -14,7 +14,7 @@ import kotlin.math.abs
 class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
 
     val driveTrain: DriveTrain by lazy { components[DRIVE_TRAIN] as DriveTrain }
-    val lift: Lift by lazy { components[LIFT] as Lift }
+    val lift: CodaLift by lazy { components[LIFT] as CodaLift }
     val glyphGrabber: GlyphGrabber by lazy { components[GLYPH_GRABBER] as GlyphGrabber }
     val jewelDisplacementBar: JewelDisplacmentBar by lazy { components[JEWEL_STICK] as JewelDisplacmentBar }
 
@@ -25,7 +25,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
      */
     fun setup() {
         addComponent(DriveTrain(linearOpMode), DRIVE_TRAIN)
-        addComponent(Lift(linearOpMode), LIFT)
+        addComponent(CodaLift(linearOpMode), LIFT)
         addComponent(GlyphGrabber(linearOpMode), GLYPH_GRABBER)
         addComponent(JewelDisplacmentBar(linearOpMode), JEWEL_STICK)
 
