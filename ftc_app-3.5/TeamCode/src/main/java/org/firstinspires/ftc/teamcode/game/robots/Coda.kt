@@ -2,10 +2,7 @@ package org.firstinspires.ftc.teamcode.game.robots
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.I2cAddr
-import org.firstinspires.ftc.teamcode.game.components.CodaLift
-import org.firstinspires.ftc.teamcode.game.components.DriveTrain
-import org.firstinspires.ftc.teamcode.game.components.GlyphGrabber
-import org.firstinspires.ftc.teamcode.game.components.JewelDisplacmentBar
+import org.firstinspires.ftc.teamcode.game.components.*
 import org.firstinspires.ftc.teamcode.lib.robot.Robot
 import org.firstinspires.ftc.teamcode.lib.robot.sensor.RangeSensor
 import kotlin.concurrent.thread
@@ -16,7 +13,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
     val driveTrain: DriveTrain by lazy { components[DRIVE_TRAIN] as DriveTrain }
     val lift: CodaLift by lazy { components[LIFT] as CodaLift }
     val glyphGrabber: GlyphGrabber by lazy { components[GLYPH_GRABBER] as GlyphGrabber }
-    val jewelDisplacementBar: JewelDisplacmentBar by lazy { components[JEWEL_STICK] as JewelDisplacmentBar }
+    val jewelDisplacementBar: JewelDisplacementBar by lazy { components[JEWEL_STICK] as JewelDisplacementBar }
 
     private var startingPitch: Double = 0.0
 
@@ -25,9 +22,10 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
      */
     fun setup() {
         addComponent(DriveTrain(linearOpMode), DRIVE_TRAIN)
-        addComponent(CodaLift(linearOpMode), LIFT)
         addComponent(GlyphGrabber(linearOpMode), GLYPH_GRABBER)
-        addComponent(JewelDisplacmentBar(linearOpMode), JEWEL_STICK)
+        addComponent(CodaLift(linearOpMode), LIFT)
+        addComponent(RelicGrabber(linearOpMode), RELIC_GRABBER)
+        addComponent(JewelDisplacementBar(linearOpMode), JEWEL_STICK)
 
         addComponent(
             RangeSensor(linearOpMode, "front left range sensor"),
@@ -132,7 +130,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
                         linearOpMode.sleep(10)
                     }
 
-                    jewelDisplacementBar.setPosition(JewelDisplacmentBar.Position.UP)
+                    jewelDisplacementBar.setPosition(JewelDisplacementBar.Position.UP)
 
                     while (startingPitch - driveTrain.currentPitch >= BALANCING_STONE_GROUND_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
                         linearOpMode.sleep(10)
@@ -144,7 +142,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
                         linearOpMode.sleep(10)
                     }
 
-                    jewelDisplacementBar.setPosition(JewelDisplacmentBar.Position.UP)
+                    jewelDisplacementBar.setPosition(JewelDisplacementBar.Position.UP)
 
                     while (startingPitch - driveTrain.currentPitch <= -BALANCING_STONE_GROUND_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
                         linearOpMode.sleep(10)
@@ -189,8 +187,9 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
 
     companion object {
         private const val DRIVE_TRAIN = "drive_train"
-        private const val LIFT = "lift"
         private const val GLYPH_GRABBER = "glyph_grabber"
+        private const val LIFT = "lift"
+        private const val RELIC_GRABBER = "relic_grabber"
         private const val JEWEL_STICK = "jewel_stick"
         private const val FRONT_LEFT_RANGE_SENSOR = "front_left_range_sensor"
         private const val FRONT_RIGHT_RANGE_SENSOR = "front_right_range_sensor"

@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.game.components
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.lib.robot.attachment.RobotAttachment
 
-class JewelDisplacmentBar(linearOpMode: LinearOpMode, name: String = "jewel stick"): RobotAttachment(linearOpMode) {
+class JewelDisplacementBar(linearOpMode: LinearOpMode, name: String = "jewel stick"): RobotAttachment(linearOpMode) {
 
     enum class Position(val value: Double) {
         UP(0.0),

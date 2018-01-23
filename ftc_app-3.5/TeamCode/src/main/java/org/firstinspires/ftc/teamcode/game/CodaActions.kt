@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
 import org.firstinspires.ftc.teamcode.game.components.GlyphGrabber
-import org.firstinspires.ftc.teamcode.game.components.JewelDisplacmentBar
+import org.firstinspires.ftc.teamcode.game.components.JewelDisplacementBar
 import org.firstinspires.ftc.teamcode.game.robots.Coda
 import org.firstinspires.ftc.teamcode.game.vision.JewelConfigurationDetector
 import org.firstinspires.ftc.teamcode.game.vision.PictographIdentifier
@@ -49,7 +49,7 @@ class CodaActions(private val linearOpMode: LinearOpMode, private val robot: Cod
 
     private fun dropJewelStickIfAppropriate() {
         if (detectedJewelConfiguration != JewelConfigurationDetector.JewelConfiguration.UNKNOWN) {
-            robot.jewelDisplacementBar.setPosition(JewelDisplacmentBar.Position.DOWN)
+            robot.jewelDisplacementBar.setPosition(JewelDisplacementBar.Position.DOWN)
         }
     }
 
@@ -105,7 +105,7 @@ class CodaActions(private val linearOpMode: LinearOpMode, private val robot: Cod
         val powerMultiplier = if (backwards) -1 else 1
 
         robot.driveTrain.linearTimeDrive(1000, 0.175 * powerMultiplier)
-        robot.jewelDisplacementBar.setPosition(JewelDisplacmentBar.Position.UP)
+        robot.jewelDisplacementBar.setPosition(JewelDisplacementBar.Position.UP)
         robot.driveOnBalancingStone(-0.40 * powerMultiplier)
     }
 

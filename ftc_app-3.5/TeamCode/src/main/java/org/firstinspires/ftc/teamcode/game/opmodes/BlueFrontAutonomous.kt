@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.game.robots.Coda
 class BlueFrontAutonomous : LinearOpMode() {
 
     companion object {
-        val OPMODE_NAME = "1: Blue Front"
+        const val OPMODE_NAME = "1: Blue Front"
     }
 
     @Throws(InterruptedException::class)

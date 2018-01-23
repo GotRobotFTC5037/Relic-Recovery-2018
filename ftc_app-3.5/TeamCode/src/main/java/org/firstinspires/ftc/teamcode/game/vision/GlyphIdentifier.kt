@@ -12,7 +12,7 @@ import kotlin.math.roundToInt
 class GlyphIdentifier : OpenCVPipeline() {
 
     companion object {
-        val GLYPH_SIZE = 15.2
+        const val GLYPH_SIZE = 15.2
 
         init {
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME)

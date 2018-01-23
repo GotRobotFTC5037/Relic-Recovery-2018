@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.game.opmodes
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.game.robots.Coda
 import org.firstinspires.ftc.teamcode.lib.powercontroller.ProportionalPowerController
 import org.firstinspires.ftc.teamcode.lib.powercontroller.StaticPowerController
 
-class CodaAutonomousMovmentDemo : LinearOpMode() {
+@Autonomous
+class CodaAutonomousMovementDemo : LinearOpMode() {
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {

@@ -95,7 +95,6 @@ class DriveTrain(linearOpMode: LinearOpMode) : MecanumDriveTrain(linearOpMode) {
     }
 
     companion object {
-        const val MINIMUM_DRIVE_POWER = 0.15
         val HEADING_PID_COEFFICIENTS = PIDCoefficients(0.025, 0.00004, 0.15)
     }
 

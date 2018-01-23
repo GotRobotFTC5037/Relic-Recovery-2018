@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DigitalChannel
 import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.teamcode.lib.robot.lift.Lift
-import kotlin.concurrent.thread
 
 class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
 
@@ -24,6 +23,16 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
     private val liftIsLowered: Boolean
         get() = !limitButton.state
 
+    enum class LiftPosition(val value: Int) {
+        BOTTOM(0),
+        FIRST_LEVEL(250),
+        SECOND_LEVEL(0),
+        THIRD_LEVEL(0),
+        FORTH_LEVEL(0)
+    }
+
+    private var currentPosition: LiftPosition = LiftPosition.BOTTOM
+
     private fun resetEncoder() {
         motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
@@ -31,7 +40,7 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
 
     override fun setPower(power: Double) {
         if(power > 0.0 || !liftIsLowered) {
-            super.setPower(Range.clip(power, -0.40, 1.00))
+            super.setPower(Range.clip(power, MINIMUM_LIFT_POWER, MAXIMUM_LIFT_POWER))
         } else {
             super.setPower(0.0)
         }
@@ -39,13 +48,28 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
 
     fun drop() {
         if (!liftIsLowered) {
-            thread(start = true) {
-                setPower(-0.20)
-                while (!liftIsLowered) { linearOpMode.idle() }
-                setPower(0.0)
-                resetEncoder()
-            }
+            setPower(-0.20)
+            while (!liftIsLowered) { linearOpMode.idle() }
+            setPower(0.0)
+            resetEncoder()
         }
+    }
+
+    fun setPosition(position: LiftPosition) {
+        currentPosition = position
+        if (position.value > motor.currentPosition) {
+            setPower(MAXIMUM_LIFT_POWER)
+            while (position.value > motor.currentPosition) { linearOpMode.idle() }
+        } else if (position.value < motor.currentPosition) {
+            setPower(MINIMUM_LIFT_POWER)
+            while (position.value < motor.currentPosition) { linearOpMode.idle() }
+        }
+        setPower(0.0)
+    }
+
+    companion object {
+        private const val MINIMUM_LIFT_POWER = -0.40
+        private const val MAXIMUM_LIFT_POWER = 1.00
     }
 
 }

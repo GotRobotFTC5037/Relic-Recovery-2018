@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 class RedBackAutonomous : LinearOpMode() {
 
     companion object {
-        val OPMODE_NAME = "4: Red Back"
+        const val OPMODE_NAME = "4: Red Back"
     }
 
     @Throws(InterruptedException::class)

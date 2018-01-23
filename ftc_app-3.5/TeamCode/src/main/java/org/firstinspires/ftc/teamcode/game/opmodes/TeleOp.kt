@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.game.opmodes
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.Gamepad
+import org.firstinspires.ftc.teamcode.game.components.CodaLift
 import org.firstinspires.ftc.teamcode.game.components.GlyphGrabber
 import org.firstinspires.ftc.teamcode.game.robots.Coda
 import kotlin.math.abs
@@ -71,9 +72,8 @@ class CodaTeleOp : LinearOpMode() {
             robot.lift.setPower(liftPower)
         } else {
             when {
-                gamepad1.dpad_up -> robot.lift.setPower(1.0)
-                gamepad1.dpad_down -> robot.lift.setPower(-0.40)
-                gamepad1.start -> robot.lift.drop()
+                gamepad1.dpad_up -> robot.lift.setPosition(CodaLift.LiftPosition.FIRST_LEVEL)
+                gamepad1.dpad_down -> robot.lift.drop()
                 else -> robot.lift.setPower(0.0)
             }
         }
