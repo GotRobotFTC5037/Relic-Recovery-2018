@@ -1,37 +1,75 @@
 package org.firstinspires.ftc.teamcode.game.components
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import com.qualcomm.robotcore.hardware.DcMotorSimple
-import org.firstinspires.ftc.teamcode.libraries.robot.lift.LimitedRobotLift
+import com.qualcomm.robotcore.hardware.DcMotor
+import com.qualcomm.robotcore.hardware.DigitalChannel
+import com.qualcomm.robotcore.util.Range
+import org.firstinspires.ftc.teamcode.lib.robot.lift.Lift
 
-class Lift(linearOpMode: LinearOpMode,
-           motorName: String = "winch motor",
-           direction: DcMotorSimple.Direction = DcMotorSimple.Direction.REVERSE,
-           limitDeviceName: String = "limit switch") :
-        LimitedRobotLift(linearOpMode, motorName, direction, limitDeviceName) {
+class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
 
-    /**
-     * A position to set the lift to.
-     */
-    enum class LiftPosition(val encoderPosition: Int) {
-        FOURTH_LEVEL(2950),
-        THIRD_LEVEL(2000),
-        SECOND_LEVEL(1150),
-        FIRST_LEVEL(400),
-        BOTTOM_LEVEL(0)
+    override val motor: DcMotor by lazy {
+        val motor = hardwareMap.dcMotor.get("lift motor")
+        motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        motor
     }
 
-    init {
-        positionCorrectionProportionalCoefficient = 0.002500
-        positionCorrectionIntegralCoefficient     = 0.000500
-        positionCorrectionDerivativeCoefficient   = 0.000035
+    private val limitButton: DigitalChannel by lazy {
+        val button = hardwareMap.digitalChannel.get("lift limit button")
+        button.mode = DigitalChannel.Mode.INPUT
+        button
     }
 
-    fun setPosition(targetPosition: LiftPosition, power: Double = 0.75) {
-        setPosition(targetPosition.encoderPosition, power)
+    private val liftIsLowered: Boolean
+        get() = !limitButton.state
+
+    enum class LiftPosition(val value: Int) {
+        BOTTOM(0),
+        FIRST_LEVEL(250),
+        SECOND_LEVEL(0),
+        THIRD_LEVEL(0),
+        FORTH_LEVEL(0)
     }
 
-    override fun drop(power: Double) {
-        setPosition(LiftPosition.BOTTOM_LEVEL)
+    private var currentPosition: LiftPosition = LiftPosition.BOTTOM
+
+    private fun resetEncoder() {
+        motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
     }
+
+    override fun setPower(power: Double) {
+        if(power > 0.0 || !liftIsLowered) {
+            super.setPower(Range.clip(power, MINIMUM_LIFT_POWER, MAXIMUM_LIFT_POWER))
+        } else {
+            super.setPower(0.0)
+        }
+    }
+
+    fun drop() {
+        if (!liftIsLowered) {
+            setPower(-0.20)
+            while (!liftIsLowered) { linearOpMode.idle() }
+            setPower(0.0)
+            resetEncoder()
+        }
+    }
+
+    fun setPosition(position: LiftPosition) {
+        currentPosition = position
+        if (position.value > motor.currentPosition) {
+            setPower(MAXIMUM_LIFT_POWER)
+            while (position.value > motor.currentPosition) { linearOpMode.idle() }
+        } else if (position.value < motor.currentPosition) {
+            setPower(MINIMUM_LIFT_POWER)
+            while (position.value < motor.currentPosition) { linearOpMode.idle() }
+        }
+        setPower(0.0)
+    }
+
+    companion object {
+        private const val MINIMUM_LIFT_POWER = -0.40
+        private const val MAXIMUM_LIFT_POWER = 1.00
+    }
+
 }

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.libraries.robot.sensors
+package org.firstinspires.ftc.teamcode.lib.robot.sensor
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode

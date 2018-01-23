@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.libraries.vision
+package org.firstinspires.ftc.teamcode.game.vision
 
 import com.vuforia.CameraDevice
 import org.corningrobotics.enderbots.endercv.OpenCVPipeline
@@ -12,7 +12,7 @@ import kotlin.math.roundToInt
 class GlyphIdentifier : OpenCVPipeline() {
 
     companion object {
-        val GLYPH_SIZE = 15.2
+        const val GLYPH_SIZE = 15.2
 
         init {
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
@@ -113,7 +113,7 @@ class GlyphIdentifier : OpenCVPipeline() {
     /**
      * Compute the convex hulls of contours.
      * @param inputContours The contours on which to perform the operation.
-     * @param outputContours The contours where the output will be stored.
+     * @param outputContours The contours where the sumOutput will be stored.
      */
     private fun convexHulls(inputContours: List<MatOfPoint>, outputContours: ArrayList<MatOfPoint>) {
         val hull = MatOfInt()
@@ -138,7 +138,7 @@ class GlyphIdentifier : OpenCVPipeline() {
     /**
      * Filters out contours that do not meet certain criteria.
      * @param inputContours is the input list of contours
-     * @param output is the the output list of contours
+     * @param output is the the sumOutput list of contours
      * @param minArea is the minimum area of a contour that will be kept
      * @param minPerimeter is the minimum perimeter of a contour that will be kept
      * @param minWidth minimum width of a contour

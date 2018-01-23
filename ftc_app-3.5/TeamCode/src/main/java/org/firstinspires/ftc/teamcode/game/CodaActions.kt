@@ -3,12 +3,11 @@ package org.firstinspires.ftc.teamcode.game
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
-import org.firstinspires.ftc.teamcode.game.components.GlyphGrabbers
-import org.firstinspires.ftc.teamcode.game.components.JewelStick
-import org.firstinspires.ftc.teamcode.game.components.Lift
+import org.firstinspires.ftc.teamcode.game.components.GlyphGrabber
+import org.firstinspires.ftc.teamcode.game.components.JewelDisplacementBar
 import org.firstinspires.ftc.teamcode.game.robots.Coda
-import org.firstinspires.ftc.teamcode.libraries.vision.JewelConfigurationDetector
-import org.firstinspires.ftc.teamcode.libraries.vision.PictographIdentifier
+import org.firstinspires.ftc.teamcode.game.vision.JewelConfigurationDetector
+import org.firstinspires.ftc.teamcode.game.vision.PictographIdentifier
 import java.security.InvalidParameterException
 import kotlin.concurrent.thread
 
@@ -23,12 +22,7 @@ class CodaActions(private val linearOpMode: LinearOpMode, private val robot: Cod
     private lateinit var detectedJewelConfiguration: JewelConfigurationDetector.JewelConfiguration
 
     lateinit var detectedPictograph: RelicRecoveryVuMark
-    private set
-
-    enum class AllianceColor {
-        RED,
-        BLUE
-    }
+        private set
 
     fun setupCameras() {
         jewelConfigurationDetector = JewelConfigurationDetector()
@@ -46,16 +40,16 @@ class CodaActions(private val linearOpMode: LinearOpMode, private val robot: Cod
 
     fun elevateGlyph() {
         elevateGlyphThread = thread(true) {
-            robot.glyphGrabbers.setState(GlyphGrabbers.GlyphGrabberState.ATTACHED, 1100)
+            robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.CLOSED, 1100)
             thread(true) {
-                robot.lift.setPosition(Lift.LiftPosition.SECOND_LEVEL)
+                //robot.lift.setPosition(Lift.LiftPosition.SECOND_LEVEL)
             }
         }
     }
 
     private fun dropJewelStickIfAppropriate() {
         if (detectedJewelConfiguration != JewelConfigurationDetector.JewelConfiguration.UNKNOWN) {
-            robot.jewelStick.setPosition(JewelStick.Position.DOWN)
+            robot.jewelDisplacementBar.setPosition(JewelDisplacementBar.Position.DOWN)
         }
     }
 
@@ -84,8 +78,13 @@ class CodaActions(private val linearOpMode: LinearOpMode, private val robot: Cod
 
     fun setLiftPositionToFirstLevel() {
         thread(true) {
-            robot.lift.setPosition(Lift.LiftPosition.FIRST_LEVEL, 0.3)
+            //robot.lift.setPosition(Lift.LiftPosition.FIRST_LEVEL, 0.3)
         }
+    }
+
+    enum class AllianceColor {
+        RED,
+        BLUE
     }
 
     fun displaceJewel(allianceColor: AllianceColor) {
@@ -105,15 +104,15 @@ class CodaActions(private val linearOpMode: LinearOpMode, private val robot: Cod
     private fun performRetroJewelDisplacementManeuver(backwards: Boolean) {
         val powerMultiplier = if (backwards) -1 else 1
 
-        robot.driveTrain.timeDrive(1000, 0.175 * powerMultiplier)
-        robot.jewelStick.setPosition(JewelStick.Position.UP)
+        robot.driveTrain.linearTimeDrive(1000, 0.175 * powerMultiplier)
+        robot.jewelDisplacementBar.setPosition(JewelDisplacementBar.Position.UP)
         robot.driveOnBalancingStone(-0.40 * powerMultiplier)
     }
 
     fun placeGlyph() {
-        robot.driveTrain.timeDrive(1000)
-        robot.glyphGrabbers.setState(GlyphGrabbers.GlyphGrabberState.OPEN, 200)
-        robot.driveTrain.timeDrive(450, -0.50)
+        robot.driveTrain.linearTimeDrive(1000, 1.0)
+        robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.OPEN, 200)
+        robot.driveTrain.linearTimeDrive(450, -0.50)
     }
 
     fun placeGlyph(wallDirection: Coda.ObjectDirection, wallDistance: Double) {
@@ -122,15 +121,17 @@ class CodaActions(private val linearOpMode: LinearOpMode, private val robot: Cod
         }
 
         robot.driveToDistanceFromObject(wallDirection, wallDistance)
-        robot.lift.drop()
+        //robot.lift.drop()
         placeGlyph()
-        robot.glyphGrabbers.setState(GlyphGrabbers.GlyphGrabberState.OPEN)
+        robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.OPEN)
     }
 
     fun driveToTrailingCryptoBox() {
-        robot.driveToDistanceFromObject(Coda.ObjectDirection.LEFT,
-                Coda.TRAILING_FRONT_CRYPTO_BOX_DISTANCE, 1.0, false)
-
+        robot.driveToDistanceFromObject(
+            Coda.ObjectDirection.LEFT,
+            RelicRecoveryConstants.TRAILING_FRONT_CRYPTO_BOX_DISTANCE,
+            1.0, false
+        )
     }
 
     enum class DistanceFromCenter(val duration: Long) {
@@ -140,18 +141,21 @@ class CodaActions(private val linearOpMode: LinearOpMode, private val robot: Cod
 
     fun grabSecondGlyph(distanceFromCenter: DistanceFromCenter) {
         linearOpMode.sleep(1000)
-        robot.driveTrain.timeDrive(distanceFromCenter.duration, 1.0)
-        robot.glyphGrabbers.setState(GlyphGrabbers.GlyphGrabberState.CLOSED)
-        robot.driveTrain.timeDrive(distanceFromCenter.duration, -0.25)
+        robot.driveTrain.linearTimeDrive(distanceFromCenter.duration, 1.0)
+        robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.CLOSED)
+        robot.driveTrain.linearTimeDrive(distanceFromCenter.duration, -0.25)
         thread(true) {
-            robot.lift.setPosition(Lift.LiftPosition.FIRST_LEVEL)
+            //robot.lift.setPosition(Lift.LiftPosition.FIRST_LEVEL)
         }
     }
 
     fun driveBackToCryptoBoxFromCenter() {
-        robot.driveTrain.timeDrive(500)
-        robot.driveToDistanceFromObject(Coda.ObjectDirection.FRONT_LEFT, Coda.CRYPTO_BOX_SPACING)
-        robot.driveToDistanceFromObject(Coda.ObjectDirection.LEFT, Coda.TRAILING_FRONT_CRYPTO_BOX_DISTANCE)
+        robot.driveTrain.linearTimeDrive(500, 1.0)
+        robot.driveToDistanceFromObject(Coda.ObjectDirection.FRONT_LEFT, 50.0)
+        robot.driveToDistanceFromObject(
+            Coda.ObjectDirection.LEFT,
+            RelicRecoveryConstants.TRAILING_FRONT_CRYPTO_BOX_DISTANCE
+        )
     }
 
 }
