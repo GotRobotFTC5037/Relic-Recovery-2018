@@ -58,6 +58,7 @@ class CodaTeleOp : LinearOpMode() {
         }
 
         if (turnPower != 0.0) lastManualHeadingUpdate.reset()
+
         if (lastManualHeadingUpdate.milliseconds() >= 750) {
             robot.driveTrain.targetHeading = robot.driveTrain.currentHeading
             robot.driveTrain.shouldCorrectHeading = true
@@ -72,6 +73,7 @@ class CodaTeleOp : LinearOpMode() {
         when {
             gamepad.a -> robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.CLOSED)
             gamepad.b -> robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.RELEASE)
+            gamepad.x -> robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.SMALL_OPEN)
         }
     }
 

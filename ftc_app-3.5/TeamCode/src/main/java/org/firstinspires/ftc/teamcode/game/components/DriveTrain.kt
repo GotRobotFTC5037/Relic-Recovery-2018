@@ -77,7 +77,7 @@ class DriveTrain(linearOpMode: LinearOpMode) : MecanumDriveTrain(linearOpMode) {
         }
 
     private val headingController: ProportionalPowerController by lazy {
-        val controller = ProportionalPowerController(0.005) {
+        val controller = ProportionalPowerController(0.0000001) {
             headingDifferenceFromTarget(targetHeading)
         }
         controller.target = 0.0
