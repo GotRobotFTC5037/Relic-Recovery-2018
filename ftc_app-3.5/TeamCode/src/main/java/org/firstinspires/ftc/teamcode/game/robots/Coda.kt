@@ -10,10 +10,21 @@ import kotlin.math.abs
 
 class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
 
-    val driveTrain: DriveTrain by lazy { components[DRIVE_TRAIN] as DriveTrain }
-    val lift: CodaLift by lazy { components[LIFT] as CodaLift }
-    val glyphGrabber: GlyphGrabber by lazy { components[GLYPH_GRABBER] as GlyphGrabber }
-    val jewelDisplacementBar: JewelDisplacementBar by lazy { components[JEWEL_STICK] as JewelDisplacementBar }
+    val driveTrain: DriveTrain by lazy {
+        components[DRIVE_TRAIN] as DriveTrain
+    }
+
+    val lift: CodaLift by lazy {
+        components[LIFT] as CodaLift
+    }
+
+    val glyphGrabber: GlyphGrabber by lazy {
+        components[GLYPH_GRABBER] as GlyphGrabber
+    }
+
+    val jewelDisplacementBar: JewelDisplacementBar by lazy {
+        components[JEWEL_STICK] as JewelDisplacementBar
+    }
 
     private var startingPitch: Double = 0.0
 

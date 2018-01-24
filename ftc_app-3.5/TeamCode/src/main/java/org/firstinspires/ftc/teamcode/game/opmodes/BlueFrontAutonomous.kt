@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.game.opmodes
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
 import org.firstinspires.ftc.teamcode.game.CodaActions
@@ -8,6 +9,7 @@ import org.firstinspires.ftc.teamcode.game.RelicRecoveryConstants
 import org.firstinspires.ftc.teamcode.game.robots.Coda
 
 @Autonomous(name = "1: Blue Front", group = "Blue Manual Selection Autonomous")
+@Disabled
 class BlueFrontAutonomous : LinearOpMode() {
 
     companion object {

@@ -183,7 +183,7 @@ extends <a href="../../../../com/qualcomm/robotcore/hardware/DcMotorSimple.html"
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getCurrentPosition--">getCurrentPosition</a></span>()</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getTargetPosition--">getTargetPosition</a></span>()</code>
 <div class="block">Returns the current reading of the encoder for this motor.</div>
 </td>
 </tr>
@@ -461,7 +461,7 @@ void&nbsp;setPowerFloat()</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>state</code> - the desired encoder target state</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getCurrentPosition--"><code>getCurrentPosition()</code></a>,
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getTargetPosition--"><code>getTargetPosition()</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setMode-com.qualcomm.robotcore.hardware.DcMotor.RunMode-"><code>setMode(RunMode)</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html#RUN_TO_POSITION"><code>DcMotor.RunMode.RUN_TO_POSITION</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getTargetPosition--"><code>getTargetPosition()</code></a>,
@@ -501,13 +501,13 @@ void&nbsp;setPowerFloat()</pre>
 </dl>
 </li>
 </ul>
-<a name="getCurrentPosition--">
+<a name="getTargetPosition--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getCurrentPosition</h4>
-<pre>int&nbsp;getCurrentPosition()</pre>
+<h4>getTargetPosition</h4>
+<pre>int&nbsp;getTargetPosition()</pre>
 <div class="block">Returns the current reading of the encoder for this motor. The units for this reading,
  that is, the number of ticks per revolution, are specific to the motor/encoder in question,
  and thus are not specified here.</div>

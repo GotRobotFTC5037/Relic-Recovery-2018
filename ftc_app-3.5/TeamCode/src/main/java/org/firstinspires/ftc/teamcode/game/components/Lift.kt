@@ -19,28 +19,14 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
         button.mode = DigitalChannel.Mode.INPUT
         button
     }
+    private var targetPosition: LiftPosition = LiftPosition.BOTTOM
 
     private val liftIsLowered: Boolean
         get() = !limitButton.state
 
-    enum class LiftPosition(val value: Int) {
-        BOTTOM(0),
-        FIRST_LEVEL(250),
-        SECOND_LEVEL(0),
-        THIRD_LEVEL(0),
-        FORTH_LEVEL(0)
-    }
-
-    private var currentPosition: LiftPosition = LiftPosition.BOTTOM
-
-    private fun resetEncoder() {
-        motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-        motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-    }
-
     override fun setPower(power: Double) {
-        if(power > 0.0 || !liftIsLowered) {
-            super.setPower(Range.clip(power, MINIMUM_LIFT_POWER, MAXIMUM_LIFT_POWER))
+        if (power > 0.0 || !liftIsLowered) {
+            super.setPower(Range.clip(power, MINIMUM_POWER, MAXIMUM_POWER))
         } else {
             super.setPower(0.0)
         }
@@ -49,27 +35,56 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
     fun drop() {
         if (!liftIsLowered) {
             setPower(-0.20)
-            while (!liftIsLowered) { linearOpMode.idle() }
+            while (!liftIsLowered) {
+                linearOpMode.idle()
+            }
             setPower(0.0)
             resetEncoder()
         }
+
+        targetPosition = LiftPosition.BOTTOM
+    }
+
+    enum class LiftPosition(val value: Int) {
+        BOTTOM(0),
+        FIRST_LEVEL(250),
+        SECOND_LEVEL(500),
+        THIRD_LEVEL(750),
+        FORTH_LEVEL(1000)
     }
 
     fun setPosition(position: LiftPosition) {
-        currentPosition = position
+        targetPosition = position
         if (position.value > motor.currentPosition) {
-            setPower(MAXIMUM_LIFT_POWER)
-            while (position.value > motor.currentPosition) { linearOpMode.idle() }
+            setPower(MAXIMUM_POWER)
+            while (position.value > motor.currentPosition) {
+                linearOpMode.idle()
+            }
         } else if (position.value < motor.currentPosition) {
-            setPower(MINIMUM_LIFT_POWER)
-            while (position.value < motor.currentPosition) { linearOpMode.idle() }
+            setPower(MINIMUM_POWER)
+            while (position.value < motor.currentPosition) {
+                linearOpMode.idle()
+            }
         }
         setPower(0.0)
     }
 
+    fun elevate() {
+        val currentPositionOrdinal = targetPosition.ordinal
+        if (currentPositionOrdinal < 5) {
+            targetPosition = LiftPosition.values()[currentPositionOrdinal + 1]
+        }
+        setPosition(targetPosition)
+    }
+
+    private fun resetEncoder() {
+        motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+    }
+
     companion object {
-        private const val MINIMUM_LIFT_POWER = -0.40
-        private const val MAXIMUM_LIFT_POWER = 1.00
+        private const val MINIMUM_POWER = -0.20
+        private const val MAXIMUM_POWER = 1.00
     }
 
 }

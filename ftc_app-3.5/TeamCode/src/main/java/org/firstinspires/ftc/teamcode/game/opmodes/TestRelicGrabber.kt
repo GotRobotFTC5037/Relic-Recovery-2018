@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.game.opmodes
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.game.robots.TestBedBot
 
-@TeleOp(name = "QuarterNote")
+@TeleOp(name = "Test: Relic Grabber")
+@Disabled
 class TestRelicGrabber: LinearOpMode() {
     override fun runOpMode() {
         val robot = TestBedBot(this)
