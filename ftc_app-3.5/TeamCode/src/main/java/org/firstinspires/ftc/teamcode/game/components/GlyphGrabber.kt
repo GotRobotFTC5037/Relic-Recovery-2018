@@ -30,7 +30,7 @@ class GlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode) {
     enum class GlyphArmPosition(val value: Double) {
         OPEN(1.0),
         SMALL_OPEN(0.85),
-        RELEASE(0.80),
+        RELEASE(0.75),
         CLOSED(0.65)
     }
 

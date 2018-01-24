@@ -4,11 +4,10 @@ import com.qualcomm.hardware.bosch.BNO055IMU
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
-import com.qualcomm.robotcore.hardware.PIDCoefficients
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
-import org.firstinspires.ftc.teamcode.lib.powercontroller.PIDPowerController
+import org.firstinspires.ftc.teamcode.lib.powercontroller.ProportionalPowerController
 import org.firstinspires.ftc.teamcode.lib.robot.drivetrain.Heading
 import org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain
 
@@ -77,25 +76,22 @@ class DriveTrain(linearOpMode: LinearOpMode) : MecanumDriveTrain(linearOpMode) {
             return orientation.thirdAngle.toDouble()
         }
 
-    private val headingPIDController: PIDPowerController by lazy {
-        val controller = PIDPowerController(linearOpMode, HEADING_PID_COEFFICIENTS)
-        controller.inputValueHandler = { headingDifferenceFromTarget(targetHeading) }
+    private val headingController: ProportionalPowerController by lazy {
+        val controller = ProportionalPowerController(0.005) {
+            headingDifferenceFromTarget(targetHeading)
+        }
         controller.target = 0.0
         controller
     }
 
     override fun headingCorrectedDrivePowers(baseDrivePowers: DrivePowers): DrivePowers {
         val drivePowers = DrivePowers()
-        val headingCorrection = headingPIDController.output
+        val headingCorrection = headingController.output
         drivePowers.frontLeft = baseDrivePowers.frontLeft - headingCorrection
         drivePowers.frontRight = baseDrivePowers.frontRight + headingCorrection
         drivePowers.rearLeft = baseDrivePowers.rearLeft - headingCorrection
         drivePowers.rearRight = baseDrivePowers.rearRight + headingCorrection
         return drivePowers
-    }
-
-    companion object {
-        val HEADING_PID_COEFFICIENTS = PIDCoefficients(0.025, 0.00004, 0.15)
     }
 
 }

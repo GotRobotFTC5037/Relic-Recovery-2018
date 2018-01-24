@@ -70,12 +70,6 @@ class CodaActions(private val linearOpMode: LinearOpMode, private val robot: Cod
         }
     }
 
-    private fun performRetroJewelManeuverIfAppropriate(backwards: Boolean) {
-        if (detectedJewelConfiguration == JewelConfigurationDetector.JewelConfiguration.RED_BLUE) {
-            performRetroJewelDisplacementManeuver(backwards)
-        }
-    }
-
     fun setLiftPositionToFirstLevel() {
         thread(true) {
             //robot.lift.setPosition(Lift.LiftPosition.FIRST_LEVEL, 0.3)
@@ -98,6 +92,12 @@ class CodaActions(private val linearOpMode: LinearOpMode, private val robot: Cod
                 performRetroJewelManeuverIfAppropriate(true)
                 robot.driveOffBalancingStone(0.175)
             }
+        }
+    }
+
+    private fun performRetroJewelManeuverIfAppropriate(backwards: Boolean) {
+        if (detectedJewelConfiguration == JewelConfigurationDetector.JewelConfiguration.RED_BLUE) {
+            performRetroJewelDisplacementManeuver(backwards)
         }
     }
 

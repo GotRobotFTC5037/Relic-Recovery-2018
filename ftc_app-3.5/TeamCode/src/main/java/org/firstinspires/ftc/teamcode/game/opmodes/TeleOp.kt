@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.game.opmodes
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.Gamepad
-import org.firstinspires.ftc.teamcode.game.components.CodaLift
+import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.game.components.GlyphGrabber
 import org.firstinspires.ftc.teamcode.game.robots.Coda
 import kotlin.math.abs
@@ -13,16 +13,17 @@ class CodaTeleOp : LinearOpMode() {
 
     private val robot: Coda by lazy { Coda(this) }
 
+    private val lastManualHeadingUpdate: ElapsedTime by lazy { ElapsedTime() }
+
     @Throws(InterruptedException::class)
     override fun runOpMode() {
         robot.setup()
         waitForStart()
-        robot.driveTrain.shouldCorrectHeading = false
 
         while (opModeIsActive()) {
             updateDriveDirection()
             updateGlyphGrabberState()
-            updateLiftPower()
+            updateLift()
         }
 
         robot.driveTrain.stop()
@@ -51,9 +52,17 @@ class CodaTeleOp : LinearOpMode() {
 
         if (
             robot.glyphGrabber.currentState == GlyphGrabber.GlyphGrabberState.RELEASE &&
-            abs(linearPower) > 0.75
+            abs(linearPower) > 0.65
         ) {
             robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.SMALL_OPEN)
+        }
+
+        if (turnPower != 0.0) lastManualHeadingUpdate.reset()
+        if (lastManualHeadingUpdate.milliseconds() >= 750) {
+            robot.driveTrain.targetHeading = robot.driveTrain.currentHeading
+            robot.driveTrain.shouldCorrectHeading = true
+        } else {
+            robot.driveTrain.shouldCorrectHeading = false
         }
     }
 
@@ -66,19 +75,22 @@ class CodaTeleOp : LinearOpMode() {
         }
     }
 
-    private fun updateLiftPower() {
+    private fun updateLift() {
         if (gamepad2IsRegistered()) {
             val liftPower = -gamepad2.left_stick_y.toDouble()
             robot.lift.setPower(liftPower)
         } else {
             when {
-                gamepad1.dpad_up -> robot.lift.setPosition(CodaLift.LiftPosition.FIRST_LEVEL)
+                gamepad1.dpad_up -> robot.lift.elevate()
                 gamepad1.dpad_down -> robot.lift.drop()
-                else -> robot.lift.setPower(0.0)
             }
         }
     }
 
 }
 
-fun LinearOpMode.gamepad2IsRegistered() = gamepad2.id != Gamepad.ID_UNASSOCIATED
+fun LinearOpMode.gamepad2IsRegistered(): Boolean {
+    return gamepad2.id != Gamepad.ID_UNASSOCIATED
+            && gamepad2.id != Gamepad.ID_SYNTHETIC
+}
+
