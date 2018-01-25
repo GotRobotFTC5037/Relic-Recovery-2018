@@ -68,7 +68,7 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
         }
         setPower(0.0)
     }
-
+    @Synchronized
     fun elevate() {
         val currentPositionOrdinal = targetPosition.ordinal
         if (currentPositionOrdinal < 5) {
