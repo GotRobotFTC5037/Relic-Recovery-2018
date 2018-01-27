@@ -77,9 +77,9 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
     enum class LiftPosition(var value: Int) {
         BOTTOM(0),
         FIRST_LEVEL(1300),
-        SECOND_LEVEL(1200 * 2),
-        THIRD_LEVEL(1200 * 3),
-        FORTH_LEVEL(1200 * 4),
+        SECOND_LEVEL(1300 * 2),
+        THIRD_LEVEL(1300 * 3),
+        FORTH_LEVEL(1300 * 4),
         MANUAL(0)
     }
 
