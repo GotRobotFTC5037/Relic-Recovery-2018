@@ -83,7 +83,7 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
     fun setPosition(position: LiftPosition) {
         targetPosition = position
     }
-
+    @Synchronized
     fun elevate() {
         val currentPositionOrdinal = targetPosition.ordinal
         if (currentPositionOrdinal < LiftPosition.values().count() - 1) {
