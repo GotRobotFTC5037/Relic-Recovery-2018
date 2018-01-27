@@ -186,16 +186,6 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
 
     }
 
-    /**
-     * Calls the handler once the opmode starts.
-     */
-    private fun LinearOpMode.onStart(startHandler: () -> Unit) {
-        thread(start = true) {
-            waitForStart()
-            startHandler()
-        }
-    }
-
     companion object {
         private const val DRIVE_TRAIN = "drive_train"
         private const val GLYPH_GRABBER = "glyph_grabber"
@@ -213,4 +203,11 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
         private const val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 4.5
     }
 
+}
+
+fun LinearOpMode.onStart(startHandler: () -> Unit) {
+    thread(start = true) {
+        waitForStart()
+        startHandler()
+    }
 }

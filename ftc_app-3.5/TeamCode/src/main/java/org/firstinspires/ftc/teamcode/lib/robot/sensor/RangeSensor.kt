@@ -8,13 +8,14 @@ import kotlin.concurrent.thread
 class RangeSensor(linearOpMode: LinearOpMode, name: String, address: I2cAddr = I2cAddr.create8bit(0x28), private val alpha: Double = 0.50): RobotSensor(linearOpMode) {
 
     companion object {
-        val RAW_RANGE_VALUE_CUTOFF  = 200
+        private const val RAW_RANGE_VALUE_CUTOFF  = 200
     }
 
-    private val sensor = linearOpMode.hardwareMap.get(ModernRoboticsI2cRangeSensor::class.java, name)
-
-    init {
+    private val sensor: ModernRoboticsI2cRangeSensor by lazy {
+        val sensor = linearOpMode.hardwareMap.get(ModernRoboticsI2cRangeSensor::class.java, name)
         sensor.i2cAddress = address
+
+        sensor
     }
 
     var distanceDetected: Double = 0.0

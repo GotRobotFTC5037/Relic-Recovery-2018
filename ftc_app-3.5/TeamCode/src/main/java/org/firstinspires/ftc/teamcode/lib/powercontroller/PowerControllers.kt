@@ -59,7 +59,7 @@ class PIDPowerController(
     private lateinit var updateThread: Thread
 
     private var previousError = 0.0
-    private var runningInterval = 0.0
+    private var runningIntegral = 0.0
     private val lastUpdateElapsedTime: ElapsedTime by lazy { ElapsedTime() }
 
     private var proportionalOutput = 0.0
@@ -80,15 +80,24 @@ class PIDPowerController(
                 val dt = lastUpdateElapsedTime.milliseconds() / 1000
 
                 val error = target - inputValueHandler()
-                runningInterval += error * dt
+                runningIntegral += error * dt
                 val derivative = (previousError - error) / dt
 
                 proportionalOutput = error * coefficients.p
-                integralOutput = runningInterval * coefficients.i
+                integralOutput = runningIntegral * coefficients.i
                 derivativeOutput = derivative * coefficients.d
                 pidOutput = proportionalOutput + integralOutput + derivativeOutput
 
                 lastUpdateElapsedTime.reset()
+
+                linearOpMode.telemetry.addLine("Error: $error")
+                linearOpMode.telemetry.addLine("Running Integral: $runningIntegral")
+                linearOpMode.telemetry.addLine()
+                linearOpMode.telemetry.addLine("Proportional: $proportionalOutput")
+                linearOpMode.telemetry.addLine("Integral: $integralOutput")
+                linearOpMode.telemetry.addLine("Derivative: $derivativeOutput")
+                linearOpMode.telemetry.addLine("Output: $pidOutput")
+                linearOpMode.telemetry.update()
             }
         }
     }
