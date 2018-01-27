@@ -142,7 +142,7 @@ private object AutonomousActions {
 
 }
 
-@Autonomous
+@Autonomous(group = "Auto")
 class BlueFront : LinearOpMode() {
 
     @Throws(InterruptedException::class)
@@ -167,7 +167,7 @@ class BlueFront : LinearOpMode() {
 
 }
 
-@Autonomous
+@Autonomous(group = "Auto")
 class RedFront : LinearOpMode() {
 
     @Throws(InterruptedException::class)
@@ -191,7 +191,7 @@ class RedFront : LinearOpMode() {
 
 }
 
-@Autonomous
+@Autonomous(group = "Auto")
 class BlueBack : LinearOpMode() {
 
     @Throws(InterruptedException::class)
@@ -215,7 +215,7 @@ class BlueBack : LinearOpMode() {
 
 }
 
-@Autonomous
+@Autonomous(group = "Auto")
 class RedBack : LinearOpMode() {
 
     @Throws(InterruptedException::class)

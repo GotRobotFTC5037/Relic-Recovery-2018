@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.game.opmodes
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.game.robots.Coda
 
-@Autonomous
+@TeleOp(group = "Tests")
 class MotorSpeedTest: LinearOpMode() {
     override fun runOpMode() {
         val robot = Coda(this)
@@ -17,6 +17,8 @@ class MotorSpeedTest: LinearOpMode() {
         telemetry.addLine("Front Right: ${robot.driveTrain.frontRightMotor.currentPosition}")
         telemetry.addLine("Rear Right: ${robot.driveTrain.rearRightMotor.currentPosition}")
         telemetry.update()
+
+        robot.driveTrain.stop()
 
         while (opModeIsActive()) {
             sleep(10)

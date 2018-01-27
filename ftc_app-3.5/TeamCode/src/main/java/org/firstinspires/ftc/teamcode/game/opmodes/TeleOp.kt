@@ -15,7 +15,6 @@ class CodaTeleOp : LinearOpMode() {
     private val robot: Coda by lazy { Coda(this) }
 
     private val lastManualHeadingUpdate: ElapsedTime by lazy { ElapsedTime() }
-    private val holdDpadDown : ElapsedTime by lazy { ElapsedTime() }
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {
@@ -47,9 +46,9 @@ class CodaTeleOp : LinearOpMode() {
             turnPower *= 0.85
         }
 
-        linearPower = abs(Math.pow(linearPower, 3.0)) * Math.signum(linearPower)
-        strafePower = abs(Math.pow(strafePower, 3.0)) * Math.signum(strafePower)
-        turnPower = abs(Math.pow(turnPower, 3.0)) * Math.signum(turnPower)
+        linearPower = abs(Math.pow(linearPower, 2.0)) * Math.signum(linearPower)
+        strafePower = abs(Math.pow(strafePower, 2.0)) * Math.signum(strafePower)
+        turnPower = abs(Math.pow(turnPower, 2.0)) * Math.signum(turnPower)
 
         robot.driveTrain.setMovementPowers(linearPower, strafePower, turnPower)
 
@@ -81,28 +80,37 @@ class CodaTeleOp : LinearOpMode() {
     }
 
     private fun updateLift() {
-        val gamepad = if (gamepad2IsRegistered()) gamepad2 else gamepad1
+        val gamepad = if (gamepad2IsRegistered()) {
+            val liftPower = -gamepad2.left_stick_y.toDouble()
+            if (liftPower != 0.0) {
+                robot.lift.shouldHoldLiftPosition = false
+                robot.lift.setPower(liftPower)
+                val position = CodaLift.LiftPosition.MANUAL
+                position.value = robot.lift.motor.currentPosition
+                robot.lift.targetPosition = position
+            } else {
+                robot.lift.shouldHoldLiftPosition = true
+            }
+
+            gamepad2
+        } else {
+            robot.lift.shouldHoldLiftPosition = true
+            gamepad1
+        }
 
         when {
-            holdDpadDown.milliseconds() > 500 -> {
-                robot.lift.setPosition(CodaLift.LiftPosition.BOTTOM)
-                holdDpadDown.reset()
-            }
-
-            gamepad.dpad_down -> robot.lift.setPosition(CodaLift.LiftPosition.FIRST_LEVEL)
-            gamepad.dpad_right -> {
-                robot.lift.setPosition(CodaLift.LiftPosition.SECOND_LEVEL)
-                holdDpadDown.reset()
-            }
-
-            gamepad.dpad_left -> {
-                robot.lift.setPosition(CodaLift.LiftPosition.THIRD_LEVEL)
-                holdDpadDown.reset()
-            }
-
             gamepad.dpad_up -> {
-                robot.lift.setPosition(CodaLift.LiftPosition.FORTH_LEVEL)
-                holdDpadDown.reset()
+                while (gamepad.dpad_up) {
+                    idle()
+                }
+                robot.lift.elevate()
+            }
+
+            gamepad.dpad_down -> {
+                while (gamepad.dpad_down) {
+                    idle()
+                }
+                robot.lift.lower()
             }
         }
     }

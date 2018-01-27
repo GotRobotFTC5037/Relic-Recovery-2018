@@ -39,28 +39,31 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
         controller
     }
 
-    private var targetPosition: LiftPosition by Delegates.observable(
+    var targetPosition: LiftPosition by Delegates.observable(
         LiftPosition.BOTTOM
     ) { _, _, new ->
         powerController.target = new.value.toDouble()
     }
 
-    private val liftIsLowered: Boolean
+    val isLowered: Boolean
         get() = !limitButton.state
 
     override fun setPower(power: Double) {
-        if (power > 0.0 || !liftIsLowered) {
+        if (power > 0.0 || !isLowered) {
             super.setPower(Range.clip(power, MINIMUM_POWER, MAXIMUM_POWER))
         } else {
+            if (isLowered) {
+                resetEncoder()
+            }
             super.setPower(0.0)
         }
     }
 
     fun drop() {
         isBusy = true
-        if (!liftIsLowered) {
+        if (!isLowered) {
             setPower(-0.20)
-            while (!liftIsLowered) {
+            while (!isLowered) {
                 linearOpMode.idle()
             }
             setPower(0.0)
@@ -71,19 +74,19 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
         isBusy = false
     }
 
-    enum class LiftPosition(val value: Int) {
+    enum class LiftPosition(var value: Int) {
         BOTTOM(0),
-        FIRST_LEVEL(1200),
+        FIRST_LEVEL(1300),
         SECOND_LEVEL(1200 * 2),
         THIRD_LEVEL(1200 * 3),
-        FORTH_LEVEL(1200 * 4)
+        FORTH_LEVEL(1200 * 4),
+        MANUAL(0)
     }
 
-    @Synchronized
     fun setPosition(position: LiftPosition) {
         targetPosition = position
     }
-    @Synchronized
+
     fun elevate() {
         val currentPositionOrdinal = targetPosition.ordinal
         if (currentPositionOrdinal < LiftPosition.values().count() - 1) {
@@ -108,7 +111,7 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
         }
     }
 
-    private fun resetEncoder() {
+    fun resetEncoder() {
         motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
     }
@@ -119,8 +122,8 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
 
         private val PID_COEFFICIENTS = {
             val coefficients = PIDCoefficients()
-            coefficients.p = 0.01
-            coefficients.i = 0.0
+            coefficients.p = 0.005
+            coefficients.i = 0.0005
             coefficients.d = 0.0
 
             coefficients
