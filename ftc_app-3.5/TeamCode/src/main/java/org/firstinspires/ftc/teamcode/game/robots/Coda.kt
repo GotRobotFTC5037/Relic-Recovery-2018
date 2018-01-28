@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.game.robots
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import com.qualcomm.robotcore.hardware.I2cAddr
 import org.firstinspires.ftc.teamcode.game.components.*
 import org.firstinspires.ftc.teamcode.lib.robot.Robot
 import org.firstinspires.ftc.teamcode.lib.robot.sensor.RangeSensor
@@ -10,20 +9,20 @@ import kotlin.math.abs
 
 class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
 
-    val driveTrain: DriveTrain by lazy {
-        components[DRIVE_TRAIN] as DriveTrain
+    val driveTrain: CodaDriveTrain by lazy {
+        components[DRIVE_TRAIN] as CodaDriveTrain
     }
 
     val lift: CodaLift by lazy {
         components[LIFT] as CodaLift
     }
 
-    val glyphGrabber: GlyphGrabber by lazy {
-        components[GLYPH_GRABBER] as GlyphGrabber
+    val glyphGrabber: CodaGlyphGrabber by lazy {
+        components[GLYPH_GRABBER] as CodaGlyphGrabber
     }
 
-    val jewelDisplacementBar: JewelDisplacementBar by lazy {
-        components[JEWEL_STICK] as JewelDisplacementBar
+    val jewelDisplacementBar: CodaJewelDisplacementBar by lazy {
+        components[JEWEL_STICK] as CodaJewelDisplacementBar
     }
 
     private var startingPitch: Double = 0.0
@@ -32,11 +31,11 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
      * Adds the necessary components to the robot.
      */
     fun setup() {
-        addComponent(DriveTrain(linearOpMode), DRIVE_TRAIN)
-        addComponent(GlyphGrabber(linearOpMode), GLYPH_GRABBER)
+        addComponent(CodaDriveTrain(linearOpMode), DRIVE_TRAIN)
+        addComponent(CodaGlyphGrabber(linearOpMode), GLYPH_GRABBER)
         addComponent(CodaLift(linearOpMode), LIFT)
-        addComponent(RelicGrabber(linearOpMode), RELIC_GRABBER)
-        addComponent(JewelDisplacementBar(linearOpMode), JEWEL_STICK)
+        addComponent(CodaRelicGrabber(linearOpMode), RELIC_GRABBER)
+        addComponent(CodaJewelDisplacementBar(linearOpMode), JEWEL_STICK)
 
         addComponent(
             RangeSensor(linearOpMode, "front left range sensor"),
@@ -47,7 +46,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
             FRONT_RIGHT_RANGE_SENSOR
         )
         addComponent(
-            RangeSensor(linearOpMode, "left range sensor", I2cAddr.create8bit(0x32)),
+            RangeSensor(linearOpMode, "left range sensor"),
             LEFT_RANGE_SENSOR
         )
         addComponent(
@@ -78,7 +77,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
     fun driveToDistanceFromObject(
         direction: ObjectDirection,
         targetDistance: Double,
-        drivePower: Double = 0.325,
+        drivePower: Double = 0.3,
         shouldCorrect: Boolean = true
     ) {
 
@@ -90,18 +89,24 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
                 else -> return // For now, do nothing
             }
 
+            rangeSensor.startUpdatingDetectedDistance()
+
             val currentDistance = rangeSensor.distanceDetected
             when {
                 targetDistance > currentDistance -> {
-                    driveTrain.strafeDriveAtPower(abs(drivePower))
+                    driveTrain.strafeDriveAtPower(-abs(drivePower))
                     while (targetDistance > rangeSensor.distanceDetected) {
+                        linearOpMode.telemetry.addLine("Distance: ${rangeSensor.distanceDetected}")
+                        linearOpMode.telemetry.update()
                         linearOpMode.sleep(10)
                     }
                 }
 
                 currentDistance > targetDistance -> {
-                    driveTrain.linearDriveAtPower(-abs(drivePower))
+                    driveTrain.strafeDriveAtPower(abs(drivePower))
                     while (rangeSensor.distanceDetected > targetDistance) {
+                        linearOpMode.telemetry.addLine("Distance: ${rangeSensor.distanceDetected}")
+                        linearOpMode.telemetry.update()
                         linearOpMode.sleep(10)
                     }
                 }
@@ -113,14 +118,17 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
                 linearOpMode.sleep(1000)
 
                 val distance = rangeSensor.distanceDetected
-                if ((targetDistance + WALL_DISTANCE_TOLERANCE < distance
-                            || targetDistance - WALL_DISTANCE_TOLERANCE > distance)
-                    && linearOpMode.opModeIsActive()) {
+                if (
+                    (targetDistance + WALL_DISTANCE_TOLERANCE < distance || targetDistance - WALL_DISTANCE_TOLERANCE > distance) &&
+                    linearOpMode.opModeIsActive()
+                ) {
                     driveToDistanceFromObject(direction, targetDistance, drivePower, shouldCorrect)
                 }
 
                 driveTrain.stop()
             }
+
+            rangeSensor.stopUpdatingDetectedDistance()
 
         }
 
@@ -141,7 +149,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
                         linearOpMode.sleep(10)
                     }
 
-                    jewelDisplacementBar.setPosition(JewelDisplacementBar.Position.UP)
+                    jewelDisplacementBar.setPosition(CodaJewelDisplacementBar.Position.UP)
 
                     while (startingPitch - driveTrain.currentPitch >= BALANCING_STONE_GROUND_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
                         linearOpMode.sleep(10)
@@ -153,7 +161,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
                         linearOpMode.sleep(10)
                     }
 
-                    jewelDisplacementBar.setPosition(JewelDisplacementBar.Position.UP)
+                    jewelDisplacementBar.setPosition(CodaJewelDisplacementBar.Position.UP)
 
                     while (startingPitch - driveTrain.currentPitch <= -BALANCING_STONE_GROUND_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
                         linearOpMode.sleep(10)

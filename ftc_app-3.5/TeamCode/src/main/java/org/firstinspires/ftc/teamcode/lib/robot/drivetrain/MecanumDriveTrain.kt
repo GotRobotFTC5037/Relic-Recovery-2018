@@ -2,10 +2,11 @@ package org.firstinspires.ftc.teamcode.lib.robot.drivetrain
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor
-import org.firstinspires.ftc.robotcore.external.navigation.Position
 import org.firstinspires.ftc.teamcode.lib.powercontroller.PowerController
 import org.firstinspires.ftc.teamcode.lib.powercontroller.StaticPowerController
 import kotlin.concurrent.thread
+import kotlin.math.abs
+import kotlin.math.max
 
 typealias Heading = Double
 typealias MotorPower = Double
@@ -17,7 +18,7 @@ abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : Driv
     abstract val rearLeftMotor: DcMotor
     abstract val rearRightMotor: DcMotor
 
-    var targetHeading: Heading = 0.0
+    open var targetHeading: Heading = 0.0
     var shouldCorrectHeading = true
     private var isActivelyTurning = false
     abstract val currentHeading: Heading
@@ -67,9 +68,11 @@ abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : Driv
     /**
      * Linearly drives for the provided duration.
      */
+    @Deprecated("Avoid using time based driving whenever possible.")
     fun linearTimeDrive(duration: Long, power: MotorPower) {
         linearDriveAtPower(power)
         linearOpMode.sleep(duration)
+        stop()
     }
 
     /**
@@ -110,11 +113,41 @@ abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : Driv
         drivePowers.rearRight = 0.0
     }
 
+    fun resetEncoders() {
+        frontLeftMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        frontRightMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        rearLeftMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        rearRightMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+
+        frontLeftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+        frontRightMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+        rearLeftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+        rearRightMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+    }
+
+    fun currentLinearEncoderPosition(): Int {
+        val maxLeft = max(frontLeftMotor.currentPosition, rearLeftMotor.currentPosition)
+        val maxRight = max(frontRightMotor.currentPosition, rearRightMotor.currentPosition)
+        return max(maxLeft, maxRight)
+    }
+
     /**
-     * Moves the drive train to the specified position in cm.
+     * Drives linearly until the specified encoder value as be reached.
      */
-    fun driveToPosition(position: Position, power: MotorPower) {
-        TODO("not implemented")
+    fun linearEncoderDrive(encoderValue: Int, power: MotorPower) {
+        resetEncoders()
+        if (encoderValue > 0) {
+            linearDriveAtPower(abs(power))
+            while (currentLinearEncoderPosition() < encoderValue && !linearOpMode.isStopRequested) {
+                linearOpMode.idle()
+            }
+        } else if (encoderValue < 0) {
+            linearDriveAtPower(-abs(power))
+            while (currentLinearEncoderPosition() > encoderValue && !linearOpMode.isStopRequested) {
+                linearOpMode.idle()
+            }
+        }
+        stop()
     }
 
     /**
@@ -153,7 +186,11 @@ abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : Driv
     }
 
     fun turnToHeading(targetHeading: Heading, power: MotorPower) {
-        turnToHeading(targetHeading, StaticPowerController(power))
+        if (headingDifferenceFromTarget(targetHeading) > 0.0) {
+            turnToHeading(targetHeading, StaticPowerController(abs(power)))
+        } else if (headingDifferenceFromTarget(targetHeading) < 0.0) {
+            turnToHeading(targetHeading, StaticPowerController(-abs(power)))
+        }
     }
 
     /**

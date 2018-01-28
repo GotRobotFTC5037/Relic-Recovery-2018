@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.lib.powercontroller.ProportionalPowerContr
 import org.firstinspires.ftc.teamcode.lib.robot.drivetrain.Heading
 import org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain
 
-class DriveTrain(linearOpMode: LinearOpMode) : MecanumDriveTrain(linearOpMode) {
+class CodaDriveTrain(linearOpMode: LinearOpMode) : MecanumDriveTrain(linearOpMode) {
 
     override val frontLeftMotor: DcMotor by lazy {
         val motor = hardwareMap.dcMotor.get("front left motor")
@@ -73,11 +73,11 @@ class DriveTrain(linearOpMode: LinearOpMode) : MecanumDriveTrain(linearOpMode) {
     val currentPitch: Double
         get() {
             val orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
-            return orientation.thirdAngle.toDouble()
+            return -orientation.thirdAngle.toDouble()
         }
 
     private val headingController: ProportionalPowerController by lazy {
-        val controller = ProportionalPowerController(0.0000001) {
+        val controller = ProportionalPowerController(0.03) {
             headingDifferenceFromTarget(targetHeading)
         }
         controller.target = 0.0
@@ -87,10 +87,10 @@ class DriveTrain(linearOpMode: LinearOpMode) : MecanumDriveTrain(linearOpMode) {
     override fun headingCorrectedDrivePowers(baseDrivePowers: DrivePowers): DrivePowers {
         val drivePowers = DrivePowers()
         val headingCorrection = headingController.output
-        drivePowers.frontLeft = baseDrivePowers.frontLeft - headingCorrection
-        drivePowers.frontRight = baseDrivePowers.frontRight + headingCorrection
-        drivePowers.rearLeft = baseDrivePowers.rearLeft - headingCorrection
-        drivePowers.rearRight = baseDrivePowers.rearRight + headingCorrection
+        drivePowers.frontLeft = baseDrivePowers.frontLeft + headingCorrection
+        drivePowers.frontRight = baseDrivePowers.frontRight - headingCorrection
+        drivePowers.rearLeft = baseDrivePowers.rearLeft + headingCorrection
+        drivePowers.rearRight = baseDrivePowers.rearRight - headingCorrection
         return drivePowers
     }
 

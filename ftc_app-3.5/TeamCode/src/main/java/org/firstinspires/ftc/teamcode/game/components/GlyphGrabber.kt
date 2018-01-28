@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.lib.robot.attachment.RobotAttachment
 
-class GlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode) {
+class CodaGlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode) {
 
     var currentState: GlyphGrabberState = GlyphGrabberState.OPEN
         private set
@@ -35,7 +35,7 @@ class GlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode) {
     }
 
     enum class GlyphDeployerPosition(val value: Double) {
-        RETRACTED(0.0),
+        RETRACTED(0.075),
         EXTENDED(0.65)
     }
 

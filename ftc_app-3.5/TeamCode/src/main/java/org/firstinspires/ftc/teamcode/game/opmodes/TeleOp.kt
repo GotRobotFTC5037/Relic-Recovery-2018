@@ -4,8 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.util.ElapsedTime
-import org.firstinspires.ftc.teamcode.game.components.CodaLift
-import org.firstinspires.ftc.teamcode.game.components.GlyphGrabber
+import org.firstinspires.ftc.teamcode.game.components.CodaGlyphGrabber
 import org.firstinspires.ftc.teamcode.game.robots.Coda
 import kotlin.math.abs
 
@@ -53,10 +52,10 @@ class CodaTeleOp : LinearOpMode() {
         robot.driveTrain.setMovementPowers(linearPower, strafePower, turnPower)
 
         if (
-            robot.glyphGrabber.currentState == GlyphGrabber.GlyphGrabberState.RELEASE &&
+            robot.glyphGrabber.currentState == CodaGlyphGrabber.GlyphGrabberState.RELEASE &&
             linearPower > 0.65
         ) {
-            robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.SMALL_OPEN)
+            robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.SMALL_OPEN)
         }
 
         if (turnPower != 0.0) lastManualHeadingUpdate.reset()
@@ -73,14 +72,15 @@ class CodaTeleOp : LinearOpMode() {
         val gamepad = if (gamepad2IsRegistered()) gamepad2 else gamepad1
 
         when {
-            gamepad.a -> robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.CLOSED)
-            gamepad.b -> robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.RELEASE)
-            gamepad.x -> robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.SMALL_OPEN)
+            gamepad.a -> robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.CLOSED)
+            gamepad.b -> robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.RELEASE)
+            gamepad.x -> robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.SMALL_OPEN)
         }
     }
 
     private fun updateLift() {
         val gamepad = if (gamepad2IsRegistered()) {
+            /*
             val liftPower = -gamepad2.left_stick_y.toDouble()
             if (liftPower != 0.0) {
                 robot.lift.shouldHoldLiftPosition = false
@@ -90,11 +90,11 @@ class CodaTeleOp : LinearOpMode() {
                 robot.lift.targetPosition = position
             } else {
                 robot.lift.shouldHoldLiftPosition = true
-            }
+            }*/
 
             gamepad2
         } else {
-            robot.lift.shouldHoldLiftPosition = true
+            // robot.lift.shouldHoldLiftPosition = true
             gamepad1
         }
 

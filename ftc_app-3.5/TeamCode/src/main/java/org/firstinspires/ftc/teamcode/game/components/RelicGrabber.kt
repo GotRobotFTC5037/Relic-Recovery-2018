@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.lib.robot.attachment.RobotAttachment
 
-class RelicGrabber(linearOpMode: LinearOpMode) : RobotAttachment(linearOpMode) {
+class CodaRelicGrabber(linearOpMode: LinearOpMode) : RobotAttachment(linearOpMode) {
 
     private val winch: DcMotor by lazy {
         hardwareMap.dcMotor.get("left_motor")

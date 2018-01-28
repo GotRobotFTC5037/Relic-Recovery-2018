@@ -12,14 +12,6 @@ import java.io.IOException
 
 class JewelConfigurationDetector : OpenCVPipeline() {
 
-    companion object {
-        const val TIME_OUT_DURATION = 500
-
-        init {
-            System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
-        }
-    }
-
     enum class JewelConfiguration {
         RED_BLUE,
         BLUE_RED,
@@ -405,6 +397,14 @@ class JewelConfigurationDetector : OpenCVPipeline() {
             val ratio = bb.width / bb.height.toDouble()
             if (ratio < minRatio || ratio > maxRatio) continue
             output.add(contour)
+        }
+    }
+
+    companion object {
+        const val TIME_OUT_DURATION = 500
+
+        init {
+            System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
         }
     }
 }

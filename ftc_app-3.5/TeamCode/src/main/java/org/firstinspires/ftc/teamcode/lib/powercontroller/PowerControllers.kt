@@ -89,15 +89,6 @@ class PIDPowerController(
                 pidOutput = proportionalOutput + integralOutput + derivativeOutput
 
                 lastUpdateElapsedTime.reset()
-
-                linearOpMode.telemetry.addLine("Error: $error")
-                linearOpMode.telemetry.addLine("Running Integral: $runningIntegral")
-                linearOpMode.telemetry.addLine()
-                linearOpMode.telemetry.addLine("Proportional: $proportionalOutput")
-                linearOpMode.telemetry.addLine("Integral: $integralOutput")
-                linearOpMode.telemetry.addLine("Derivative: $derivativeOutput")
-                linearOpMode.telemetry.addLine("Output: $pidOutput")
-                linearOpMode.telemetry.update()
             }
         }
     }

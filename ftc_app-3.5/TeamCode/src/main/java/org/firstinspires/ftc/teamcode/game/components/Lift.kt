@@ -27,8 +27,7 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
     }
 
     var shouldHoldLiftPosition = true
-    var isBusy = false
-        private set
+    private var isBusy = false
 
     private val powerController: PIDPowerController by lazy {
         val controller = PIDPowerController(linearOpMode, PID_COEFFICIENTS) {
@@ -45,7 +44,7 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
         powerController.target = new.value.toDouble()
     }
 
-    val isLowered: Boolean
+    private val isLowered: Boolean
         get() = !limitButton.state
 
     override fun setPower(power: Double) {
@@ -76,10 +75,9 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
 
     enum class LiftPosition(var value: Int) {
         BOTTOM(0),
-        FIRST_LEVEL(1300),
-        SECOND_LEVEL(1300 * 2),
-        THIRD_LEVEL(1300 * 3),
-        FORTH_LEVEL(1300 * 4),
+        FIRST_LEVEL(1750),
+        SECOND_LEVEL(3100),
+        THIRD_LEVEL(4450),
         MANUAL(0)
     }
 
@@ -89,7 +87,7 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
 
     fun elevate() {
         val currentPositionOrdinal = targetPosition.ordinal
-        if (currentPositionOrdinal < LiftPosition.values().count() - 1) {
+        if (currentPositionOrdinal < LiftPosition.values().count() - 2) {
             setPosition(LiftPosition.values()[currentPositionOrdinal + 1])
         }
     }
@@ -111,7 +109,7 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
         }
     }
 
-    fun resetEncoder() {
+    private fun resetEncoder() {
         motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
     }
