@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.util.ElapsedTime
-import org.firstinspires.ftc.teamcode.game.components.GlyphGrabber
+import org.firstinspires.ftc.teamcode.game.components.CodaGlyphGrabber
 import org.firstinspires.ftc.teamcode.game.robots.Coda
 import kotlin.math.abs
 
@@ -19,6 +19,7 @@ class CodaTeleOp : LinearOpMode() {
     override fun runOpMode() {
         robot.setup()
         waitForStart()
+        robot.lift.startSettingMotorPowers()
 
         while (opModeIsActive()) {
             updateDriveDirection()
@@ -44,17 +45,17 @@ class CodaTeleOp : LinearOpMode() {
             turnPower *= 0.85
         }
 
-        linearPower = abs(Math.pow(linearPower, 3.0)) * Math.signum(linearPower)
-        strafePower = abs(Math.pow(strafePower, 3.0)) * Math.signum(strafePower)
-        turnPower = abs(Math.pow(turnPower, 3.0)) * Math.signum(turnPower)
+        linearPower = abs(Math.pow(linearPower, 2.0)) * Math.signum(linearPower)
+        strafePower = abs(Math.pow(strafePower, 2.0)) * Math.signum(strafePower)
+        turnPower = abs(Math.pow(turnPower, 2.0)) * Math.signum(turnPower)
 
         robot.driveTrain.setMovementPowers(linearPower, strafePower, turnPower)
 
         if (
-            robot.glyphGrabber.currentState == GlyphGrabber.GlyphGrabberState.RELEASE &&
-            abs(linearPower) > 0.65
+            robot.glyphGrabber.currentState == CodaGlyphGrabber.GlyphGrabberState.RELEASE &&
+            linearPower > 0.65
         ) {
-            robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.SMALL_OPEN)
+            robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.SMALL_OPEN)
         }
 
         if (turnPower != 0.0) lastManualHeadingUpdate.reset()
@@ -71,20 +72,45 @@ class CodaTeleOp : LinearOpMode() {
         val gamepad = if (gamepad2IsRegistered()) gamepad2 else gamepad1
 
         when {
-            gamepad.a -> robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.CLOSED)
-            gamepad.b -> robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.RELEASE)
-            gamepad.x -> robot.glyphGrabber.setState(GlyphGrabber.GlyphGrabberState.SMALL_OPEN)
+            gamepad.a -> robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.CLOSED)
+            gamepad.b -> robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.RELEASE)
+            gamepad.x -> robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.SMALL_OPEN)
         }
     }
 
     private fun updateLift() {
-        if (gamepad2IsRegistered()) {
+        val gamepad = if (gamepad2IsRegistered()) {
+            /*
             val liftPower = -gamepad2.left_stick_y.toDouble()
-            robot.lift.setPower(liftPower)
+            if (liftPower != 0.0) {
+                robot.lift.shouldHoldLiftPosition = false
+                robot.lift.setPower(liftPower)
+                val position = CodaLift.LiftPosition.MANUAL
+                position.value = robot.lift.motor.currentPosition
+                robot.lift.targetPosition = position
+            } else {
+                robot.lift.shouldHoldLiftPosition = true
+            }*/
+
+            gamepad2
         } else {
-            when {
-                gamepad1.dpad_up -> robot.lift.elevate()
-                gamepad1.dpad_down -> robot.lift.drop()
+            // robot.lift.shouldHoldLiftPosition = true
+            gamepad1
+        }
+
+        when {
+            gamepad.dpad_up -> {
+                while (gamepad.dpad_up) {
+                    idle()
+                }
+                robot.lift.elevate()
+            }
+
+            gamepad.dpad_down -> {
+                while (gamepad.dpad_down) {
+                    idle()
+                }
+                robot.lift.lower()
             }
         }
     }

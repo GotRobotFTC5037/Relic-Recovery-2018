@@ -4,39 +4,39 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.lib.robot.attachment.RobotAttachment
 
-class GlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode) {
+class CodaGlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode) {
 
     var currentState: GlyphGrabberState = GlyphGrabberState.OPEN
         private set
 
     private val leftGlyphGrabber: Servo by lazy {
         val servo = hardwareMap.servo.get("left grabber")
-        servo.direction = Servo.Direction.FORWARD
+        servo.direction = Servo.Direction.REVERSE
         servo
     }
 
     private val rightGlyphGrabber: Servo by lazy {
         val servo = hardwareMap.servo.get("right grabber")
-        servo.direction = Servo.Direction.REVERSE
+        servo.direction = Servo.Direction.FORWARD
         servo
     }
 
     private val glyphDeployer: Servo by lazy {
         val servo = hardwareMap.servo.get("glyph deployer")
-        servo.direction = Servo.Direction.FORWARD
+        servo.direction = Servo.Direction.REVERSE
         servo
     }
 
     enum class GlyphArmPosition(val value: Double) {
-        OPEN(1.0),
-        SMALL_OPEN(0.85),
-        RELEASE(0.75),
-        CLOSED(0.65)
+        OPEN(0.0),
+        SMALL_OPEN(0.15),
+        RELEASE(0.25),
+        CLOSED(0.35)
     }
 
     enum class GlyphDeployerPosition(val value: Double) {
-        RETRACTED(0.80),
-        EXTENDED(0.35)
+        RETRACTED(0.075),
+        EXTENDED(0.65)
     }
 
     enum class GlyphGrabberState(
