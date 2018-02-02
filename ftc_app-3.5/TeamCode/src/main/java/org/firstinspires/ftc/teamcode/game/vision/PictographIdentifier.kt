@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.game.vision
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.util.ElapsedTime
 import com.vuforia.CameraDevice
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
@@ -14,24 +13,25 @@ import org.firstinspires.ftc.teamcode.lib.vision.ClosableVuforiaLocalizer
  * A class that is used to identify the pictograph images on the side wall in
  * the 2017-2018 FTC game.
  */
-class PictographIdentifier(hardwareMap: HardwareMap) {
+class PictographIdentifier(private var linearOpMode: LinearOpMode) {
 
-    private val vuforiaLocalizer: ClosableVuforiaLocalizer
-    private val relicTrackables: VuforiaTrackables
-    private val relicTemplate: VuforiaTrackable
+    private var vuforiaLocalizer: ClosableVuforiaLocalizer
+    private var relicTrackables: VuforiaTrackables
+    private var relicTemplate: VuforiaTrackable
 
-    /**
-     * Sets up the vuforia localizer and the vuforia trackables for usage.
-     */
     init {
-        val cameraMonitorViewId = hardwareMap.appContext.resources.getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.packageName)
+        val cameraMonitorViewId = linearOpMode.hardwareMap.appContext.resources.getIdentifier(
+            "cameraMonitorViewId", "id",
+            linearOpMode.hardwareMap.appContext.packageName
+        )
+
         val parameters = VuforiaLocalizer.Parameters(cameraMonitorViewId)
         parameters.vuforiaLicenseKey = VUFORIA_LICENSE_KEY
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK
 
-        vuforiaLocalizer =
-                ClosableVuforiaLocalizer(parameters)
+        vuforiaLocalizer = ClosableVuforiaLocalizer(parameters)
         this.relicTrackables = vuforiaLocalizer.loadTrackablesFromAsset("RelicVuMark")
+
         this.relicTemplate = relicTrackables[0]
     }
 
@@ -58,14 +58,15 @@ class PictographIdentifier(hardwareMap: HardwareMap) {
      * Waits until the pictograph is identified or it has been a specified number of seconds in an ElapsedTime.
      * @return The identified pictograph.
      */
-    fun waitForPictographIdentification(elapsedTime: ElapsedTime, linearOpMode: LinearOpMode): RelicRecoveryVuMark {
+    fun waitForPictographIdentification(): RelicRecoveryVuMark {
 
         linearOpMode.telemetry.log().add("Waiting for pictograph identification.")
 
+        val elapsedTime = ElapsedTime()
         while (elapsedTime.milliseconds() < TIME_OUT_DURATION && !linearOpMode.isStopRequested) {
             val pictograph = this.identifiedPictograph
 
-            if (elapsedTime.milliseconds() >= 1500) {
+            if (elapsedTime.milliseconds() >= 1000) {
                 CameraDevice.getInstance().setFlashTorchMode(true)
             }
 
@@ -94,7 +95,7 @@ class PictographIdentifier(hardwareMap: HardwareMap) {
                 "9I/7jMeKHn9lu6zhbnMlOi2D/iY14mOYUvQg1eMiHstkPzUY7IeBngPmCnEjOHWmv7" +
                 "XRboufL3JsCTrC8pnnEn5n3pZHei++FW9ovS6Aub89z//Yxq6OhPQ6+WaRNc3VSwFH/KJImw0"
 
-        const val TIME_OUT_DURATION = 3000
+        const val TIME_OUT_DURATION = 2000
     }
 
 }

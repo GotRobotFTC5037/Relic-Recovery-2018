@@ -5,7 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.I2cAddr
 import kotlin.concurrent.thread
 
-class RangeSensor(linearOpMode: LinearOpMode, name: String, address: I2cAddr = I2cAddr.create8bit(0x28), private val alpha: Double = 0.50): RobotSensor(linearOpMode) {
+class RangeSensor(
+    linearOpMode: LinearOpMode,
+    name: String,
+    address: I2cAddr = I2cAddr.create8bit(0x28),
+    private val alpha: Double = 1.0
+) : RobotSensor(linearOpMode) {
 
     companion object {
         private const val RAW_RANGE_VALUE_CUTOFF  = 200
@@ -23,13 +28,14 @@ class RangeSensor(linearOpMode: LinearOpMode, name: String, address: I2cAddr = I
     private lateinit var sensorUpdateThread: Thread
 
     fun startUpdatingDetectedDistance() {
-        sensorUpdateThread = thread(start = true) {
-            while (!linearOpMode.isStopRequested && !Thread.interrupted()) {
-                val rawDistance = sensor.cmUltrasonic()
-                if (rawDistance < RAW_RANGE_VALUE_CUTOFF) {
-                    distanceDetected += (rawDistance - distanceDetected) * alpha
+        if (!::sensorUpdateThread.isInitialized || !sensorUpdateThread.isAlive) {
+            sensorUpdateThread = thread(start = true) {
+                while (linearOpMode.opModeIsActive() && !Thread.interrupted()) {
+                    val rawDistance = sensor.rawUltrasonic()
+                    if (rawDistance < RAW_RANGE_VALUE_CUTOFF) {
+                        distanceDetected += (rawDistance - distanceDetected) * alpha
+                    }
                 }
-                linearOpMode.sleep(50)
             }
         }
     }

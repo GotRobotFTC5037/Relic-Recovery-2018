@@ -31,6 +31,26 @@ class CodaTeleOp : LinearOpMode() {
     }
 
     private fun updateDriveDirection() {
+
+        if (gamepad2IsRegistered()) {
+            when {
+                gamepad1.dpad_left -> robot.driveTrain.strafeDriveAtPower(0.40)
+                gamepad1.dpad_right -> robot.driveTrain.strafeDriveAtPower(-0.40)
+                gamepad1.dpad_up -> robot.driveTrain.linearDriveAtPower(0.20)
+                gamepad1.dpad_down -> robot.driveTrain.linearDriveAtPower(-0.20)
+                else -> manuallySetDriveDirection()
+            }
+        } else {
+            when {
+                gamepad1.dpad_left -> robot.driveTrain.strafeDriveAtPower(0.40)
+                gamepad1.dpad_right -> robot.driveTrain.strafeDriveAtPower(-0.40)
+                else -> manuallySetDriveDirection()
+            }
+        }
+
+    }
+
+    private fun manuallySetDriveDirection() {
         var linearPower = -gamepad1.left_stick_y.toDouble()
         var strafePower = gamepad1.left_stick_x.toDouble()
         var turnPower = -gamepad1.right_stick_x.toDouble()
@@ -80,21 +100,20 @@ class CodaTeleOp : LinearOpMode() {
 
     private fun updateLift() {
         val gamepad = if (gamepad2IsRegistered()) {
-            /*
             val liftPower = -gamepad2.left_stick_y.toDouble()
             if (liftPower != 0.0) {
                 robot.lift.shouldHoldLiftPosition = false
                 robot.lift.setPower(liftPower)
-                val position = CodaLift.LiftPosition.MANUAL
+                val position = robot.lift.position
                 position.value = robot.lift.motor.currentPosition
-                robot.lift.targetPosition = position
+                robot.lift.position = position
             } else {
                 robot.lift.shouldHoldLiftPosition = true
-            }*/
+            }
 
             gamepad2
         } else {
-            // robot.lift.shouldHoldLiftPosition = true
+            robot.lift.shouldHoldLiftPosition = true
             gamepad1
         }
 

@@ -4,46 +4,44 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.PIDCoefficients
 import com.qualcomm.robotcore.util.ElapsedTime
 import kotlin.concurrent.thread
+import kotlin.math.abs
+import kotlin.math.sign
 
 typealias Power = Double
 
 /**
- * A interface for power controllers.
+ * A interface for creating classes that control the power of motors for specific types of movement.
  */
 interface PowerController {
-    var target: Double
-    var inputValueHandler: () -> Double
-    val output: Power
+    var errorValueHandler: () -> Double
+    val outputPower: Power
+    fun stopUpdatingOutput()
 }
 
 /**
  * A PowerController that always returns the same value.
  */
-class StaticPowerController(private val power: Power): PowerController {
-
-    // Changing these values does nothing. Output is always the same.
-    override var target = 0.0
-    override var inputValueHandler = { 0.0 }
-
-    override val output: Power
-        get() = power
+class StaticPowerController(private val power: Power) : PowerController {
+    override var errorValueHandler: () -> Double = { 0.0 }
+    override val outputPower: Power
+        get() = sign(errorValueHandler()) * abs(power)
+    override fun stopUpdatingOutput() {
+        // Does nothing
+    }
 }
 
 /**
  * A PowerController that returns a value proportional to the difference between the input value
  * and target value.
  */
-class ProportionalPowerController(
-    private var gain: Double,
-    override var target: Double = 0.0,
-    override var inputValueHandler: () -> Double = { 0.0 }
-): PowerController {
-    override val output: Power
-        get() {
-            val input = inputValueHandler()
-            val error = target - input
-            return error * gain
-        }
+class ProportionalPowerController(private var gain: Double) : PowerController {
+    override var errorValueHandler: () -> Double = { 0.0 }
+    override val outputPower: Power
+        get() = errorValueHandler() * gain
+
+    override fun stopUpdatingOutput() {
+        // Does nothing
+    }
 }
 
 /**
@@ -51,23 +49,16 @@ class ProportionalPowerController(
  */
 class PIDPowerController(
     private val linearOpMode: LinearOpMode,
-    private val coefficients: PIDCoefficients,
-    override var target: Double = 0.0,
-    override var inputValueHandler: () -> Double = {0.0}
+    private val coefficients: PIDCoefficients
 ) : PowerController {
-
+    override var errorValueHandler: () -> Double = { 0.0 }
     private lateinit var updateThread: Thread
-
+    private val lastUpdateElapsedTime: ElapsedTime by lazy { ElapsedTime() }
     private var previousError = 0.0
     private var runningIntegral = 0.0
-    private val lastUpdateElapsedTime: ElapsedTime by lazy { ElapsedTime() }
-
-    private var proportionalOutput = 0.0
-    private var integralOutput = 0.0
-    private var derivativeOutput = 0.0
     private var pidOutput = 0.0
 
-    override val output: Power
+    override val outputPower: Power
         get() = pidOutput
 
     init {
@@ -78,22 +69,20 @@ class PIDPowerController(
         updateThread = thread(start = true) {
             while (linearOpMode.opModeIsActive() && !Thread.interrupted()) {
                 val dt = lastUpdateElapsedTime.milliseconds() / 1000
-
-                val error = target - inputValueHandler()
+                val error = errorValueHandler()
                 runningIntegral += error * dt
-                val derivative = (previousError - error) / dt
-
-                proportionalOutput = error * coefficients.p
-                integralOutput = runningIntegral * coefficients.i
-                derivativeOutput = derivative * coefficients.d
+                val derivative = (error - previousError) / dt
+                val proportionalOutput = error * coefficients.p
+                val integralOutput = runningIntegral * coefficients.i
+                val derivativeOutput = derivative * coefficients.d
                 pidOutput = proportionalOutput + integralOutput + derivativeOutput
-
+                previousError = error
                 lastUpdateElapsedTime.reset()
             }
         }
     }
 
-    fun stopUpdatingOutput() {
+    override fun stopUpdatingOutput() {
         if (::updateThread.isInitialized && updateThread.isAlive) {
             updateThread.interrupt()
         }

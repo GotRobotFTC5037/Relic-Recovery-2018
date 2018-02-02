@@ -77,21 +77,25 @@ class CodaDriveTrain(linearOpMode: LinearOpMode) : MecanumDriveTrain(linearOpMod
         }
 
     private val headingController: ProportionalPowerController by lazy {
-        val controller = ProportionalPowerController(0.03) {
+        val controller = ProportionalPowerController(HEADING_CORRECTION_GAIN)
+        controller.errorValueHandler = {
             headingDifferenceFromTarget(targetHeading)
         }
-        controller.target = 0.0
         controller
     }
 
     override fun headingCorrectedDrivePowers(baseDrivePowers: DrivePowers): DrivePowers {
         val drivePowers = DrivePowers()
-        val headingCorrection = headingController.output
-        drivePowers.frontLeft = baseDrivePowers.frontLeft + headingCorrection
-        drivePowers.frontRight = baseDrivePowers.frontRight - headingCorrection
-        drivePowers.rearLeft = baseDrivePowers.rearLeft + headingCorrection
-        drivePowers.rearRight = baseDrivePowers.rearRight - headingCorrection
+        val headingCorrection = headingController.outputPower
+        drivePowers.frontLeft = baseDrivePowers.frontLeft - headingCorrection
+        drivePowers.frontRight = baseDrivePowers.frontRight + headingCorrection
+        drivePowers.rearLeft = baseDrivePowers.rearLeft - headingCorrection
+        drivePowers.rearRight = baseDrivePowers.rearRight + headingCorrection
         return drivePowers
+    }
+
+    companion object {
+        private const val HEADING_CORRECTION_GAIN = 0.03
     }
 
 }
