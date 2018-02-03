@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.game.opmodes
 
+import OpModeManager
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.PIDCoefficients
@@ -60,28 +61,53 @@ private class CodaRelicRecoveryAutonomousActions(
     private val wallDistance: Double
         get() = when (cryptoBoxPosition) {
             CryptoBoxPosition.FRONT ->
-                when (detectedPictograph) {
-                    RelicRecoveryVuMark.LEFT -> RelicRecoveryConstants.LEADING_FRONT_CRYPTO_BOX_DISTANCE
-                    RelicRecoveryVuMark.CENTER -> RelicRecoveryConstants.CENTER_FRONT_CRYPTO_BOX_DISTANCE
-                    RelicRecoveryVuMark.RIGHT -> RelicRecoveryConstants.TRAILING_FRONT_CRYPTO_BOX_DISTANCE
-                    RelicRecoveryVuMark.UNKNOWN -> RelicRecoveryConstants.LEADING_FRONT_CRYPTO_BOX_DISTANCE
+                when (allianceColor) {
+                    AllianceColor.RED ->
+                        when (detectedPictograph) {
+                            RelicRecoveryVuMark.LEFT -> RelicRecoveryConstants.TRAILING_FRONT_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.CENTER -> RelicRecoveryConstants.CENTER_FRONT_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.RIGHT -> RelicRecoveryConstants.LEADING_FRONT_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.UNKNOWN -> RelicRecoveryConstants.LEADING_FRONT_CRYPTO_BOX_DISTANCE
+                        }
+                    AllianceColor.BLUE ->
+                        when (detectedPictograph) {
+                            RelicRecoveryVuMark.LEFT -> RelicRecoveryConstants.LEADING_FRONT_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.CENTER -> RelicRecoveryConstants.CENTER_FRONT_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.RIGHT -> RelicRecoveryConstants.TRAILING_FRONT_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.UNKNOWN -> RelicRecoveryConstants.LEADING_FRONT_CRYPTO_BOX_DISTANCE
+                        }
                 }
 
+
             CryptoBoxPosition.SIDE ->
-                when (detectedPictograph) {
-                    RelicRecoveryVuMark.LEFT -> RelicRecoveryConstants.LEADING_SIDE_CRYPTO_BOX_DISTANCE
-                    RelicRecoveryVuMark.CENTER -> RelicRecoveryConstants.CENTER_SIDE_CRYPTO_BOX_DISTANCE
-                    RelicRecoveryVuMark.RIGHT -> RelicRecoveryConstants.TRAILING_SIDE_CRYPTO_BOX_DISTANCE
-                    RelicRecoveryVuMark.UNKNOWN -> RelicRecoveryConstants.LEADING_SIDE_CRYPTO_BOX_DISTANCE
+                when (allianceColor) {
+                    AllianceColor.RED ->
+                        when (detectedPictograph) {
+                            RelicRecoveryVuMark.LEFT -> RelicRecoveryConstants.TRAILING_FRONT_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.CENTER -> RelicRecoveryConstants.CENTER_SIDE_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.RIGHT -> RelicRecoveryConstants.LEADING_SIDE_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.UNKNOWN -> RelicRecoveryConstants.LEADING_SIDE_CRYPTO_BOX_DISTANCE
+                        }
+                    AllianceColor.BLUE ->
+                        when (detectedPictograph) {
+                            RelicRecoveryVuMark.LEFT -> RelicRecoveryConstants.LEADING_SIDE_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.CENTER -> RelicRecoveryConstants.CENTER_SIDE_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.RIGHT -> RelicRecoveryConstants.TRAILING_SIDE_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.UNKNOWN -> RelicRecoveryConstants.LEADING_SIDE_CRYPTO_BOX_DISTANCE
+                        }
                 }
+
         }
 
     init {
         robot = Coda(linearOpMode)
         robot.setup()
+        OpModeManager.queueOpMode(linearOpMode, "TeleOp")
     }
 
     private fun deliverGlyph() {
+        robot.lift.position = CodaLift.LiftPosition.BOTTOM
+        linearOpMode.sleep(1000)
         robot.driveTrain.linearTimeDrive(
             1000, StaticPowerController(0.25),
             MecanumDriveTrain.DriveDirection.FORWARD
@@ -142,10 +168,7 @@ private class CodaRelicRecoveryAutonomousActions(
             AllianceColor.RED ->
                 when (detectedJewelConfiguration) {
                     JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
-                        robot.driveTrain.linearTimeDrive(
-                            1000, StaticPowerController(0.175),
-                            MecanumDriveTrain.DriveDirection.FORWARD
-                        )
+                        robot.driveTrain.linearEncoderDrive(300, StaticPowerController(0.175))
                         robot.jewelDisplacementBar.setPosition(CodaJewelDisplacementBar.Position.UP)
                         robot.driveOnBalancingStone(-0.40)
                         robot.driveOffBalancingStone(-0.175)
@@ -164,10 +187,7 @@ private class CodaRelicRecoveryAutonomousActions(
             AllianceColor.BLUE ->
                 when (detectedJewelConfiguration) {
                     JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
-                        robot.driveTrain.linearTimeDrive(
-                            1000, StaticPowerController(0.175),
-                            MecanumDriveTrain.DriveDirection.REVERSE
-                        )
+                        robot.driveTrain.linearEncoderDrive(-300, StaticPowerController(0.175))
                         robot.jewelDisplacementBar.setPosition(CodaJewelDisplacementBar.Position.UP)
                         robot.driveOnBalancingStone(0.40)
                         robot.driveOffBalancingStone(0.175)
@@ -184,62 +204,42 @@ private class CodaRelicRecoveryAutonomousActions(
                 }
         }
 
-        robot.driveTrain.linearTimeDrive(
-            500, StaticPowerController(0.30),
-            MecanumDriveTrain.DriveDirection.REVERSE
-        )
-        robot.lift.drop()
     }
 
     fun performSharedActionGroup2() {
-        alignWithCryptoBoxColumn()
-        deliverGlyph()
-
         if (cryptoBoxPosition == CryptoBoxPosition.FRONT) {
-            robot.driveToDistanceFromObject(
-                wallDirection,
-                RelicRecoveryConstants.TRAILING_FRONT_CRYPTO_BOX_DISTANCE,
-                StaticPowerController(0.60),
-                false
+            robot.driveTrain.linearTimeDrive(
+                500, StaticPowerController(0.30),
+                MecanumDriveTrain.DriveDirection.REVERSE
             )
         }
+
+        robot.lift.drop()
+        robot.lift.position = CodaLift.LiftPosition.FIRST_LEVEL
+
+        alignWithCryptoBoxColumn()
+        deliverGlyph()
 
         robot.driveTrain.turnToHeading(
             glyphPitHeading,
             CodaRelicRecoveryAutonomousActions.TURN_POWER_CONTROLLER
         )
 
-        robot.driveTrain.linearEncoderDrive(1600, StaticPowerController(1.0))
-        robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.CLOSED)
-        linearOpMode.sleep(1000)
-        robot.lift.position = CodaLift.LiftPosition.FIRST_LEVEL
-        robot.driveTrain.linearEncoderDrive(-250, StaticPowerController(0.50))
-
-        robot.driveTrain.linearEncoderDrive(-12, ProportionalPowerController(0.00075))
-
-        robot.driveTrain.turnToHeading(
-            cryptoBoxHeading,
-            CodaRelicRecoveryAutonomousActions.TURN_POWER_CONTROLLER
-        )
-
-        alignWithCryptoBoxColumn()
-        deliverGlyph()
     }
 
     companion object {
         val TURN_POWER_CONTROLLER = ProportionalPowerController(0.015)
         val CRYPTO_BOX_ALIGNMENT_PID_COEFFICIENTS = {
             val coefficients = PIDCoefficients()
-            coefficients.p = 0.025
+            coefficients.p = 0.01
             coefficients.i = 0.01
-            coefficients.d = 0.00025
             coefficients
         }()
     }
 
 }
 
-@Autonomous(group = "BlueFront")
+@Autonomous(name = "Blue Front", group = "Blue Front")
 class BlueFront : LinearOpMode() {
 
     @Throws(InterruptedException::class)
@@ -258,12 +258,12 @@ class BlueFront : LinearOpMode() {
 
     companion object {
         private const val CRYPTO_BOX_HEADING = 0.0
-        private const val GLYPH_PIT_HEADING = -145.0
+        private const val GLYPH_PIT_HEADING = -155.0
     }
 
 }
 
-@Autonomous(group = "RedFront")
+@Autonomous(name = "Red Front", group = "Red Front")
 class RedFront : LinearOpMode() {
 
     @Throws(InterruptedException::class)
@@ -286,12 +286,12 @@ class RedFront : LinearOpMode() {
 
     companion object {
         private const val CRYPTO_BOX_HEADING = 180.0
-        private const val GLYPH_PIT_HEADING = -45.0
+        private const val GLYPH_PIT_HEADING = -25.0
     }
 
 }
 
-@Autonomous(group = "BlueRear")
+@Autonomous(name = "Blue Side", group = "Blue Side")
 class BlueRear : LinearOpMode() {
 
     @Throws(InterruptedException::class)
@@ -320,7 +320,7 @@ class BlueRear : LinearOpMode() {
 
 }
 
-@Autonomous(group = "RedRear")
+@Autonomous(name = "Red Side", group = "Red Side")
 class RedRear : LinearOpMode() {
 
     @Throws(InterruptedException::class)

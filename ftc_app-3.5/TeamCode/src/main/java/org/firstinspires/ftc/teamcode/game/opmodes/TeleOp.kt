@@ -56,8 +56,8 @@ class CodaTeleOp : LinearOpMode() {
         var turnPower = -gamepad1.right_stick_x.toDouble()
 
         if (gamepad1.right_trigger > 0.1 || gamepad1.left_trigger > 0.1) {
-            linearPower *= 0.85
-            strafePower *= 0.85
+            linearPower *= 0.75
+            strafePower *= 0.75
             turnPower *= 0.65
         } else {
             linearPower *= 1.00
@@ -95,6 +95,7 @@ class CodaTeleOp : LinearOpMode() {
             gamepad.a -> robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.CLOSED)
             gamepad.b -> robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.RELEASE)
             gamepad.x -> robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.SMALL_OPEN)
+            gamepad.y -> robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.OPEN)
         }
     }
 

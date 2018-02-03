@@ -77,7 +77,7 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
         position = LiftPosition.BOTTOM
         isBusy = true
         while (!isLowered && !linearOpMode.isStopRequested) {
-            setPower(-0.20)
+            setPower(-0.10)
         }
         resetEncoder()
         setPower(0.0)

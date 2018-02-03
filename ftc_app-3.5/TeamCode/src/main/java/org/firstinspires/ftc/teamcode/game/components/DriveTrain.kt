@@ -76,7 +76,7 @@ class CodaDriveTrain(linearOpMode: LinearOpMode) : MecanumDriveTrain(linearOpMod
             return -orientation.thirdAngle.toDouble()
         }
 
-    private val headingController: ProportionalPowerController by lazy {
+    private val headingController by lazy {
         val controller = ProportionalPowerController(HEADING_CORRECTION_GAIN)
         controller.errorValueHandler = {
             headingDifferenceFromTarget(targetHeading)

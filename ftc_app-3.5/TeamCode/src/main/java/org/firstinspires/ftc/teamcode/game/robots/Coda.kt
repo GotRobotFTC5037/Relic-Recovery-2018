@@ -85,6 +85,8 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
     ) {
         if (!linearOpMode.isStopRequested) {
 
+            linearOpMode.telemetry.log().add("Driving to distance from object.")
+
             val rangeSensor: RangeSensor = when (rangeSensorDirection) {
                 RangeSensorDirection.LEFT -> components[LEFT_RANGE_SENSOR] as RangeSensor
                 RangeSensorDirection.RIGHT -> components[RIGHT_RANGE_SENSOR] as RangeSensor
@@ -122,8 +124,8 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
                     }
 
 
-                currentDistance > targetDistance ->
-                    while (targetDistance > rangeSensor.distanceDetected &&
+                targetDistance < currentDistance ->
+                    while (targetDistance < rangeSensor.distanceDetected &&
                         linearOpMode.opModeIsActive()
                     ) {
                         when (rangeSensorDirection) {
@@ -144,13 +146,16 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
                     }
             }
 
-            controller.stopUpdatingOutput()
             driveTrain.stop()
 
             if (shouldCorrect) {
                 linearOpMode.sleep(1000)
                 val distance = rangeSensor.distanceDetected
-                if ((targetDistance + WALL_DISTANCE_TOLERANCE < distance || targetDistance - WALL_DISTANCE_TOLERANCE > distance) && linearOpMode.opModeIsActive()) {
+                if (
+                    distance > targetDistance + WALL_DISTANCE_TOLERANCE ||
+                    distance < targetDistance - WALL_DISTANCE_TOLERANCE
+                ) {
+                    linearOpMode.telemetry.log().add("Correcting distance from object.")
                     driveToDistanceFromObject(
                         rangeSensorDirection,
                         targetDistance,
@@ -161,6 +166,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
 
             }
 
+            controller.stopUpdatingOutput()
             rangeSensor.stopUpdatingDetectedDistance()
 
         }
@@ -237,7 +243,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
 
         private const val WALL_DISTANCE_TOLERANCE = 3.0
         private const val BALANCING_STONE_ANGLE_THRESHOLD = 6.0
-        private const val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 4.0
+        private const val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 3.0
     }
 
 }

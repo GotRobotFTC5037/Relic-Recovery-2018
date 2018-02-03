@@ -66,18 +66,25 @@ class PIDPowerController(
     }
 
     private fun startUpdatingOutput() {
-        updateThread = thread(start = true) {
-            while (linearOpMode.opModeIsActive() && !Thread.interrupted()) {
-                val dt = lastUpdateElapsedTime.milliseconds() / 1000
-                val error = errorValueHandler()
-                runningIntegral += error * dt
-                val derivative = (error - previousError) / dt
-                val proportionalOutput = error * coefficients.p
-                val integralOutput = runningIntegral * coefficients.i
-                val derivativeOutput = derivative * coefficients.d
-                pidOutput = proportionalOutput + integralOutput + derivativeOutput
-                previousError = error
-                lastUpdateElapsedTime.reset()
+        if (
+            !::updateThread.isInitialized &&
+            !linearOpMode.isStopRequested
+        ) {
+            updateThread = thread(start = true) {
+                while (!linearOpMode.isStopRequested && !Thread.interrupted()) {
+                    val dt = lastUpdateElapsedTime.milliseconds() / 1000
+                    val error = errorValueHandler()
+                    runningIntegral += error * dt
+                    val derivative = (error - previousError) / dt
+                    val proportionalOutput = error * coefficients.p
+                    val integralOutput = runningIntegral * coefficients.i
+                    val derivativeOutput = derivative * coefficients.d
+                    pidOutput = proportionalOutput + integralOutput + derivativeOutput
+                    previousError = error
+                    lastUpdateElapsedTime.reset()
+
+                    linearOpMode.sleep(1)
+                }
             }
         }
     }

@@ -30,7 +30,7 @@ class CodaGlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode
     enum class GlyphArmPosition(val value: Double) {
         OPEN(0.0),
         SMALL_OPEN(0.30),
-        RELEASE(0.475),
+        RELEASE(0.45),
         CLOSED(0.55)
     }
 

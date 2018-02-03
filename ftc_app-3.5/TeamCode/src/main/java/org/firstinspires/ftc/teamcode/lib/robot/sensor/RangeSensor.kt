@@ -22,7 +22,7 @@ class RangeSensor(
         sensor
     }
 
-    var distanceDetected: Double = 0.0
+    var distanceDetected: Double = -1.0
     private set
 
     private lateinit var sensorUpdateThread: Thread
@@ -32,6 +32,11 @@ class RangeSensor(
             sensorUpdateThread = thread(start = true) {
                 while (linearOpMode.opModeIsActive() && !Thread.interrupted()) {
                     val rawDistance = sensor.rawUltrasonic()
+                    if (distanceDetected == -1.0) {
+                        distanceDetected = rawDistance.toDouble()
+                        continue
+                    }
+
                     if (rawDistance < RAW_RANGE_VALUE_CUTOFF) {
                         distanceDetected += (rawDistance - distanceDetected) * alpha
                     }
