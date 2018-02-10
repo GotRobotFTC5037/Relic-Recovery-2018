@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.DigitalChannel
 import com.qualcomm.robotcore.hardware.PIDCoefficients
+import com.qualcomm.robotcore.util.ElapsedTime
 import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.teamcode.lib.powercontroller.PIDPowerController
 import org.firstinspires.ftc.teamcode.lib.robot.lift.Lift
@@ -73,10 +74,11 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
         }
     }
 
-    fun drop() {
+    fun drop(timeout: Long = 0L) {
         position = LiftPosition.BOTTOM
         isBusy = true
-        while (!isLowered && !linearOpMode.isStopRequested) {
+        val elapsedTime = ElapsedTime()
+        while (!isLowered && !linearOpMode.isStopRequested && elapsedTime.milliseconds() < timeout) {
             setPower(-0.10)
         }
         resetEncoder()

@@ -214,7 +214,7 @@ private class CodaRelicRecoveryAutonomousActions(
             )
         }
 
-        robot.lift.drop()
+        robot.lift.drop(3000)
         robot.lift.position = CodaLift.LiftPosition.FIRST_LEVEL
 
         alignWithCryptoBoxColumn()
@@ -231,8 +231,8 @@ private class CodaRelicRecoveryAutonomousActions(
         val TURN_POWER_CONTROLLER = ProportionalPowerController(0.015)
         val CRYPTO_BOX_ALIGNMENT_PID_COEFFICIENTS = {
             val coefficients = PIDCoefficients()
-            coefficients.p = 0.01
-            coefficients.i = 0.01
+            coefficients.p = 0.025
+            coefficients.i = 0.013
             coefficients
         }()
     }

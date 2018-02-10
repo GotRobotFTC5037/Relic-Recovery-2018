@@ -57,7 +57,7 @@ abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : Driv
     /**
      * Turns the drive train by using the provided power.
      */
-    private fun turnAtPower(power: MotorPower) {
+    fun turnAtPower(power: MotorPower) {
         drivePowers.frontLeft = -power
         drivePowers.frontRight = power
         drivePowers.rearLeft = -power

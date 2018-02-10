@@ -38,6 +38,8 @@ class CodaTeleOp : LinearOpMode() {
                 gamepad1.dpad_right -> robot.driveTrain.strafeDriveAtPower(-0.40)
                 gamepad1.dpad_up -> robot.driveTrain.linearDriveAtPower(0.20)
                 gamepad1.dpad_down -> robot.driveTrain.linearDriveAtPower(-0.20)
+                gamepad1.left_bumper -> robot.driveTrain.turnAtPower(0.40)
+                gamepad1.right_bumper -> robot.driveTrain.turnAtPower(-0.40)
                 else -> manuallySetDriveDirection()
             }
         } else {

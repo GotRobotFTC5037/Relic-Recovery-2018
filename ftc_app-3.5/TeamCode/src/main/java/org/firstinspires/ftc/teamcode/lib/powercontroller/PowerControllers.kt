@@ -70,6 +70,8 @@ class PIDPowerController(
             !::updateThread.isInitialized &&
             !linearOpMode.isStopRequested
         ) {
+            runningIntegral = 0.0
+            previousError = 0.0
             updateThread = thread(start = true) {
                 while (!linearOpMode.isStopRequested && !Thread.interrupted()) {
                     val dt = lastUpdateElapsedTime.milliseconds() / 1000
