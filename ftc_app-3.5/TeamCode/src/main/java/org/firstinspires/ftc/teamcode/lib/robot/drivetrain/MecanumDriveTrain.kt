@@ -136,7 +136,7 @@ abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : Driv
         rearRightMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
     }
 
-    private fun currentLinearEncoderPosition(): Int {
+    fun currentLinearEncoderPosition(): Int {
         val maxLeft = max(frontLeftMotor.currentPosition, rearLeftMotor.currentPosition)
         val maxRight = max(frontRightMotor.currentPosition, rearRightMotor.currentPosition)
         return max(maxLeft, maxRight)
