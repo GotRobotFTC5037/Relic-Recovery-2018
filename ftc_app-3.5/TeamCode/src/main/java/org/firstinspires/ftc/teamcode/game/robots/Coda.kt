@@ -96,7 +96,17 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
             }
 
             rangeSensor.startUpdatingDetectedDistance()
-            controller.errorValueHandler = { targetDistance - rangeSensor.distanceDetected }
+            var minimumErrorDetected = Double.POSITIVE_INFINITY
+            controller.errorValueHandler = {
+                val error = targetDistance - rangeSensor.distanceDetected
+                if (minimumErrorDetected > error) {
+                    minimumErrorDetected = error
+                    error
+                } else {
+                    minimumErrorDetected
+                }
+            }
+
             val currentDistance = rangeSensor.distanceDetected
 
             when {
@@ -108,12 +118,16 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
                         when (rangeSensorDirection) {
                             RangeSensorDirection.LEFT ->
                                 driveTrain.strafeDriveAtPower(-controller.outputPower)
+
                             RangeSensorDirection.RIGHT ->
                                 driveTrain.strafeDriveAtPower(controller.outputPower)
+
                             RangeSensorDirection.FRONT_LEFT ->
                                 driveTrain.linearDriveAtPower(controller.outputPower)
+
                             RangeSensorDirection.FRONT_RIGHT ->
                                 driveTrain.linearDriveAtPower(controller.outputPower)
+
                             RangeSensorDirection.BACK -> TODO()
                         }
 
@@ -131,17 +145,22 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
                         when (rangeSensorDirection) {
                             RangeSensorDirection.LEFT ->
                                 driveTrain.strafeDriveAtPower(controller.outputPower)
+
                             RangeSensorDirection.RIGHT ->
                                 driveTrain.strafeDriveAtPower(-controller.outputPower)
+
                             RangeSensorDirection.FRONT_LEFT ->
                                 driveTrain.linearDriveAtPower(-controller.outputPower)
+
                             RangeSensorDirection.FRONT_RIGHT ->
                                 driveTrain.linearDriveAtPower(-controller.outputPower)
+
                             RangeSensorDirection.BACK -> TODO()
                         }
 
                         linearOpMode.telemetry.addLine("Target: $targetDistance")
                         linearOpMode.telemetry.addLine("Distance: ${rangeSensor.distanceDetected}")
+                        linearOpMode.telemetry.addLine("Power: ${controller.outputPower}")
                         linearOpMode.telemetry.update()
                     }
             }

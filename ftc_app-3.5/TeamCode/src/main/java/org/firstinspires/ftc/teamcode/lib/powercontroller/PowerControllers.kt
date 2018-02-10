@@ -38,7 +38,6 @@ class ProportionalPowerController(private var gain: Double) : PowerController {
     override var errorValueHandler: () -> Double = { 0.0 }
     override val outputPower: Power
         get() = errorValueHandler() * gain
-
     override fun stopUpdatingOutput() {
         // Does nothing
     }
