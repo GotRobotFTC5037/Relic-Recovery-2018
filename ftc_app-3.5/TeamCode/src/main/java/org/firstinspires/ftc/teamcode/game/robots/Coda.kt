@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.game.robots
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.game.components.*
+import org.firstinspires.ftc.teamcode.lib.powercontroller.PowerController
 import org.firstinspires.ftc.teamcode.lib.robot.Robot
 import org.firstinspires.ftc.teamcode.lib.robot.sensor.RangeSensor
 import kotlin.concurrent.thread
@@ -9,19 +10,19 @@ import kotlin.math.abs
 
 class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
 
-    val driveTrain: CodaDriveTrain by lazy {
+    val driveTrain by lazy {
         components[DRIVE_TRAIN] as CodaDriveTrain
     }
 
-    val lift: CodaLift by lazy {
+    val lift by lazy {
         components[LIFT] as CodaLift
     }
 
-    val glyphGrabber: CodaGlyphGrabber by lazy {
+    val glyphGrabber by lazy {
         components[GLYPH_GRABBER] as CodaGlyphGrabber
     }
 
-    val jewelDisplacementBar: CodaJewelDisplacementBar by lazy {
+    val jewelDisplacementBar by lazy {
         components[JEWEL_STICK] as CodaJewelDisplacementBar
     }
 
@@ -63,10 +64,12 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
 
         linearOpMode.onStart {
             driveTrain.startUpdatingDrivePowers()
+            lift.resetEncoder()
+            lift.startSettingMotorPowers()
         }
     }
 
-    enum class ObjectDirection {
+    enum class RangeSensorDirection {
         FRONT_LEFT,
         FRONT_RIGHT,
         LEFT,
@@ -75,59 +78,95 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
     }
 
     fun driveToDistanceFromObject(
-        direction: ObjectDirection,
+        rangeSensorDirection: RangeSensorDirection,
         targetDistance: Double,
-        drivePower: Double = 0.3,
+        controller: PowerController,
         shouldCorrect: Boolean = true
     ) {
-
         if (!linearOpMode.isStopRequested) {
 
-            val rangeSensor = when (direction) {
-                ObjectDirection.LEFT -> components[LEFT_RANGE_SENSOR] as RangeSensor
-                ObjectDirection.RIGHT -> components[RIGHT_RANGE_SENSOR] as RangeSensor
-                else -> return // For now, do nothing
+            linearOpMode.telemetry.log().add("Driving to distance from object.")
+
+            val rangeSensor: RangeSensor = when (rangeSensorDirection) {
+                RangeSensorDirection.LEFT -> components[LEFT_RANGE_SENSOR] as RangeSensor
+                RangeSensorDirection.RIGHT -> components[RIGHT_RANGE_SENSOR] as RangeSensor
+                RangeSensorDirection.FRONT_LEFT -> components[FRONT_LEFT_RANGE_SENSOR] as RangeSensor
+                RangeSensorDirection.FRONT_RIGHT -> components[FRONT_RIGHT_RANGE_SENSOR] as RangeSensor
+                RangeSensorDirection.BACK -> TODO()
             }
 
             rangeSensor.startUpdatingDetectedDistance()
-
+            controller.errorValueHandler = { targetDistance - rangeSensor.distanceDetected }
             val currentDistance = rangeSensor.distanceDetected
-            when {
-                targetDistance > currentDistance -> {
-                    driveTrain.strafeDriveAtPower(-abs(drivePower))
-                    while (targetDistance > rangeSensor.distanceDetected) {
-                        linearOpMode.telemetry.addLine("Distance: ${rangeSensor.distanceDetected}")
-                        linearOpMode.telemetry.update()
-                        linearOpMode.sleep(10)
-                    }
-                }
 
-                currentDistance > targetDistance -> {
-                    driveTrain.strafeDriveAtPower(abs(drivePower))
-                    while (rangeSensor.distanceDetected > targetDistance) {
+            when {
+                targetDistance > currentDistance ->
+                    while (
+                        targetDistance > rangeSensor.distanceDetected &&
+                        linearOpMode.opModeIsActive()
+                    ) {
+                        when (rangeSensorDirection) {
+                            RangeSensorDirection.LEFT ->
+                                driveTrain.strafeDriveAtPower(-controller.outputPower)
+                            RangeSensorDirection.RIGHT ->
+                                driveTrain.strafeDriveAtPower(controller.outputPower)
+                            RangeSensorDirection.FRONT_LEFT ->
+                                driveTrain.linearDriveAtPower(controller.outputPower)
+                            RangeSensorDirection.FRONT_RIGHT ->
+                                driveTrain.linearDriveAtPower(controller.outputPower)
+                            RangeSensorDirection.BACK -> TODO()
+                        }
+
+                        linearOpMode.telemetry.addLine("Target: $targetDistance")
+                        linearOpMode.telemetry.addLine("Distance: ${rangeSensor.distanceDetected}")
+                        linearOpMode.telemetry.addLine("Power: ${controller.outputPower}")
+                        linearOpMode.telemetry.update()
+                    }
+
+
+                targetDistance < currentDistance ->
+                    while (targetDistance < rangeSensor.distanceDetected &&
+                        linearOpMode.opModeIsActive()
+                    ) {
+                        when (rangeSensorDirection) {
+                            RangeSensorDirection.LEFT ->
+                                driveTrain.strafeDriveAtPower(controller.outputPower)
+                            RangeSensorDirection.RIGHT ->
+                                driveTrain.strafeDriveAtPower(-controller.outputPower)
+                            RangeSensorDirection.FRONT_LEFT ->
+                                driveTrain.linearDriveAtPower(-controller.outputPower)
+                            RangeSensorDirection.FRONT_RIGHT ->
+                                driveTrain.linearDriveAtPower(-controller.outputPower)
+                            RangeSensorDirection.BACK -> TODO()
+                        }
+
+                        linearOpMode.telemetry.addLine("Target: $targetDistance")
                         linearOpMode.telemetry.addLine("Distance: ${rangeSensor.distanceDetected}")
                         linearOpMode.telemetry.update()
-                        linearOpMode.sleep(10)
                     }
-                }
             }
 
             driveTrain.stop()
 
             if (shouldCorrect) {
                 linearOpMode.sleep(1000)
-
                 val distance = rangeSensor.distanceDetected
                 if (
-                    (targetDistance + WALL_DISTANCE_TOLERANCE < distance || targetDistance - WALL_DISTANCE_TOLERANCE > distance) &&
-                    linearOpMode.opModeIsActive()
+                    distance > targetDistance + WALL_DISTANCE_TOLERANCE ||
+                    distance < targetDistance - WALL_DISTANCE_TOLERANCE
                 ) {
-                    driveToDistanceFromObject(direction, targetDistance, drivePower, shouldCorrect)
+                    linearOpMode.telemetry.log().add("Correcting distance from object.")
+                    driveToDistanceFromObject(
+                        rangeSensorDirection,
+                        targetDistance,
+                        controller,
+                        shouldCorrect
+                    )
                 }
 
-                driveTrain.stop()
             }
 
+            controller.stopUpdatingOutput()
             rangeSensor.stopUpdatingDetectedDistance()
 
         }
@@ -180,18 +219,14 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
      * the angle of the robot as an indication of completion.
      */
     fun driveOnBalancingStone(power: Double) {
-
         if (!linearOpMode.isStopRequested) {
-
             driveTrain.linearDriveAtPower(power)
-
             while (abs(startingPitch - driveTrain.currentPitch) >= BALANCING_STONE_GROUND_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
                 linearOpMode.sleep(10)
             }
 
             driveTrain.stop()
         }
-
     }
 
     companion object {
@@ -208,7 +243,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
 
         private const val WALL_DISTANCE_TOLERANCE = 3.0
         private const val BALANCING_STONE_ANGLE_THRESHOLD = 6.0
-        private const val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 4.5
+        private const val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 3.0
     }
 
 }

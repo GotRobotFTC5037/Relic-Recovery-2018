@@ -11,13 +11,13 @@ class CodaGlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode
 
     private val leftGlyphGrabber: Servo by lazy {
         val servo = hardwareMap.servo.get("left grabber")
-        servo.direction = Servo.Direction.REVERSE
+        servo.direction = Servo.Direction.FORWARD
         servo
     }
 
     private val rightGlyphGrabber: Servo by lazy {
         val servo = hardwareMap.servo.get("right grabber")
-        servo.direction = Servo.Direction.FORWARD
+        servo.direction = Servo.Direction.REVERSE
         servo
     }
 
@@ -29,13 +29,13 @@ class CodaGlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode
 
     enum class GlyphArmPosition(val value: Double) {
         OPEN(0.0),
-        SMALL_OPEN(0.15),
-        RELEASE(0.25),
-        CLOSED(0.35)
+        SMALL_OPEN(0.30),
+        RELEASE(0.45),
+        CLOSED(0.55)
     }
 
     enum class GlyphDeployerPosition(val value: Double) {
-        RETRACTED(0.075),
+        RETRACTED(0.375),
         EXTENDED(0.65)
     }
 
@@ -59,10 +59,12 @@ class CodaGlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode
     }
 
     fun setState(state: GlyphGrabberState, delay: Long = 0) {
-        currentState = state
-        setDeployerPosition(state.deployerPosition)
-        setArmsPosition(state.armPosition)
-        linearOpMode.sleep(delay)
+        if (!linearOpMode.isStopRequested) {
+            currentState = state
+            setDeployerPosition(state.deployerPosition)
+            setArmsPosition(state.armPosition)
+            linearOpMode.sleep(delay)
+        }
     }
 
 }

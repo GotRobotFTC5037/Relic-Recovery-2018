@@ -264,7 +264,7 @@ implements <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html" ti
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorImpl.html#getTargetPosition--">getTargetPosition</a></span>()</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorImpl.html#getPosition--">getPosition</a></span>()</code>
 <div class="block">Get the current encoder value, accommodating the configured directionality of the motor.</div>
 </td>
 </tr>
@@ -322,7 +322,7 @@ implements <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html" ti
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorImpl.html#getTargetPosition--">getTargetPosition</a></span>()</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorImpl.html#getPosition--">getPosition</a></span>()</code>
 <div class="block">Get the current motor target state.</div>
 </td>
 </tr>
@@ -394,7 +394,7 @@ implements <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html" ti
 </tr>
 <tr id="i28" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorImpl.html#setTargetPosition-int-">setTargetPosition</a></span>(int&nbsp;state)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/qualcomm/robotcore/hardware/DcMotorImpl.html#setPosition-int-">setPosition</a></span>(int&nbsp;state)</code>
 <div class="block">Set the motor target state, using an integer.</div>
 </td>
 </tr>
@@ -805,7 +805,7 @@ implements <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html" ti
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the motor is busy</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setTargetPosition-int-"><code>DcMotor.setTargetPosition(int)</code></a></dd>
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setPosition-int-"><code>DcMotor.setPosition(int)</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -884,25 +884,25 @@ public&nbsp;void&nbsp;setPowerFloat()</pre>
 </dl>
 </li>
 </ul>
-<a name="setTargetPosition-int-">
+<a name="setPosition-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setTargetPosition</h4>
-<pre>public&nbsp;void&nbsp;setTargetPosition(int&nbsp;state)</pre>
+<h4>setPosition</h4>
+<pre>public&nbsp;void&nbsp;setPosition(int&nbsp;state)</pre>
 <div class="block">Set the motor target state, using an integer. If this motor has been set to REVERSE,
  the passed-in "state" value will be multiplied by -1.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setTargetPosition-int-">setTargetPosition</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html" title="interface in com.qualcomm.robotcore.hardware">DcMotor</a></code></dd>
+<dd><code><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setPosition-int-">setPosition</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html" title="interface in com.qualcomm.robotcore.hardware">DcMotor</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>state</code> - range from Integer.MIN_VALUE to Integer.MAX_VALUE</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getTargetPosition--"><code>DcMotor.getTargetPosition()</code></a>,
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getPosition--"><code>DcMotor.getPosition()</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setMode-com.qualcomm.robotcore.hardware.DcMotor.RunMode-"><code>DcMotor.setMode(RunMode)</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html#RUN_TO_POSITION"><code>DcMotor.RunMode.RUN_TO_POSITION</code></a>,
-<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getTargetPosition--"><code>DcMotor.getTargetPosition()</code></a>,
+<a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getPosition--"><code>DcMotor.getPosition()</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#isBusy--"><code>DcMotor.isBusy()</code></a></dd>
 </dl>
 </li>
@@ -916,40 +916,40 @@ public&nbsp;void&nbsp;setPowerFloat()</pre>
 <pre>protected&nbsp;void&nbsp;internalSetTargetPosition(int&nbsp;state)</pre>
 </li>
 </ul>
-<a name="getTargetPosition--">
+<a name="getPosition--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getTargetPosition</h4>
-<pre>public&nbsp;int&nbsp;getTargetPosition()</pre>
+<h4>getPosition</h4>
+<pre>public&nbsp;int&nbsp;getPosition()</pre>
 <div class="block">Get the current motor target state. If this motor has been set to REVERSE, the returned
  "state" will be multiplied by -1.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getTargetPosition--">getTargetPosition</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html" title="interface in com.qualcomm.robotcore.hardware">DcMotor</a></code></dd>
+<dd><code><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getPosition--">getPosition</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html" title="interface in com.qualcomm.robotcore.hardware">DcMotor</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>integer, unscaled</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setTargetPosition-int-"><code>DcMotor.setTargetPosition(int)</code></a></dd>
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#setPosition-int-"><code>DcMotor.setPosition(int)</code></a></dd>
 </dl>
 </li>
 </ul>
-<a name="getTargetPosition--">
+<a name="getPosition--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getTargetPosition</h4>
-<pre>public&nbsp;int&nbsp;getTargetPosition()</pre>
+<h4>getPosition</h4>
+<pre>public&nbsp;int&nbsp;getPosition()</pre>
 <div class="block">Get the current encoder value, accommodating the configured directionality of the motor.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getTargetPosition--">getTargetPosition</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html" title="interface in com.qualcomm.robotcore.hardware">DcMotor</a></code></dd>
+<dd><code><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getPosition--">getPosition</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html" title="interface in com.qualcomm.robotcore.hardware">DcMotor</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>double indicating current state</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getTargetPosition--"><code>DcMotor.getTargetPosition()</code></a>,
+<dd><a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.html#getPosition--"><code>DcMotor.getPosition()</code></a>,
 <a href="../../../../com/qualcomm/robotcore/hardware/DcMotor.RunMode.html#STOP_AND_RESET_ENCODER"><code>DcMotor.RunMode.STOP_AND_RESET_ENCODER</code></a></dd>
 </dl>
 </li>

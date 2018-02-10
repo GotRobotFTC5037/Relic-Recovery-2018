@@ -10,13 +10,7 @@ import java.io.File
 import java.io.FileWriter
 import java.io.IOException
 
-class JewelConfigurationDetector : OpenCVPipeline() {
-
-    enum class JewelConfiguration {
-        RED_BLUE,
-        BLUE_RED,
-        UNKNOWN
-    }
+class JewelConfigurationDetector(private val linearOpMode: LinearOpMode) : OpenCVPipeline() {
 
     private val resizeOutput = Mat()
     private val hsvOutput = Mat()
@@ -54,13 +48,12 @@ class JewelConfigurationDetector : OpenCVPipeline() {
     private val detectedObjectsOutput = Mat()
 
     /**
-     * Waits for the jewels to be identified until 5 seconds elapse.
-     * @param elapsedTime The elapsed time instance containing the start time of the opmode.
-     * @param linearOpMode The instance of RobotOpMode that is running.
+     * Waits for the jewels to be identified.
      */
-    fun waitForJewelIdentification(elapsedTime: ElapsedTime, linearOpMode: LinearOpMode): JewelConfiguration {
+    fun waitForJewelIdentification(): JewelConfiguration {
 
         linearOpMode.telemetry.log().add("Waiting for jewel configuration identification.")
+        val elapsedTime = ElapsedTime()
         while (elapsedTime.milliseconds() < TIME_OUT_DURATION && !linearOpMode.isStopRequested) {
             val jewelConfiguration = getJewelConfiguration()
 
@@ -85,7 +78,7 @@ class JewelConfigurationDetector : OpenCVPipeline() {
      * @return The KeyPoint of the first blob identified in the image.
      */
     @Synchronized
-    fun getRedJewelKeyPoint(): KeyPoint? {
+    private fun getRedJewelKeyPoint(): KeyPoint? {
         val redBlobs = findRedBlobsOutput.toArray()
         return if (redBlobs.isNotEmpty()) {
             redBlobs[0]
@@ -99,7 +92,7 @@ class JewelConfigurationDetector : OpenCVPipeline() {
      * @return The KeyPoint of the first blob identified in the image.
      */
     @Synchronized
-    fun getBlueJewelKeyPoint(): KeyPoint? {
+    private fun getBlueJewelKeyPoint(): KeyPoint? {
         val blueBlobs = findBlueBlobsOutput.toArray()
         return if (blueBlobs.isNotEmpty()) {
             blueBlobs[0]
@@ -113,7 +106,7 @@ class JewelConfigurationDetector : OpenCVPipeline() {
      * @return A Point of the location of the white line.
      */
     @Synchronized
-    fun getWhiteLinePoint(): Point? {
+    private fun getWhiteLinePoint(): Point? {
         val findContoursOutput = ArrayList<MatOfPoint>()
         val filterContoursOutput = ArrayList<MatOfPoint>()
 
@@ -135,6 +128,12 @@ class JewelConfigurationDetector : OpenCVPipeline() {
              null
         }
 
+    }
+
+    enum class JewelConfiguration {
+        RED_BLUE,
+        BLUE_RED,
+        UNKNOWN
     }
 
     /**
@@ -320,30 +319,6 @@ class JewelConfigurationDetector : OpenCVPipeline() {
         blobDet.detect(input, blobList)
     }
 
-    /**
-     * Compute the convex hulls of contours.
-     * @param inputContours The contours on which to perform the operation.
-     * @param outputContours The contours where the sumOutput will be stored.
-     */
-    private fun convexHulls(inputContours: List<MatOfPoint>, outputContours: java.util.ArrayList<MatOfPoint>) {
-        val hull = MatOfInt()
-        outputContours.clear()
-        for (i in inputContours.indices) {
-            val contour = inputContours[i]
-            val mopHull = MatOfPoint()
-            Imgproc.convexHull(contour, hull)
-            mopHull.create(hull.size().height.toInt(), 1, CvType.CV_32SC2)
-            var j = 0
-            while (j < hull.size().height) {
-                val index = hull.get(j, 0)[0].toInt()
-                val point = doubleArrayOf(contour.get(index, 0)[0], contour.get(index, 0)[1])
-                mopHull.put(j, 0, *point)
-                j++
-            }
-            outputContours.add(mopHull)
-        }
-    }
-
 
     /**
      * Filters out contours that do not meet certain criteria.
@@ -401,7 +376,7 @@ class JewelConfigurationDetector : OpenCVPipeline() {
     }
 
     companion object {
-        const val TIME_OUT_DURATION = 500
+        const val TIME_OUT_DURATION = 2000
 
         init {
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME)

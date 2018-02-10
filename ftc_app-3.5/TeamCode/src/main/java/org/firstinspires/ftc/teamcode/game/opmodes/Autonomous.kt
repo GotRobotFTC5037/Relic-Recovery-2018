@@ -1,8 +1,9 @@
 package org.firstinspires.ftc.teamcode.game.opmodes
 
+import OpModeManager
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import com.qualcomm.robotcore.util.ElapsedTime
+import com.qualcomm.robotcore.hardware.PIDCoefficients
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
 import org.firstinspires.ftc.teamcode.game.RelicRecoveryConstants
@@ -12,85 +13,162 @@ import org.firstinspires.ftc.teamcode.game.components.CodaLift
 import org.firstinspires.ftc.teamcode.game.robots.Coda
 import org.firstinspires.ftc.teamcode.game.vision.JewelConfigurationDetector
 import org.firstinspires.ftc.teamcode.game.vision.PictographIdentifier
+import org.firstinspires.ftc.teamcode.lib.powercontroller.PIDPowerController
+import org.firstinspires.ftc.teamcode.lib.powercontroller.ProportionalPowerController
+import org.firstinspires.ftc.teamcode.lib.powercontroller.StaticPowerController
+import org.firstinspires.ftc.teamcode.lib.robot.drivetrain.Heading
+import org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain
 import kotlin.concurrent.thread
 
-private object AutonomousActions {
+private class CodaRelicRecoveryAutonomousActions(
+    val linearOpMode: LinearOpMode,
+    private val allianceColor: AllianceColor,
+    private val cryptoBoxPosition: CryptoBoxPosition,
+    private val cryptoBoxHeading: Heading,
+    private val glyphPitHeading: Heading
+) {
 
-    const val DEFAULT_TURN_SPEED = 0.75
-
-    lateinit var robot: Coda
-    lateinit var linearOpMode: LinearOpMode
+    var robot: Coda
+        private set
     var detectedJewelConfiguration = JewelConfigurationDetector.JewelConfiguration.UNKNOWN
+        private set
     var detectedPictograph = RelicRecoveryVuMark.UNKNOWN
+        private set
 
-    fun waitForStart() {
-        linearOpMode.waitForStart()
+    val jewelConfigurationDetector by lazy {
+        JewelConfigurationDetector(linearOpMode)
     }
 
-    fun getJewelConfigurationDetector() = JewelConfigurationDetector()
-    fun getPictographIdentifier() = PictographIdentifier(linearOpMode.hardwareMap)
-
-    fun performSharedActionGroup1() {
-
-        // Setup the robot.
-        robot = Coda(linearOpMode)
-        robot.setup()
-
-        // Setup the camera.
-        val jewelConfigurationDetector = getJewelConfigurationDetector()
-        jewelConfigurationDetector.init(
-            linearOpMode.hardwareMap.appContext, CameraViewDisplay.getInstance()
-        )
-        jewelConfigurationDetector.enable()
-
-        val pictographIdentifier = getPictographIdentifier()
-
-        // Wait for start.
-        waitForStart()
-        robot.lift.startSettingMotorPowers()
-
-        // Grab the glyph.
-        val glyphGrabbingThread = thread(start = true) {
-            robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.CLOSED)
-            linearOpMode.sleep(1300)
-            robot.lift.setPosition(CodaLift.LiftPosition.FIRST_LEVEL)
-        }
-
-        // Start the camera detection timer.
-        val elapsedTime = ElapsedTime(ElapsedTime.Resolution.MILLISECONDS)
-
-        // Detect the jewel configuration.
-        detectedJewelConfiguration = jewelConfigurationDetector.waitForJewelIdentification(
-            elapsedTime, linearOpMode
-        )
-        jewelConfigurationDetector.disable()
-
-        // Move the jewel displacement bar if applicable.
-        if (detectedJewelConfiguration != JewelConfigurationDetector.JewelConfiguration.UNKNOWN) {
-            robot.jewelDisplacementBar.setPosition(CodaJewelDisplacementBar.Position.DOWN)
-        }
-
-        // Detect the pictograph.
-        pictographIdentifier.activate()
-        detectedPictograph = pictographIdentifier.waitForPictographIdentification(
-            elapsedTime, linearOpMode
-        )
-        pictographIdentifier.deactivate()
-
-        // Wait for the grabber to grab the glyph.
-        glyphGrabbingThread.join()
+    val pictographIdentifier by lazy {
+        PictographIdentifier(linearOpMode)
     }
 
     enum class AllianceColor {
         RED, BLUE
     }
 
-    fun performSharedActionGroup2(allianceColor: AllianceColor) {
+    enum class CryptoBoxPosition {
+        FRONT, SIDE
+    }
+
+    private val wallDirection: Coda.RangeSensorDirection
+        get() = if (allianceColor == AllianceColor.BLUE) {
+                Coda.RangeSensorDirection.LEFT
+            } else {
+                Coda.RangeSensorDirection.RIGHT
+            }
+
+    private val wallDistance: Double
+        get() = when (cryptoBoxPosition) {
+            CryptoBoxPosition.FRONT ->
+                when (allianceColor) {
+                    AllianceColor.RED ->
+                        when (detectedPictograph) {
+                            RelicRecoveryVuMark.LEFT -> RelicRecoveryConstants.TRAILING_FRONT_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.CENTER -> RelicRecoveryConstants.CENTER_FRONT_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.RIGHT -> RelicRecoveryConstants.LEADING_FRONT_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.UNKNOWN -> RelicRecoveryConstants.LEADING_FRONT_CRYPTO_BOX_DISTANCE
+                        }
+                    AllianceColor.BLUE ->
+                        when (detectedPictograph) {
+                            RelicRecoveryVuMark.LEFT -> RelicRecoveryConstants.LEADING_FRONT_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.CENTER -> RelicRecoveryConstants.CENTER_FRONT_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.RIGHT -> RelicRecoveryConstants.TRAILING_FRONT_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.UNKNOWN -> RelicRecoveryConstants.LEADING_FRONT_CRYPTO_BOX_DISTANCE
+                        }
+                }
+
+
+            CryptoBoxPosition.SIDE ->
+                when (allianceColor) {
+                    AllianceColor.RED ->
+                        when (detectedPictograph) {
+                            RelicRecoveryVuMark.LEFT -> RelicRecoveryConstants.TRAILING_FRONT_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.CENTER -> RelicRecoveryConstants.CENTER_SIDE_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.RIGHT -> RelicRecoveryConstants.LEADING_SIDE_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.UNKNOWN -> RelicRecoveryConstants.LEADING_SIDE_CRYPTO_BOX_DISTANCE
+                        }
+                    AllianceColor.BLUE ->
+                        when (detectedPictograph) {
+                            RelicRecoveryVuMark.LEFT -> RelicRecoveryConstants.LEADING_SIDE_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.CENTER -> RelicRecoveryConstants.CENTER_SIDE_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.RIGHT -> RelicRecoveryConstants.TRAILING_SIDE_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.UNKNOWN -> RelicRecoveryConstants.LEADING_SIDE_CRYPTO_BOX_DISTANCE
+                        }
+                }
+
+        }
+
+    init {
+        robot = Coda(linearOpMode)
+        robot.setup()
+        OpModeManager.queueOpMode(linearOpMode, "TeleOp")
+    }
+
+    private fun deliverGlyph() {
+        robot.lift.position = CodaLift.LiftPosition.BOTTOM
+        linearOpMode.sleep(1000)
+        robot.driveTrain.linearTimeDrive(
+            1000, StaticPowerController(0.25),
+            MecanumDriveTrain.DriveDirection.FORWARD
+        )
+        robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.RELEASE)
+        robot.driveTrain.linearEncoderDrive(-250, StaticPowerController(0.25))
+        robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.SMALL_OPEN)
+    }
+
+    private fun alignWithCryptoBoxColumn() {
+        robot.driveToDistanceFromObject(
+            wallDirection,
+            wallDistance,
+            PIDPowerController(linearOpMode, CRYPTO_BOX_ALIGNMENT_PID_COEFFICIENTS)
+        )
+    }
+
+    fun performSharedActionGroup1() {
+
+        // Setup the jewel configuration detector and pictograph identifier.
+        val context = linearOpMode.hardwareMap.appContext
+        val viewDisplay = CameraViewDisplay.getInstance()
+        jewelConfigurationDetector.init(context, viewDisplay)
+
+        // Wait for start.
+        linearOpMode.waitForStart()
+
+        // Enable the jewel configuration detector.
+        jewelConfigurationDetector.enable()
+
+        // Grab the glyph.
+        val glyphGrabbingThread = thread(start = true) {
+            robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.CLOSED)
+            linearOpMode.sleep(750)
+            robot.lift.position = CodaLift.LiftPosition.FIRST_LEVEL
+        }
+
+        // Detect the jewel configuration.
+        detectedJewelConfiguration = jewelConfigurationDetector.waitForJewelIdentification()
+
+        // Move the jewel displacement bar if applicable.
+        if (detectedJewelConfiguration != JewelConfigurationDetector.JewelConfiguration.UNKNOWN) {
+            robot.jewelDisplacementBar.setPosition(CodaJewelDisplacementBar.Position.DOWN)
+        }
+
+        jewelConfigurationDetector.disable()
+        pictographIdentifier.activate()
+
+        // Detect the pictograph.
+        detectedPictograph = pictographIdentifier.waitForPictographIdentification()
+        pictographIdentifier.deactivate()
+
+        // Wait for the grabber to grab the glyph.
+        glyphGrabbingThread.join()
+
+        // Knock off the correct jewel.
         when (allianceColor) {
             AllianceColor.RED ->
                 when (detectedJewelConfiguration) {
                     JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
-                        robot.driveTrain.linearTimeDrive(1000, 0.175)
+                        robot.driveTrain.linearEncoderDrive(300, StaticPowerController(0.175))
                         robot.jewelDisplacementBar.setPosition(CodaJewelDisplacementBar.Position.UP)
                         robot.driveOnBalancingStone(-0.40)
                         robot.driveOffBalancingStone(-0.175)
@@ -109,7 +187,7 @@ private object AutonomousActions {
             AllianceColor.BLUE ->
                 when (detectedJewelConfiguration) {
                     JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
-                        robot.driveTrain.linearTimeDrive(1000, -0.175)
+                        robot.driveTrain.linearEncoderDrive(-300, StaticPowerController(0.175))
                         robot.jewelDisplacementBar.setPosition(CodaJewelDisplacementBar.Position.UP)
                         robot.driveOnBalancingStone(0.40)
                         robot.driveOffBalancingStone(0.175)
@@ -125,187 +203,148 @@ private object AutonomousActions {
                     }
                 }
         }
+
     }
 
-    enum class CryptoBoxPosition {
-        FRONT, SIDE
-    }
-
-    fun performSharedActionGroup3(
-        direction: Coda.ObjectDirection,
-        cryptoBoxPosition: CryptoBoxPosition
-    ) {
-
-        val wallDistance = when (cryptoBoxPosition) {
-            CryptoBoxPosition.FRONT ->
-                when (detectedPictograph) {
-                    RelicRecoveryVuMark.LEFT -> RelicRecoveryConstants.LEADING_FRONT_CRYPTO_BOX_DISTANCE
-                    RelicRecoveryVuMark.CENTER -> RelicRecoveryConstants.CENTER_FRONT_CRYPTO_BOX_DISTANCE
-                    RelicRecoveryVuMark.RIGHT -> RelicRecoveryConstants.TRAILING_FRONT_CRYPTO_BOX_DISTANCE
-                    RelicRecoveryVuMark.UNKNOWN -> RelicRecoveryConstants.LEADING_FRONT_CRYPTO_BOX_DISTANCE
-                }
-
-            CryptoBoxPosition.SIDE ->
-                when (detectedPictograph) {
-                    RelicRecoveryVuMark.LEFT -> RelicRecoveryConstants.LEADING_SIDE_CRYPTO_BOX_DISTANCE
-                    RelicRecoveryVuMark.CENTER -> RelicRecoveryConstants.CENTER_SIDE_CRYPTO_BOX_DISTANCE
-                    RelicRecoveryVuMark.RIGHT -> RelicRecoveryConstants.TRAILING_SIDE_CRYPTO_BOX_DISTANCE
-                    RelicRecoveryVuMark.UNKNOWN -> RelicRecoveryConstants.LEADING_SIDE_CRYPTO_BOX_DISTANCE
-                }
+    fun performSharedActionGroup2() {
+        if (cryptoBoxPosition == CryptoBoxPosition.FRONT) {
+            robot.driveTrain.linearTimeDrive(
+                500, StaticPowerController(0.30),
+                MecanumDriveTrain.DriveDirection.REVERSE
+            )
         }
 
-        robot.driveToDistanceFromObject(direction, wallDistance)
-    }
+        robot.lift.drop(3000)
+        robot.lift.position = CodaLift.LiftPosition.FIRST_LEVEL
 
-    private fun deliverGlyph() {
-        robot.driveTrain.linearTimeDrive(1000, 0.25)
-        robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.RELEASE)
-        robot.driveTrain.linearTimeDrive(750, -0.25)
-        robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.SMALL_OPEN)
-    }
-
-    fun performSharedActionGroup4() {
-        robot.lift.setPosition(CodaLift.LiftPosition.BOTTOM)
-        linearOpMode.sleep(1000)
+        alignWithCryptoBoxColumn()
         deliverGlyph()
-    }
 
-    fun performSharedActionGroup5() {
-        robot.driveTrain.linearTimeDrive(850, 1.0)
-        robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.CLOSED)
-        linearOpMode.sleep(2000)
-        robot.driveTrain.linearTimeDrive(500, -0.50)
-    }
-
-    fun performSharedActionGroup6() {
-        robot.driveTrain.linearTimeDrive(200, 0.25)
-        robot.driveToDistanceFromObject(
-            Coda.ObjectDirection.LEFT,
-            RelicRecoveryConstants.TRAILING_FRONT_CRYPTO_BOX_DISTANCE
+        robot.driveTrain.turnToHeading(
+            glyphPitHeading,
+            CodaRelicRecoveryAutonomousActions.TURN_POWER_CONTROLLER
         )
-        deliverGlyph()
+
+    }
+
+    companion object {
+        val TURN_POWER_CONTROLLER = ProportionalPowerController(0.015)
+        val CRYPTO_BOX_ALIGNMENT_PID_COEFFICIENTS = {
+            val coefficients = PIDCoefficients()
+            coefficients.p = 0.025
+            coefficients.i = 0.013
+            coefficients
+        }()
     }
 
 }
 
-@Autonomous(group = "Front")
+@Autonomous(name = "Blue Front", group = "Blue Front")
 class BlueFront : LinearOpMode() {
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {
-        AutonomousActions.linearOpMode = this
-        AutonomousActions.performSharedActionGroup1()
-        AutonomousActions.performSharedActionGroup2(AutonomousActions.AllianceColor.BLUE)
-        // All other autonomous opmodes have a turn here. It's unnecessary for ths one.
-        AutonomousActions.performSharedActionGroup3(
-            Coda.ObjectDirection.LEFT,
-            AutonomousActions.CryptoBoxPosition.FRONT
+        val actions = CodaRelicRecoveryAutonomousActions(
+            this,
+            CodaRelicRecoveryAutonomousActions.AllianceColor.BLUE,
+            CodaRelicRecoveryAutonomousActions.CryptoBoxPosition.FRONT,
+            CRYPTO_BOX_HEADING,
+            GLYPH_PIT_HEADING
         )
-        AutonomousActions.performSharedActionGroup4()
-        AutonomousActions.robot.driveToDistanceFromObject(
-            Coda.ObjectDirection.LEFT,
-            RelicRecoveryConstants.CENTER_FRONT_CRYPTO_BOX_DISTANCE,
-            0.75, false
-        )
-        AutonomousActions.robot.driveTrain.turnToHeading(
-            -145.0, AutonomousActions.DEFAULT_TURN_SPEED
-        )
-        AutonomousActions.performSharedActionGroup5()
-        AutonomousActions.robot.driveTrain.turnToHeading(
-            0.0, AutonomousActions.DEFAULT_TURN_SPEED
-        )
-        AutonomousActions.performSharedActionGroup6()
+
+        actions.performSharedActionGroup1()
+        actions.performSharedActionGroup2()
+    }
+
+    companion object {
+        private const val CRYPTO_BOX_HEADING = 0.0
+        private const val GLYPH_PIT_HEADING = -155.0
     }
 
 }
 
-@Autonomous(group = "Front")
+@Autonomous(name = "Red Front", group = "Red Front")
 class RedFront : LinearOpMode() {
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {
-        AutonomousActions.linearOpMode = this
-        AutonomousActions.performSharedActionGroup1()
-        AutonomousActions.performSharedActionGroup2(AutonomousActions.AllianceColor.RED)
-        AutonomousActions.robot.driveTrain.turnToHeading(
-            180.0, AutonomousActions.DEFAULT_TURN_SPEED
+        val actions = CodaRelicRecoveryAutonomousActions(
+            this,
+            CodaRelicRecoveryAutonomousActions.AllianceColor.RED,
+            CodaRelicRecoveryAutonomousActions.CryptoBoxPosition.FRONT,
+            CRYPTO_BOX_HEADING,
+            GLYPH_PIT_HEADING
         )
-        AutonomousActions.performSharedActionGroup3(
-            Coda.ObjectDirection.RIGHT,
-            AutonomousActions.CryptoBoxPosition.FRONT
+
+        actions.performSharedActionGroup1()
+        actions.robot.driveTrain.turnToHeading(
+            CRYPTO_BOX_HEADING,
+            CodaRelicRecoveryAutonomousActions.TURN_POWER_CONTROLLER
         )
-        AutonomousActions.performSharedActionGroup4()
-        AutonomousActions.robot.driveToDistanceFromObject(
-            Coda.ObjectDirection.RIGHT,
-            RelicRecoveryConstants.TRAILING_FRONT_CRYPTO_BOX_DISTANCE,
-            0.75, false
-        )
-        AutonomousActions.robot.driveTrain.turnToHeading(
-            -45.0, AutonomousActions.DEFAULT_TURN_SPEED
-        )
-        AutonomousActions.performSharedActionGroup5()
-        AutonomousActions.robot.driveTrain.turnToHeading(
-            0.0, AutonomousActions.DEFAULT_TURN_SPEED
-        )
-        AutonomousActions.performSharedActionGroup6()
+        actions.performSharedActionGroup2()
+    }
+
+    companion object {
+        private const val CRYPTO_BOX_HEADING = 180.0
+        private const val GLYPH_PIT_HEADING = -25.0
     }
 
 }
 
-@Autonomous(group = "Rear")
-class BlueBack : LinearOpMode() {
+@Autonomous(name = "Blue Side", group = "Blue Side")
+class BlueRear : LinearOpMode() {
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {
-        AutonomousActions.linearOpMode = this
-        AutonomousActions.performSharedActionGroup1()
-        AutonomousActions.performSharedActionGroup2(AutonomousActions.AllianceColor.BLUE)
-        AutonomousActions.robot.driveTrain.turnToHeading(
-            90.0, AutonomousActions.DEFAULT_TURN_SPEED
+        val actions = CodaRelicRecoveryAutonomousActions(
+            this,
+            CodaRelicRecoveryAutonomousActions.AllianceColor.BLUE,
+            CodaRelicRecoveryAutonomousActions.CryptoBoxPosition.SIDE,
+            CRYPTO_BOX_HEADING,
+            GLYPH_PIT_HEADING
         )
-        AutonomousActions.performSharedActionGroup3(
-            Coda.ObjectDirection.LEFT,
-            AutonomousActions.CryptoBoxPosition.SIDE
+
+        actions.performSharedActionGroup1()
+        actions.robot.driveTrain.turnToHeading(
+            CRYPTO_BOX_HEADING,
+            CodaRelicRecoveryAutonomousActions.TURN_POWER_CONTROLLER
         )
-        AutonomousActions.performSharedActionGroup4()
-        // The front antonymous opmodes have a drive here. It is not necessary for the back ones.
-        AutonomousActions.robot.driveTrain.turnToHeading(
-            -90.0, AutonomousActions.DEFAULT_TURN_SPEED
-        )
-        AutonomousActions.performSharedActionGroup5()
-        AutonomousActions.robot.driveTrain.turnToHeading(
-            0.0, AutonomousActions.DEFAULT_TURN_SPEED
-        )
-        AutonomousActions.performSharedActionGroup6()
+
+        actions.performSharedActionGroup2()
+    }
+
+    companion object {
+        private const val CRYPTO_BOX_HEADING = 90.0
+        private const val GLYPH_PIT_HEADING = -90.0
     }
 
 }
 
-@Autonomous(group = "Rear")
-class RedBack : LinearOpMode() {
+@Autonomous(name = "Red Side", group = "Red Side")
+class RedRear : LinearOpMode() {
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {
-        AutonomousActions.linearOpMode = this
-        AutonomousActions.performSharedActionGroup1()
-        AutonomousActions.performSharedActionGroup2(AutonomousActions.AllianceColor.RED)
-        AutonomousActions.robot.driveTrain.turnToHeading(
-            90.0, AutonomousActions.DEFAULT_TURN_SPEED
+        val actions = CodaRelicRecoveryAutonomousActions(
+            this,
+            CodaRelicRecoveryAutonomousActions.AllianceColor.RED,
+            CodaRelicRecoveryAutonomousActions.CryptoBoxPosition.SIDE,
+            CRYPTO_BOX_HEADING,
+            GLYPH_PIT_HEADING
         )
-        AutonomousActions.performSharedActionGroup3(
-            Coda.ObjectDirection.RIGHT,
-            AutonomousActions.CryptoBoxPosition.SIDE
+
+        actions.performSharedActionGroup1()
+        actions.robot.driveTrain.turnToHeading(
+            CRYPTO_BOX_HEADING,
+            CodaRelicRecoveryAutonomousActions.TURN_POWER_CONTROLLER
         )
-        AutonomousActions.performSharedActionGroup4()
-        // The front antonymous opmodes have a drive here. It is not necessary for the back ones.
-        AutonomousActions.robot.driveTrain.turnToHeading(
-            -90.0, AutonomousActions.DEFAULT_TURN_SPEED
-        )
-        AutonomousActions.performSharedActionGroup5()
-        AutonomousActions.robot.driveTrain.turnToHeading(
-            0.0, AutonomousActions.DEFAULT_TURN_SPEED
-        )
-        AutonomousActions.performSharedActionGroup6()
+
+        actions.performSharedActionGroup2()
+    }
+
+    companion object {
+        private const val CRYPTO_BOX_HEADING = 90.0
+        private const val GLYPH_PIT_HEADING = -90.0
     }
 
 }

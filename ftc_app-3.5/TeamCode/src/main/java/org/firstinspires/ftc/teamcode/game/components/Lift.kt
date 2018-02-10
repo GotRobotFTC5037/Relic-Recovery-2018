@@ -5,11 +5,11 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.DigitalChannel
 import com.qualcomm.robotcore.hardware.PIDCoefficients
+import com.qualcomm.robotcore.util.ElapsedTime
 import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.teamcode.lib.powercontroller.PIDPowerController
 import org.firstinspires.ftc.teamcode.lib.robot.lift.Lift
 import kotlin.concurrent.thread
-import kotlin.properties.Delegates
 
 class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
 
@@ -30,19 +30,14 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
     private var isBusy = false
 
     private val powerController: PIDPowerController by lazy {
-        val controller = PIDPowerController(linearOpMode, PID_COEFFICIENTS) {
-            motor.currentPosition.toDouble()
+        val controller = PIDPowerController(linearOpMode, PID_COEFFICIENTS)
+        controller.errorValueHandler = {
+            position.value - motor.currentPosition.toDouble()
         }
-        controller.target = targetPosition.value.toDouble()
-
         controller
     }
 
-    var targetPosition: LiftPosition by Delegates.observable(
-        LiftPosition.BOTTOM
-    ) { _, _, new ->
-        powerController.target = new.value.toDouble()
-    }
+    var position: LiftPosition = LiftPosition.BOTTOM
 
     private val isLowered: Boolean
         get() = !limitButton.state
@@ -58,58 +53,50 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
         }
     }
 
-    fun drop() {
-        isBusy = true
-        if (!isLowered) {
-            setPower(-0.20)
-            while (!isLowered) {
-                linearOpMode.idle()
-            }
-            setPower(0.0)
-            resetEncoder()
-        }
-
-        targetPosition = LiftPosition.BOTTOM
-        isBusy = false
-    }
-
     enum class LiftPosition(var value: Int) {
         BOTTOM(0),
         FIRST_LEVEL(1750),
         SECOND_LEVEL(3100),
-        THIRD_LEVEL(4450),
-        MANUAL(0)
-    }
-
-    fun setPosition(position: LiftPosition) {
-        targetPosition = position
+        THIRD_LEVEL(4450)
     }
 
     fun elevate() {
-        val currentPositionOrdinal = targetPosition.ordinal
-        if (currentPositionOrdinal < LiftPosition.values().count() - 2) {
-            setPosition(LiftPosition.values()[currentPositionOrdinal + 1])
+        val currentPositionOrdinal = position.ordinal
+        if (currentPositionOrdinal < LiftPosition.values().count() - 1) {
+            position = LiftPosition.values()[currentPositionOrdinal + 1]
         }
     }
 
     fun lower() {
-        val currentPositionOrdinal = targetPosition.ordinal
+        val currentPositionOrdinal = position.ordinal
         if (currentPositionOrdinal > 0) {
-            setPosition(LiftPosition.values()[currentPositionOrdinal - 1])
+            position = LiftPosition.values()[currentPositionOrdinal - 1]
         }
+    }
+
+    fun drop(timeout: Long = 0L) {
+        position = LiftPosition.BOTTOM
+        isBusy = true
+        val elapsedTime = ElapsedTime()
+        while (!isLowered && !linearOpMode.isStopRequested && elapsedTime.milliseconds() < timeout) {
+            setPower(-0.10)
+        }
+        resetEncoder()
+        setPower(0.0)
+        isBusy = false
     }
 
     fun startSettingMotorPowers() {
         thread(start = true) {
             while (linearOpMode.opModeIsActive()) {
                 if (shouldHoldLiftPosition && !isBusy) {
-                    setPower(powerController.output)
+                    setPower(powerController.outputPower)
                 }
             }
         }
     }
 
-    private fun resetEncoder() {
+    fun resetEncoder() {
         motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
     }
