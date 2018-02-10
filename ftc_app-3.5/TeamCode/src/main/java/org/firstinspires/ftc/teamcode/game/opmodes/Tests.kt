@@ -7,14 +7,16 @@ import org.firstinspires.ftc.teamcode.game.robots.Coda
 
 @Autonomous
 class CodaDriveTrainStallTest : LinearOpMode() {
+
     override fun runOpMode() {
 
         val robot = Coda(this)
         val timer = ElapsedTime()
 
         while(opModeIsActive()) {
-            val drivePower = timer.milliseconds()/TEST_TIME_SECONDS
+            val drivePower = timer.milliseconds() / TEST_TIME_SECONDS
             robot.driveTrain.linearDriveAtPower(drivePower)
+
             if(robot.driveTrain.currentLinearEncoderPosition() > TEST_COMPLETION_THRESHOLD) {
                 requestOpModeStop()
             }
