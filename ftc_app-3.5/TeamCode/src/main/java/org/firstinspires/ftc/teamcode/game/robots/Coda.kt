@@ -254,11 +254,11 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
         private const val LIFT = "lift"
         private const val RELIC_GRABBER = "relic_grabber"
         private const val JEWEL_STICK = "jewel_stick"
-        private const val FRONT_LEFT_RANGE_SENSOR = "front_left_range_sensor"
-        private const val FRONT_RIGHT_RANGE_SENSOR = "front_right_range_sensor"
-        private const val LEFT_RANGE_SENSOR = "left range sensor"
-        private const val RIGHT_RANGE_SENSOR = "right_range_sensor"
-        private const val BACK_RANGE_SENSOR = "back_range_sensor"
+        const val FRONT_LEFT_RANGE_SENSOR = "front_left_range_sensor"
+        const val FRONT_RIGHT_RANGE_SENSOR = "front_right_range_sensor"
+        const val LEFT_RANGE_SENSOR = "left range sensor"
+        const val RIGHT_RANGE_SENSOR = "right_range_sensor"
+        const val BACK_RANGE_SENSOR = "back_range_sensor"
 
         private const val WALL_DISTANCE_TOLERANCE = 3.0
         private const val BALANCING_STONE_ANGLE_THRESHOLD = 6.0
