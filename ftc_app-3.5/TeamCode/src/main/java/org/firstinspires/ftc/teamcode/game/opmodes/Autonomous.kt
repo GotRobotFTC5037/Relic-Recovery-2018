@@ -239,7 +239,7 @@ private class CodaRelicRecoveryAutonomousActions(
 
 }
 
-@Autonomous(name = "Blue Front", group = "Blue Front")
+@Autonomous(name = "Blue Front", group = "Gameplay")
 class BlueFront : LinearOpMode() {
 
     @Throws(InterruptedException::class)
@@ -263,7 +263,7 @@ class BlueFront : LinearOpMode() {
 
 }
 
-@Autonomous(name = "Red Front", group = "Red Front")
+@Autonomous(name = "Red Front", group = "Gameplay")
 class RedFront : LinearOpMode() {
 
     @Throws(InterruptedException::class)
@@ -291,7 +291,7 @@ class RedFront : LinearOpMode() {
 
 }
 
-@Autonomous(name = "Blue Side", group = "Blue Side")
+@Autonomous(name = "Blue Side", group = "Gameplay")
 class BlueRear : LinearOpMode() {
 
     @Throws(InterruptedException::class)
@@ -320,7 +320,7 @@ class BlueRear : LinearOpMode() {
 
 }
 
-@Autonomous(name = "Red Side", group = "Red Side")
+@Autonomous(name = "Red Side", group = "Gameplay")
 class RedRear : LinearOpMode() {
 
     @Throws(InterruptedException::class)

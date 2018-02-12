@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.game.robots.Coda
 import org.firstinspires.ftc.teamcode.lib.robot.sensor.RangeSensor
 
-@Autonomous
+@Autonomous(group = "Tests")
 class CodaDriveTrainStallTest : LinearOpMode() {
 
     override fun runOpMode() {
@@ -39,7 +39,7 @@ class CodaDriveTrainStallTest : LinearOpMode() {
 
 }
 
-@Autonomous
+@Autonomous(group = "Tests")
 class SensorTest : LinearOpMode() {
 
     override fun runOpMode() {

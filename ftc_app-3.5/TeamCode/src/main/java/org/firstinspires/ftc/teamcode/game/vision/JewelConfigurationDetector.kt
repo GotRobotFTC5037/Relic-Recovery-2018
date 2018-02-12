@@ -59,9 +59,15 @@ class JewelConfigurationDetector(private val linearOpMode: LinearOpMode) : OpenC
 
             if (jewelConfiguration != JewelConfiguration.UNKNOWN) {
                 when (jewelConfiguration) {
-                    JewelConfiguration.RED_BLUE -> linearOpMode.telemetry.log().add("Red-Blue configuration identified at ${elapsedTime.milliseconds()} milliseconds")
-                    JewelConfiguration.BLUE_RED -> linearOpMode.telemetry.log().add("Blue-Red configuration identified at ${elapsedTime.milliseconds()} milliseconds")
-                    else -> { /* This should never happen */ }
+                    JewelConfiguration.RED_BLUE ->
+                        linearOpMode.telemetry.log()
+                            .add("Red-Blue configuration identified at ${elapsedTime.milliseconds()} milliseconds")
+                    JewelConfiguration.BLUE_RED ->
+                        linearOpMode.telemetry.log()
+                            .add("Blue-Red configuration identified at ${elapsedTime.milliseconds()} milliseconds")
+
+                    else -> { /* This should never happen */
+                    }
                 }
                 return jewelConfiguration
             }
@@ -69,7 +75,7 @@ class JewelConfigurationDetector(private val linearOpMode: LinearOpMode) : OpenC
             linearOpMode.sleep(10)
         }
 
-       linearOpMode.telemetry.log().add("Failed to identify jewel configuration.")
+        linearOpMode.telemetry.log().add("Failed to identify jewel configuration.")
         return JewelConfiguration.UNKNOWN
     }
 
@@ -110,22 +116,33 @@ class JewelConfigurationDetector(private val linearOpMode: LinearOpMode) : OpenC
         val findContoursOutput = ArrayList<MatOfPoint>()
         val filterContoursOutput = ArrayList<MatOfPoint>()
 
-        Imgproc.findContours(whiteErodeOutput, findContoursOutput, Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE)
+        Imgproc.findContours(
+            whiteErodeOutput,
+            findContoursOutput,
+            Mat(),
+            Imgproc.RETR_EXTERNAL,
+            Imgproc.CHAIN_APPROX_SIMPLE
+        )
 
-        filterContours(findContoursOutput,
-                0.0, 0.0,
-                10.0, 40.0,
-                0.0, 1000.0,
-                doubleArrayOf(0.0, 100.0),
-                1000.0, 0.0,
-                0.0, 1000.0,
-                filterContoursOutput)
+        filterContours(
+            findContoursOutput,
+            0.0, 0.0,
+            10.0, 40.0,
+            0.0, 1000.0,
+            doubleArrayOf(0.0, 100.0),
+            1000.0, 0.0,
+            0.0, 1000.0,
+            filterContoursOutput
+        )
 
         return if (filterContoursOutput.isNotEmpty()) {
             val boundingRectangle = Imgproc.boundingRect(filterContoursOutput[0])
-            Point(boundingRectangle.x.toDouble() + (boundingRectangle.width / 2), boundingRectangle.y.toDouble() + (boundingRectangle.height / 2))
+            Point(
+                boundingRectangle.x.toDouble() + (boundingRectangle.width / 2),
+                boundingRectangle.y.toDouble() + (boundingRectangle.height / 2)
+            )
         } else {
-             null
+            null
         }
 
     }
@@ -187,36 +204,163 @@ class JewelConfigurationDetector(private val linearOpMode: LinearOpMode) : OpenC
         Core.extractChannel(resizeOutput, extractRedChannelOutput, 0)
         Core.extractChannel(resizeOutput, extractGreenChannelOutput, 1)
         Core.extractChannel(resizeOutput, extractBlueChannelOutput, 2)
-        Core.normalize(extractRedChannelOutput, redNormalizationOutput, 0.0, 255.0, Core.NORM_MINMAX)
-        Core.normalize(extractGreenChannelOutput, greenNormalizationOutput, 0.0, 130.0, Core.NORM_MINMAX)
-        Core.normalize(extractBlueChannelOutput, blueNormalizationOutput, 0.0, 255.0, Core.NORM_MINMAX)
+        Core.normalize(
+            extractRedChannelOutput,
+            redNormalizationOutput,
+            0.0,
+            255.0,
+            Core.NORM_MINMAX
+        )
+        Core.normalize(
+            extractGreenChannelOutput,
+            greenNormalizationOutput,
+            0.0,
+            130.0,
+            Core.NORM_MINMAX
+        )
+        Core.normalize(
+            extractBlueChannelOutput,
+            blueNormalizationOutput,
+            0.0,
+            255.0,
+            Core.NORM_MINMAX
+        )
 
         // Find the red jewel.
         Core.subtract(redNormalizationOutput, blueNormalizationOutput, redMinusBlueOutput)
-        Core.normalize(redMinusBlueOutput, normalizedRedMinusBlueOutput, 0.0, 255.0, Core.NORM_MINMAX)
+        Core.normalize(
+            redMinusBlueOutput,
+            normalizedRedMinusBlueOutput,
+            0.0,
+            255.0,
+            Core.NORM_MINMAX
+        )
         Core.subtract(normalizedRedMinusBlueOutput, greenNormalizationOutput, redMinusGreenOutput)
-        Core.normalize(redMinusGreenOutput, normalizedRedMinusGreenOutput, 0.0, 255.0, Core.NORM_MINMAX)
-        Imgproc.threshold(normalizedRedMinusGreenOutput, thresholdRedChannelOutput, 125.0, 255.0, Imgproc.THRESH_BINARY)
-        Imgproc.erode(thresholdRedChannelOutput, redErodeOutput, Mat(), Point(-1.0, -1.0), 1, Core.BORDER_CONSTANT, Scalar(-1.0))
-        Imgproc.dilate(redErodeOutput, redDilateOutput, Mat(), Point(-1.0, -1.0), 6, Core.BORDER_CONSTANT, Scalar(-1.0))
-        Imgproc.erode(redDilateOutput, redFindBlobsInput, Mat(), Point(-1.0, -1.0), 5, Core.BORDER_CONSTANT, Scalar(-1.0))
-        findBlobs(redFindBlobsInput, 600.0, doubleArrayOf(0.0, 100.0), false, findRedBlobsOutput)
+        Core.normalize(
+            redMinusGreenOutput,
+            normalizedRedMinusGreenOutput,
+            0.0,
+            255.0,
+            Core.NORM_MINMAX
+        )
+        Imgproc.threshold(
+            normalizedRedMinusGreenOutput,
+            thresholdRedChannelOutput,
+            125.0,
+            255.0,
+            Imgproc.THRESH_BINARY
+        )
+        Imgproc.erode(
+            thresholdRedChannelOutput,
+            redErodeOutput,
+            Mat(),
+            Point(-1.0, -1.0),
+            1,
+            Core.BORDER_CONSTANT,
+            Scalar(-1.0)
+        )
+        Imgproc.dilate(
+            redErodeOutput,
+            redDilateOutput,
+            Mat(),
+            Point(-1.0, -1.0),
+            6,
+            Core.BORDER_CONSTANT,
+            Scalar(-1.0)
+        )
+        Imgproc.erode(
+            redDilateOutput,
+            redFindBlobsInput,
+            Mat(),
+            Point(-1.0, -1.0),
+            5,
+            Core.BORDER_CONSTANT,
+            Scalar(-1.0)
+        )
+        findBlobs(
+            redFindBlobsInput,
+            600.0,
+            doubleArrayOf(0.0, 100.0),
+            false,
+            findRedBlobsOutput
+        )
 
         // Find the blue jewel.
         Core.subtract(blueNormalizationOutput, redNormalizationOutput, blueMinusRedOutput)
-        Core.normalize(blueMinusRedOutput, normalizedBlueMinusRedOutput, 0.0, 255.0, Core.NORM_MINMAX)
+        Core.normalize(
+            blueMinusRedOutput,
+            normalizedBlueMinusRedOutput,
+            0.0,
+            255.0,
+            Core.NORM_MINMAX
+        )
         Core.subtract(normalizedBlueMinusRedOutput, greenNormalizationOutput, blueMinusGreenOutput)
-        Core.normalize(blueMinusGreenOutput, normalizedBlueMinusGreenOutput, 0.0, 255.0, Core.NORM_MINMAX)
-        Imgproc.threshold(normalizedBlueMinusGreenOutput, thresholdBlueChannelOutput, 10.0, 255.0, Imgproc.THRESH_BINARY)
-        Imgproc.erode(thresholdBlueChannelOutput, blueErodeOutput, Mat(), Point(-1.0, -1.0), 1, Core.BORDER_CONSTANT, Scalar(-1.0))
-        Imgproc.dilate(blueErodeOutput, blueDilateOutput, Mat(), Point(-1.0, -1.0), 6, Core.BORDER_CONSTANT, Scalar(-1.0))
-        Imgproc.erode(blueDilateOutput, blueFindBlobsInput, Mat(), Point(-1.0, -1.0), 5, Core.BORDER_CONSTANT, Scalar(-1.0))
-        findBlobs(blueFindBlobsInput, 600.0, doubleArrayOf(0.0, 100.0), false, findBlueBlobsOutput)
+        Core.normalize(
+            blueMinusGreenOutput,
+            normalizedBlueMinusGreenOutput,
+            0.0,
+            255.0,
+            Core.NORM_MINMAX
+        )
+        Imgproc.threshold(
+            normalizedBlueMinusGreenOutput,
+            thresholdBlueChannelOutput,
+            10.0,
+            255.0,
+            Imgproc.THRESH_BINARY
+        )
+        Imgproc.erode(
+            thresholdBlueChannelOutput,
+            blueErodeOutput,
+            Mat(),
+            Point(-1.0, -1.0),
+            1,
+            Core.BORDER_CONSTANT,
+            Scalar(-1.0)
+        )
+        Imgproc.dilate(
+            blueErodeOutput,
+            blueDilateOutput,
+            Mat(),
+            Point(-1.0, -1.0),
+            6,
+            Core.BORDER_CONSTANT,
+            Scalar(-1.0)
+        )
+        Imgproc.erode(
+            blueDilateOutput,
+            blueFindBlobsInput,
+            Mat(),
+            Point(-1.0, -1.0),
+            5,
+            Core.BORDER_CONSTANT,
+            Scalar(-1.0)
+        )
+        findBlobs(
+            blueFindBlobsInput,
+            600.0,
+            doubleArrayOf(0.0, 100.0),
+            false,
+            findBlueBlobsOutput
+        )
 
         // Find the white line.
         Imgproc.cvtColor(resizeOutput, hsvOutput, Imgproc.COLOR_BGR2HSV)
-        Core.inRange(hsvOutput, Scalar(0.0, 0.0, 205.0), Scalar(180.0, 75.0, 255.0), whiteThresholdOutput)
-        Imgproc.erode(whiteThresholdOutput, whiteErodeOutput, Mat(), Point(-1.0, -1.0), 1, Core.BORDER_CONSTANT, Scalar(-1.0))
+        Core.inRange(
+            hsvOutput,
+            Scalar(0.0, 0.0, 205.0),
+            Scalar(180.0, 75.0, 255.0),
+            whiteThresholdOutput
+        )
+        Imgproc.erode(
+            whiteThresholdOutput,
+            whiteErodeOutput,
+            Mat(),
+            Point(-1.0, -1.0),
+            1,
+            Core.BORDER_CONSTANT,
+            Scalar(-1.0)
+        )
 
         // Show all detected elements on the screen.
         resizeOutput.copyTo(detectedObjectsOutput)
@@ -233,8 +377,22 @@ class JewelConfigurationDetector(private val linearOpMode: LinearOpMode) : OpenC
             val size = redKeyPoint.size
             val radius = size / 2
             val redScalar = Scalar(255.0, 0.0, 0.0)
-            Imgproc.rectangle(detectedObjectsOutput, Point(x - radius, y - radius), Point(x + radius, y + radius), redScalar, 3)
-            Imgproc.putText(detectedObjectsOutput, "Red", Point(x - radius, y - 5 - radius), 0, 0.5, redScalar, 2)
+            Imgproc.rectangle(
+                detectedObjectsOutput,
+                Point(x - radius, y - radius),
+                Point(x + radius, y + radius),
+                redScalar,
+                3
+            )
+            Imgproc.putText(
+                detectedObjectsOutput,
+                "Red",
+                Point(x - radius, y - 5 - radius),
+                0,
+                0.5,
+                redScalar,
+                2
+            )
         }
 
         // Show the identified blue jewel on the screen.
@@ -244,8 +402,22 @@ class JewelConfigurationDetector(private val linearOpMode: LinearOpMode) : OpenC
             val size = blueKeyPoint.size
             val radius = size / 2
             val blueScalar = Scalar(0.0, 0.0, 255.0)
-            Imgproc.rectangle(detectedObjectsOutput, Point(x - radius, y - radius), Point(x + radius, y + radius), blueScalar, 3)
-            Imgproc.putText(detectedObjectsOutput, "Blue", Point(x - radius, y - 5 - radius), 0, 0.5, blueScalar, 2)
+            Imgproc.rectangle(
+                detectedObjectsOutput,
+                Point(x - radius, y - radius),
+                Point(x + radius, y + radius),
+                blueScalar,
+                3
+            )
+            Imgproc.putText(
+                detectedObjectsOutput,
+                "Blue",
+                Point(x - radius, y - 5 - radius),
+                0,
+                0.5,
+                blueScalar,
+                2
+            )
         }
 
         // Show the identified white line on the screen.
@@ -256,7 +428,14 @@ class JewelConfigurationDetector(private val linearOpMode: LinearOpMode) : OpenC
             Imgproc.circle(detectedObjectsOutput, Point(x, y), 5, yellowScalar, 5)
         }
 
-        Imgproc.resize(detectedObjectsOutput, detectedObjectsOutput, originalSize, 0.0, 0.0, Imgproc.INTER_AREA)
+        Imgproc.resize(
+            detectedObjectsOutput,
+            detectedObjectsOutput,
+            originalSize,
+            0.0,
+            0.0,
+            Imgproc.INTER_AREA
+        )
 
         return detectedObjectsOutput
     }
@@ -269,7 +448,13 @@ class JewelConfigurationDetector(private val linearOpMode: LinearOpMode) : OpenC
      * @param darkBlobs Informs the blob detector if the recognition should be based on light blobs or dark blobs.
      * @param blobList The MatOfKeyPoints to use as the sumOutput for recognition.
      */
-    private fun findBlobs(input: Mat, minArea: Double, circularity: DoubleArray, darkBlobs: Boolean, blobList: MatOfKeyPoint) {
+    private fun findBlobs(
+        input: Mat,
+        minArea: Double,
+        circularity: DoubleArray,
+        darkBlobs: Boolean,
+        blobList: MatOfKeyPoint
+    ) {
         val blobDet = FeatureDetector.create(FeatureDetector.SIMPLEBLOB)
         try {
             val tempFile = File.createTempFile("config", ".xml")
@@ -319,32 +504,16 @@ class JewelConfigurationDetector(private val linearOpMode: LinearOpMode) : OpenC
         blobDet.detect(input, blobList)
     }
 
-
-    /**
-     * Filters out contours that do not meet certain criteria.
-     * @param inputContours is the input list of contours
-     * @param output is the the sumOutput list of contours
-     * @param minArea is the minimum area of a contour that will be kept
-     * @param minPerimeter is the minimum perimeter of a contour that will be kept
-     * @param minWidth minimum width of a contour
-     * @param maxWidth maximum width
-     * @param minHeight minimum height
-     * @param maxHeight maximum height
-     * @param solidity the minimum and maximum solidity of a contour
-     * @param minVertexCount minimum vertex Count of the contours
-     * @param maxVertexCount maximum vertex Count
-     * @param minRatio minimum ratio of width to height
-     * @param maxRatio maximum ratio of width to height
-     */
-    private fun filterContours(inputContours: List<MatOfPoint>,
-                               minArea: Double, minPerimeter: Double,
-                               minWidth: Double, maxWidth: Double,
-                               minHeight: Double, maxHeight: Double,
-                               solidity: DoubleArray,
-                               maxVertexCount: Double, minVertexCount: Double,
-                               minRatio: Double, maxRatio: Double,
-                               output: MutableList<MatOfPoint>) {
-
+    private fun filterContours(
+        inputContours: List<MatOfPoint>,
+        minArea: Double, minPerimeter: Double,
+        minWidth: Double, maxWidth: Double,
+        minHeight: Double, maxHeight: Double,
+        solidity: DoubleArray,
+        maxVertexCount: Double, minVertexCount: Double,
+        minRatio: Double, maxRatio: Double,
+        output: MutableList<MatOfPoint>
+    ) {
         val hull = MatOfInt()
         output.clear()
 
