@@ -96,7 +96,17 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
             }
 
             rangeSensor.startUpdatingDetectedDistance()
-            controller.errorValueHandler = { targetDistance - rangeSensor.distanceDetected }
+            var minimumErrorDetected = Double.POSITIVE_INFINITY
+            controller.errorValueHandler = {
+                val error = targetDistance - rangeSensor.distanceDetected
+                if (minimumErrorDetected > error) {
+                    minimumErrorDetected = error
+                    error
+                } else {
+                    minimumErrorDetected
+                }
+            }
+
             val currentDistance = rangeSensor.distanceDetected
 
             when {
@@ -108,12 +118,16 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
                         when (rangeSensorDirection) {
                             RangeSensorDirection.LEFT ->
                                 driveTrain.strafeDriveAtPower(-controller.outputPower)
+
                             RangeSensorDirection.RIGHT ->
                                 driveTrain.strafeDriveAtPower(controller.outputPower)
+
                             RangeSensorDirection.FRONT_LEFT ->
                                 driveTrain.linearDriveAtPower(controller.outputPower)
+
                             RangeSensorDirection.FRONT_RIGHT ->
                                 driveTrain.linearDriveAtPower(controller.outputPower)
+
                             RangeSensorDirection.BACK -> TODO()
                         }
 
@@ -131,17 +145,22 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
                         when (rangeSensorDirection) {
                             RangeSensorDirection.LEFT ->
                                 driveTrain.strafeDriveAtPower(controller.outputPower)
+
                             RangeSensorDirection.RIGHT ->
                                 driveTrain.strafeDriveAtPower(-controller.outputPower)
+
                             RangeSensorDirection.FRONT_LEFT ->
                                 driveTrain.linearDriveAtPower(-controller.outputPower)
+
                             RangeSensorDirection.FRONT_RIGHT ->
                                 driveTrain.linearDriveAtPower(-controller.outputPower)
+
                             RangeSensorDirection.BACK -> TODO()
                         }
 
                         linearOpMode.telemetry.addLine("Target: $targetDistance")
                         linearOpMode.telemetry.addLine("Distance: ${rangeSensor.distanceDetected}")
+                        linearOpMode.telemetry.addLine("Power: ${controller.outputPower}")
                         linearOpMode.telemetry.update()
                     }
             }
@@ -235,11 +254,11 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
         private const val LIFT = "lift"
         private const val RELIC_GRABBER = "relic_grabber"
         private const val JEWEL_STICK = "jewel_stick"
-        private const val FRONT_LEFT_RANGE_SENSOR = "front_left_range_sensor"
-        private const val FRONT_RIGHT_RANGE_SENSOR = "front_right_range_sensor"
-        private const val LEFT_RANGE_SENSOR = "left range sensor"
-        private const val RIGHT_RANGE_SENSOR = "right_range_sensor"
-        private const val BACK_RANGE_SENSOR = "back_range_sensor"
+        const val FRONT_LEFT_RANGE_SENSOR = "front_left_range_sensor"
+        const val FRONT_RIGHT_RANGE_SENSOR = "front_right_range_sensor"
+        const val LEFT_RANGE_SENSOR = "left range sensor"
+        const val RIGHT_RANGE_SENSOR = "right_range_sensor"
+        const val BACK_RANGE_SENSOR = "back_range_sensor"
 
         private const val WALL_DISTANCE_TOLERANCE = 3.0
         private const val BALANCING_STONE_ANGLE_THRESHOLD = 6.0
