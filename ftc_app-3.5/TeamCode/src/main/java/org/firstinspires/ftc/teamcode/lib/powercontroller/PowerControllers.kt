@@ -53,7 +53,7 @@ class PIDPowerController(
     override var errorValueHandler: () -> Double = { 0.0 }
     private lateinit var updateThread: Thread
     private val lastUpdateElapsedTime: ElapsedTime by lazy { ElapsedTime() }
-    private var previousError = 0.0
+    private var previousError = -1.0
     private var runningIntegral = 0.0
     private var pidOutput = 0.0
 
@@ -65,25 +65,27 @@ class PIDPowerController(
     }
 
     private fun startUpdatingOutput() {
+        previousError = -1.0
+        runningIntegral = 0.0
+        pidOutput = 0.0
         if (
             !::updateThread.isInitialized &&
             !linearOpMode.isStopRequested
         ) {
-            runningIntegral = 0.0
-            previousError = 0.0
             updateThread = thread(start = true) {
                 while (!linearOpMode.isStopRequested && !Thread.interrupted()) {
-                    val dt = lastUpdateElapsedTime.milliseconds() / 1000
                     val error = errorValueHandler()
-                    runningIntegral += error * dt
-                    val derivative = (error - previousError) / dt
-                    val proportionalOutput = error * coefficients.p
-                    val integralOutput = runningIntegral * coefficients.i
-                    val derivativeOutput = derivative * coefficients.d
-                    pidOutput = proportionalOutput + integralOutput + derivativeOutput
+                    if (previousError != -1.0) {
+                        val dt = lastUpdateElapsedTime.milliseconds() / 1000
+                        runningIntegral += error * dt
+                        val derivative = (previousError - error) / dt
+                        val proportionalOutput = error * coefficients.p
+                        val integralOutput = runningIntegral * coefficients.i
+                        val derivativeOutput = derivative * coefficients.d
+                        pidOutput = proportionalOutput + integralOutput + derivativeOutput
+                    }
                     previousError = error
                     lastUpdateElapsedTime.reset()
-
                     linearOpMode.sleep(1)
                 }
             }

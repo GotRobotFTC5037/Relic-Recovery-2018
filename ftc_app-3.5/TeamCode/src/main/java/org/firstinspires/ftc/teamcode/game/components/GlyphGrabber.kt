@@ -6,38 +6,34 @@ import org.firstinspires.ftc.teamcode.lib.robot.attachment.RobotAttachment
 
 class CodaGlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode) {
 
-    private val topLeftGlyphGrabber by lazy {
+    val topLeftGlyphGrabber: Servo by lazy {
         val servo = hardwareMap.servo.get("top left grabber")
-        servo.direction = Servo.Direction.FORWARD
-        servo.scaleRange(GRABBER_SERVO_MIN_POSITION, GRABBER_SERVO_MAX_POSITION)
+        servo.direction = Servo.Direction.REVERSE
         servo
     }
 
-    private val topRightGlyphGrabber by lazy {
+    val topRightGlyphGrabber: Servo by lazy {
         val servo = hardwareMap.servo.get("top right grabber")
-        servo.direction = Servo.Direction.REVERSE
-        servo.scaleRange(GRABBER_SERVO_MIN_POSITION, GRABBER_SERVO_MAX_POSITION)
-        servo
-    }
-
-    private val bottomLeftGlyphGrabber: Servo by lazy {
-        val servo = hardwareMap.servo.get("bottom left grabber")
         servo.direction = Servo.Direction.FORWARD
-        servo.scaleRange(GRABBER_SERVO_MIN_POSITION, GRABBER_SERVO_MAX_POSITION)
         servo
     }
 
-    private val bottomRightGlyphGrabber: Servo by lazy {
+    val bottomLeftGlyphGrabber: Servo by lazy {
+        val servo = hardwareMap.servo.get("bottom left grabber")
+        servo.direction = Servo.Direction.REVERSE
+        servo
+    }
+
+    val bottomRightGlyphGrabber: Servo by lazy {
         val servo = hardwareMap.servo.get("bottom right grabber")
-        servo.direction = Servo.Direction.REVERSE
-        servo.scaleRange(GRABBER_SERVO_MIN_POSITION, GRABBER_SERVO_MAX_POSITION)
+        servo.direction = Servo.Direction.FORWARD
         servo
     }
 
-    private val glyphDeployer: Servo by lazy {
+    private val glyphDeployer by lazy {
         val servo = hardwareMap.servo.get("glyph deployer")
-        servo.direction = Servo.Direction.REVERSE
         servo.scaleRange(DEPLOYER_SERVO_MIN_POSITION, DEPLOYER_SERVO_MAX_POSITION)
+        servo.direction = Servo.Direction.REVERSE
         servo
     }
 
@@ -64,10 +60,10 @@ class CodaGlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode
     }
 
     enum class GlyphArmPosition(val value: Double) {
-        OPEN(0.0),
-        SMALL_OPEN(0.50),
-        RELEASE(0.75),
-        CLOSED(1.0)
+        OPEN(GRABBER_SERVO_MIN_POSITION),
+        SMALL_OPEN(0.10),
+        RELEASE(0.30),
+        CLOSED(GRABBER_SERVO_MAX_POSITION)
     }
 
     private fun setArmsPosition(position: GlyphArmPosition) {
@@ -88,7 +84,7 @@ class CodaGlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode
 
     companion object {
         private const val GRABBER_SERVO_MIN_POSITION  = 0.0
-        private const val GRABBER_SERVO_MAX_POSITION  = 0.5
+        private const val GRABBER_SERVO_MAX_POSITION  = 0.6
 
         private const val DEPLOYER_SERVO_MIN_POSITION = 0.375
         private const val DEPLOYER_SERVO_MAX_POSITION = 0.650

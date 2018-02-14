@@ -106,14 +106,15 @@ private class CodaRelicRecoveryAutonomousActions(
     }
 
     private fun deliverGlyph() {
-        robot.lift.position = CodaLift.LiftPosition.BOTTOM
-        linearOpMode.sleep(1000)
+        robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.RELEASE)
         robot.driveTrain.linearTimeDrive(
             1000, StaticPowerController(0.25),
             MecanumDriveTrain.DriveDirection.FORWARD
         )
-        robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.RELEASE)
-        robot.driveTrain.linearEncoderDrive(-250, StaticPowerController(0.25))
+        robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.OPEN)
+        robot.glyphGrabber.bottomLeftGlyphGrabber.position = 0.30
+        robot.driveTrain.strafingTimeDrive(1000, StaticPowerController(0.25), MecanumDriveTrain.StrafeDirection.RIGHT)
+        robot.driveTrain.linearEncoderDrive(-400, StaticPowerController(0.25))
         robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.SMALL_OPEN)
     }
 
@@ -214,10 +215,12 @@ private class CodaRelicRecoveryAutonomousActions(
             )
         }
 
-        robot.lift.drop(3000)
-        robot.lift.position = CodaLift.LiftPosition.FIRST_LEVEL
+        val liftDropThread = thread(start = true) {
+            robot.lift.drop(1500)
+        }
 
         alignWithCryptoBoxColumn()
+        liftDropThread.join()
         deliverGlyph()
 
         robot.driveTrain.turnToHeading(
@@ -228,10 +231,10 @@ private class CodaRelicRecoveryAutonomousActions(
     }
 
     companion object {
-        val TURN_POWER_CONTROLLER = ProportionalPowerController(0.015)
+        val TURN_POWER_CONTROLLER = ProportionalPowerController(0.01)
         val CRYPTO_BOX_ALIGNMENT_PID_COEFFICIENTS = {
             val coefficients = PIDCoefficients()
-            coefficients.p = 0.025
+            coefficients.p = 0.0115
             coefficients.i = 0.013
             coefficients
         }()

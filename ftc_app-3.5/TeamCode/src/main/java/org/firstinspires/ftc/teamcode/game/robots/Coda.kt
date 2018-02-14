@@ -117,10 +117,10 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
                     ) {
                         when (rangeSensorDirection) {
                             RangeSensorDirection.LEFT ->
-                                driveTrain.strafeDriveAtPower(-controller.outputPower)
+                                driveTrain.strafeDriveAtPower(-abs(controller.outputPower))
 
                             RangeSensorDirection.RIGHT ->
-                                driveTrain.strafeDriveAtPower(controller.outputPower)
+                                driveTrain.strafeDriveAtPower(abs(controller.outputPower))
 
                             RangeSensorDirection.FRONT_LEFT ->
                                 driveTrain.linearDriveAtPower(controller.outputPower)
@@ -144,10 +144,10 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
                     ) {
                         when (rangeSensorDirection) {
                             RangeSensorDirection.LEFT ->
-                                driveTrain.strafeDriveAtPower(controller.outputPower)
+                                driveTrain.strafeDriveAtPower(abs(controller.outputPower))
 
                             RangeSensorDirection.RIGHT ->
-                                driveTrain.strafeDriveAtPower(-controller.outputPower)
+                                driveTrain.strafeDriveAtPower(-abs(controller.outputPower))
 
                             RangeSensorDirection.FRONT_LEFT ->
                                 driveTrain.linearDriveAtPower(-controller.outputPower)
