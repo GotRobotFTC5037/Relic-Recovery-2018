@@ -48,13 +48,14 @@ class ProportionalPowerController(private var gain: Double) : PowerController {
  */
 class PIDPowerController(
     private val linearOpMode: LinearOpMode,
-    private val coefficients: PIDCoefficients
+    private val coefficients: PIDCoefficients,
+    private val shouldPrintDebug: Boolean = false
 ) : PowerController {
     override var errorValueHandler: () -> Double = { 0.0 }
     private lateinit var updateThread: Thread
     private val lastUpdateElapsedTime: ElapsedTime by lazy { ElapsedTime() }
     private var previousError = -1.0
-    private var runningIntegral = 0.0
+    private var runningIntegral = Double.POSITIVE_INFINITY
     private var pidOutput = 0.0
 
     override val outputPower: Power
@@ -66,7 +67,7 @@ class PIDPowerController(
 
     private fun startUpdatingOutput() {
         previousError = -1.0
-        runningIntegral = 0.0
+        resetIntegral()
         pidOutput = 0.0
         if (
             !::updateThread.isInitialized &&
@@ -75,7 +76,7 @@ class PIDPowerController(
             updateThread = thread(start = true) {
                 while (!linearOpMode.isStopRequested && !Thread.interrupted()) {
                     val error = errorValueHandler()
-                    if (previousError != -1.0) {
+                    if (previousError != -1.0 && !runningIntegral.isInfinite()) {
                         val dt = lastUpdateElapsedTime.milliseconds() / 1000
                         runningIntegral += error * dt
                         val derivative = (previousError - error) / dt
@@ -83,18 +84,34 @@ class PIDPowerController(
                         val integralOutput = runningIntegral * coefficients.i
                         val derivativeOutput = derivative * coefficients.d
                         pidOutput = proportionalOutput + integralOutput + derivativeOutput
+
+                        if (shouldPrintDebug) {
+                            linearOpMode.telemetry.addLine("P: $proportionalOutput")
+                            linearOpMode.telemetry.addLine("I: $integralOutput")
+                            linearOpMode.telemetry.addLine("D: $derivativeOutput")
+                            linearOpMode.telemetry.update()
+                        }
+
                     }
+
                     previousError = error
                     lastUpdateElapsedTime.reset()
                     linearOpMode.sleep(1)
                 }
             }
         }
+
+        linearOpMode.telemetry.update()
+    }
+
+    private fun resetIntegral() {
+        runningIntegral = 0.0
     }
 
     override fun stopUpdatingOutput() {
         if (::updateThread.isInitialized && updateThread.isAlive) {
             updateThread.interrupt()
+            resetIntegral()
         }
     }
 

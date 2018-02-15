@@ -32,8 +32,7 @@ class CodaGlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode
 
     private val glyphDeployer by lazy {
         val servo = hardwareMap.servo.get("glyph deployer")
-        servo.scaleRange(DEPLOYER_SERVO_MIN_POSITION, DEPLOYER_SERVO_MAX_POSITION)
-        servo.direction = Servo.Direction.REVERSE
+        servo.direction = Servo.Direction.FORWARD
         servo
     }
 
@@ -74,8 +73,8 @@ class CodaGlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode
     }
 
     enum class GlyphDeployerPosition(val value: Double) {
-        RETRACTED(0.0),
-        EXTENDED(1.0)
+        RETRACTED(DEPLOYER_SERVO_MIN_POSITION),
+        EXTENDED(DEPLOYER_SERVO_MAX_POSITION)
     }
 
     private fun setDeployerPosition(position: GlyphDeployerPosition) {
@@ -86,8 +85,8 @@ class CodaGlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode
         private const val GRABBER_SERVO_MIN_POSITION  = 0.0
         private const val GRABBER_SERVO_MAX_POSITION  = 0.6
 
-        private const val DEPLOYER_SERVO_MIN_POSITION = 0.375
-        private const val DEPLOYER_SERVO_MAX_POSITION = 0.650
+        private const val DEPLOYER_SERVO_MIN_POSITION = 0.5
+        private const val DEPLOYER_SERVO_MAX_POSITION = 0.1
     }
 
 }

@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.game.robots.Coda
 import org.firstinspires.ftc.teamcode.lib.robot.sensor.RangeSensor
 
 @Autonomous(group = "Tests")
-@Disabled
 class CodaDriveTrainStallTest : LinearOpMode() {
 
     override fun runOpMode() {
@@ -16,33 +15,45 @@ class CodaDriveTrainStallTest : LinearOpMode() {
         val robot = Coda(this)
         robot.setup()
 
-        val timer = ElapsedTime()
-
         waitForStart()
 
+        robot.driveTrain.resetEncoders()
+
+        val timer = ElapsedTime()
+
+        var drivePower = 0.0
+
         while(opModeIsActive()) {
-            val drivePower = timer.milliseconds() / TEST_TIME_SECONDS
+            drivePower = timer.milliseconds() / TEST_TIME_MILLISECONDS
             robot.driveTrain.linearDriveAtPower(drivePower)
 
             if(robot.driveTrain.currentLinearEncoderPosition() > TEST_COMPLETION_THRESHOLD) {
-                requestOpModeStop()
+                break
             }
 
             telemetry.addLine("Drive Power: $drivePower")
             telemetry.update()
         }
 
+        robot.driveTrain.stop()
+
+        telemetry.addLine("Drive Power: $drivePower")
+        telemetry.update()
+
+        while(opModeIsActive()) {
+            // Do nothing.
+        }
+
     }
 
     companion object {
-        private const val TEST_TIME_SECONDS = 50
+        private const val TEST_TIME_MILLISECONDS = 500000
         private const val TEST_COMPLETION_THRESHOLD = 100
     }
 
 }
 
 @Autonomous(group = "Tests")
-@Disabled
 class SensorTest : LinearOpMode() {
 
     override fun runOpMode() {
@@ -76,6 +87,7 @@ class SensorTest : LinearOpMode() {
 }
 
 @Autonomous(group = "Tests")
+@Disabled
 class GlyphGrabberServoTest : LinearOpMode() {
     override fun runOpMode() {
         val robot = Coda(this)

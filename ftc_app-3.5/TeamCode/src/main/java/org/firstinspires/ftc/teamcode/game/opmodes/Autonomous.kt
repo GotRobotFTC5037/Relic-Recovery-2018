@@ -106,15 +106,15 @@ private class CodaRelicRecoveryAutonomousActions(
     }
 
     private fun deliverGlyph() {
-        robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.RELEASE)
+        robot.lift.drop(1500)
         robot.driveTrain.linearTimeDrive(
             1000, StaticPowerController(0.25),
             MecanumDriveTrain.DriveDirection.FORWARD
         )
-        robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.OPEN)
         robot.glyphGrabber.bottomLeftGlyphGrabber.position = 0.30
         robot.driveTrain.strafingTimeDrive(1000, StaticPowerController(0.25), MecanumDriveTrain.StrafeDirection.RIGHT)
-        robot.driveTrain.linearEncoderDrive(-400, StaticPowerController(0.25))
+        robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.RELEASE)
+        robot.driveTrain.linearEncoderDrive(-200, StaticPowerController(0.25))
         robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.SMALL_OPEN)
     }
 
@@ -122,120 +122,130 @@ private class CodaRelicRecoveryAutonomousActions(
         robot.driveToDistanceFromObject(
             wallDirection,
             wallDistance,
-            PIDPowerController(linearOpMode, CRYPTO_BOX_ALIGNMENT_PID_COEFFICIENTS)
+            PIDPowerController(
+                linearOpMode,
+                CRYPTO_BOX_ALIGNMENT_PID_COEFFICIENTS,
+                shouldPrintDebug = true
+            )
         )
     }
 
+    @Throws(InterruptedException::class)
     fun performSharedActionGroup1() {
 
         // Setup the jewel configuration detector and pictograph identifier.
         val context = linearOpMode.hardwareMap.appContext
         val viewDisplay = CameraViewDisplay.getInstance()
-        jewelConfigurationDetector.init(context, viewDisplay)
+        if (!linearOpMode.isStopRequested) {
+            jewelConfigurationDetector.init(context, viewDisplay)
+        }
 
         // Wait for start.
         linearOpMode.waitForStart()
 
-        // Enable the jewel configuration detector.
-        jewelConfigurationDetector.enable()
+        if (!linearOpMode.isStopRequested) {
 
-        // Grab the glyph.
-        val glyphGrabbingThread = thread(start = true) {
-            robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.CLOSED)
-            linearOpMode.sleep(750)
-            robot.lift.position = CodaLift.LiftPosition.FIRST_LEVEL
-        }
+            // Enable the jewel configuration detector.
+            if (!linearOpMode.isStopRequested) {
+                jewelConfigurationDetector.enable()
+            }
 
-        // Detect the jewel configuration.
-        detectedJewelConfiguration = jewelConfigurationDetector.waitForJewelIdentification()
+            // Grab the glyph.
+            val glyphGrabbingThread = thread(start = true) {
+                robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.CLOSED)
+                linearOpMode.sleep(750)
+                robot.lift.position = CodaLift.LiftPosition.FIRST_LEVEL
+            }
 
-        // Move the jewel displacement bar if applicable.
-        if (detectedJewelConfiguration != JewelConfigurationDetector.JewelConfiguration.UNKNOWN) {
-            robot.jewelDisplacementBar.setPosition(CodaJewelDisplacementBar.Position.DOWN)
-        }
+            // Detect the jewel configuration.
+            detectedJewelConfiguration = jewelConfigurationDetector.waitForJewelIdentification()
 
-        jewelConfigurationDetector.disable()
-        pictographIdentifier.activate()
+            // Move the jewel displacement bar if applicable.
+            if (detectedJewelConfiguration != JewelConfigurationDetector.JewelConfiguration.UNKNOWN) {
+                robot.jewelDisplacementBar.setPosition(CodaJewelDisplacementBar.Position.DOWN)
+            }
 
-        // Detect the pictograph.
-        detectedPictograph = pictographIdentifier.waitForPictographIdentification()
-        pictographIdentifier.deactivate()
+            jewelConfigurationDetector.disable()
+            pictographIdentifier.activate()
 
-        // Wait for the grabber to grab the glyph.
-        glyphGrabbingThread.join()
+            // Detect the pictograph.
+            detectedPictograph = pictographIdentifier.waitForPictographIdentification()
+            pictographIdentifier.deactivate()
 
-        // Knock off the correct jewel.
-        when (allianceColor) {
-            AllianceColor.RED ->
-                when (detectedJewelConfiguration) {
-                    JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
-                        robot.driveTrain.linearEncoderDrive(300, StaticPowerController(0.175))
-                        robot.jewelDisplacementBar.setPosition(CodaJewelDisplacementBar.Position.UP)
-                        robot.driveOnBalancingStone(-0.40)
-                        robot.driveOffBalancingStone(-0.175)
+            // Wait for the grabber to grab the glyph.
+            glyphGrabbingThread.join()
+
+            // Knock off the correct jewel.
+            when (allianceColor) {
+                AllianceColor.RED ->
+                    when (detectedJewelConfiguration) {
+                        JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
+                            robot.driveTrain.linearEncoderDrive(300, StaticPowerController(0.175))
+                            robot.jewelDisplacementBar.setPosition(CodaJewelDisplacementBar.Position.UP)
+                            robot.driveOnBalancingStone(-0.40)
+                            robot.driveOffBalancingStone(-0.175)
+                        }
+
+                        JewelConfigurationDetector.JewelConfiguration.BLUE_RED -> {
+                            robot.driveOffBalancingStone(-0.175)
+                            robot.jewelDisplacementBar.setPosition(CodaJewelDisplacementBar.Position.UP)
+                        }
+
+                        JewelConfigurationDetector.JewelConfiguration.UNKNOWN -> {
+                            robot.driveOffBalancingStone(-0.175)
+                        }
                     }
 
-                    JewelConfigurationDetector.JewelConfiguration.BLUE_RED -> {
-                        robot.driveOffBalancingStone(-0.175)
-                        robot.jewelDisplacementBar.setPosition(CodaJewelDisplacementBar.Position.UP)
-                    }
+                AllianceColor.BLUE ->
+                    when (detectedJewelConfiguration) {
+                        JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
+                            robot.driveTrain.linearEncoderDrive(-300, StaticPowerController(0.175))
+                            robot.jewelDisplacementBar.setPosition(CodaJewelDisplacementBar.Position.UP)
+                            robot.driveOnBalancingStone(0.40)
+                            robot.driveOffBalancingStone(0.175)
+                        }
 
-                    JewelConfigurationDetector.JewelConfiguration.UNKNOWN -> {
-                        robot.driveOffBalancingStone(-0.175)
-                    }
-                }
+                        JewelConfigurationDetector.JewelConfiguration.BLUE_RED -> {
+                            robot.driveOffBalancingStone(0.175)
+                            robot.jewelDisplacementBar.setPosition(CodaJewelDisplacementBar.Position.UP)
+                        }
 
-            AllianceColor.BLUE ->
-                when (detectedJewelConfiguration) {
-                    JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
-                        robot.driveTrain.linearEncoderDrive(-300, StaticPowerController(0.175))
-                        robot.jewelDisplacementBar.setPosition(CodaJewelDisplacementBar.Position.UP)
-                        robot.driveOnBalancingStone(0.40)
-                        robot.driveOffBalancingStone(0.175)
+                        JewelConfigurationDetector.JewelConfiguration.UNKNOWN -> {
+                            robot.driveOffBalancingStone(0.175)
+                        }
                     }
-
-                    JewelConfigurationDetector.JewelConfiguration.BLUE_RED -> {
-                        robot.driveOffBalancingStone(0.175)
-                        robot.jewelDisplacementBar.setPosition(CodaJewelDisplacementBar.Position.UP)
-                    }
-
-                    JewelConfigurationDetector.JewelConfiguration.UNKNOWN -> {
-                        robot.driveOffBalancingStone(0.175)
-                    }
-                }
+            }
         }
 
     }
 
+    @Throws(InterruptedException::class)
     fun performSharedActionGroup2() {
-        if (cryptoBoxPosition == CryptoBoxPosition.FRONT) {
-            robot.driveTrain.linearTimeDrive(
-                500, StaticPowerController(0.30),
-                MecanumDriveTrain.DriveDirection.REVERSE
+        if (!linearOpMode.isStopRequested) {
+            if (cryptoBoxPosition == CryptoBoxPosition.FRONT) {
+                robot.driveTrain.linearTimeDrive(
+                    500,
+                    StaticPowerController(0.30),
+                    MecanumDriveTrain.DriveDirection.REVERSE
+                )
+            }
+
+            alignWithCryptoBoxColumn()
+            deliverGlyph()
+
+            robot.driveTrain.turnToHeading(
+                glyphPitHeading,
+                CodaRelicRecoveryAutonomousActions.TURN_POWER_CONTROLLER
             )
         }
-
-        val liftDropThread = thread(start = true) {
-            robot.lift.drop(1500)
-        }
-
-        alignWithCryptoBoxColumn()
-        liftDropThread.join()
-        deliverGlyph()
-
-        robot.driveTrain.turnToHeading(
-            glyphPitHeading,
-            CodaRelicRecoveryAutonomousActions.TURN_POWER_CONTROLLER
-        )
-
     }
 
     companion object {
-        val TURN_POWER_CONTROLLER = ProportionalPowerController(0.01)
+        val TURN_POWER_CONTROLLER = ProportionalPowerController(0.0095)
         val CRYPTO_BOX_ALIGNMENT_PID_COEFFICIENTS = {
             val coefficients = PIDCoefficients()
-            coefficients.p = 0.0115
-            coefficients.i = 0.013
+            coefficients.p = 0.0100
+            coefficients.i = 0.0115
             coefficients
         }()
     }

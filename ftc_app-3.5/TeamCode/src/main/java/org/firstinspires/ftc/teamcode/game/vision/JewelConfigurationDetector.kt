@@ -52,30 +52,33 @@ class JewelConfigurationDetector(private val linearOpMode: LinearOpMode) : OpenC
      */
     fun waitForJewelIdentification(): JewelConfiguration {
 
-        linearOpMode.telemetry.log().add("Waiting for jewel configuration identification.")
-        val elapsedTime = ElapsedTime()
-        while (elapsedTime.milliseconds() < TIME_OUT_DURATION && !linearOpMode.isStopRequested) {
-            val jewelConfiguration = getJewelConfiguration()
+        if (!linearOpMode.isStopRequested) {
+            linearOpMode.telemetry.log().add("Waiting for jewel configuration identification.")
+            val elapsedTime = ElapsedTime()
+            while (elapsedTime.milliseconds() < TIME_OUT_DURATION && !linearOpMode.isStopRequested) {
+                val jewelConfiguration = getJewelConfiguration()
 
-            if (jewelConfiguration != JewelConfiguration.UNKNOWN) {
-                when (jewelConfiguration) {
-                    JewelConfiguration.RED_BLUE ->
-                        linearOpMode.telemetry.log()
-                            .add("Red-Blue configuration identified at ${elapsedTime.milliseconds()} milliseconds")
-                    JewelConfiguration.BLUE_RED ->
-                        linearOpMode.telemetry.log()
-                            .add("Blue-Red configuration identified at ${elapsedTime.milliseconds()} milliseconds")
+                if (jewelConfiguration != JewelConfiguration.UNKNOWN) {
+                    when (jewelConfiguration) {
+                        JewelConfiguration.RED_BLUE ->
+                            linearOpMode.telemetry.log()
+                                .add("Red-Blue configuration identified at ${elapsedTime.milliseconds()} milliseconds")
+                        JewelConfiguration.BLUE_RED ->
+                            linearOpMode.telemetry.log()
+                                .add("Blue-Red configuration identified at ${elapsedTime.milliseconds()} milliseconds")
 
-                    else -> { /* This should never happen */
+                        else -> { /* This should never happen */
+                        }
                     }
+                    return jewelConfiguration
                 }
-                return jewelConfiguration
+
+                linearOpMode.sleep(10)
             }
 
-            linearOpMode.sleep(10)
+            linearOpMode.telemetry.log().add("Failed to identify jewel configuration.")
         }
 
-        linearOpMode.telemetry.log().add("Failed to identify jewel configuration.")
         return JewelConfiguration.UNKNOWN
     }
 

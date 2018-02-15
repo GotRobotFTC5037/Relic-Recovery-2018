@@ -96,15 +96,8 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
             }
 
             rangeSensor.startUpdatingDetectedDistance()
-            var minimumErrorDetected = Double.POSITIVE_INFINITY
             controller.errorValueHandler = {
-                val error = targetDistance - rangeSensor.distanceDetected
-                if (minimumErrorDetected > error) {
-                    minimumErrorDetected = error
-                    error
-                } else {
-                    minimumErrorDetected
-                }
+                targetDistance - rangeSensor.distanceDetected
             }
 
             val currentDistance = rangeSensor.distanceDetected
@@ -260,7 +253,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
         const val RIGHT_RANGE_SENSOR = "right_range_sensor"
         const val BACK_RANGE_SENSOR = "back_range_sensor"
 
-        private const val WALL_DISTANCE_TOLERANCE = 3.0
+        private const val WALL_DISTANCE_TOLERANCE = 1.5
         private const val BALANCING_STONE_ANGLE_THRESHOLD = 6.0
         private const val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 3.0
     }

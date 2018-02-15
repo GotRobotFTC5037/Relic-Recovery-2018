@@ -146,7 +146,7 @@ abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : Driv
         drivePowers.rearRight = 0.0
     }
 
-    private fun resetEncoders() {
+    fun resetEncoders() {
         frontLeftMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         frontRightMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         rearLeftMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
