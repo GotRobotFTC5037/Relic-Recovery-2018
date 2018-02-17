@@ -106,13 +106,12 @@ private class CodaRelicRecoveryAutonomousActions(
     }
 
     private fun deliverGlyph() {
-        robot.lift.drop(1500)
+        robot.lift.drop(3000)
         robot.driveTrain.linearTimeDrive(
-            1000, StaticPowerController(0.25),
+            1750,
+            StaticPowerController(0.3),
             MecanumDriveTrain.DriveDirection.FORWARD
         )
-        robot.glyphGrabber.bottomLeftGlyphGrabber.position = 0.30
-        robot.driveTrain.strafingTimeDrive(1000, StaticPowerController(0.25), MecanumDriveTrain.StrafeDirection.RIGHT)
         robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.RELEASE)
         robot.driveTrain.linearEncoderDrive(-200, StaticPowerController(0.25))
         robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.SMALL_OPEN)
@@ -182,7 +181,7 @@ private class CodaRelicRecoveryAutonomousActions(
                         JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
                             robot.driveTrain.linearEncoderDrive(300, StaticPowerController(0.175))
                             robot.jewelDisplacementBar.setPosition(CodaJewelDisplacementBar.Position.UP)
-                            robot.driveOnBalancingStone(-0.40)
+                            robot.driveOnBalancingStone(StaticPowerController(0.40))
                             robot.driveOffBalancingStone(-0.175)
                         }
 
@@ -201,7 +200,7 @@ private class CodaRelicRecoveryAutonomousActions(
                         JewelConfigurationDetector.JewelConfiguration.RED_BLUE -> {
                             robot.driveTrain.linearEncoderDrive(-300, StaticPowerController(0.175))
                             robot.jewelDisplacementBar.setPosition(CodaJewelDisplacementBar.Position.UP)
-                            robot.driveOnBalancingStone(0.40)
+                            robot.driveOnBalancingStone(StaticPowerController(0.40))
                             robot.driveOffBalancingStone(0.175)
                         }
 
@@ -244,8 +243,8 @@ private class CodaRelicRecoveryAutonomousActions(
         val TURN_POWER_CONTROLLER = ProportionalPowerController(0.0095)
         val CRYPTO_BOX_ALIGNMENT_PID_COEFFICIENTS = {
             val coefficients = PIDCoefficients()
-            coefficients.p = 0.0100
-            coefficients.i = 0.0115
+            coefficients.p = 0.0125
+            coefficients.i = 0.015
             coefficients
         }()
     }

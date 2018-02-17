@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime
 import kotlin.concurrent.thread
 import kotlin.math.abs
 import kotlin.math.sign
+import kotlin.properties.Delegates
 
 typealias Power = Double
 
@@ -51,7 +52,9 @@ class PIDPowerController(
     private val coefficients: PIDCoefficients,
     private val shouldPrintDebug: Boolean = false
 ) : PowerController {
-    override var errorValueHandler: () -> Double = { 0.0 }
+    override var errorValueHandler: () -> Double by Delegates.observable({ 0.0 }) { _,_,_ ->
+        resetIntegral()
+    }
     private lateinit var updateThread: Thread
     private val lastUpdateElapsedTime: ElapsedTime by lazy { ElapsedTime() }
     private var previousError = -1.0

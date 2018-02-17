@@ -56,10 +56,10 @@ class JewelConfigurationDetector(private val linearOpMode: LinearOpMode) : OpenC
             linearOpMode.telemetry.log().add("Waiting for jewel configuration identification.")
             val elapsedTime = ElapsedTime()
             while (elapsedTime.milliseconds() < TIME_OUT_DURATION && !linearOpMode.isStopRequested) {
-                val jewelConfiguration = getJewelConfiguration()
+                val jewelSetup = getJewelSetup()
 
-                if (jewelConfiguration != JewelConfiguration.UNKNOWN) {
-                    when (jewelConfiguration) {
+                if (jewelSetup.configuration != JewelConfiguration.UNKNOWN) {
+                    when (jewelSetup.configuration) {
                         JewelConfiguration.RED_BLUE ->
                             linearOpMode.telemetry.log()
                                 .add("Red-Blue configuration identified at ${elapsedTime.milliseconds()} milliseconds")
@@ -70,7 +70,7 @@ class JewelConfigurationDetector(private val linearOpMode: LinearOpMode) : OpenC
                         else -> { /* This should never happen */
                         }
                     }
-                    return jewelConfiguration
+                    return jewelSetup.configuration
                 }
 
                 linearOpMode.sleep(10)
@@ -156,12 +156,22 @@ class JewelConfigurationDetector(private val linearOpMode: LinearOpMode) : OpenC
         UNKNOWN
     }
 
+    enum class JewelConfigurationConfidence {
+        HIGH,
+        LOW
+    }
+
+    data class JewelSetup(
+        val configuration: JewelConfiguration,
+        val confidence: JewelConfigurationConfidence
+    )
+
     /**
      * Determines the configuration of the jewels in the image.
      * @return The configuration of the jewels in the image.
      */
     @Synchronized
-    private fun getJewelConfiguration(): JewelConfiguration {
+    private fun getJewelSetup(): JewelSetup {
         val bluePosition = getBlueJewelKeyPoint()
         val redPosition = getRedJewelKeyPoint()
         val whiteLinePosition = getWhiteLinePoint()
@@ -169,27 +179,73 @@ class JewelConfigurationDetector(private val linearOpMode: LinearOpMode) : OpenC
         return when {
             bluePosition != null && redPosition != null ->
                 when {
-                    bluePosition.pt.x < redPosition.pt.x -> JewelConfiguration.BLUE_RED
-                    bluePosition.pt.x > redPosition.pt.x -> JewelConfiguration.RED_BLUE
-                    else -> JewelConfiguration.UNKNOWN
+                    bluePosition.pt.x < redPosition.pt.x ->
+                        JewelSetup(
+                            JewelConfiguration.BLUE_RED,
+                            JewelConfigurationConfidence.HIGH
+                        )
+
+                    redPosition.pt.x < bluePosition.pt.x ->
+                        JewelSetup(
+                            JewelConfiguration.RED_BLUE,
+                            JewelConfigurationConfidence.HIGH
+                        )
+
+                    else ->
+                        JewelSetup(
+                            JewelConfiguration.UNKNOWN,
+                            JewelConfigurationConfidence.HIGH
+                        )
                 }
 
 
             whiteLinePosition != null && bluePosition != null ->
                 when {
-                    bluePosition.pt.x < whiteLinePosition.x -> JewelConfiguration.BLUE_RED
-                    bluePosition.pt.x > whiteLinePosition.x -> JewelConfiguration.RED_BLUE
-                    else -> JewelConfiguration.UNKNOWN
+                    bluePosition.pt.x < whiteLinePosition.x ->
+                        JewelSetup(
+                            JewelConfiguration.BLUE_RED,
+                            JewelConfigurationConfidence.LOW
+                        )
+
+                    bluePosition.pt.x > whiteLinePosition.x ->
+                        JewelSetup(
+                            JewelConfiguration.RED_BLUE,
+                            JewelConfigurationConfidence.LOW
+                        )
+
+                    else ->
+                        JewelSetup(
+                            JewelConfiguration.UNKNOWN,
+                            JewelConfigurationConfidence.LOW
+                        )
                 }
 
             whiteLinePosition != null && redPosition != null ->
                 when {
-                    redPosition.pt.x < whiteLinePosition.x -> JewelConfiguration.RED_BLUE
-                    redPosition.pt.x > whiteLinePosition.x -> JewelConfiguration.BLUE_RED
-                    else -> JewelConfiguration.UNKNOWN
+                    redPosition.pt.x < whiteLinePosition.x ->
+                        JewelSetup(
+                            JewelConfiguration.RED_BLUE,
+                            JewelConfigurationConfidence.LOW
+                        )
+
+                    redPosition.pt.x > whiteLinePosition.x ->
+                        JewelSetup(
+                            JewelConfiguration.BLUE_RED,
+                            JewelConfigurationConfidence.LOW
+                        )
+
+                    else ->
+                        JewelSetup(
+                            JewelConfiguration.UNKNOWN,
+                            JewelConfigurationConfidence.LOW
+                        )
                 }
 
-            else -> JewelConfiguration.UNKNOWN
+            else ->
+                JewelSetup(
+                    JewelConfiguration.UNKNOWN,
+                    JewelConfigurationConfidence.HIGH
+                )
         }
     }
 
