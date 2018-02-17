@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.game.robots
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.game.components.*
 import org.firstinspires.ftc.teamcode.lib.powercontroller.PowerController
+import org.firstinspires.ftc.teamcode.lib.powerultil.PowerAmplitudeMinimumClip
 import org.firstinspires.ftc.teamcode.lib.robot.Robot
 import org.firstinspires.ftc.teamcode.lib.robot.sensor.RangeSensor
 import kotlin.concurrent.thread
@@ -96,18 +97,13 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
             }
 
             rangeSensor.startUpdatingDetectedDistance()
-            var minimumErrorDetected = Double.POSITIVE_INFINITY
             controller.errorValueHandler = {
-                val error = targetDistance - rangeSensor.distanceDetected
-                if (minimumErrorDetected > error) {
-                    minimumErrorDetected = error
-                    error
-                } else {
-                    minimumErrorDetected
-                }
+                targetDistance - rangeSensor.distanceDetected
             }
 
             val currentDistance = rangeSensor.distanceDetected
+
+            val powerClip = PowerAmplitudeMinimumClip(0.20)
 
             when {
                 targetDistance > currentDistance ->
@@ -117,16 +113,24 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
                     ) {
                         when (rangeSensorDirection) {
                             RangeSensorDirection.LEFT ->
-                                driveTrain.strafeDriveAtPower(-controller.outputPower)
+                                driveTrain.strafeDriveAtPower(
+                                    powerClip.getOutputPower(-abs(controller.outputPower))
+                                )
 
                             RangeSensorDirection.RIGHT ->
-                                driveTrain.strafeDriveAtPower(controller.outputPower)
+                                driveTrain.strafeDriveAtPower(
+                                    powerClip.getOutputPower(abs(controller.outputPower))
+                                )
 
                             RangeSensorDirection.FRONT_LEFT ->
-                                driveTrain.linearDriveAtPower(controller.outputPower)
+                                driveTrain.linearDriveAtPower(
+                                    powerClip.getOutputPower(controller.outputPower)
+                                )
 
                             RangeSensorDirection.FRONT_RIGHT ->
-                                driveTrain.linearDriveAtPower(controller.outputPower)
+                                driveTrain.linearDriveAtPower(
+                                    powerClip.getOutputPower(controller.outputPower)
+                                )
 
                             RangeSensorDirection.BACK -> TODO()
                         }
@@ -144,16 +148,24 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
                     ) {
                         when (rangeSensorDirection) {
                             RangeSensorDirection.LEFT ->
-                                driveTrain.strafeDriveAtPower(controller.outputPower)
+                                driveTrain.strafeDriveAtPower(
+                                    powerClip.getOutputPower(abs(controller.outputPower))
+                                )
 
                             RangeSensorDirection.RIGHT ->
-                                driveTrain.strafeDriveAtPower(-controller.outputPower)
+                                driveTrain.strafeDriveAtPower(
+                                    powerClip.getOutputPower(-abs(controller.outputPower))
+                                )
 
                             RangeSensorDirection.FRONT_LEFT ->
-                                driveTrain.linearDriveAtPower(-controller.outputPower)
+                                driveTrain.linearDriveAtPower(
+                                    powerClip.getOutputPower(-controller.outputPower)
+                                )
 
                             RangeSensorDirection.FRONT_RIGHT ->
-                                driveTrain.linearDriveAtPower(-controller.outputPower)
+                                driveTrain.linearDriveAtPower(
+                                    powerClip.getOutputPower(-controller.outputPower)
+                                )
 
                             RangeSensorDirection.BACK -> TODO()
                         }
@@ -168,7 +180,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
             driveTrain.stop()
 
             if (shouldCorrect) {
-                linearOpMode.sleep(1000)
+                linearOpMode.sleep(500)
                 val distance = rangeSensor.distanceDetected
                 if (
                     distance > targetDistance + WALL_DISTANCE_TOLERANCE ||
@@ -237,13 +249,19 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
      * Drives the robot on of the balancing stone, using
      * the angle of the robot as an indication of completion.
      */
-    fun driveOnBalancingStone(power: Double) {
+    fun driveOnBalancingStone(controller: PowerController) {
         if (!linearOpMode.isStopRequested) {
-            driveTrain.linearDriveAtPower(power)
+
+            controller.errorValueHandler = {
+                abs(startingPitch - driveTrain.currentPitch) -  BALANCING_STONE_GROUND_ANGLE_THRESHOLD
+            }
+
             while (abs(startingPitch - driveTrain.currentPitch) >= BALANCING_STONE_GROUND_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
+                driveTrain.linearDriveAtPower(controller.outputPower)
                 linearOpMode.sleep(10)
             }
 
+            controller.stopUpdatingOutput()
             driveTrain.stop()
         }
     }
@@ -260,7 +278,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
         const val RIGHT_RANGE_SENSOR = "right_range_sensor"
         const val BACK_RANGE_SENSOR = "back_range_sensor"
 
-        private const val WALL_DISTANCE_TOLERANCE = 3.0
+        private const val WALL_DISTANCE_TOLERANCE = 1.5
         private const val BALANCING_STONE_ANGLE_THRESHOLD = 6.0
         private const val BALANCING_STONE_GROUND_ANGLE_THRESHOLD = 3.0
     }

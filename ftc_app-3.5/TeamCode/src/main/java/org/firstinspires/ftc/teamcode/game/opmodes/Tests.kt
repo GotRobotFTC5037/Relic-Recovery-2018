@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.game.opmodes
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.game.robots.Coda
 import org.firstinspires.ftc.teamcode.lib.robot.sensor.RangeSensor
 
-@Autonomous
+@Autonomous(group = "Tests")
 class CodaDriveTrainStallTest : LinearOpMode() {
 
     override fun runOpMode() {
@@ -14,32 +15,45 @@ class CodaDriveTrainStallTest : LinearOpMode() {
         val robot = Coda(this)
         robot.setup()
 
-        val timer = ElapsedTime()
-
         waitForStart()
 
+        robot.driveTrain.resetEncoders()
+
+        val timer = ElapsedTime()
+
+        var drivePower = 0.0
+
         while(opModeIsActive()) {
-            val drivePower = timer.milliseconds() / TEST_TIME_SECONDS
+            drivePower = timer.milliseconds() / TEST_TIME_MILLISECONDS
             robot.driveTrain.linearDriveAtPower(drivePower)
 
             if(robot.driveTrain.currentLinearEncoderPosition() > TEST_COMPLETION_THRESHOLD) {
-                requestOpModeStop()
+                break
             }
 
             telemetry.addLine("Drive Power: $drivePower")
             telemetry.update()
         }
 
+        robot.driveTrain.stop()
+
+        telemetry.addLine("Drive Power: $drivePower")
+        telemetry.update()
+
+        while(opModeIsActive()) {
+            // Do nothing.
+        }
+
     }
 
     companion object {
-        private const val TEST_TIME_SECONDS = 50
+        private const val TEST_TIME_MILLISECONDS = 500000
         private const val TEST_COMPLETION_THRESHOLD = 100
     }
 
 }
 
-@Autonomous
+@Autonomous(group = "Tests")
 class SensorTest : LinearOpMode() {
 
     override fun runOpMode() {
@@ -70,4 +84,46 @@ class SensorTest : LinearOpMode() {
         }
     }
 
+}
+
+@Autonomous(group = "Tests")
+@Disabled
+class GlyphGrabberServoTest : LinearOpMode() {
+    override fun runOpMode() {
+        val robot = Coda(this)
+        robot.setup()
+
+        waitForStart()
+
+        waitForAButtonPress()
+
+        robot.glyphGrabber.topLeftGlyphGrabber.position = 0.0
+        waitForAButtonPress()
+        robot.glyphGrabber.topLeftGlyphGrabber.position = 1.0
+        waitForAButtonPress()
+
+        robot.glyphGrabber.topRightGlyphGrabber.position = 0.0
+        waitForAButtonPress()
+        robot.glyphGrabber.topRightGlyphGrabber.position = 1.0
+        waitForAButtonPress()
+
+        robot.glyphGrabber.bottomLeftGlyphGrabber.position = 0.0
+        waitForAButtonPress()
+        robot.glyphGrabber.bottomLeftGlyphGrabber.position = 1.0
+        waitForAButtonPress()
+
+        robot.glyphGrabber.bottomRightGlyphGrabber.position = 0.0
+        waitForAButtonPress()
+        robot.glyphGrabber.bottomRightGlyphGrabber.position = 1.0
+        waitForAButtonPress()
+    }
+
+    private fun waitForAButtonPress() {
+        while(gamepad1.a && !isStopRequested) {
+            idle()
+        }
+        while(!gamepad1.a && !isStopRequested) {
+            idle()
+        }
+    }
 }

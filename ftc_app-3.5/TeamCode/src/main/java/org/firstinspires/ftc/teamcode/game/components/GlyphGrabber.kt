@@ -6,49 +6,34 @@ import org.firstinspires.ftc.teamcode.lib.robot.attachment.RobotAttachment
 
 class CodaGlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode) {
 
-    var currentState: GlyphGrabberState = GlyphGrabberState.OPEN
-        private set
-
-    private val topLeftGlyphGrabber by lazy {
+    val topLeftGlyphGrabber: Servo by lazy {
         val servo = hardwareMap.servo.get("top left grabber")
-        servo.direction = Servo.Direction.FORWARD
+        servo.direction = Servo.Direction.REVERSE
         servo
     }
 
-    private val topRightGlyphGrabber by lazy {
+    val topRightGlyphGrabber: Servo by lazy {
         val servo = hardwareMap.servo.get("top right grabber")
-        servo.direction = Servo.Direction.REVERSE
-        servo
-    }
-
-    private val bottomLeftGlyphGrabber: Servo by lazy {
-        val servo = hardwareMap.servo.get("bottom left grabber")
         servo.direction = Servo.Direction.FORWARD
         servo
     }
 
-    private val bottomRightGlyphGrabber: Servo by lazy {
+    val bottomLeftGlyphGrabber: Servo by lazy {
+        val servo = hardwareMap.servo.get("bottom left grabber")
+        servo.direction = Servo.Direction.REVERSE
+        servo
+    }
+
+    val bottomRightGlyphGrabber: Servo by lazy {
         val servo = hardwareMap.servo.get("bottom right grabber")
-        servo.direction = Servo.Direction.REVERSE
+        servo.direction = Servo.Direction.FORWARD
         servo
     }
 
-    private val glyphDeployer: Servo by lazy {
+    private val glyphDeployer by lazy {
         val servo = hardwareMap.servo.get("glyph deployer")
-        servo.direction = Servo.Direction.REVERSE
+        servo.direction = Servo.Direction.FORWARD
         servo
-    }
-
-    enum class GlyphArmPosition(val value: Double) {
-        OPEN(0.0),
-        SMALL_OPEN(0.30),
-        RELEASE(0.45),
-        CLOSED(0.55)
-    }
-
-    enum class GlyphDeployerPosition(val value: Double) {
-        RETRACTED(0.375),
-        EXTENDED(0.65)
     }
 
     enum class GlyphGrabberState(
@@ -61,16 +46,8 @@ class CodaGlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode
         RELEASE(GlyphArmPosition.RELEASE, GlyphDeployerPosition.EXTENDED),
     }
 
-    private fun setArmsPosition(position: GlyphArmPosition) {
-        topLeftGlyphGrabber.position = position.value
-        topRightGlyphGrabber.position = position.value
-        bottomLeftGlyphGrabber.position = position.value
-        bottomRightGlyphGrabber.position = position.value
-    }
-
-    private fun setDeployerPosition(position: GlyphDeployerPosition) {
-        glyphDeployer.position = position.value
-    }
+    var currentState: GlyphGrabberState = GlyphGrabberState.OPEN
+        private set
 
     fun setState(state: GlyphGrabberState, delay: Long = 0) {
         if (!linearOpMode.isStopRequested) {
@@ -79,6 +56,37 @@ class CodaGlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode
             setArmsPosition(state.armPosition)
             linearOpMode.sleep(delay)
         }
+    }
+
+    enum class GlyphArmPosition(val value: Double) {
+        OPEN(GRABBER_SERVO_MIN_POSITION),
+        SMALL_OPEN(0.10),
+        RELEASE(0.30),
+        CLOSED(GRABBER_SERVO_MAX_POSITION)
+    }
+
+    private fun setArmsPosition(position: GlyphArmPosition) {
+        topLeftGlyphGrabber.position = position.value
+        topRightGlyphGrabber.position = position.value
+        bottomLeftGlyphGrabber.position = position.value
+        bottomRightGlyphGrabber.position = position.value
+    }
+
+    enum class GlyphDeployerPosition(val value: Double) {
+        RETRACTED(DEPLOYER_SERVO_MIN_POSITION),
+        EXTENDED(DEPLOYER_SERVO_MAX_POSITION)
+    }
+
+    private fun setDeployerPosition(position: GlyphDeployerPosition) {
+        glyphDeployer.position = position.value
+    }
+
+    companion object {
+        private const val GRABBER_SERVO_MIN_POSITION  = 0.0
+        private const val GRABBER_SERVO_MAX_POSITION  = 0.6
+
+        private const val DEPLOYER_SERVO_MIN_POSITION = 0.5
+        private const val DEPLOYER_SERVO_MAX_POSITION = 0.1
     }
 
 }

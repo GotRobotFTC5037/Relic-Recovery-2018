@@ -60,30 +60,35 @@ class PictographIdentifier(private var linearOpMode: LinearOpMode) {
      */
     fun waitForPictographIdentification(): RelicRecoveryVuMark {
 
-        linearOpMode.telemetry.log().add("Waiting for pictograph identification.")
+        if (!linearOpMode.isStopRequested) {
+            linearOpMode.telemetry.log().add("Waiting for pictograph identification.")
 
-        val elapsedTime = ElapsedTime()
-        while (elapsedTime.milliseconds() < TIME_OUT_DURATION && !linearOpMode.isStopRequested) {
-            val pictograph = this.identifiedPictograph
+            val elapsedTime = ElapsedTime()
+            while (elapsedTime.milliseconds() < TIME_OUT_DURATION && !linearOpMode.isStopRequested) {
+                val pictograph = this.identifiedPictograph
 
-            if (elapsedTime.milliseconds() >= 1000) {
-                CameraDevice.getInstance().setFlashTorchMode(true)
-            }
-
-            if (pictograph != RelicRecoveryVuMark.UNKNOWN) {
-                when(pictograph) {
-                    RelicRecoveryVuMark.LEFT -> linearOpMode.telemetry.log().add("Left Pictograph identified.")
-                    RelicRecoveryVuMark.CENTER -> linearOpMode.telemetry.log().add("Center Pictograph identified")
-                    RelicRecoveryVuMark.RIGHT -> linearOpMode.telemetry.log().add("Right Pictograph identified.")
-                    else -> { /* This should never happen. */ }
+                if (elapsedTime.milliseconds() >= 1000) {
+                    CameraDevice.getInstance().setFlashTorchMode(true)
                 }
-                return pictograph
+
+                if (pictograph != RelicRecoveryVuMark.UNKNOWN) {
+                    when (pictograph) {
+                        RelicRecoveryVuMark.LEFT -> linearOpMode.telemetry.log().add("Left Pictograph identified.")
+                        RelicRecoveryVuMark.CENTER -> linearOpMode.telemetry.log().add("Center Pictograph identified")
+                        RelicRecoveryVuMark.RIGHT -> linearOpMode.telemetry.log().add("Right Pictograph identified.")
+
+                        else -> { /* This should never happen. */
+                        }
+                    }
+                    return pictograph
+                }
+
+                linearOpMode.sleep(10)
             }
 
-            linearOpMode.sleep(10)
+            linearOpMode.telemetry.log().add("Failed to identify the pictograph.")
         }
 
-        linearOpMode.telemetry.log().add("Failed to identify the pictograph.")
         return RelicRecoveryVuMark.UNKNOWN
     }
 
