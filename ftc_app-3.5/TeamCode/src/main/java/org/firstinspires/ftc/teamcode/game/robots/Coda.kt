@@ -27,6 +27,14 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
         components[JEWEL_STICK] as CodaJewelDisplacementBar
     }
 
+    val balancingStoneHolder by lazy {
+        components[BALANCING_STONE_HOLDER] as CodaBalancingStoneHolder
+    }
+
+    val relicGrabber by lazy {
+        components[RELIC_GRABBER] as CodaRelicGrabber
+    }
+
     private var startingPitch: Double = 0.0
 
     /*
@@ -38,6 +46,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
         addComponent(CodaLift(linearOpMode), LIFT)
         addComponent(CodaRelicGrabber(linearOpMode), RELIC_GRABBER)
         addComponent(CodaJewelDisplacementBar(linearOpMode), JEWEL_STICK)
+        addComponent(CodaBalancingStoneHolder(linearOpMode), BALANCING_STONE_HOLDER)
 
         addComponent(
             RangeSensor(linearOpMode, "front left range sensor"),
@@ -62,6 +71,9 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
 
         driveTrain.waitForGyroCalibration()
         startingPitch = driveTrain.currentPitch
+
+        glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.OPEN)
+        balancingStoneHolder.setState(CodaBalancingStoneHolder.BalancingStoneHolderState.UP)
 
         linearOpMode.onStart {
             driveTrain.startUpdatingDrivePowers()
@@ -272,6 +284,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
         private const val LIFT = "lift"
         private const val RELIC_GRABBER = "relic_grabber"
         private const val JEWEL_STICK = "jewel_stick"
+        private const val BALANCING_STONE_HOLDER = "balancing_stone_holder"
         const val FRONT_LEFT_RANGE_SENSOR = "front_left_range_sensor"
         const val FRONT_RIGHT_RANGE_SENSOR = "front_right_range_sensor"
         const val LEFT_RANGE_SENSOR = "left range sensor"

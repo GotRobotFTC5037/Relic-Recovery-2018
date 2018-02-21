@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.game.robots.Coda
 import org.firstinspires.ftc.teamcode.lib.robot.sensor.RangeSensor
 
 @Autonomous(group = "Tests")
+@Disabled
 class CodaDriveTrainStallTest : LinearOpMode() {
 
     override fun runOpMode() {
