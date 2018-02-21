@@ -2,9 +2,10 @@ package org.firstinspires.ftc.teamcode.game.opmodes
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.util.ElapsedTime
+import org.firstinspires.ftc.teamcode.game.components.CodaBalancingStoneHolder
 import org.firstinspires.ftc.teamcode.game.components.CodaGlyphGrabber
+import org.firstinspires.ftc.teamcode.game.components.CodaRelicGrabber
 import org.firstinspires.ftc.teamcode.game.robots.Coda
 import kotlin.math.abs
 
@@ -22,34 +23,113 @@ class CodaTeleOp : LinearOpMode() {
         robot.lift.startSettingMotorPowers()
 
         while (opModeIsActive()) {
-            updateDriveDirection()
-            updateGlyphGrabberState()
-            updateLift()
+            performDriverActions()
+            performGunnerActions()
         }
 
         robot.driveTrain.stop()
     }
 
-    private fun updateDriveDirection() {
+    private fun performDriverActions() {
+        val gamepad = gamepad1
 
-        if (gamepad2IsRegistered()) {
-            when {
-                gamepad1.dpad_left -> robot.driveTrain.strafeDriveAtPower(0.40)
-                gamepad1.dpad_right -> robot.driveTrain.strafeDriveAtPower(-0.40)
-                gamepad1.dpad_up -> robot.driveTrain.linearDriveAtPower(0.20)
-                gamepad1.dpad_down -> robot.driveTrain.linearDriveAtPower(-0.20)
-                gamepad1.left_bumper -> robot.driveTrain.turnAtPower(0.40)
-                gamepad1.right_bumper -> robot.driveTrain.turnAtPower(-0.40)
-                else -> manuallySetDriveDirection()
+        when {
+            gamepad.a && gamepad1.b -> robot.relicGrabber.deliverRelic()
+            gamepad.a -> robot.relicGrabber.setGrabberState(CodaRelicGrabber.GrabberState.CLOSED)
+            gamepad.b -> robot.relicGrabber.setGrabberState(CodaRelicGrabber.GrabberState.OPEN)
+            gamepad.x -> robot.relicGrabber.setArmPosition(CodaRelicGrabber.ArmPosition.DOWN)
+            gamepad.y -> robot.relicGrabber.setArmPosition(CodaRelicGrabber.ArmPosition.IN)
+
+            gamepad.dpad_left -> {
+                if (gamepad.left_trigger > 0.1) {
+                    robot.driveTrain.turnAtPower(0.30)
+                    lastManualHeadingUpdate.reset()
+                    robot.driveTrain.shouldCorrectHeading = false
+                } else {
+                    robot.driveTrain.strafeDriveAtPower(0.40)
+                }
             }
-        } else {
-            when {
-                gamepad1.dpad_left -> robot.driveTrain.strafeDriveAtPower(0.40)
-                gamepad1.dpad_right -> robot.driveTrain.strafeDriveAtPower(-0.40)
-                else -> manuallySetDriveDirection()
+
+            gamepad.dpad_right -> {
+                if (gamepad.left_trigger > 0.1) {
+                    robot.driveTrain.turnAtPower(-0.30)
+                    lastManualHeadingUpdate.reset()
+                    robot.driveTrain.shouldCorrectHeading = false
+                } else {
+                    robot.driveTrain.strafeDriveAtPower(-0.40)
+                }
+            }
+
+            gamepad.dpad_up -> robot.driveTrain.linearDriveAtPower(0.20)
+            gamepad.dpad_down -> robot.driveTrain.linearDriveAtPower(-0.20)
+            else -> manuallySetDriveDirection()
+        }
+
+        when {
+            gamepad.left_bumper ->
+                robot.balancingStoneHolder.setState(
+                    CodaBalancingStoneHolder.BalancingStoneHolderState.UP
+                )
+
+            gamepad.right_bumper ->
+                robot.balancingStoneHolder.setState(
+                    CodaBalancingStoneHolder.BalancingStoneHolderState.DOWN
+                )
+        }
+    }
+
+    private fun performGunnerActions() {
+        when {
+            gamepad2.a -> robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.CLOSED)
+            gamepad2.b -> robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.RELEASE)
+            gamepad2.x -> robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.SMALL_OPEN)
+
+            gamepad2.left_trigger > 0.1 -> {
+                robot.glyphGrabber.bottomLeftGlyphGrabber.position =
+                        CodaGlyphGrabber.BOTTOM_GRABBER_CLOSED_POSITION
+
+                robot.glyphGrabber.bottomRightGlyphGrabber.position =
+                        CodaGlyphGrabber.BOTTOM_GRABBER_CLOSED_POSITION
+            }
+
+            gamepad2.right_trigger > 0.1 -> {
+                robot.glyphGrabber.topLeftGlyphGrabber.position =
+                        CodaGlyphGrabber.BOTTOM_GRABBER_CLOSED_POSITION
+
+                robot.glyphGrabber.topRightGlyphGrabber.position =
+                        CodaGlyphGrabber.BOTTOM_GRABBER_CLOSED_POSITION
             }
         }
 
+        val liftPower = -gamepad2.left_stick_y.toDouble()
+        if (liftPower != 0.0) {
+            robot.lift.shouldHoldLiftPosition = false
+            robot.lift.setPower(liftPower)
+            val position = robot.lift.position
+            position.value = robot.lift.motor.currentPosition
+            robot.lift.position = position
+        } else {
+            robot.lift.shouldHoldLiftPosition = true
+        }
+
+        when {
+            gamepad2.dpad_up -> {
+                while (gamepad2.dpad_up) {
+                    idle()
+                }
+                robot.lift.elevate()
+            }
+
+            gamepad2.dpad_down -> {
+                while (gamepad2.dpad_down) {
+                    idle()
+                }
+                robot.lift.lower()
+            }
+        }
+
+        val relicGrabberPower = -gamepad2.right_stick_y.toDouble()
+        robot.relicGrabber.setPower(relicGrabberPower)
     }
 
     private fun manuallySetDriveDirection() {
@@ -57,7 +137,7 @@ class CodaTeleOp : LinearOpMode() {
         var strafePower = gamepad1.left_stick_x.toDouble()
         var turnPower = -gamepad1.right_stick_x.toDouble()
 
-        if (gamepad1.right_trigger > 0.1 || gamepad1.left_trigger > 0.1) {
+        if (gamepad1.right_trigger > 0.1) {
             linearPower *= 0.75
             strafePower *= 0.75
             turnPower *= 0.65
@@ -89,58 +169,4 @@ class CodaTeleOp : LinearOpMode() {
             robot.driveTrain.shouldCorrectHeading = false
         }
     }
-
-    private fun updateGlyphGrabberState() {
-        val gamepad = if (gamepad2IsRegistered()) gamepad2 else gamepad1
-
-        when {
-            gamepad.a -> robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.CLOSED)
-            gamepad.b -> robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.RELEASE)
-            gamepad.x -> robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.SMALL_OPEN)
-            gamepad.y -> robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.OPEN)
-        }
-    }
-
-    private fun updateLift() {
-        val gamepad = if (gamepad2IsRegistered()) {
-            val liftPower = -gamepad2.left_stick_y.toDouble()
-            if (liftPower != 0.0) {
-                robot.lift.shouldHoldLiftPosition = false
-                robot.lift.setPower(liftPower)
-                val position = robot.lift.position
-                position.value = robot.lift.motor.currentPosition
-                robot.lift.position = position
-            } else {
-                robot.lift.shouldHoldLiftPosition = true
-            }
-
-            gamepad2
-        } else {
-            robot.lift.shouldHoldLiftPosition = true
-            gamepad1
-        }
-
-        when {
-            gamepad.dpad_up -> {
-                while (gamepad.dpad_up) {
-                    idle()
-                }
-                robot.lift.elevate()
-            }
-
-            gamepad.dpad_down -> {
-                while (gamepad.dpad_down) {
-                    idle()
-                }
-                robot.lift.lower()
-            }
-        }
-    }
-
 }
-
-fun LinearOpMode.gamepad2IsRegistered(): Boolean {
-    return gamepad2.id != Gamepad.ID_UNASSOCIATED
-            && gamepad2.id != Gamepad.ID_SYNTHETIC
-}
-

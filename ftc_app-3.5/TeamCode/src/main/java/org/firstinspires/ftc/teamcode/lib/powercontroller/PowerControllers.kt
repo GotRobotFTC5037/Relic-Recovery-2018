@@ -20,7 +20,7 @@ interface PowerController {
 }
 
 /**
- * A PowerController that always returns the same value.
+ * A PowerController that always returns the same position.
  */
 class StaticPowerController(private val power: Power) : PowerController {
     override var errorValueHandler: () -> Double = { 0.0 }
@@ -32,8 +32,8 @@ class StaticPowerController(private val power: Power) : PowerController {
 }
 
 /**
- * A PowerController that returns a value proportional to the difference between the input value
- * and target value.
+ * A PowerController that returns a position proportional to the difference between the input position
+ * and target position.
  */
 class ProportionalPowerController(private var gain: Double) : PowerController {
     override var errorValueHandler: () -> Double = { 0.0 }
@@ -45,7 +45,7 @@ class ProportionalPowerController(private var gain: Double) : PowerController {
 }
 
 /**
- * A PowerController that returns a value controlled by PID.
+ * A PowerController that returns a position controlled by PID.
  */
 class PIDPowerController(
     private val linearOpMode: LinearOpMode,

@@ -240,7 +240,7 @@ private class CodaRelicRecoveryAutonomousActions(
     }
 
     companion object {
-        val TURN_POWER_CONTROLLER = ProportionalPowerController(0.0095)
+        val TURN_POWER_CONTROLLER = ProportionalPowerController(0.0125)
         val CRYPTO_BOX_ALIGNMENT_PID_COEFFICIENTS = {
             val coefficients = PIDCoefficients()
             coefficients.p = 0.0125

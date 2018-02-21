@@ -165,7 +165,7 @@ abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : Driv
     }
 
     /**
-     * Drives linearly until the specified encoder value as be reached.
+     * Drives linearly until the specified encoder position as be reached.
      */
     fun linearEncoderDrive(encoderValue: Int, controller: PowerController) {
 

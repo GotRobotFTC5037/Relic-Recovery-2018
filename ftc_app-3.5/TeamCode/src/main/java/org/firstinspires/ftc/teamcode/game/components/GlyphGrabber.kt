@@ -58,18 +58,18 @@ class CodaGlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode
         }
     }
 
-    enum class GlyphArmPosition(val value: Double) {
-        OPEN(GRABBER_SERVO_MIN_POSITION),
-        SMALL_OPEN(0.10),
-        RELEASE(0.30),
-        CLOSED(GRABBER_SERVO_MAX_POSITION)
+    enum class GlyphArmPosition(val bottomGrabberPosition: Double, val topGrabberPosition: Double) {
+        OPEN(BOTTOM_GRABBER_OPEN_POSITION, TOP_GRABBER_OPEN_POSITION),
+        SMALL_OPEN(BOTTOM_GRABBER_SMALL_OPEN_POSITION, TOP_GRABBER_SMALL_OPEN_POSITION),
+        RELEASE(BOTTOM_GRABBER_RELEASE_POSITION, TOP_GRABBER_RELEASE_POSITION),
+        CLOSED(BOTTOM_GRABBER_CLOSED_POSITION, TOP_GRABBER_CLOSED_POSITION)
     }
 
     private fun setArmsPosition(position: GlyphArmPosition) {
-        topLeftGlyphGrabber.position = position.value
-        topRightGlyphGrabber.position = position.value
-        bottomLeftGlyphGrabber.position = position.value
-        bottomRightGlyphGrabber.position = position.value
+        topLeftGlyphGrabber.position = position.topGrabberPosition
+        topRightGlyphGrabber.position = position.topGrabberPosition
+        bottomLeftGlyphGrabber.position = position.bottomGrabberPosition
+        bottomRightGlyphGrabber.position = position.bottomGrabberPosition
     }
 
     enum class GlyphDeployerPosition(val value: Double) {
@@ -82,8 +82,15 @@ class CodaGlyphGrabber(linearOpMode: LinearOpMode): RobotAttachment(linearOpMode
     }
 
     companion object {
-        private const val GRABBER_SERVO_MIN_POSITION  = 0.0
-        private const val GRABBER_SERVO_MAX_POSITION  = 0.6
+        private const val BOTTOM_GRABBER_OPEN_POSITION = 0.0
+        private const val BOTTOM_GRABBER_SMALL_OPEN_POSITION = 0.1
+        private const val BOTTOM_GRABBER_RELEASE_POSITION = 0.25
+        const val BOTTOM_GRABBER_CLOSED_POSITION = 0.5
+
+        private const val TOP_GRABBER_OPEN_POSITION = 0.0
+        private const val TOP_GRABBER_SMALL_OPEN_POSITION = 0.1
+        private const val TOP_GRABBER_RELEASE_POSITION = 0.35
+        private const val TOP_GRABBER_CLOSED_POSITION = 0.5
 
         private const val DEPLOYER_SERVO_MIN_POSITION = 0.5
         private const val DEPLOYER_SERVO_MAX_POSITION = 0.1
