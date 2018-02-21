@@ -35,9 +35,9 @@ class CodaTeleOp : LinearOpMode() {
 
         when {
             gamepad.a && gamepad1.b -> robot.relicGrabber.deliverRelic()
-            gamepad.a -> robot.relicGrabber.setGrabberState(CodaRelicGrabber.GrabberState.CLOSED)
-            gamepad.b -> robot.relicGrabber.setGrabberState(CodaRelicGrabber.GrabberState.OPEN)
-            gamepad.x -> robot.relicGrabber.setArmPosition(CodaRelicGrabber.ArmPosition.DOWN)
+            gamepad.a -> robot.relicGrabber.setArmPosition(CodaRelicGrabber.ArmPosition.DOWN)
+            gamepad.b -> robot.relicGrabber.setGrabberState(CodaRelicGrabber.GrabberState.CLOSED)
+            gamepad.x -> robot.relicGrabber.setGrabberState(CodaRelicGrabber.GrabberState.OPEN)
             gamepad.y -> robot.relicGrabber.setArmPosition(CodaRelicGrabber.ArmPosition.IN)
 
             gamepad.dpad_left -> {
