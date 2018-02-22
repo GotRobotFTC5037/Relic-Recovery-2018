@@ -21,7 +21,7 @@ abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : Driv
     var shouldCorrectHeading = true
     private var isActivelyTurning = false
     abstract val currentHeading: Heading
-    val minimumDrivePower: Double = 0.0
+    open val minimumDrivePower: Double = 0.0
 
     private val drivePowers: DrivePowers = DrivePowers()
 
