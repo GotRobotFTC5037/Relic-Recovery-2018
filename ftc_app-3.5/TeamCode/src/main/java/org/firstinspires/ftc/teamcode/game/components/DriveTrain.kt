@@ -41,6 +41,9 @@ class CodaDriveTrain(linearOpMode: LinearOpMode) : MecanumDriveTrain(linearOpMod
         motor
     }
 
+    override val minimumDrivePower: Double
+        get() = 0.2
+
     private val imu: BNO055IMU by lazy {
         val calibration = BNO055IMU.CalibrationData()
         calibration.dxAccel = -19; calibration.dyAccel = -33; calibration.dzAccel = 19
@@ -82,6 +85,10 @@ class CodaDriveTrain(linearOpMode: LinearOpMode) : MecanumDriveTrain(linearOpMod
             headingDifferenceFromTarget(targetHeading)
         }
         controller
+    }
+
+    private fun clipPowerAmplitude() {
+
     }
 
     override fun headingCorrectedDrivePowers(baseDrivePowers: DrivePowers): DrivePowers {
