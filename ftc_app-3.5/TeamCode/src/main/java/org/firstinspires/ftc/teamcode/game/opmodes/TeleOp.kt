@@ -34,7 +34,6 @@ class CodaTeleOp : LinearOpMode() {
         val gamepad = gamepad1
 
         when {
-            gamepad.a && gamepad1.b -> robot.relicGrabber.deliverRelic()
             gamepad.a -> robot.relicGrabber.setArmPosition(CodaRelicGrabber.ArmPosition.DOWN)
             gamepad.b -> robot.relicGrabber.setGrabberState(CodaRelicGrabber.GrabberState.CLOSED)
             gamepad.x -> robot.relicGrabber.setGrabberState(CodaRelicGrabber.GrabberState.OPEN)
