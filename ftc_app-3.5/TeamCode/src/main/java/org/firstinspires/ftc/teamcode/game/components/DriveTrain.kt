@@ -87,10 +87,6 @@ class CodaDriveTrain(linearOpMode: LinearOpMode) : MecanumDriveTrain(linearOpMod
         controller
     }
 
-    private fun clipPowerAmplitude() {
-
-    }
-
     override fun headingCorrectedDrivePowers(baseDrivePowers: DrivePowers): DrivePowers {
         val drivePowers = DrivePowers()
         val headingCorrection = headingController.outputPower
