@@ -53,7 +53,7 @@ class CodaRelicGrabber(linearOpMode: LinearOpMode) : RobotAttachment(linearOpMod
         controller.stopUpdatingOutput()
     }
 
-    enum class ArmPosition(val position: Double) { IN(0.3), DOWN(0.9) }
+    enum class ArmPosition(val position: Double) { IN(0.0), DOWN(0.7) }
 
     fun setArmPosition(position: ArmPosition) {
         armServo.position = position.position
