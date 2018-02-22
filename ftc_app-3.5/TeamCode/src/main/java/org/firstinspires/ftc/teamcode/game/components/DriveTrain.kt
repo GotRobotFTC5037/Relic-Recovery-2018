@@ -41,7 +41,7 @@ class CodaDriveTrain(linearOpMode: LinearOpMode) : MecanumDriveTrain(linearOpMod
         motor
     }
 
-    override val minimumDrivePower = 0.2
+    override val minimumDrivePower = 0.25
 
     private val imu: BNO055IMU by lazy {
         val calibration = BNO055IMU.CalibrationData()
