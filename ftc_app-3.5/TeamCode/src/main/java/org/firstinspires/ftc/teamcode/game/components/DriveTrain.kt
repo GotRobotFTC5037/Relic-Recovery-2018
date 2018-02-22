@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
 import org.firstinspires.ftc.teamcode.lib.powercontroller.ProportionalPowerController
 import org.firstinspires.ftc.teamcode.lib.robot.drivetrain.Heading
 import org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain
+import kotlin.math.abs
 
 class CodaDriveTrain(linearOpMode: LinearOpMode) : MecanumDriveTrain(linearOpMode) {
 
@@ -88,7 +89,13 @@ class CodaDriveTrain(linearOpMode: LinearOpMode) : MecanumDriveTrain(linearOpMod
 
     override fun headingCorrectedDrivePowers(baseDrivePowers: DrivePowers): DrivePowers {
         val drivePowers = DrivePowers()
-        val headingCorrection = headingController.outputPower
+
+        val headingCorrection = if (abs(headingDifferenceFromTarget(targetHeading)) >= 1.5) {
+            headingController.outputPower
+        } else {
+            0.0
+        }
+
         drivePowers.frontLeft = baseDrivePowers.frontLeft - headingCorrection
         drivePowers.frontRight = baseDrivePowers.frontRight + headingCorrection
         drivePowers.rearLeft = baseDrivePowers.rearLeft - headingCorrection
