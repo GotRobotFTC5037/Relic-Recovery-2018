@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.lib.robot.drivetrain
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.util.ElapsedTime
+import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.teamcode.lib.powercontroller.PowerController
 import kotlin.concurrent.thread
 import kotlin.math.max
@@ -21,6 +22,7 @@ abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : Driv
     var shouldCorrectHeading = true
     private var isActivelyTurning = false
     abstract val currentHeading: Heading
+    open val minimumDrivePower: Double = 0.0
 
     private val drivePowers: DrivePowers = DrivePowers()
 
@@ -219,6 +221,14 @@ abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : Driv
         isActivelyTurning = false
     }
 
+    private fun clipToMinimumAmplitude(power: Double): Double {
+        return when {
+            power > 0 -> Range.clip(power, minimumDrivePower, 1.0)
+            power < 0 -> Range.clip(power, -1.0, -minimumDrivePower)
+            else -> 0.0
+        }
+    }
+
     /**
      * Starts a thread that continually updates the powers of the drive motors.
      */
@@ -231,10 +241,10 @@ abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : Driv
                     this.drivePowers
                 }
 
-                frontLeftMotor.power = drivePowers.frontLeft
-                frontRightMotor.power = drivePowers.frontRight
-                rearLeftMotor.power = drivePowers.rearLeft
-                rearRightMotor.power = drivePowers.rearRight
+                frontLeftMotor.power = clipToMinimumAmplitude(drivePowers.frontLeft)
+                frontRightMotor.power = clipToMinimumAmplitude(drivePowers.frontRight)
+                rearLeftMotor.power = clipToMinimumAmplitude(drivePowers.rearLeft)
+                rearRightMotor.power = clipToMinimumAmplitude(drivePowers.rearRight)
             }
         }
     }
