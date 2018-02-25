@@ -83,7 +83,7 @@ private class CodaRelicRecoveryAutonomousActions(
                 when (allianceColor) {
                     AllianceColor.RED ->
                         when (detectedPictograph) {
-                            RelicRecoveryVuMark.LEFT -> RelicRecoveryConstants.TRAILING_FRONT_CRYPTO_BOX_DISTANCE
+                            RelicRecoveryVuMark.LEFT -> RelicRecoveryConstants.TRAILING_SIDE_CRYPTO_BOX_DISTANCE
                             RelicRecoveryVuMark.CENTER -> RelicRecoveryConstants.CENTER_SIDE_CRYPTO_BOX_DISTANCE
                             RelicRecoveryVuMark.RIGHT -> RelicRecoveryConstants.LEADING_SIDE_CRYPTO_BOX_DISTANCE
                             RelicRecoveryVuMark.UNKNOWN -> RelicRecoveryConstants.LEADING_SIDE_CRYPTO_BOX_DISTANCE

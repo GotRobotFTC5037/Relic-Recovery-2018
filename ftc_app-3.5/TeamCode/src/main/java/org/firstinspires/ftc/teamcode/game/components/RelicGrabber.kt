@@ -18,7 +18,7 @@ class CodaRelicGrabber(linearOpMode: LinearOpMode) : RobotAttachment(linearOpMod
 
     private val armServo by lazy {
         val servo = hardwareMap.servo.get("relic arm")
-        servo.direction = Servo.Direction.FORWARD
+        servo.direction = Servo.Direction.REVERSE
         servo
     }
 
@@ -52,8 +52,8 @@ class CodaRelicGrabber(linearOpMode: LinearOpMode) : RobotAttachment(linearOpMod
 
         controller.stopUpdatingOutput()
     }
-
-    enum class ArmPosition(val position: Double) { IN(0.0), DOWN(0.7) }
+  
+    enum class ArmPosition(val position: Double) { IN(0.0), DOWN(1.0) }
 
     fun setArmPosition(position: ArmPosition) {
         armServo.position = position.position
