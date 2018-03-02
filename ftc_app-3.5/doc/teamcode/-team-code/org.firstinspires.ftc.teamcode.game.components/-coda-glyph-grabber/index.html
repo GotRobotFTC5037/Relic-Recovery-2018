@@ -1,0 +1,144 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>CodaGlyphGrabber - TeamCode</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">TeamCode</a>&nbsp;/&nbsp;<a href="../index.html">org.firstinspires.ftc.teamcode.game.components</a>&nbsp;/&nbsp;<a href="./index.html">CodaGlyphGrabber</a><br/>
+<br/>
+<h1>CodaGlyphGrabber</h1>
+<code><span class="keyword">class </span><span class="identifier">CodaGlyphGrabber</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.firstinspires.ftc.teamcode.lib.robot.attachment/-robot-attachment/index.html"><span class="identifier">RobotAttachment</span></a></code>
+<p>The grabbers on the Coda used to grab, identify and deploy glyphs.</p>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-glyph-arm-position/index.html">GlyphArmPosition</a></p>
+</td>
+<td>
+<code><span class="keyword">enum</span> <span class="keyword">class </span><span class="identifier">GlyphArmPosition</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="-glyph-deployer-position/index.html">GlyphDeployerPosition</a></p>
+</td>
+<td>
+<code><span class="keyword">enum</span> <span class="keyword">class </span><span class="identifier">GlyphDeployerPosition</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="-glyph-grabber-state/index.html">GlyphGrabberState</a></p>
+</td>
+<td>
+<code><span class="keyword">enum</span> <span class="keyword">class </span><span class="identifier">GlyphGrabberState</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="-grabbed-glyphs/index.html">GrabbedGlyphs</a></p>
+</td>
+<td>
+<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">GrabbedGlyphs</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">CodaGlyphGrabber</span><span class="symbol">(</span><span class="identifier" id="org.firstinspires.ftc.teamcode.game.components.CodaGlyphGrabber$<init>(com.qualcomm.robotcore.eventloop.opmode.LinearOpMode)/linearOpMode">linearOpMode</span><span class="symbol">:</span>&nbsp;<span class="identifier">LinearOpMode</span><span class="symbol">)</span></code>
+<p>The grabbers on the Coda used to grab, identify and deploy glyphs.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="bottom-left-glyph-grabber.html">bottomLeftGlyphGrabber</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">bottomLeftGlyphGrabber</span><span class="symbol">: </span><span class="identifier">Servo</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="bottom-right-glyph-grabber.html">bottomRightGlyphGrabber</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">bottomRightGlyphGrabber</span><span class="symbol">: </span><span class="identifier">Servo</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="current-state.html">currentState</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">currentState</span><span class="symbol">: </span><a href="-glyph-grabber-state/index.html"><span class="identifier">GlyphGrabberState</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="grabbed-glyphs.html">grabbedGlyphs</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">grabbedGlyphs</span><span class="symbol">: </span><a href="-grabbed-glyphs/index.html"><span class="identifier">GrabbedGlyphs</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="top-left-glyph-grabber.html">topLeftGlyphGrabber</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">topLeftGlyphGrabber</span><span class="symbol">: </span><span class="identifier">Servo</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="top-right-glyph-grabber.html">topRightGlyphGrabber</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">topRightGlyphGrabber</span><span class="symbol">: </span><span class="identifier">Servo</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inherited Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../../org.firstinspires.ftc.teamcode.lib.robot.attachment/-robot-attachment/linear-op-mode.html">linearOpMode</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">val </span><span class="identifier">linearOpMode</span><span class="symbol">: </span><span class="identifier">LinearOpMode</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="set-state.html">setState</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setState</span><span class="symbol">(</span><span class="identifier" id="org.firstinspires.ftc.teamcode.game.components.CodaGlyphGrabber$setState(org.firstinspires.ftc.teamcode.game.components.CodaGlyphGrabber.GlyphGrabberState, kotlin.Long)/state">state</span><span class="symbol">:</span>&nbsp;<a href="-glyph-grabber-state/index.html"><span class="identifier">GlyphGrabberState</span></a><span class="symbol">, </span><span class="identifier" id="org.firstinspires.ftc.teamcode.game.components.CodaGlyphGrabber$setState(org.firstinspires.ftc.teamcode.game.components.CodaGlyphGrabber.GlyphGrabberState, kotlin.Long)/delay">delay</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a>&nbsp;<span class="symbol">=</span>&nbsp;0<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-b-o-t-t-o-m_-g-r-a-b-b-e-r_-c-l-o-s-e-d_-p-o-s-i-t-i-o-n.html">BOTTOM_GRABBER_CLOSED_POSITION</a></p>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">BOTTOM_GRABBER_CLOSED_POSITION</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html"><span class="identifier">Double</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

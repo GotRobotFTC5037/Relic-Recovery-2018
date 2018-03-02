@@ -8,22 +8,41 @@
 // please think carefully as to whether such customizations are really necessary
 // before doing so.
 
-
 // Custom definitions may go here
 
 // Include common definitions from above.
+
 apply from: '../build.common.gradle'
 apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.dokka-android'
+
 repositories {
     mavenCentral()
 }
+
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compile project(':openCVLibrary320')
     compile project(':endercv')
 }
+
 kotlin {
     experimental {
         coroutines "enable"
     }
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:${dokka_version}"
+    }
+}
+
+dokka {
+    outputFormat = 'html'
+    outputDirectory = "doc/teamcode"
 }

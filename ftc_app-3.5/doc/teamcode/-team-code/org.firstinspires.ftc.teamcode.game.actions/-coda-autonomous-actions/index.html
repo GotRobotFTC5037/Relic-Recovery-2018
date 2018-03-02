@@ -1,0 +1,148 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>CodaAutonomousActions - TeamCode</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">TeamCode</a>&nbsp;/&nbsp;<a href="../index.html">org.firstinspires.ftc.teamcode.game.actions</a>&nbsp;/&nbsp;<a href="./index.html">CodaAutonomousActions</a><br/>
+<br/>
+<h1>CodaAutonomousActions</h1>
+<code><span class="keyword">class </span><span class="identifier">CodaAutonomousActions</span></code>
+<p>The class used to run all action that are programed.</p>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-alliance-color/index.html">AllianceColor</a></p>
+</td>
+<td>
+<code><span class="keyword">enum</span> <span class="keyword">class </span><span class="identifier">AllianceColor</span></code>
+<p>An enum class for the current alliance color.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-crypto-box-position/index.html">CryptoBoxPosition</a></p>
+</td>
+<td>
+<code><span class="keyword">enum</span> <span class="keyword">class </span><span class="identifier">CryptoBoxPosition</span></code>
+<p>An enum class for the target crypto box position.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">CodaAutonomousActions</span><span class="symbol">(</span><span class="identifier" id="org.firstinspires.ftc.teamcode.game.actions.CodaAutonomousActions$<init>(com.qualcomm.robotcore.eventloop.opmode.LinearOpMode, org.firstinspires.ftc.teamcode.game.robots.Coda)/linearOpMode">linearOpMode</span><span class="symbol">:</span>&nbsp;<span class="identifier">LinearOpMode</span><span class="symbol">, </span><span class="identifier" id="org.firstinspires.ftc.teamcode.game.actions.CodaAutonomousActions$<init>(com.qualcomm.robotcore.eventloop.opmode.LinearOpMode, org.firstinspires.ftc.teamcode.game.robots.Coda)/robot">robot</span><span class="symbol">:</span>&nbsp;<a href="../../org.firstinspires.ftc.teamcode.game.robots/-coda/index.html"><span class="identifier">Coda</span></a>&nbsp;<span class="symbol">=</span>&nbsp;Coda(linearOpMode)<span class="symbol">)</span></code>
+<p>The class used to run all action that are programed.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="alliance-color.html">allianceColor</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">allianceColor</span><span class="symbol">: </span><a href="-alliance-color/index.html"><span class="identifier">AllianceColor</span></a></code>
+<p>The alliance color of the robot to be used to perform actions.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="crypto-box-heading.html">cryptoBoxHeading</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">cryptoBoxHeading</span><span class="symbol">: </span><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-heading.html"><span class="identifier">Heading</span></a></code>
+<p>The heading of the target crypto box while the robot is at the glyph pit.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="crypto-box-position.html">cryptoBoxPosition</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">cryptoBoxPosition</span><span class="symbol">: </span><a href="-crypto-box-position/index.html"><span class="identifier">CryptoBoxPosition</span></a></code>
+<p>The position of the target crypto box.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="glyph-pit-heading.html">glyphPitHeading</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">glyphPitHeading</span><span class="symbol">: </span><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-heading.html"><span class="identifier">Heading</span></a></code>
+<p>The heading of the glyph pit while the robot is at the crypto box.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="linear-op-mode.html">linearOpMode</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">linearOpMode</span><span class="symbol">: </span><span class="identifier">LinearOpMode</span></code>
+<p>The linear op mode that the robot is running on.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="robot.html">robot</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">robot</span><span class="symbol">: </span><a href="../../org.firstinspires.ftc.teamcode.game.robots/-coda/index.html"><span class="identifier">Coda</span></a></code>
+<p>The robot to be used to perform actions.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="perform-for-autonomous-op-mode.html">performForAutonomousOpMode</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">performForAutonomousOpMode</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Performs all of the actions done inside of our autonomous opmode.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-c-r-y-p-t-o_-b-o-x_-a-l-i-g-n-m-e-n-t_-p-i-d_-c-o-e-f-f-i-c-i-e-n-t-s.html">CRYPTO_BOX_ALIGNMENT_PID_COEFFICIENTS</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">CRYPTO_BOX_ALIGNMENT_PID_COEFFICIENTS</span><span class="symbol">: </span><span class="identifier">PIDCoefficients</span></code>
+<p>The power controller used to control the power the robot strafes at while delivering
+glyphs.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-t-u-r-n_-p-o-w-e-r_-c-o-n-t-r-o-l-l-e-r.html">TURN_POWER_CONTROLLER</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">TURN_POWER_CONTROLLER</span><span class="symbol">: </span><a href="../../org.firstinspires.ftc.teamcode.lib.powercontroller/-proportional-power-controller/index.html"><span class="identifier">ProportionalPowerController</span></a></code>
+<p>The power controller used to control the power the robot drives at while it is turning.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

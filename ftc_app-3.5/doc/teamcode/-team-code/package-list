@@ -1,0 +1,18 @@
+$dokka.format:html
+$dokka.linkExtension:html
+$dokka.location:org.firstinspires.ftc.teamcode.game.robots$onStart(com.qualcomm.robotcore.eventloop.opmode.LinearOpMode, kotlin.Function0((kotlin.Unit)))org.firstinspires.ftc.teamcode.game.robots/com.qualcomm.robotcore.eventloop.opmode.-linear-op-mode/on-start.html
+org.firstinspires.ftc.teamcode.game
+org.firstinspires.ftc.teamcode.game.actions
+org.firstinspires.ftc.teamcode.game.components
+org.firstinspires.ftc.teamcode.game.elements
+org.firstinspires.ftc.teamcode.game.opmodes
+org.firstinspires.ftc.teamcode.game.robots
+org.firstinspires.ftc.teamcode.game.vision
+org.firstinspires.ftc.teamcode.lib.powercontroller
+org.firstinspires.ftc.teamcode.lib.powerultil
+org.firstinspires.ftc.teamcode.lib.robot
+org.firstinspires.ftc.teamcode.lib.robot.attachment
+org.firstinspires.ftc.teamcode.lib.robot.drivetrain
+org.firstinspires.ftc.teamcode.lib.robot.lift
+org.firstinspires.ftc.teamcode.lib.robot.sensor
+org.firstinspires.ftc.teamcode.lib.vision

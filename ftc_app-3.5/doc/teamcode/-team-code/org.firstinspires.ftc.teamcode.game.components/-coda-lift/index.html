@@ -1,0 +1,124 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>CodaLift - TeamCode</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">TeamCode</a>&nbsp;/&nbsp;<a href="../index.html">org.firstinspires.ftc.teamcode.game.components</a>&nbsp;/&nbsp;<a href="./index.html">CodaLift</a><br/>
+<br/>
+<h1>CodaLift</h1>
+<code><span class="keyword">class </span><span class="identifier">CodaLift</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.firstinspires.ftc.teamcode.lib.robot.lift/-lift/index.html"><span class="identifier">Lift</span></a></code>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-lift-position/index.html">LiftPosition</a></p>
+</td>
+<td>
+<code><span class="keyword">enum</span> <span class="keyword">class </span><span class="identifier">LiftPosition</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">CodaLift</span><span class="symbol">(</span><span class="identifier" id="org.firstinspires.ftc.teamcode.game.components.CodaLift$<init>(com.qualcomm.robotcore.eventloop.opmode.LinearOpMode)/linearOpMode">linearOpMode</span><span class="symbol">:</span>&nbsp;<span class="identifier">LinearOpMode</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="linear-op-mode.html">linearOpMode</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">linearOpMode</span><span class="symbol">: </span><span class="identifier">LinearOpMode</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="motor.html">motor</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">motor</span><span class="symbol">: </span><span class="identifier">DcMotor</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="position.html">position</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">position</span><span class="symbol">: </span><a href="-lift-position/index.html"><span class="identifier">LiftPosition</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="should-hold-lift-position.html">shouldHoldLiftPosition</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">shouldHoldLiftPosition</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="drop.html">drop</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">drop</span><span class="symbol">(</span><span class="identifier" id="org.firstinspires.ftc.teamcode.game.components.CodaLift$drop(kotlin.Long)/timeout">timeout</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a>&nbsp;<span class="symbol">=</span>&nbsp;2500L<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="elevate.html">elevate</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">elevate</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="lower.html">lower</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">lower</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="move-to-row.html">moveToRow</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">moveToRow</span><span class="symbol">(</span><span class="identifier" id="org.firstinspires.ftc.teamcode.game.components.CodaLift$moveToRow(org.firstinspires.ftc.teamcode.game.elements.CryptoBox.RowPosition)/row">row</span><span class="symbol">:</span>&nbsp;<a href="../../org.firstinspires.ftc.teamcode.game.elements/-crypto-box/-row-position/index.html"><span class="identifier">RowPosition</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="reset-encoder.html">resetEncoder</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">resetEncoder</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="set-power.html">setPower</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setPower</span><span class="symbol">(</span><span class="identifier" id="org.firstinspires.ftc.teamcode.game.components.CodaLift$setPower(kotlin.Double)/power">power</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html"><span class="identifier">Double</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="start-setting-motor-powers.html">startSettingMotorPowers</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">startSettingMotorPowers</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

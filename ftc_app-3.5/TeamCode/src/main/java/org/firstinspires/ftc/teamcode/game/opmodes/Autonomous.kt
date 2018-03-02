@@ -20,8 +20,7 @@ class BlueFront : LinearOpMode() {
                 cryptoBoxPosition = CodaAutonomousActions.CryptoBoxPosition.FRONT
                 cryptoBoxHeading = CRYPTO_BOX_HEADING
                 glyphPitHeading = GLYPH_PIT_HEADING
-            }
-            .performForAutonomousOpMode()
+            }.performForAutonomousOpMode()
     }
 
     companion object {
@@ -46,8 +45,7 @@ class RedFront : LinearOpMode() {
                 cryptoBoxPosition = CodaAutonomousActions.CryptoBoxPosition.FRONT
                 cryptoBoxHeading = CRYPTO_BOX_HEADING
                 glyphPitHeading = GLYPH_PIT_HEADING
-            }
-            .performForAutonomousOpMode()
+            }.performForAutonomousOpMode()
     }
 
     companion object {
@@ -72,8 +70,7 @@ class BlueRear : LinearOpMode() {
                 cryptoBoxPosition = CodaAutonomousActions.CryptoBoxPosition.SIDE
                 cryptoBoxHeading = CRYPTO_BOX_HEADING
                 glyphPitHeading = GLYPH_PIT_HEADING
-            }
-            .performForAutonomousOpMode()
+            }.performForAutonomousOpMode()
     }
 
     companion object {
@@ -98,8 +95,7 @@ class RedRear : LinearOpMode() {
                 cryptoBoxPosition = CodaAutonomousActions.CryptoBoxPosition.SIDE
                 cryptoBoxHeading = CRYPTO_BOX_HEADING
                 glyphPitHeading = GLYPH_PIT_HEADING
-            }
-            .performForAutonomousOpMode()
+            }.performForAutonomousOpMode()
     }
 
     companion object {

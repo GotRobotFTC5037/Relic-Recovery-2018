@@ -1,0 +1,106 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>CryptoBox - TeamCode</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">TeamCode</a>&nbsp;/&nbsp;<a href="../index.html">org.firstinspires.ftc.teamcode.game.elements</a>&nbsp;/&nbsp;<a href="./index.html">CryptoBox</a><br/>
+<br/>
+<h1>CryptoBox</h1>
+<code><span class="keyword">class </span><span class="identifier">CryptoBox</span></code>
+<p>Used to keep track of the glyphs that are in a crypto box, primarily in autonomous.</p>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-column/index.html">Column</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">Column</span></code>
+<p>A collection of glyphs stacked into a column.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-column-position/index.html">ColumnPosition</a></p>
+</td>
+<td>
+<code><span class="keyword">enum</span> <span class="keyword">class </span><span class="identifier">ColumnPosition</span></code>
+<p>A column position within the crypto box.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-position/index.html">Position</a></p>
+</td>
+<td>
+<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">Position</span></code>
+<p>A position within a crypto box.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-row-position/index.html">RowPosition</a></p>
+</td>
+<td>
+<code><span class="keyword">enum</span> <span class="keyword">class </span><span class="identifier">RowPosition</span></code>
+<p>A row position within a crypto box.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">CryptoBox</span><span class="symbol">(</span><span class="symbol">)</span></code>
+<p>Used to keep track of the glyphs that are in a crypto box, primarily in autonomous.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="is-full.html">isFull</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">isFull</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
+<p>The current fill state of the crypto box.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="add-glyph-to-column.html">addGlyphToColumn</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">addGlyphToColumn</span><span class="symbol">(</span><span class="identifier" id="org.firstinspires.ftc.teamcode.game.elements.CryptoBox$addGlyphToColumn(org.firstinspires.ftc.teamcode.game.elements.Glyph, org.firstinspires.ftc.teamcode.game.elements.CryptoBox.ColumnPosition)/glyph">glyph</span><span class="symbol">:</span>&nbsp;<a href="../-glyph/index.html"><span class="identifier">Glyph</span></a><span class="symbol">, </span><span class="identifier" id="org.firstinspires.ftc.teamcode.game.elements.CryptoBox$addGlyphToColumn(org.firstinspires.ftc.teamcode.game.elements.Glyph, org.firstinspires.ftc.teamcode.game.elements.CryptoBox.ColumnPosition)/column">column</span><span class="symbol">:</span>&nbsp;<a href="-column-position/index.html"><span class="identifier">ColumnPosition</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Adds a <a href="add-glyph-to-column.html#org.firstinspires.ftc.teamcode.game.elements.CryptoBox$addGlyphToColumn(org.firstinspires.ftc.teamcode.game.elements.Glyph, org.firstinspires.ftc.teamcode.game.elements.CryptoBox.ColumnPosition)/glyph">glyph</a> to the selected <a href="add-glyph-to-column.html#org.firstinspires.ftc.teamcode.game.elements.CryptoBox$addGlyphToColumn(org.firstinspires.ftc.teamcode.game.elements.Glyph, org.firstinspires.ftc.teamcode.game.elements.CryptoBox.ColumnPosition)/column">column</a>.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="position-for-glyphs.html">positionForGlyphs</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">positionForGlyphs</span><span class="symbol">(</span><span class="identifier" id="org.firstinspires.ftc.teamcode.game.elements.CryptoBox$positionForGlyphs(org.firstinspires.ftc.teamcode.game.components.CodaGlyphGrabber.GrabbedGlyphs)/glyphs">glyphs</span><span class="symbol">:</span>&nbsp;<a href="../../org.firstinspires.ftc.teamcode.game.components/-coda-glyph-grabber/-grabbed-glyphs/index.html"><span class="identifier">GrabbedGlyphs</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-position/index.html"><span class="identifier">Position</span></a><span class="symbol">?</span></code>
+<p>Returns the best place to put the <a href="position-for-glyphs.html#org.firstinspires.ftc.teamcode.game.elements.CryptoBox$positionForGlyphs(org.firstinspires.ftc.teamcode.game.components.CodaGlyphGrabber.GrabbedGlyphs)/glyphs">glyphs</a>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

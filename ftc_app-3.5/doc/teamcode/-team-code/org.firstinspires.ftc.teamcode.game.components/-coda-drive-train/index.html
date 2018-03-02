@@ -1,0 +1,271 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>CodaDriveTrain - TeamCode</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">TeamCode</a>&nbsp;/&nbsp;<a href="../index.html">org.firstinspires.ftc.teamcode.game.components</a>&nbsp;/&nbsp;<a href="./index.html">CodaDriveTrain</a><br/>
+<br/>
+<h1>CodaDriveTrain</h1>
+<code><span class="keyword">class </span><span class="identifier">CodaDriveTrain</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/index.html"><span class="identifier">MecanumDriveTrain</span></a></code>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">CodaDriveTrain</span><span class="symbol">(</span><span class="identifier" id="org.firstinspires.ftc.teamcode.game.components.CodaDriveTrain$<init>(com.qualcomm.robotcore.eventloop.opmode.LinearOpMode)/linearOpMode">linearOpMode</span><span class="symbol">:</span>&nbsp;<span class="identifier">LinearOpMode</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="current-heading.html">currentHeading</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">currentHeading</span><span class="symbol">: </span><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-heading.html"><span class="identifier">Heading</span></a></code>
+<p>The current heading of the robot.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="current-pitch.html">currentPitch</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">currentPitch</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html"><span class="identifier">Double</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="front-left-motor.html">frontLeftMotor</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">frontLeftMotor</span><span class="symbol">: </span><span class="identifier">DcMotor</span></code>
+<p>The motor connected to the front left wheel.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="front-right-motor.html">frontRightMotor</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">frontRightMotor</span><span class="symbol">: </span><span class="identifier">DcMotor</span></code>
+<p>The motor connected to the front right wheel.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="minimum-drive-power.html">minimumDrivePower</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">minimumDrivePower</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html"><span class="identifier">Double</span></a></code>
+<p>The minimum drive power of the drive train.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="rear-left-motor.html">rearLeftMotor</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">rearLeftMotor</span><span class="symbol">: </span><span class="identifier">DcMotor</span></code>
+<p>The motor connected to the rear left wheel.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="rear-right-motor.html">rearRightMotor</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">rearRightMotor</span><span class="symbol">: </span><span class="identifier">DcMotor</span></code>
+<p>The motor connected to the rear right wheel.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Inherited Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/linear-op-mode.html">linearOpMode</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">val </span><span class="identifier">linearOpMode</span><span class="symbol">: </span><span class="identifier">LinearOpMode</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/should-correct-heading.html">shouldCorrectHeading</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">shouldCorrectHeading</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
+<p>Tells the drive train if it should correct it's heading or not. Helpful if the robot is
+being manually driven.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/target-heading.html">targetHeading</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">var </span><span class="identifier">targetHeading</span><span class="symbol">: </span><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-heading.html"><span class="identifier">Heading</span></a></code>
+<p>The target heading of the robot. Primarily used in heading correction.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="heading-corrected-drive-powers.html">headingCorrectedDrivePowers</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">headingCorrectedDrivePowers</span><span class="symbol">(</span><span class="identifier" id="org.firstinspires.ftc.teamcode.game.components.CodaDriveTrain$headingCorrectedDrivePowers(org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain.DrivePowers)/baseDrivePowers">baseDrivePowers</span><span class="symbol">:</span>&nbsp;<a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/-drive-powers/index.html"><span class="identifier">DrivePowers</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/-drive-powers/index.html"><span class="identifier">DrivePowers</span></a></code>
+<p>Returns the drive powers after correction.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="wait-for-gyro-calibration.html">waitForGyroCalibration</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">waitForGyroCalibration</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inherited Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/current-linear-encoder-position.html">currentLinearEncoderPosition</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">currentLinearEncoderPosition</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/heading-difference-from-target.html">headingDifferenceFromTarget</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">headingDifferenceFromTarget</span><span class="symbol">(</span><span class="identifier" id="org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain$headingDifferenceFromTarget(kotlin.Double)/target">target</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html"><span class="identifier">Double</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html"><span class="identifier">Double</span></a></code>
+<p>Returns the shortest heading difference from a specified angle.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/linear-drive-at-power.html">linearDriveAtPower</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">linearDriveAtPower</span><span class="symbol">(</span><span class="identifier" id="org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain$linearDriveAtPower(kotlin.Double)/power">power</span><span class="symbol">:</span>&nbsp;<a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-motor-power.html"><span class="identifier">MotorPower</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Linearly drives the drive train by using the provided power.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/linear-encoder-drive.html">linearEncoderDrive</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">linearEncoderDrive</span><span class="symbol">(</span><span class="identifier" id="org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain$linearEncoderDrive(kotlin.Int, org.firstinspires.ftc.teamcode.lib.powercontroller.PowerController)/encoderValue">encoderValue</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain$linearEncoderDrive(kotlin.Int, org.firstinspires.ftc.teamcode.lib.powercontroller.PowerController)/controller">controller</span><span class="symbol">:</span>&nbsp;<a href="../../org.firstinspires.ftc.teamcode.lib.powercontroller/-power-controller/index.html"><span class="identifier">PowerController</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Drives linearly until the specified encoder position as be reached.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/linear-stall-detection-drive.html">linearStallDetectionDrive</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">linearStallDetectionDrive</span><span class="symbol">(</span><span class="identifier" id="org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain$linearStallDetectionDrive(kotlin.Int, kotlin.Double, kotlin.Long)/speedThreshold">speedThreshold</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain$linearStallDetectionDrive(kotlin.Int, kotlin.Double, kotlin.Long)/power">power</span><span class="symbol">:</span>&nbsp;<a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-motor-power.html"><span class="identifier">MotorPower</span></a><span class="symbol">, </span><span class="identifier" id="org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain$linearStallDetectionDrive(kotlin.Int, kotlin.Double, kotlin.Long)/timeout">timeout</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Drives linearly until the robot detect stalling of the motors via a speed threshold or a
+specified amount of time elapses.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/linear-time-drive.html">linearTimeDrive</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><s><span class="identifier">linearTimeDrive</span></s><span class="symbol">(</span><span class="identifier" id="org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain$linearTimeDrive(kotlin.Long, org.firstinspires.ftc.teamcode.lib.powercontroller.PowerController, org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain.DriveDirection)/duration">duration</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a><span class="symbol">, </span><span class="identifier" id="org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain$linearTimeDrive(kotlin.Long, org.firstinspires.ftc.teamcode.lib.powercontroller.PowerController, org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain.DriveDirection)/controller">controller</span><span class="symbol">:</span>&nbsp;<a href="../../org.firstinspires.ftc.teamcode.lib.powercontroller/-power-controller/index.html"><span class="identifier">PowerController</span></a><span class="symbol">, </span><span class="identifier" id="org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain$linearTimeDrive(kotlin.Long, org.firstinspires.ftc.teamcode.lib.powercontroller.PowerController, org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain.DriveDirection)/direction">direction</span><span class="symbol">:</span>&nbsp;<a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/-drive-direction/index.html"><span class="identifier">DriveDirection</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Linearly drives for the provided duration.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/reset-encoders.html">resetEncoders</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">resetEncoders</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/set-movement-powers.html">setMovementPowers</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setMovementPowers</span><span class="symbol">(</span><span class="identifier" id="org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain$setMovementPowers(kotlin.Double, kotlin.Double, kotlin.Double)/linearPower">linearPower</span><span class="symbol">:</span>&nbsp;<a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-motor-power.html"><span class="identifier">MotorPower</span></a><span class="symbol">, </span><span class="identifier" id="org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain$setMovementPowers(kotlin.Double, kotlin.Double, kotlin.Double)/strafePower">strafePower</span><span class="symbol">:</span>&nbsp;<a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-motor-power.html"><span class="identifier">MotorPower</span></a><span class="symbol">, </span><span class="identifier" id="org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain$setMovementPowers(kotlin.Double, kotlin.Double, kotlin.Double)/turnPower">turnPower</span><span class="symbol">:</span>&nbsp;<a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-motor-power.html"><span class="identifier">MotorPower</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Moves the drive train by using the provided powers for each action.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/start-updating-drive-powers.html">startUpdatingDrivePowers</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">startUpdatingDrivePowers</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Starts a thread that continually updates the powers of the drive motors.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/stop.html">stop</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">stop</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Stops all of the drive motors</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/strafe-drive-at-power.html">strafeDriveAtPower</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">strafeDriveAtPower</span><span class="symbol">(</span><span class="identifier" id="org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain$strafeDriveAtPower(kotlin.Double)/power">power</span><span class="symbol">:</span>&nbsp;<a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-motor-power.html"><span class="identifier">MotorPower</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Strafes the drive train by using the provided power.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/strafing-time-drive.html">strafingTimeDrive</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><s><span class="identifier">strafingTimeDrive</span></s><span class="symbol">(</span><span class="identifier" id="org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain$strafingTimeDrive(kotlin.Long, org.firstinspires.ftc.teamcode.lib.powercontroller.PowerController, org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain.StrafeDirection)/duration">duration</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a><span class="symbol">, </span><span class="identifier" id="org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain$strafingTimeDrive(kotlin.Long, org.firstinspires.ftc.teamcode.lib.powercontroller.PowerController, org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain.StrafeDirection)/controller">controller</span><span class="symbol">:</span>&nbsp;<a href="../../org.firstinspires.ftc.teamcode.lib.powercontroller/-power-controller/index.html"><span class="identifier">PowerController</span></a><span class="symbol">, </span><span class="identifier" id="org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain$strafingTimeDrive(kotlin.Long, org.firstinspires.ftc.teamcode.lib.powercontroller.PowerController, org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain.StrafeDirection)/direction">direction</span><span class="symbol">:</span>&nbsp;<a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/-strafe-direction/index.html"><span class="identifier">StrafeDirection</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Drive for the privided duration strafing.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/turn-at-power.html">turnAtPower</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">turnAtPower</span><span class="symbol">(</span><span class="identifier" id="org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain$turnAtPower(kotlin.Double)/power">power</span><span class="symbol">:</span>&nbsp;<a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-motor-power.html"><span class="identifier">MotorPower</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Turns the drive train by using the provided power.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-mecanum-drive-train/turn-to-heading.html">turnToHeading</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">turnToHeading</span><span class="symbol">(</span><span class="identifier" id="org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain$turnToHeading(kotlin.Double, org.firstinspires.ftc.teamcode.lib.powercontroller.PowerController)/targetHeading">targetHeading</span><span class="symbol">:</span>&nbsp;<a href="../../org.firstinspires.ftc.teamcode.lib.robot.drivetrain/-heading.html"><span class="identifier">Heading</span></a><span class="symbol">, </span><span class="identifier" id="org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain$turnToHeading(kotlin.Double, org.firstinspires.ftc.teamcode.lib.powercontroller.PowerController)/controller">controller</span><span class="symbol">:</span>&nbsp;<a href="../../org.firstinspires.ftc.teamcode.lib.powercontroller/-power-controller/index.html"><span class="identifier">PowerController</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Turns the drive train to the specified heading.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>
