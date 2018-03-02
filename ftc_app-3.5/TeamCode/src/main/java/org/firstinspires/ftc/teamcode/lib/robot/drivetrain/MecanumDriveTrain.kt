@@ -11,18 +11,61 @@ import kotlin.math.max
 typealias Heading = Double
 typealias MotorPower = Double
 
-abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : DriveTrain {
+/**
+ * A drive train that is a collection of 4 motors with wheels that have rollers on that that are
+ * tilted at a 45 degree angle.
+ */
+abstract class MecanumDriveTrain(
 
+    /**
+     *
+     */
+    override val linearOpMode: LinearOpMode
+
+) : DriveTrain {
+
+    /**
+     * The motor connected to the front left wheel.
+     */
     abstract val frontLeftMotor: DcMotor
+
+    /**
+     * The motor connected to the front right wheel.
+     */
     abstract val frontRightMotor: DcMotor
+
+    /**
+     * The motor connected to the rear left wheel.
+     */
     abstract val rearLeftMotor: DcMotor
+
+    /**
+     * The motor connected to the rear right wheel.
+     */
     abstract val rearRightMotor: DcMotor
 
-    open var targetHeading: Heading = 0.0
-    var shouldCorrectHeading = true
-    private var isActivelyTurning = false
+    /**
+     * The current heading of the robot.
+     */
     abstract val currentHeading: Heading
+
+    /**
+     * The target heading of the robot. Primarily used in heading correction.
+     */
+    open var targetHeading: Heading = 0.0
+
+    /**
+     * The minimum drive power of the drive train.
+     */
     open val minimumDrivePower: Double = 0.0
+
+    /**
+     * Tells the drive train if it should correct it's heading or not. Helpful if the robot is
+     * being manually driven.
+     */
+    var shouldCorrectHeading = true
+
+    private var isActivelyTurning = false
 
     private val drivePowers: DrivePowers = DrivePowers()
 
@@ -190,6 +233,35 @@ abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : Driv
     }
 
     /**
+     * Drives linearly until the robot detect stalling of the motors via a speed threshold or a
+     * specified amount of time elapses.
+     */
+    fun linearStallDetectionDrive(speedThreshold: Int, power: MotorPower, timeout: Long) {
+        resetEncoders()
+        linearDriveAtPower(power)
+
+        // Waits for the speed of the motors to reach its full capacity for this power.
+        linearOpMode.sleep(100)
+
+        val elapsedTime = ElapsedTime()
+        val deltaTime = ElapsedTime()
+        var lastPosition = 0
+
+        do {
+            linearOpMode.sleep(50)
+            val position = currentLinearEncoderPosition()
+            val deltaPosition = position - lastPosition
+            val speed = deltaPosition / (deltaTime.milliseconds() / 1000)
+            lastPosition = position
+            deltaTime.reset()
+        } while (
+            linearOpMode.isStopRequested.not() &&
+            elapsedTime.milliseconds() < timeout &&
+            speed > speedThreshold
+        )
+    }
+
+    /**
      * Turns the drive train to the specified heading.
      */
     fun turnToHeading(targetHeading: Heading, controller: PowerController) {
@@ -252,7 +324,7 @@ abstract class MecanumDriveTrain(override val linearOpMode: LinearOpMode) : Driv
     /**
      * Returns the shortest heading difference from a specified angle.
      */
-    protected fun headingDifferenceFromTarget(target: Double): Double {
+    fun headingDifferenceFromTarget(target: Double): Double {
         val currentHeading = currentHeading
         val headingDifference = target - currentHeading
         return when {

@@ -7,6 +7,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables
+import org.firstinspires.ftc.teamcode.game.elements.CryptoBox
 import org.firstinspires.ftc.teamcode.lib.vision.ClosableVuforiaLocalizer
 
 /**
@@ -58,7 +59,7 @@ class PictographIdentifier(private var linearOpMode: LinearOpMode) {
      * Waits until the pictograph is identified or it has been a specified number of seconds in an ElapsedTime.
      * @return The identified pictograph.
      */
-    fun waitForPictographIdentification(): RelicRecoveryVuMark {
+    fun waitForPictographIdentification(): CryptoBox.ColumnPosition? {
 
         if (!linearOpMode.isStopRequested) {
             linearOpMode.telemetry.log().add("Waiting for pictograph identification.")
@@ -72,15 +73,27 @@ class PictographIdentifier(private var linearOpMode: LinearOpMode) {
                 }
 
                 if (pictograph != RelicRecoveryVuMark.UNKNOWN) {
-                    when (pictograph) {
-                        RelicRecoveryVuMark.LEFT -> linearOpMode.telemetry.log().add("Left Pictograph identified.")
-                        RelicRecoveryVuMark.CENTER -> linearOpMode.telemetry.log().add("Center Pictograph identified")
-                        RelicRecoveryVuMark.RIGHT -> linearOpMode.telemetry.log().add("Right Pictograph identified.")
+                    return when (pictograph) {
+                        RelicRecoveryVuMark.LEFT -> {
+                            linearOpMode.telemetry.log().add("Left Pictograph identified.")
+                            CryptoBox.ColumnPosition.LEFT
+                        }
 
-                        else -> { /* This should never happen. */
+                        RelicRecoveryVuMark.CENTER -> {
+                            linearOpMode.telemetry.log().add("Center Pictograph identified")
+                            CryptoBox.ColumnPosition.CENTER
+                        }
+
+                        RelicRecoveryVuMark.RIGHT -> {
+                            linearOpMode.telemetry.log().add("Right Pictograph identified.")
+                            CryptoBox.ColumnPosition.RIGHT
+                        }
+
+                        else -> {
+                            // This should never happen.
+                            null
                         }
                     }
-                    return pictograph
                 }
 
                 linearOpMode.sleep(10)
@@ -89,7 +102,7 @@ class PictographIdentifier(private var linearOpMode: LinearOpMode) {
             linearOpMode.telemetry.log().add("Failed to identify the pictograph.")
         }
 
-        return RelicRecoveryVuMark.UNKNOWN
+        return null
     }
 
     companion object {

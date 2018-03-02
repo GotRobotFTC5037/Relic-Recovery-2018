@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.game.robots
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import org.firstinspires.ftc.teamcode.game.OpModeContinuity
 import org.firstinspires.ftc.teamcode.game.components.*
 import org.firstinspires.ftc.teamcode.lib.powercontroller.PowerController
+import org.firstinspires.ftc.teamcode.lib.powercontroller.ProportionalPowerController
 import org.firstinspires.ftc.teamcode.lib.powerultil.PowerAmplitudeMinimumClip
 import org.firstinspires.ftc.teamcode.lib.robot.Robot
 import org.firstinspires.ftc.teamcode.lib.robot.sensor.RangeSensor
@@ -37,49 +39,56 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
 
     private var startingPitch: Double = 0.0
 
+    var isSetup = false
+        private set
+
     /*
      * Adds the necessary components to the robot.
      */
     fun setup() {
-        addComponent(CodaDriveTrain(linearOpMode), DRIVE_TRAIN)
-        addComponent(CodaGlyphGrabber(linearOpMode), GLYPH_GRABBER)
-        addComponent(CodaLift(linearOpMode), LIFT)
-        addComponent(CodaRelicGrabber(linearOpMode), RELIC_GRABBER)
-        addComponent(CodaJewelDisplacementBar(linearOpMode), JEWEL_STICK)
-        addComponent(CodaBalancingStoneHolder(linearOpMode), BALANCING_STONE_HOLDER)
+        if (!isSetup) {
+            addComponent(CodaDriveTrain(linearOpMode), DRIVE_TRAIN)
+            addComponent(CodaGlyphGrabber(linearOpMode), GLYPH_GRABBER)
+            addComponent(CodaLift(linearOpMode), LIFT)
+            addComponent(CodaRelicGrabber(linearOpMode), RELIC_GRABBER)
+            addComponent(CodaJewelDisplacementBar(linearOpMode), JEWEL_STICK)
+            addComponent(CodaBalancingStoneHolder(linearOpMode), BALANCING_STONE_HOLDER)
 
-        addComponent(
-            RangeSensor(linearOpMode, "front left range sensor"),
-            FRONT_LEFT_RANGE_SENSOR
-        )
-        addComponent(
-            RangeSensor(linearOpMode, "front right range sensor"),
-            FRONT_RIGHT_RANGE_SENSOR
-        )
-        addComponent(
-            RangeSensor(linearOpMode, "left range sensor"),
-            LEFT_RANGE_SENSOR
-        )
-        addComponent(
-            RangeSensor(linearOpMode, "right range sensor"),
-            RIGHT_RANGE_SENSOR
-        )
-        addComponent(
-            RangeSensor(linearOpMode, "back range sensor"),
-            BACK_RANGE_SENSOR
-        )
+            addComponent(
+                RangeSensor(linearOpMode, "front left range sensor"),
+                FRONT_LEFT_RANGE_SENSOR
+            )
+            addComponent(
+                RangeSensor(linearOpMode, "front right range sensor"),
+                FRONT_RIGHT_RANGE_SENSOR
+            )
+            addComponent(
+                RangeSensor(linearOpMode, "left range sensor"),
+                LEFT_RANGE_SENSOR
+            )
+            addComponent(
+                RangeSensor(linearOpMode, "right range sensor"),
+                RIGHT_RANGE_SENSOR
+            )
+            addComponent(
+                RangeSensor(linearOpMode, "back range sensor"),
+                BACK_RANGE_SENSOR
+            )
 
-        driveTrain.waitForGyroCalibration()
-        startingPitch = driveTrain.currentPitch
+            driveTrain.waitForGyroCalibration()
+            startingPitch = driveTrain.currentPitch
 
-        glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.OPEN)
-        balancingStoneHolder.setState(CodaBalancingStoneHolder.BalancingStoneHolderState.UP)
+            glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.OPEN)
+            balancingStoneHolder.setState(CodaBalancingStoneHolder.BalancingStoneHolderState.UP)
 
-        linearOpMode.onStart {
-            driveTrain.startUpdatingDrivePowers()
-            lift.resetEncoder()
-            lift.startSettingMotorPowers()
+            linearOpMode.onStart {
+                driveTrain.startUpdatingDrivePowers()
+                lift.resetEncoder()
+                lift.startSettingMotorPowers()
+            }
         }
+
+        isSetup = true
     }
 
     enum class RangeSensorDirection {
@@ -192,7 +201,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
             driveTrain.stop()
 
             if (shouldCorrect) {
-                linearOpMode.sleep(500)
+                linearOpMode.sleep(100)
                 val distance = rangeSensor.distanceDetected
                 if (
                     distance > targetDistance + WALL_DISTANCE_TOLERANCE ||
@@ -276,6 +285,46 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
             controller.stopUpdatingOutput()
             driveTrain.stop()
         }
+    }
+
+    fun alignAndDeliverGlyph() {
+
+        when (OpModeContinuity.lastAllianceColor) {
+            OpModeContinuity.AllianceColor.BLUE -> {
+
+                val differenceFromFrontCryptoBox = abs(driveTrain.headingDifferenceFromTarget(0.0))
+                val differenceFromSideCryptoBox = abs(driveTrain.headingDifferenceFromTarget(-90.0))
+
+                if (differenceFromFrontCryptoBox < differenceFromSideCryptoBox) {
+                    driveTrain.turnToHeading(0.0, ProportionalPowerController(0.05))
+                } else if (differenceFromFrontCryptoBox > differenceFromSideCryptoBox) {
+                    driveTrain.turnToHeading(-90.0, ProportionalPowerController(0.05))
+                }
+
+            }
+
+            OpModeContinuity.AllianceColor.RED -> {
+
+                val differenceFromFrontCryptoBox = abs(driveTrain.headingDifferenceFromTarget(180.0))
+                val differenceFromSideCryptoBox = abs(driveTrain.headingDifferenceFromTarget(-90.0))
+
+                if (differenceFromFrontCryptoBox < differenceFromSideCryptoBox) {
+                    driveTrain.turnToHeading(180.0, ProportionalPowerController(0.05))
+                } else if (differenceFromFrontCryptoBox > differenceFromSideCryptoBox) {
+                    driveTrain.turnToHeading(-90.0, ProportionalPowerController(0.05))
+                }
+
+            }
+
+            OpModeContinuity.AllianceColor.UNDETERMINED -> {
+                TODO()
+            }
+
+            OpModeContinuity.AllianceColor.UNKNOWN -> {
+                TODO()
+            }
+        }
+
     }
 
     companion object {

@@ -20,7 +20,6 @@ class CodaTeleOp : LinearOpMode() {
     override fun runOpMode() {
         robot.setup()
         waitForStart()
-        robot.lift.startSettingMotorPowers()
 
         while (opModeIsActive()) {
             performDriverActions()
@@ -159,13 +158,46 @@ class CodaTeleOp : LinearOpMode() {
             robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.SMALL_OPEN)
         }
 
-        if (turnPower != 0.0) lastManualHeadingUpdate.reset()
-
-        if (lastManualHeadingUpdate.milliseconds() >= 750) {
+        if (turnPower != 0.0) {
+            lastManualHeadingUpdate.reset()
+            robot.driveTrain.shouldCorrectHeading = false
+        } else if (
+            lastManualHeadingUpdate.milliseconds() >= 750 &&
+            !robot.driveTrain.shouldCorrectHeading
+        ) {
             robot.driveTrain.targetHeading = robot.driveTrain.currentHeading
             robot.driveTrain.shouldCorrectHeading = true
-        } else {
-            robot.driveTrain.shouldCorrectHeading = false
+        }
+    }
+}
+
+
+@TeleOp(name = "Demo TeleOp")
+class DemoTeleOp : LinearOpMode() {
+
+    @Throws(InterruptedException::class)
+    override fun runOpMode() {
+
+        val robot = Coda(this).apply {
+            driveTrain.shouldCorrectHeading = false
+        }
+
+        robot.setup()
+        waitForStart()
+
+        with(robot) {
+            while(opModeIsActive()) {
+                val linearPower = -gamepad1.left_stick_y.toDouble() * 0.5
+                val strafePower = gamepad1.left_stick_x.toDouble() * 0.5
+                val turnPower = -gamepad1.right_stick_x.toDouble() * 0.4
+                driveTrain.setMovementPowers(linearPower, strafePower, turnPower)
+
+                when {
+                    gamepad1.a -> glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.CLOSED)
+                    gamepad1.b -> glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.RELEASE)
+                    gamepad1.x -> glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.SMALL_OPEN)
+                }
+            }
         }
     }
 }

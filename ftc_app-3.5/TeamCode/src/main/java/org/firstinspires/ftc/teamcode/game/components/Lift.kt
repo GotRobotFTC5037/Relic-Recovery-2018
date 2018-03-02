@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel
 import com.qualcomm.robotcore.hardware.PIDCoefficients
 import com.qualcomm.robotcore.util.ElapsedTime
 import com.qualcomm.robotcore.util.Range
+import org.firstinspires.ftc.teamcode.game.elements.CryptoBox
 import org.firstinspires.ftc.teamcode.lib.powercontroller.PIDPowerController
 import org.firstinspires.ftc.teamcode.lib.robot.lift.Lift
 import kotlin.concurrent.thread
@@ -53,6 +54,15 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
         }
     }
 
+    fun moveToRow(row: CryptoBox.RowPosition) {
+        position = when (row) {
+            CryptoBox.RowPosition.FIRST -> LiftPosition.BOTTOM
+            CryptoBox.RowPosition.SECOND -> LiftPosition.FIRST_LEVEL
+            CryptoBox.RowPosition.THIRD -> LiftPosition.SECOND_LEVEL
+            CryptoBox.RowPosition.FOURTH -> LiftPosition.THIRD_LEVEL
+        }
+    }
+
     enum class LiftPosition(var value: Int) {
         BOTTOM(0),
         FIRST_LEVEL(1750),
@@ -74,7 +84,7 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
         }
     }
 
-    fun drop(timeout: Long = 0L) {
+    fun drop(timeout: Long = 2500L) {
         position = LiftPosition.BOTTOM
         isBusy = true
         val elapsedTime = ElapsedTime()
@@ -105,14 +115,12 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
         private const val MINIMUM_POWER = -1.00
         private const val MAXIMUM_POWER = 1.00
 
-        private val PID_COEFFICIENTS = {
-            val coefficients = PIDCoefficients()
-            coefficients.p = 0.005
-            coefficients.i = 0.0005
-            coefficients.d = 0.0
-
-            coefficients
-        }()
+        private val PID_COEFFICIENTS =
+            PIDCoefficients().also {
+                it.p = 0.005
+                it.i = 0.0005
+                it.d = 0.0
+            }
     }
 
 }

@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl
  *
  * @author FTC Team 5037 gotrobot?
  */
-object OpModeManager : Thread() {
+object OpModeController : Thread() {
 
     private var currentOpMode: OpMode? = null
     private var queuedOpModeName: String? = null
@@ -28,7 +28,9 @@ object OpModeManager : Thread() {
             while (true) {
                 synchronized(this) {
                     if (currentOpMode != null) {
-                        val opModeManager = currentOpMode!!.internalOpModeServices as OpModeManagerImpl
+                        val opModeManager =
+                            currentOpMode!!.internalOpModeServices as OpModeManagerImpl
+
                         if (opModeManager.activeOpMode !== currentOpMode) {
                             Thread.sleep(500)
                             opModeManager.initActiveOpMode(queuedOpModeName!!)
@@ -40,7 +42,7 @@ object OpModeManager : Thread() {
                 Thread.sleep(100)
             }
         } catch (ex: InterruptedException) {
-            Log.e(FtcRobotControllerActivity.TAG, "OpModeManager shutdown, thread interrupted")
+            Log.e(FtcRobotControllerActivity.TAG, "OpModeController shutdown, thread interrupted")
         }
     }
 
