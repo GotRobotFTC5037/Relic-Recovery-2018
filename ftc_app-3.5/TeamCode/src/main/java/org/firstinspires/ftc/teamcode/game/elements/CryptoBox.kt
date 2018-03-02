@@ -16,12 +16,11 @@ class CryptoBox {
         columns[column.ordinal].addGlyph(glyph)
     }
 
-    fun positionForGlyphs(glyphs: CodaGlyphGrabber.GrabbedGlyphs): Position? {
-        val availableColumns = columns.withIndex().filter { it.value.isFull.not() }
-        return availableColumns.firstOrNull()?.let {
+    fun positionForGlyphs(glyphs: CodaGlyphGrabber.GrabbedGlyphs) =
+            // What the heck have I created!? Well, if it works, it works.
+        columns.withIndex().firstOrNull { it.value.isFull.not() }?.let {
             Position(ColumnPosition.values()[it.index], it.value.firstOpenRow!!)
         }
-    }
 
     enum class ColumnPosition {
         LEFT, CENTER, RIGHT
@@ -31,7 +30,7 @@ class CryptoBox {
         FIRST, SECOND, THIRD, FOURTH
     }
 
-    data class Position (
+    data class Position(
         val column: ColumnPosition,
         val row: RowPosition
     )
@@ -52,10 +51,7 @@ class CryptoBox {
             }
 
         fun addGlyph(glyph: Glyph) {
-            val row = firstOpenRow
-            row?.let {
-                glyphs[it.ordinal] = glyph
-            }
+            firstOpenRow?.let { glyphs[it.ordinal] = glyph }
         }
 
     }
