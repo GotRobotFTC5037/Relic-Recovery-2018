@@ -17,7 +17,8 @@ class CryptoBox {
     }
 
     fun positionForGlyphs(glyphs: CodaGlyphGrabber.GrabbedGlyphs) =
-            // What the heck have I created!? Well, if it works, it works.
+            // What the heck have I created!? Well, if it works, it works. I'm just going to say
+            // sorry right now to who ever is trying to understand what is going on here.
         columns.withIndex().firstOrNull { it.value.isFull.not() }?.let {
             Position(ColumnPosition.values()[it.index], it.value.firstOpenRow!!)
         }
@@ -43,11 +44,8 @@ class CryptoBox {
             get() = glyphs.all { (it == null).not() }
 
         val firstOpenRow: RowPosition?
-            get() {
-                for ((row, glyph) in glyphs.withIndex()) {
-                    return glyph?.let { RowPosition.values()[row] }
-                }
-                return null
+            get() = glyphs.withIndex().firstOrNull { it.value == null }?.let {
+                RowPosition.values()[it.index]
             }
 
         fun addGlyph(glyph: Glyph) {
