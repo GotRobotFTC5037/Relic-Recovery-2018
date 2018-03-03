@@ -5,9 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.game.OpModeContinuity
 import org.firstinspires.ftc.teamcode.game.actions.CodaAutonomousActions
 
-/**
- * The autonomous opmode that is run on the blue alliance with the front crypto box.
- */
+/** The autonomous opmode that is run on the blue alliance with the front crypto box. */
 @Autonomous(name = "Blue Front", group = "Gameplay")
 class BlueFront : LinearOpMode() {
 
@@ -30,9 +28,7 @@ class BlueFront : LinearOpMode() {
 
 }
 
-/**
- * The autonomous opmode that is run on the red alliance with the front crypto box.
- */
+/** The autonomous opmode that is run on the red alliance with the front crypto box. */
 @Autonomous(name = "Red Front", group = "Gameplay")
 class RedFront : LinearOpMode() {
 
@@ -55,9 +51,7 @@ class RedFront : LinearOpMode() {
 
 }
 
-/**
- * The autonomous opmode that is run on the blue alliance with the side crypto box.
- */
+/** The autonomous opmode that is run on the blue alliance with the side crypto box. */
 @Autonomous(name = "Blue Side", group = "Gameplay")
 class BlueRear : LinearOpMode() {
 
@@ -80,9 +74,7 @@ class BlueRear : LinearOpMode() {
 
 }
 
-/**
- * The autonomous opmode that is run on the red alliance with the side crypto box.
- */
+/** The autonomous opmode that is run on the red alliance with the side crypto box. */
 @Autonomous(name = "Red Side", group = "Gameplay")
 class RedRear : LinearOpMode() {
 

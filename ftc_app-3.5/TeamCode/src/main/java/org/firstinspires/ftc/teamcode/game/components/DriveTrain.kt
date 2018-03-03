@@ -91,8 +91,8 @@ class CodaDriveTrain(linearOpMode: LinearOpMode) : MecanumDriveTrain(linearOpMod
     }
 
     companion object {
-        private const val HEADING_CORRECTION_GAIN = 0.03
-        private const val HEADING_CORRECTION_THRESHOLD = 3.0
+        private const val HEADING_CORRECTION_GAIN = 0.025
+        private const val HEADING_CORRECTION_THRESHOLD = 2.0
     }
 
 }

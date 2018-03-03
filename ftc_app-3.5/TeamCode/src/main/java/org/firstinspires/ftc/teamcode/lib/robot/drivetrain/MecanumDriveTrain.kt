@@ -236,7 +236,7 @@ abstract class MecanumDriveTrain(
      * Drives linearly until the robot detect stalling of the motors via a speed threshold or a
      * specified amount of time elapses.
      */
-    fun linearStallDetectionDrive(speedThreshold: Int, power: MotorPower, timeout: Long) {
+    fun linearStallDetectionDrive(speedThreshold: Int, power: MotorPower, timeout: Long = 1500) {
         resetEncoders()
         linearDriveAtPower(power)
 
@@ -254,6 +254,11 @@ abstract class MecanumDriveTrain(
             val speed = deltaPosition / (deltaTime.milliseconds() / 1000)
             lastPosition = position
             deltaTime.reset()
+            with(linearOpMode.telemetry) {
+                addLine("Speed: $speed")
+                update()
+            }
+
         } while (
             linearOpMode.isStopRequested.not() &&
             elapsedTime.milliseconds() < timeout &&

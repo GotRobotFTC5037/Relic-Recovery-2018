@@ -51,8 +51,8 @@ class CodaGlyphGrabber(linearOpMode: LinearOpMode) : RobotAttachment(linearOpMod
 
     val grabbedGlyphs: GrabbedGlyphs
         get() = GrabbedGlyphs(
-            topGlyph = glyphDetectedByColorSensor(topColorSensor),
-            bottomGlyph = glyphDetectedByColorSensor(bottomColorSensor)
+            topGlyph = Glyph(Glyph.Color.UNKNOWN),
+            bottomGlyph = Glyph(Glyph.Color.UNKNOWN)
         )
 
     private fun glyphDetectedByColorSensor(sensor: ColorSensor): Glyph? {
