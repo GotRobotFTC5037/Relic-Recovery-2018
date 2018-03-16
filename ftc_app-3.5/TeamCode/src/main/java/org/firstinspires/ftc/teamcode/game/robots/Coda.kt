@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode.game.robots
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import org.firstinspires.ftc.teamcode.game.OpModeContinuity
 import org.firstinspires.ftc.teamcode.game.components.*
 import org.firstinspires.ftc.teamcode.lib.powercontroller.PowerController
-import org.firstinspires.ftc.teamcode.lib.powercontroller.ProportionalPowerController
-import org.firstinspires.ftc.teamcode.lib.powerultil.PowerAmplitudeMinimumClip
 import org.firstinspires.ftc.teamcode.lib.robot.Robot
 import org.firstinspires.ftc.teamcode.lib.robot.sensor.RangeSensor
 import kotlin.concurrent.thread
@@ -22,7 +19,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
     }
 
     val glyphGrabber by lazy {
-        components[GLYPH_GRABBER] as CodaGlyphGrabber
+        components[GLYPH_GRABBER] as CodaGlyphGrabbers
     }
 
     val jewelDisplacementBar by lazy {
@@ -48,7 +45,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
     fun setup() {
         if (!isSetup) {
             addComponent(CodaDriveTrain(linearOpMode), DRIVE_TRAIN)
-            addComponent(CodaGlyphGrabber(linearOpMode), GLYPH_GRABBER)
+            addComponent(CodaGlyphGrabbers(linearOpMode), GLYPH_GRABBER)
             addComponent(CodaLift(linearOpMode), LIFT)
             addComponent(CodaRelicGrabber(linearOpMode), RELIC_GRABBER)
             addComponent(CodaJewelDisplacementBar(linearOpMode), JEWEL_STICK)
@@ -78,7 +75,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
             driveTrain.waitForGyroCalibration()
             startingPitch = driveTrain.currentPitch
 
-            glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.OPEN)
+            glyphGrabber.setState(CodaGlyphGrabbers.GlyphGrabberState.OPEN)
             balancingStoneHolder.setState(CodaBalancingStoneHolder.BalancingStoneHolderState.UP)
 
             linearOpMode.onStart {
@@ -107,8 +104,6 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
     ) {
         if (!linearOpMode.isStopRequested) {
 
-            linearOpMode.telemetry.log().add("Driving to distance from object.")
-
             val rangeSensor: RangeSensor = when (rangeSensorDirection) {
                 RangeSensorDirection.LEFT -> components[LEFT_RANGE_SENSOR] as RangeSensor
                 RangeSensorDirection.RIGHT -> components[RIGHT_RANGE_SENSOR] as RangeSensor
@@ -124,8 +119,6 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
 
             val currentDistance = rangeSensor.distanceDetected
 
-            val powerClip = PowerAmplitudeMinimumClip(0.20)
-
             when {
                 targetDistance > currentDistance ->
                     while (
@@ -134,32 +127,20 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
                     ) {
                         when (rangeSensorDirection) {
                             RangeSensorDirection.LEFT ->
-                                driveTrain.strafeDriveAtPower(
-                                    powerClip.getOutputPower(-abs(controller.outputPower))
-                                )
+                                driveTrain.strafeDriveAtPower(-abs(controller.outputPower))
 
                             RangeSensorDirection.RIGHT ->
-                                driveTrain.strafeDriveAtPower(
-                                    powerClip.getOutputPower(abs(controller.outputPower))
-                                )
+                                driveTrain.strafeDriveAtPower(abs(controller.outputPower))
 
                             RangeSensorDirection.FRONT_LEFT ->
-                                driveTrain.linearDriveAtPower(
-                                    powerClip.getOutputPower(controller.outputPower)
-                                )
+                                driveTrain.linearDriveAtPower(-controller.outputPower)
 
                             RangeSensorDirection.FRONT_RIGHT ->
-                                driveTrain.linearDriveAtPower(
-                                    powerClip.getOutputPower(controller.outputPower)
-                                )
+                                driveTrain.linearDriveAtPower(-controller.outputPower)
 
-                            RangeSensorDirection.BACK -> TODO()
+                            RangeSensorDirection.BACK ->
+                                driveTrain.linearDriveAtPower(controller.outputPower)
                         }
-
-                        linearOpMode.telemetry.addLine("Target: $targetDistance")
-                        linearOpMode.telemetry.addLine("Distance: ${rangeSensor.distanceDetected}")
-                        linearOpMode.telemetry.addLine("Power: ${controller.outputPower}")
-                        linearOpMode.telemetry.update()
                     }
 
 
@@ -169,32 +150,20 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
                     ) {
                         when (rangeSensorDirection) {
                             RangeSensorDirection.LEFT ->
-                                driveTrain.strafeDriveAtPower(
-                                    powerClip.getOutputPower(abs(controller.outputPower))
-                                )
+                                driveTrain.strafeDriveAtPower(abs(controller.outputPower))
 
                             RangeSensorDirection.RIGHT ->
-                                driveTrain.strafeDriveAtPower(
-                                    powerClip.getOutputPower(-abs(controller.outputPower))
-                                )
+                                driveTrain.strafeDriveAtPower(-abs(controller.outputPower))
 
                             RangeSensorDirection.FRONT_LEFT ->
-                                driveTrain.linearDriveAtPower(
-                                    powerClip.getOutputPower(-controller.outputPower)
-                                )
+                                driveTrain.linearDriveAtPower(controller.outputPower)
 
                             RangeSensorDirection.FRONT_RIGHT ->
-                                driveTrain.linearDriveAtPower(
-                                    powerClip.getOutputPower(-controller.outputPower)
-                                )
+                                driveTrain.linearDriveAtPower(controller.outputPower)
 
-                            RangeSensorDirection.BACK -> TODO()
+                            RangeSensorDirection.BACK ->
+                                driveTrain.linearDriveAtPower(-controller.outputPower)
                         }
-
-                        linearOpMode.telemetry.addLine("Target: $targetDistance")
-                        linearOpMode.telemetry.addLine("Distance: ${rangeSensor.distanceDetected}")
-                        linearOpMode.telemetry.addLine("Power: ${controller.outputPower}")
-                        linearOpMode.telemetry.update()
                     }
             }
 
@@ -274,7 +243,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
         if (!linearOpMode.isStopRequested) {
 
             controller.errorValueHandler = {
-                abs(startingPitch - driveTrain.currentPitch) -  BALANCING_STONE_GROUND_ANGLE_THRESHOLD
+                driveTrain.currentPitch - startingPitch - BALANCING_STONE_GROUND_ANGLE_THRESHOLD
             }
 
             while (abs(startingPitch - driveTrain.currentPitch) >= BALANCING_STONE_GROUND_ANGLE_THRESHOLD && !linearOpMode.isStopRequested) {
@@ -285,46 +254,6 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
             controller.stopUpdatingOutput()
             driveTrain.stop()
         }
-    }
-
-    fun alignAndDeliverGlyph() {
-
-        when (OpModeContinuity.lastAllianceColor) {
-            OpModeContinuity.AllianceColor.BLUE -> {
-
-                val differenceFromFrontCryptoBox = abs(driveTrain.headingDifferenceFromTarget(0.0))
-                val differenceFromSideCryptoBox = abs(driveTrain.headingDifferenceFromTarget(-90.0))
-
-                if (differenceFromFrontCryptoBox < differenceFromSideCryptoBox) {
-                    driveTrain.turnToHeading(0.0, ProportionalPowerController(0.05))
-                } else if (differenceFromFrontCryptoBox > differenceFromSideCryptoBox) {
-                    driveTrain.turnToHeading(-90.0, ProportionalPowerController(0.05))
-                }
-
-            }
-
-            OpModeContinuity.AllianceColor.RED -> {
-
-                val differenceFromFrontCryptoBox = abs(driveTrain.headingDifferenceFromTarget(180.0))
-                val differenceFromSideCryptoBox = abs(driveTrain.headingDifferenceFromTarget(-90.0))
-
-                if (differenceFromFrontCryptoBox < differenceFromSideCryptoBox) {
-                    driveTrain.turnToHeading(180.0, ProportionalPowerController(0.05))
-                } else if (differenceFromFrontCryptoBox > differenceFromSideCryptoBox) {
-                    driveTrain.turnToHeading(-90.0, ProportionalPowerController(0.05))
-                }
-
-            }
-
-            OpModeContinuity.AllianceColor.UNDETERMINED -> {
-                TODO()
-            }
-
-            OpModeContinuity.AllianceColor.UNKNOWN -> {
-                TODO()
-            }
-        }
-
     }
 
     companion object {

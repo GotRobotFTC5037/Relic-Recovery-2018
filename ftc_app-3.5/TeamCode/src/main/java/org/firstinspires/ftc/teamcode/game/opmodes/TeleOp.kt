@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.game.components.CodaBalancingStoneHolder
-import org.firstinspires.ftc.teamcode.game.components.CodaGlyphGrabber
+import org.firstinspires.ftc.teamcode.game.components.CodaGlyphGrabbers
 import org.firstinspires.ftc.teamcode.game.components.CodaRelicGrabber
 import org.firstinspires.ftc.teamcode.game.robots.Coda
 import kotlin.math.abs
@@ -78,24 +78,24 @@ class CodaTeleOp : LinearOpMode() {
 
     private fun performGunnerActions() {
         when {
-            gamepad2.a -> robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.CLOSED)
-            gamepad2.b -> robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.RELEASE)
-            gamepad2.x -> robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.SMALL_OPEN)
+            gamepad2.a -> robot.glyphGrabber.setState(CodaGlyphGrabbers.GlyphGrabberState.CLOSED)
+            gamepad2.b -> robot.glyphGrabber.setState(CodaGlyphGrabbers.GlyphGrabberState.RELEASE)
+            gamepad2.x -> robot.glyphGrabber.setState(CodaGlyphGrabbers.GlyphGrabberState.SMALL_OPEN)
 
             gamepad2.left_trigger > 0.1 -> {
                 robot.glyphGrabber.bottomLeftGlyphGrabber.position =
-                        CodaGlyphGrabber.BOTTOM_GRABBER_CLOSED_POSITION
+                    CodaGlyphGrabbers.BOTTOM_GRABBER_CLOSED_POSITION
 
                 robot.glyphGrabber.bottomRightGlyphGrabber.position =
-                        CodaGlyphGrabber.BOTTOM_GRABBER_CLOSED_POSITION
+                    CodaGlyphGrabbers.BOTTOM_GRABBER_CLOSED_POSITION
             }
 
             gamepad2.right_trigger > 0.1 -> {
                 robot.glyphGrabber.topLeftGlyphGrabber.position =
-                        CodaGlyphGrabber.BOTTOM_GRABBER_CLOSED_POSITION
+                    CodaGlyphGrabbers.TOP_GRABBER_CLOSED_POSITION
 
                 robot.glyphGrabber.topRightGlyphGrabber.position =
-                        CodaGlyphGrabber.BOTTOM_GRABBER_CLOSED_POSITION
+                    CodaGlyphGrabbers.TOP_GRABBER_CLOSED_POSITION
             }
         }
 
@@ -152,10 +152,10 @@ class CodaTeleOp : LinearOpMode() {
         robot.driveTrain.setMovementPowers(linearPower, strafePower, turnPower)
 
         if (
-            robot.glyphGrabber.currentState == CodaGlyphGrabber.GlyphGrabberState.RELEASE &&
+            robot.glyphGrabber.currentState == CodaGlyphGrabbers.GlyphGrabberState.RELEASE &&
             linearPower > 0.65
         ) {
-            robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.SMALL_OPEN)
+            robot.glyphGrabber.setState(CodaGlyphGrabbers.GlyphGrabberState.SMALL_OPEN)
         }
 
         if (turnPower != 0.0) {
@@ -172,32 +172,3 @@ class CodaTeleOp : LinearOpMode() {
 }
 
 
-@TeleOp(name = "Demo TeleOp")
-class DemoTeleOp : LinearOpMode() {
-
-    @Throws(InterruptedException::class)
-    override fun runOpMode() {
-
-        val robot = Coda(this).apply {
-            driveTrain.shouldCorrectHeading = false
-        }
-
-        robot.setup()
-        waitForStart()
-
-        with(robot) {
-            while(opModeIsActive()) {
-                val linearPower = -gamepad1.left_stick_y.toDouble() * 0.5
-                val strafePower = gamepad1.left_stick_x.toDouble() * 0.5
-                val turnPower = -gamepad1.right_stick_x.toDouble() * 0.4
-                driveTrain.setMovementPowers(linearPower, strafePower, turnPower)
-
-                when {
-                    gamepad1.a -> glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.CLOSED)
-                    gamepad1.b -> glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.RELEASE)
-                    gamepad1.x -> glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.SMALL_OPEN)
-                }
-            }
-        }
-    }
-}

@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.game
 
 object RelicRecoveryConstants {
-    const val LEADING_FRONT_CRYPTO_BOX_DISTANCE = 49.0
+    const val LEADING_FRONT_CRYPTO_BOX_DISTANCE = 52.0
     const val CENTER_FRONT_CRYPTO_BOX_DISTANCE = LEADING_FRONT_CRYPTO_BOX_DISTANCE + 17.0
     const val TRAILING_FRONT_CRYPTO_BOX_DISTANCE = CENTER_FRONT_CRYPTO_BOX_DISTANCE + 18.0
 

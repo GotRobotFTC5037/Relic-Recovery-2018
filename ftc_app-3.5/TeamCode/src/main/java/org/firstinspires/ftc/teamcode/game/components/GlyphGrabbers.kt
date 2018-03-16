@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.game.components
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import com.qualcomm.robotcore.hardware.ColorSensor
 import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.game.elements.Glyph
 import org.firstinspires.ftc.teamcode.lib.robot.attachment.RobotAttachment
@@ -9,7 +8,7 @@ import org.firstinspires.ftc.teamcode.lib.robot.attachment.RobotAttachment
 /**
  * The grabbers on the Coda used to grab, identify and deploy glyphs.
  */
-class CodaGlyphGrabber(linearOpMode: LinearOpMode) : RobotAttachment(linearOpMode) {
+class CodaGlyphGrabbers(linearOpMode: LinearOpMode) : RobotAttachment(linearOpMode) {
 
     val topLeftGlyphGrabber: Servo by lazy {
         hardwareMap.servo.get("top left grabber")
@@ -36,29 +35,10 @@ class CodaGlyphGrabber(linearOpMode: LinearOpMode) : RobotAttachment(linearOpMod
             .apply { direction = Servo.Direction.FORWARD }
     }
 
-    private val topColorSensor: ColorSensor by lazy {
-        hardwareMap.colorSensor.get("top glyph color sensor")
-    }
-
-    private val bottomColorSensor: ColorSensor by lazy {
-        hardwareMap.colorSensor.get("bottom glyph color sensor")
-    }
-
     data class GrabbedGlyphs(
         val topGlyph: Glyph?,
         val bottomGlyph: Glyph?
     )
-
-    val grabbedGlyphs: GrabbedGlyphs
-        get() = GrabbedGlyphs(
-            topGlyph = Glyph(Glyph.Color.UNKNOWN),
-            bottomGlyph = Glyph(Glyph.Color.UNKNOWN)
-        )
-
-    private fun glyphDetectedByColorSensor(sensor: ColorSensor): Glyph? {
-        // TODO: Return the actual glyph detected by the color sensor.
-        return Glyph(Glyph.Color.UNKNOWN)
-    }
 
     enum class GlyphGrabberState(
         val armPosition: GlyphArmPosition,
@@ -112,19 +92,17 @@ class CodaGlyphGrabber(linearOpMode: LinearOpMode) : RobotAttachment(linearOpMod
 
     companion object {
         private const val BOTTOM_GRABBER_OPEN_POSITION = 0.0
-        private const val BOTTOM_GRABBER_SMALL_OPEN_POSITION = 0.1
+        private const val BOTTOM_GRABBER_SMALL_OPEN_POSITION = 0.24
         private const val BOTTOM_GRABBER_RELEASE_POSITION = 0.25
         const val BOTTOM_GRABBER_CLOSED_POSITION = 0.5
 
         private const val TOP_GRABBER_OPEN_POSITION = 0.0
         private const val TOP_GRABBER_SMALL_OPEN_POSITION = 0.1
         private const val TOP_GRABBER_RELEASE_POSITION = 0.35
-        private const val TOP_GRABBER_CLOSED_POSITION = 0.5
+        const val TOP_GRABBER_CLOSED_POSITION = 0.5
 
         private const val DEPLOYER_SERVO_MIN_POSITION = 0.5
         private const val DEPLOYER_SERVO_MAX_POSITION = 0.1
-
-        private const val GLYPH_ALPHA_THRESHOLD = 0.0
     }
 
 }

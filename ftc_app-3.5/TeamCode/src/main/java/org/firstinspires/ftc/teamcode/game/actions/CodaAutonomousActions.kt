@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.PIDCoefficients
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay
 import org.firstinspires.ftc.teamcode.game.RelicRecoveryConstants
-import org.firstinspires.ftc.teamcode.game.components.CodaGlyphGrabber
+import org.firstinspires.ftc.teamcode.game.components.CodaGlyphGrabbers
 import org.firstinspires.ftc.teamcode.game.components.CodaJewelDisplacementBar
 import org.firstinspires.ftc.teamcode.game.components.CodaLift
 import org.firstinspires.ftc.teamcode.game.elements.CryptoBox
@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.lib.powercontroller.PIDPowerController
 import org.firstinspires.ftc.teamcode.lib.powercontroller.ProportionalPowerController
 import org.firstinspires.ftc.teamcode.lib.powercontroller.StaticPowerController
 import org.firstinspires.ftc.teamcode.lib.robot.drivetrain.Heading
+import org.firstinspires.ftc.teamcode.lib.robot.drivetrain.MecanumDriveTrain
 import kotlin.concurrent.thread
 
 /** Runs complex actions on Coda that are primarily autonomous. */
@@ -29,7 +30,7 @@ class CodaAutonomousActions(
     val robot: Coda = Coda(linearOpMode)
 ) {
 
-    /** The alliance color of the robot to100 be used to perform actions. */
+    /** The alliance color of the robot to be used to perform actions. */
     var allianceColor = AllianceColor.UNDETERMINED
 
     /** An enum class for the current alliance color. */
@@ -80,11 +81,120 @@ class CodaAutonomousActions(
         linearOpMode.waitForStart()
 
         val glyphGrabbingThread = thread(start = true) {
-            robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.CLOSED)
-            linearOpMode.sleep(GLYPH_GRAB_WAIT_TIME)
+            robot.glyphGrabber.setState(
+                CodaGlyphGrabbers.GlyphGrabberState.CLOSED,
+                GLYPH_GRAB_WAIT_TIME
+            )
             robot.lift.position = CodaLift.LiftPosition.FIRST_LEVEL
         }
 
+        performCameraIdentifications()
+
+        glyphGrabbingThread.join()
+        robot.lift.shouldHoldLiftPosition = false
+
+        displaceIdentifiedJewel()
+
+        if (isNotBlueFront()) turnToCryptoBox()
+
+        robot.lift.resetEncoder()
+
+        distanceFromCryptoBox()
+
+        alignWithColumn(detectedPictographColumn)
+
+        robot.lift.drop()
+
+        deliverGlyph()
+
+        val cryptoBox = CryptoBox().apply {
+            val pictographColumn = detectedPictographColumn
+                ?: when (allianceColor) {
+                    AllianceColor.BLUE -> CryptoBox.ColumnPosition.LEFT
+                    AllianceColor.RED -> CryptoBox.ColumnPosition.RIGHT
+                    else -> TODO("If this happens, we have bigger problems.")
+                }
+
+            addGlyphToColumn(Glyph(Glyph.Color.UNKNOWN), pictographColumn)
+        }
+
+        if (SHOULD_GRAB_ADDITIONAL_GLYPHS) {
+            repeat(2) {
+
+                val liftDropThread = thread(start = true) {
+                    robot.lift.shouldHoldLiftPosition = false
+                    robot.lift.drop()
+                }
+
+                alignWithGlyphPit()
+
+                turnToGlyphPit()
+
+                robot.glyphGrabber.setState(CodaGlyphGrabbers.GlyphGrabberState.SMALL_OPEN)
+
+                robot.driveTrain.linearEncoderDrive(
+                    GLYPH_PIT_DISTANCE,
+                    StaticPowerController(GLYPH_PIT_DRIVE_POWER)
+                )
+
+                liftDropThread.join()
+
+                robot.glyphGrabber.setState(
+                    CodaGlyphGrabbers.GlyphGrabberState.CLOSED,
+                    GLYPH_GRAB_WAIT_TIME
+                )
+
+                robot.lift.shouldHoldLiftPosition = true
+                robot.lift.position = CodaLift.LiftPosition.SECOND_LEVEL
+
+                robot.driveTrain.linearEncoderDrive(
+                    GLYPH_PIT_REVERSE_DISTANCE,
+                    StaticPowerController(GLYPH_PIT_REVERSE_DRIVE_POWER)
+                )
+
+                val position = cryptoBox.positionForNextGlyph()?.also {
+                    robot.lift.moveToRow(it.row)
+                }
+
+                turnToCryptoBox()
+
+                distanceFromCryptoBox()
+
+                position?.let {
+                    alignWithColumn(it.column)
+                }
+
+                deliverGlyph()
+
+                position?.let {
+                    cryptoBox.addGlyphToColumn(Glyph(Glyph.Color.UNKNOWN), it.column)
+                }
+            }
+        }
+
+    }
+
+    private fun distanceFromCryptoBox() {
+        robot.driveToDistanceFromObject(
+            Coda.RangeSensorDirection.FRONT_LEFT,
+            45.0,
+            ProportionalPowerController(0.015),
+            shouldCorrect = false
+        )
+    }
+
+    private fun prepareForAutonomousOpMode() {
+        robot.setup()
+
+        OpModeController.queueOpMode(linearOpMode, "TeleOp")
+
+        jewelConfigurationDetector.init(
+            linearOpMode.hardwareMap.appContext,
+            CameraViewDisplay.getInstance()
+        )
+    }
+
+    private fun performCameraIdentifications() {
         jewelConfigurationDetector.enable()
 
         detectedJewelConfiguration = jewelConfigurationDetector.waitForJewelIdentification()
@@ -97,63 +207,6 @@ class CodaAutonomousActions(
 
         detectedPictographColumn = pictographIdentifier.waitForPictographIdentification()
         pictographIdentifier.deactivate()
-
-        glyphGrabbingThread.join()
-
-        displaceIdentifiedJewel()
-
-        if (isNotBlueFront()) turnToCryptoBox()
-
-        alignWithColumn(detectedPictographColumn)
-        robot.lift.drop()
-        deliverGlyph()
-
-        val cryptoBox = CryptoBox().apply {
-            addGlyphToColumn(Glyph(Glyph.Color.UNKNOWN), detectedPictographColumn!!)
-        }
-
-        alignWithGlyphPit()
-
-        while (linearOpMode.isStopRequested.not() && cryptoBox.isFull.not()) {
-            turnToGlyphPit()
-            robot.lift.drop()
-            robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.SMALL_OPEN)
-
-            robot.driveTrain.linearEncoderDrive(
-                GLYPH_PIT_DISTANCE,
-                StaticPowerController(GLYPH_PIT_DRIVE_POWER)
-            )
-            robot.glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.CLOSED)
-
-            val position = cryptoBox.positionForNextGlyph()!!
-
-            robot.lift.moveToRow(position.row)
-            robot.driveTrain.linearEncoderDrive(
-                GLYPH_PIT_REVERSE_DISTANCE,
-                StaticPowerController(GLYPH_PIT_REVERSE_DRIVE_POWER)
-            )
-            turnToCryptoBox()
-            robot.driveTrain.linearEncoderDrive(
-                ADDITIONAL_CRYPTO_BOX_APPROACH_DISTANCE,
-                StaticPowerController(ADDITIONAL_CRYPTO_BOX_APPROACH_DRIVE_POWER)
-            )
-            alignWithColumn(position.column)
-            deliverGlyph()
-
-            cryptoBox.addGlyphToColumn(Glyph(Glyph.Color.UNKNOWN), position.column)
-        }
-
-    }
-
-    private fun prepareForAutonomousOpMode() {
-        robot.setup()
-
-        OpModeController.queueOpMode(linearOpMode, "TeleOp")
-
-        jewelConfigurationDetector.init(
-            linearOpMode.hardwareMap.appContext,
-            CameraViewDisplay.getInstance()
-        )
     }
 
     private fun displaceIdentifiedJewel() {
@@ -188,14 +241,7 @@ class CodaAutonomousActions(
             if (cryptoBoxPosition == CryptoBoxPosition.FRONT) {
                 driveToDistanceFromObject(
                     rangeSensorDirection(),
-                    RelicRecoveryConstants.TRAILING_FRONT_CRYPTO_BOX_DISTANCE,
-                    ProportionalPowerController(GLYPH_PIT_ALIGNMENT_GAIN),
-                    shouldCorrect = false
-                )
-            } else if (cryptoBoxPosition == CryptoBoxPosition.SIDE) {
-                driveToDistanceFromObject(
-                    rangeSensorDirection(),
-                    RelicRecoveryConstants.CENTER_SIDE_CRYPTO_BOX_DISTANCE,
+                    RelicRecoveryConstants.TRAILING_FRONT_CRYPTO_BOX_DISTANCE + 10,
                     ProportionalPowerController(GLYPH_PIT_ALIGNMENT_GAIN),
                     shouldCorrect = false
                 )
@@ -217,16 +263,17 @@ class CodaAutonomousActions(
 
     private fun deliverGlyph() {
         with(robot) {
-            driveTrain.linearStallDetectionDrive(
-                STALL_DETECTION_SPEED_THRESHOLD,
-                GLYPH_DELIVERY_DRIVE_POWER
+            driveTrain.linearTimeDrive(
+                650,
+                StaticPowerController(0.3),
+                MecanumDriveTrain.DriveDirection.FORWARD
             )
-            glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.RELEASE)
+            glyphGrabber.setState(CodaGlyphGrabbers.GlyphGrabberState.RELEASE)
             driveTrain.linearEncoderDrive(
                 GLYPH_DELIVERY_REVERSE_DISTANCE,
-                StaticPowerController(GLYPH_DELIVERY_REVERSE_DRIVE_POWER)
+                StaticPowerController(0.3),
+                1000
             )
-            glyphGrabber.setState(CodaGlyphGrabber.GlyphGrabberState.SMALL_OPEN)
         }
     }
 
@@ -299,23 +346,25 @@ class CodaAutonomousActions(
         (allianceColor == AllianceColor.BLUE && cryptoBoxPosition == CryptoBoxPosition.FRONT).not()
 
     companion object {
-        private const val DRIVE_ON_BALANCING_STONE_POWER = 0.40
-        private const val DRIVE_OFF_BALANCING_STONE_DRIVE_POWER = 0.175
+        private const val SHOULD_GRAB_ADDITIONAL_GLYPHS = false
+
+        private const val DRIVE_ON_BALANCING_STONE_POWER = 0.4
+        private const val DRIVE_OFF_BALANCING_STONE_DRIVE_POWER = 0.275
         private const val GLYPH_DELIVERY_DRIVE_POWER = 0.5
-        private const val GLYPH_DELIVERY_REVERSE_DRIVE_POWER = 0.25
+        private const val GLYPH_DELIVERY_REVERSE_DRIVE_POWER = 0.6
         private const val GLYPH_PIT_DRIVE_POWER = 1.0
         private const val GLYPH_PIT_REVERSE_DRIVE_POWER = 1.0
         private const val ADDITIONAL_CRYPTO_BOX_APPROACH_DRIVE_POWER = 0.4
 
         private const val DRIVE_OFF_BALANCING_STONE_DISTANCE = 300
-        private const val GLYPH_DELIVERY_REVERSE_DISTANCE = -200
-        private const val GLYPH_PIT_DISTANCE = 850
-        private const val GLYPH_PIT_REVERSE_DISTANCE = -450
-        private const val ADDITIONAL_CRYPTO_BOX_APPROACH_DISTANCE = 150
+        private const val GLYPH_DELIVERY_REVERSE_DISTANCE = -150
+        private const val GLYPH_PIT_DISTANCE = 1500
+        private const val GLYPH_PIT_REVERSE_DISTANCE = -850
+        private const val ADDITIONAL_CRYPTO_BOX_APPROACH_DISTANCE = 100
 
-        private const val GLYPH_GRAB_WAIT_TIME = 500L
+        private const val GLYPH_GRAB_WAIT_TIME = 750L
 
-        private const val STALL_DETECTION_SPEED_THRESHOLD = 2250
+        private const val STALL_DETECTION_SPEED_THRESHOLD = 2000
 
         private const val TURNING_GIAN = 0.015
         private const val GLYPH_PIT_ALIGNMENT_GAIN = 0.05

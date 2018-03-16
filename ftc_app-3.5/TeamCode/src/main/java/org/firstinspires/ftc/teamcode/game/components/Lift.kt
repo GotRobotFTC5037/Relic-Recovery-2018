@@ -84,12 +84,12 @@ class CodaLift(override val linearOpMode: LinearOpMode) : Lift() {
         }
     }
 
-    fun drop(timeout: Long = 2000L) {
+    fun drop(timeout: Long = 2500) {
         position = LiftPosition.BOTTOM
         isBusy = true
         val elapsedTime = ElapsedTime()
         while (!isLowered && !linearOpMode.isStopRequested && elapsedTime.milliseconds() < timeout) {
-            setPower(-0.20)
+            setPower(-0.30)
         }
         resetEncoder()
         setPower(0.0)

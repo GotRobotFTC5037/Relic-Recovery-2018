@@ -3,15 +3,7 @@ package org.firstinspires.ftc.teamcode.game.elements
 /**
  * Used to keep track of the glyphs that are in a crypto box, primarily in autonomous.
  */
-class CryptoBox constructor() {
-
-    private constructor(glyphs: List<List<Glyph>>) : this() {
-        glyphs.mapIndexed { columnIndex, column ->
-            column.mapIndexed { rowIndex, glyph ->
-                columns[columnIndex].glyphs[rowIndex] = glyph
-            }
-        }
-    }
+class CryptoBox {
 
     private val columns = listOf(Column(), Column(), Column())
 
@@ -44,33 +36,18 @@ class CryptoBox constructor() {
     fun positionForNextGlyph() =
         columns
             .withIndex()
-            .filter { it.value.isFull.not() }
             .sortedBy { it.value.numberOfGlyphs }
-            .firstOrNull()
-            ?.let { Position(ColumnPosition.values()[it.index], it.value.firstOpenRow!!) }
+            .firstOrNull { it.value.numberOfGlyphs % 2 != 0 && it.value.numberOfGlyphs < 2 }
+            ?.let {
+                Position(
+                    ColumnPosition.values()[it.index],
+                    it.value.firstOpenRow!!
+                )
+            }
 
     /** Adds a [glyph] to the selected [column]. */
     fun addGlyphToColumn(glyph: Glyph, column: ColumnPosition) =
         columns[column.ordinal].addGlyph(glyph)
-
-    private fun inverted(): CryptoBox {
-        return CryptoBox().also {
-            for ((i, column) in columns.withIndex()) {
-                column.glyphs.withIndex()
-                    .forEach { (index, glyph) ->
-                        it.columns[i].glyphs[index] = glyph?.let {
-                            Glyph(
-                                when (it.color) {
-                                    Glyph.Color.GRAY -> Glyph.Color.BROWN
-                                    Glyph.Color.BROWN -> Glyph.Color.GRAY
-                                    Glyph.Color.UNKNOWN -> Glyph.Color.UNKNOWN
-                                }
-                            )
-                        }
-                    }
-            }
-        }
-    }
 
     /** A column position within the crypto box. */
     enum class ColumnPosition {
@@ -113,106 +90,6 @@ class CryptoBox constructor() {
         val row: RowPosition
 
     )
-
-    /** A crypto box filled into a pattern that makes a cipher. */
-    enum class Cipher {
-
-        FROG {
-            override val template: CryptoBox
-                get() = CryptoBox(
-                    listOf(
-                        listOf(
-                            Glyph(Glyph.Color.BROWN),
-                            Glyph(Glyph.Color.GRAY),
-                            Glyph(Glyph.Color.BROWN),
-                            Glyph(Glyph.Color.GRAY)
-                        ),
-                        listOf(
-                            Glyph(Glyph.Color.GRAY),
-                            Glyph(Glyph.Color.BROWN),
-                            Glyph(Glyph.Color.GRAY),
-                            Glyph(Glyph.Color.BROWN)
-                        ),
-                        listOf(
-                            Glyph(Glyph.Color.BROWN),
-                            Glyph(Glyph.Color.GRAY),
-                            Glyph(Glyph.Color.BROWN),
-                            Glyph(Glyph.Color.GRAY)
-                        )
-                    )
-                )
-        },
-
-        FROG_INVERTED {
-            override val template: CryptoBox
-                get() = FROG.template.inverted()
-        },
-
-        BIRD {
-            override val template: CryptoBox
-                get() = CryptoBox(
-                    listOf(
-                        listOf(
-                            Glyph(Glyph.Color.GRAY),
-                            Glyph(Glyph.Color.BROWN),
-                            Glyph(Glyph.Color.BROWN),
-                            Glyph(Glyph.Color.GRAY)
-                        ),
-                        listOf(
-                            Glyph(Glyph.Color.BROWN),
-                            Glyph(Glyph.Color.GRAY),
-                            Glyph(Glyph.Color.GRAY),
-                            Glyph(Glyph.Color.BROWN)
-                        ),
-                        listOf(
-                            Glyph(Glyph.Color.GRAY),
-                            Glyph(Glyph.Color.BROWN),
-                            Glyph(Glyph.Color.BROWN),
-                            Glyph(Glyph.Color.GRAY)
-                        )
-                    )
-                )
-        },
-
-        BIRD_INVERTED {
-            override val template: CryptoBox
-                get() = BIRD.template.inverted()
-        },
-
-        SNAKE {
-            override val template: CryptoBox
-                get() = CryptoBox(
-                    listOf(
-                        listOf(
-                            Glyph(Glyph.Color.GRAY),
-                            Glyph(Glyph.Color.GRAY),
-                            Glyph(Glyph.Color.BROWN),
-                            Glyph(Glyph.Color.BROWN)
-                        ),
-                        listOf(
-                            Glyph(Glyph.Color.GRAY),
-                            Glyph(Glyph.Color.BROWN),
-                            Glyph(Glyph.Color.BROWN),
-                            Glyph(Glyph.Color.GRAY)
-                        ),
-                        listOf(
-                            Glyph(Glyph.Color.BROWN),
-                            Glyph(Glyph.Color.BROWN),
-                            Glyph(Glyph.Color.GRAY),
-                            Glyph(Glyph.Color.GRAY)
-                        )
-                    )
-                )
-        },
-
-        SNAKE_INVERTED {
-            override val template: CryptoBox
-                get() = SNAKE.template.inverted()
-        };
-
-        /** A crypto box filled with a cipher */
-        abstract val template: CryptoBox
-    }
 
 }
 

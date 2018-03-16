@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.lib.robot.Component
 
+/** The stone holder that prevents the robot from over shooting the balancing stone. */
 class CodaBalancingStoneHolder(override val linearOpMode: LinearOpMode) : Component {
 
     private val servo by lazy {

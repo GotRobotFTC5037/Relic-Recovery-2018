@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime
 import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.teamcode.lib.powercontroller.PowerController
 import kotlin.concurrent.thread
+import kotlin.math.abs
 import kotlin.math.max
 
 typealias Heading = Double
@@ -197,6 +198,15 @@ abstract class MecanumDriveTrain(
         rearLeftMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         rearRightMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
 
+        while (
+            frontLeftMotor.currentPosition > 50 ||
+            frontRightMotor.currentPosition > 50 ||
+            rearLeftMotor.currentPosition > 50 ||
+            rearRightMotor.currentPosition > 50
+        ) {
+            linearOpMode.idle()
+        }
+
         frontLeftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
         frontRightMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
         rearLeftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
@@ -212,19 +222,26 @@ abstract class MecanumDriveTrain(
     /**
      * Drives linearly until the specified encoder position as be reached.
      */
-    fun linearEncoderDrive(encoderValue: Int, controller: PowerController) {
+    fun linearEncoderDrive(
+        encoderValue: Int,
+        controller: PowerController,
+        timeout: Long = Long.MAX_VALUE
+    ) {
+
+        resetEncoders()
 
         controller.errorValueHandler = {
             (encoderValue - currentLinearEncoderPosition()).toDouble()
         }
 
-        resetEncoders()
+        val elapsedTime = ElapsedTime()
+
         if (encoderValue > 0) {
-            while (currentLinearEncoderPosition() < encoderValue && linearOpMode.opModeIsActive()) {
+            while (currentLinearEncoderPosition() < encoderValue && linearOpMode.opModeIsActive() && elapsedTime.milliseconds() < timeout) {
                 linearDriveAtPower(controller.outputPower)
             }
         } else if (encoderValue < 0) {
-            while (currentLinearEncoderPosition() > encoderValue && linearOpMode.opModeIsActive()) {
+            while (currentLinearEncoderPosition() > encoderValue && linearOpMode.opModeIsActive() && elapsedTime.milliseconds() < timeout) {
                 linearDriveAtPower(controller.outputPower)
             }
         }
@@ -237,11 +254,13 @@ abstract class MecanumDriveTrain(
      * specified amount of time elapses.
      */
     fun linearStallDetectionDrive(speedThreshold: Int, power: MotorPower, timeout: Long = 1500) {
+
         resetEncoders()
-        linearDriveAtPower(power)
+
+        linearDriveAtPower(abs(power))
 
         // Waits for the speed of the motors to reach its full capacity for this power.
-        linearOpMode.sleep(100)
+        linearOpMode.sleep(300)
 
         val elapsedTime = ElapsedTime()
         val deltaTime = ElapsedTime()
@@ -279,16 +298,16 @@ abstract class MecanumDriveTrain(
 
         // Determine which direction the robot will be turning in.
         val targetHeadingDifference = headingDifferenceFromTarget(targetHeading)
-        if (targetHeadingDifference > 0) {
+        if (targetHeadingDifference > 1.5) {
             while (
-                headingDifferenceFromTarget(targetHeading) > 0.0 &&
+                headingDifferenceFromTarget(targetHeading) > 1.5 &&
                 linearOpMode.opModeIsActive()
             ) {
                 turnAtPower(controller.outputPower)
             }
-        } else if (targetHeadingDifference < 0) {
+        } else if (targetHeadingDifference < 1.5) {
             while (
-                headingDifferenceFromTarget(targetHeading) < 0.0 &&
+                headingDifferenceFromTarget(targetHeading) < 1.5 &&
                 linearOpMode.opModeIsActive()
             ) {
                 turnAtPower(controller.outputPower)
@@ -312,11 +331,12 @@ abstract class MecanumDriveTrain(
     fun startUpdatingDrivePowers() {
         thread(start = true) {
             while (linearOpMode.opModeIsActive()) {
-                val drivePowers = if (shouldCorrectHeading && !isActivelyTurning) {
-                    headingCorrectedDrivePowers(this.drivePowers)
-                } else {
-                    this.drivePowers
-                }
+                val drivePowers =
+                    if (shouldCorrectHeading && !isActivelyTurning)
+                        headingCorrectedDrivePowers(this.drivePowers)
+                    else
+                        this.drivePowers
+
 
                 frontLeftMotor.power = clipToMinimumAmplitude(drivePowers.frontLeft)
                 frontRightMotor.power = clipToMinimumAmplitude(drivePowers.frontRight)
