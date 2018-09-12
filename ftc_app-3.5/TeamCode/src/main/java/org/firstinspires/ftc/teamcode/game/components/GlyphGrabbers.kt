@@ -22,12 +22,12 @@ class CodaGlyphGrabbers(linearOpMode: LinearOpMode) : RobotAttachment(linearOpMo
 
     val bottomLeftGlyphGrabber: Servo by lazy {
         hardwareMap.servo.get("bottom left grabber")
-            .apply { direction = Servo.Direction.REVERSE }
+            .apply { direction = Servo.Direction.FORWARD }
     }
 
     val bottomRightGlyphGrabber: Servo by lazy {
         hardwareMap.servo.get("bottom right grabber")
-            .apply { direction = Servo.Direction.FORWARD }
+            .apply { direction = Servo.Direction.REVERSE }
     }
 
     private val glyphDeployer by lazy {
@@ -94,12 +94,12 @@ class CodaGlyphGrabbers(linearOpMode: LinearOpMode) : RobotAttachment(linearOpMo
         private const val BOTTOM_GRABBER_OPEN_POSITION = 0.0
         private const val BOTTOM_GRABBER_SMALL_OPEN_POSITION = 0.24
         private const val BOTTOM_GRABBER_RELEASE_POSITION = 0.25
-        const val BOTTOM_GRABBER_CLOSED_POSITION = 0.5
+        const val BOTTOM_GRABBER_CLOSED_POSITION = 0.55
 
         private const val TOP_GRABBER_OPEN_POSITION = 0.0
         private const val TOP_GRABBER_SMALL_OPEN_POSITION = 0.1
         private const val TOP_GRABBER_RELEASE_POSITION = 0.35
-        const val TOP_GRABBER_CLOSED_POSITION = 0.5
+        const val TOP_GRABBER_CLOSED_POSITION = 0.55
 
         private const val DEPLOYER_SERVO_MIN_POSITION = 0.5
         private const val DEPLOYER_SERVO_MAX_POSITION = 0.1

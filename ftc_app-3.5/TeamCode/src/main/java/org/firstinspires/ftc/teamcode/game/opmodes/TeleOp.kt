@@ -9,6 +9,89 @@ import org.firstinspires.ftc.teamcode.game.components.CodaRelicGrabber
 import org.firstinspires.ftc.teamcode.game.robots.Coda
 import kotlin.math.abs
 
+@TeleOp(name = "One-Man TeleOp")
+class CodaOneManTeleOp : LinearOpMode() {
+
+    private val robot: Coda by lazy { Coda(this) }
+
+    private val lastManualHeadingUpdate: ElapsedTime by lazy { ElapsedTime() }
+
+    @Throws(InterruptedException::class)
+    override fun runOpMode() {
+        robot.setup()
+        waitForStart()
+
+        while (opModeIsActive()) {
+            manuallySetDriveDirection()
+            performGunnerActions()
+        }
+
+        robot.driveTrain.stop()
+    }
+
+    private fun performGunnerActions() {
+        val gamepad = gamepad1
+
+        when {
+            gamepad.a -> robot.glyphGrabber.setState(CodaGlyphGrabbers.GlyphGrabberState.CLOSED)
+            gamepad.b -> robot.glyphGrabber.setState(CodaGlyphGrabbers.GlyphGrabberState.RELEASE)
+            gamepad.x -> robot.glyphGrabber.setState(CodaGlyphGrabbers.GlyphGrabberState.SMALL_OPEN)
+        }
+
+        val liftPower = if (gamepad.dpad_up) { 1.0 } else if (gamepad.dpad_down) { -1.0 } else { 0.0}
+        if (liftPower != 0.0) {
+            robot.lift.shouldHoldLiftPosition = false
+            robot.lift.setPower(liftPower)
+            val position = robot.lift.position
+            position.value = robot.lift.motor.currentPosition
+            robot.lift.position = position
+        } else {
+            robot.lift.shouldHoldLiftPosition = true
+        }
+
+    }
+
+    private fun manuallySetDriveDirection() {
+        var linearPower = -gamepad1.left_stick_y.toDouble()
+        var strafePower = gamepad1.left_stick_x.toDouble()
+        var turnPower = -gamepad1.right_stick_x.toDouble()
+
+        if (gamepad1.right_trigger > 0.1) {
+            linearPower *= 0.75
+            strafePower *= 0.75
+            turnPower *= 0.65
+        } else {
+            linearPower *= 1.00
+            strafePower *= 1.00
+            turnPower *= 0.85
+        }
+
+        linearPower = abs(Math.pow(linearPower, 2.0)) * Math.signum(linearPower)
+        strafePower = abs(Math.pow(strafePower, 2.0)) * Math.signum(strafePower)
+        turnPower = abs(Math.pow(turnPower, 2.0)) * Math.signum(turnPower)
+
+        robot.driveTrain.setMovementPowers(linearPower, strafePower, turnPower)
+
+        if (
+            robot.glyphGrabber.currentState == CodaGlyphGrabbers.GlyphGrabberState.RELEASE &&
+            linearPower > 0.65
+        ) {
+            robot.glyphGrabber.setState(CodaGlyphGrabbers.GlyphGrabberState.SMALL_OPEN)
+        }
+
+        if (turnPower != 0.0) {
+            lastManualHeadingUpdate.reset()
+            robot.driveTrain.shouldCorrectHeading = false
+        } else if (
+            lastManualHeadingUpdate.milliseconds() >= 750 &&
+            !robot.driveTrain.shouldCorrectHeading
+        ) {
+            robot.driveTrain.targetHeading = robot.driveTrain.currentHeading
+            robot.driveTrain.shouldCorrectHeading = true
+        }
+    }
+}
+
 @TeleOp(name = "TeleOp")
 class CodaTeleOp : LinearOpMode() {
 

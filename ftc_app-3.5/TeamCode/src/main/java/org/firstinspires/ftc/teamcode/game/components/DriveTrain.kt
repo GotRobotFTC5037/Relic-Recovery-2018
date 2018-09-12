@@ -48,7 +48,7 @@ class CodaDriveTrain(linearOpMode: LinearOpMode) : MecanumDriveTrain(linearOpMod
         }
     }
 
-    override val minimumDrivePower = 0.3
+    override val minimumDrivePower = 0.35
 
     fun waitForGyroCalibration() {
         while (!imu.isGyroCalibrated && !linearOpMode.isStopRequested) {

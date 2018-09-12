@@ -3,8 +3,11 @@ package org.firstinspires.ftc.teamcode.game.opmodes
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.util.ElapsedTime
+import org.corningrobotics.enderbots.endercv.CameraViewDisplay
 import org.firstinspires.ftc.teamcode.game.robots.Coda
+import org.firstinspires.ftc.teamcode.game.vision.JewelConfigurationDetector
 import org.firstinspires.ftc.teamcode.lib.robot.sensor.RangeSensor
 
 @Autonomous(group = "Tests")
@@ -55,6 +58,7 @@ class CodaDriveTrainStallTest : LinearOpMode() {
 }
 
 @Autonomous(group = "Tests")
+@Disabled
 class SensorTest : LinearOpMode() {
 
     override fun runOpMode() {
@@ -128,4 +132,20 @@ class GlyphGrabberServoTest : LinearOpMode() {
             idle()
         }
     }
+}
+
+@TeleOp(group = "Tests")
+class JewelDetectionTest : LinearOpMode() {
+
+    override fun runOpMode() {
+        val jewelConfigurationDetector = JewelConfigurationDetector(linearOpMode = this)
+        waitForStart()
+        jewelConfigurationDetector.init(hardwareMap.appContext, CameraViewDisplay.getInstance())
+        jewelConfigurationDetector.enable()
+
+        while (opModeIsActive()) {
+            sleep(50)
+        }
+    }
+
 }

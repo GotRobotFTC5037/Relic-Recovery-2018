@@ -158,7 +158,12 @@ class CodaAutonomousActions(
 
                 turnToCryptoBox()
 
-                distanceFromCryptoBox()
+                // distanceFromCryptoBox()
+
+                robot.driveTrain.linearEncoderDrive(
+                    ADDITIONAL_CRYPTO_BOX_APPROACH_DISTANCE,
+                    StaticPowerController(ADDITIONAL_CRYPTO_BOX_APPROACH_DRIVE_POWER)
+                )
 
                 position?.let {
                     alignWithColumn(it.column)
@@ -241,7 +246,7 @@ class CodaAutonomousActions(
             if (cryptoBoxPosition == CryptoBoxPosition.FRONT) {
                 driveToDistanceFromObject(
                     rangeSensorDirection(),
-                    RelicRecoveryConstants.TRAILING_FRONT_CRYPTO_BOX_DISTANCE + 10,
+                    RelicRecoveryConstants.TRAILING_FRONT_CRYPTO_BOX_DISTANCE - 10,
                     ProportionalPowerController(GLYPH_PIT_ALIGNMENT_GAIN),
                     shouldCorrect = false
                 )
@@ -264,8 +269,8 @@ class CodaAutonomousActions(
     private fun deliverGlyph() {
         with(robot) {
             driveTrain.linearTimeDrive(
-                650,
-                StaticPowerController(0.3),
+                850,
+                StaticPowerController(0.4),
                 MecanumDriveTrain.DriveDirection.FORWARD
             )
             glyphGrabber.setState(CodaGlyphGrabbers.GlyphGrabberState.RELEASE)
@@ -354,13 +359,13 @@ class CodaAutonomousActions(
         private const val GLYPH_DELIVERY_REVERSE_DRIVE_POWER = 0.6
         private const val GLYPH_PIT_DRIVE_POWER = 1.0
         private const val GLYPH_PIT_REVERSE_DRIVE_POWER = 1.0
-        private const val ADDITIONAL_CRYPTO_BOX_APPROACH_DRIVE_POWER = 0.4
+        private const val ADDITIONAL_CRYPTO_BOX_APPROACH_DRIVE_POWER = 0.5
 
         private const val DRIVE_OFF_BALANCING_STONE_DISTANCE = 300
         private const val GLYPH_DELIVERY_REVERSE_DISTANCE = -150
         private const val GLYPH_PIT_DISTANCE = 1500
-        private const val GLYPH_PIT_REVERSE_DISTANCE = -850
-        private const val ADDITIONAL_CRYPTO_BOX_APPROACH_DISTANCE = 100
+        private const val GLYPH_PIT_REVERSE_DISTANCE = -1200
+        private const val ADDITIONAL_CRYPTO_BOX_APPROACH_DISTANCE = 50
 
         private const val GLYPH_GRAB_WAIT_TIME = 750L
 

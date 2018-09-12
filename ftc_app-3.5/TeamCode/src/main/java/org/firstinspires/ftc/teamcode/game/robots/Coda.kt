@@ -170,7 +170,7 @@ class Coda(linearOpMode: LinearOpMode) : Robot(linearOpMode) {
             driveTrain.stop()
 
             if (shouldCorrect) {
-                linearOpMode.sleep(100)
+                linearOpMode.sleep(500)
                 val distance = rangeSensor.distanceDetected
                 if (
                     distance > targetDistance + WALL_DISTANCE_TOLERANCE ||

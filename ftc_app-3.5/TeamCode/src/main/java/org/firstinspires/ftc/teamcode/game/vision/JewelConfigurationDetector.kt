@@ -129,9 +129,9 @@ class JewelConfigurationDetector(private val linearOpMode: LinearOpMode) : OpenC
 
         filterContours(
             findContoursOutput,
-            0.0, 0.0,
+            30.0, 0.0,
             10.0, 40.0,
-            0.0, 1000.0,
+            15.0, 1000.0,
             doubleArrayOf(0.0, 100.0),
             1000.0, 0.0,
             0.0, 1000.0,
